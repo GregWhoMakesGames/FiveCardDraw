@@ -95,10 +95,10 @@ EV under matched call-downs — leading does not rescue you.
 
 | Drawer stab when checked to | Stab rate | Opener EV if never leads |
 | --- | ---: | ---: |
-| never (straight+ only) | 0.3434 | +3.666 |
-| AA | 0.3905 | +3.252 |
-| AA+KK | 0.3917 | +2.903 |
-| AA..JJ | 0.4133 | +2.206 |
+| never (straight+ only) | 0.3434 | +3.6662 |
+| AA | 0.3905 | +3.2519 |
+| AA+KK | 0.3924 | +2.9032 |
+| AA..JJ | 0.4128 | +2.2056 |
 
 Narrow face-pair stabs (AA, maybe KK) are the interesting region. Wide J+
 stabs are a blunt EV tax on the opener.
