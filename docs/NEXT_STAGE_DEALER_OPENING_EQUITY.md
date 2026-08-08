@@ -1,6 +1,6 @@
 # Next stage: dealer-seat opening equity validation data
 
-**Status:** Planned handoff for a fresh agent. Do not trust current opening charts as strategy truth until this validation layer exists.
+**Status:** Calling-draw pot odds / cascade / face-pair outs implemented (see `tests/fixtures/validation/` and PR #3). **Next implementation work:** [NEXT_STAGE_SHOWDOWN_MATRIX.md](NEXT_STAGE_SHOWDOWN_MATRIX.md).
 
 ## Goal
 
