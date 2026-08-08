@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fivecarddraw"
+version = "0.1.0"
+description = "Fixed-limit five-card draw (bug, jacks-or-better) pre-draw analysis toolkit"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "numpy>=1.26",
+  "numba>=0.59",
+  "pandas>=2.2",
+  "rich>=13.7",
+  "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-benchmark>=4.0"]
+
+[project.scripts]
+solve-predraw = "fivecarddraw.predraw.solve:main"
+audit-abstraction = "fivecarddraw.abstraction:main_audit"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
