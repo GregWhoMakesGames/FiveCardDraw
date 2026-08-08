@@ -32,7 +32,7 @@ See [README.md](README.md) for `pytest`, `solve-predraw`, `audit-abstraction`, a
 
 **Read first:** [docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md](docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md)
 
-Build dealer-seat opening equity **validation fixtures** and mathematical acceptance tests. Branch from updated `main` (solver v1 PR is already merged). Prefer a new Cloud Agent chat so context stays small.
+Build dealer-seat opening equity **validation fixtures** and mathematical acceptance tests. This is **not pre-draw-only**: must include one-card draw improvement for non-opening drawing callers, fine-grained trips+/straight/flush opener splits, and **card removal**. Branch from updated `main`. Prefer a new Cloud Agent chat so context stays small.
 
 ### Handoff checklist for new agents
 
