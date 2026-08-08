@@ -25,6 +25,7 @@ audit-abstraction = "fivecarddraw.abstraction:main_audit"
 analyze-draw-call-odds = "fivecarddraw.validation.draw_call_odds:main"
 analyze-cascade-odds = "fivecarddraw.validation.cascade_odds:main"
 analyze-face-pair-outs = "fivecarddraw.validation.face_pair_outs:main"
+analyze-showdown-matrix = "fivecarddraw.validation.showdown_matrix:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

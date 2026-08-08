@@ -1,0 +1,660 @@
+{
+  "meta": {
+    "stakes": "$0.25 ante / $2-$4",
+    "matchup": "dealer_opener_vs_one_2to1_drawing_caller",
+    "caller_set": "call_2to1 (bug 2:1 + FFS16), 18396 combos",
+    "deck_model": "exact remaining deck after both hands (43 cards); caller draws first, then dealer if drawing",
+    "outs_denominator_note": "Pot-odds fixtures use outs/48; this showdown matrix uses exact card removal for both holdings.",
+    "discard_policies": {
+      "caller": "keep4_draw1 (fixture 2:1 keep)",
+      "dealer_straight_plus": "stand_pat",
+      "dealer_two_pair": "stand_pat",
+      "dealer_trips": "keep_trips_draw2",
+      "dealer_one_pair": "keep_pair_draw3"
+    },
+    "case_descriptions": {
+      "1": "Dealer straight+ beats drawer straight+",
+      "1b": "Dealer straight+ beats drawer face-pair (not straight+)",
+      "2": "Dealer straight+ loses to drawer straight+",
+      "3": "Dealer starts <straight, improves to straight+, beats/ties drawer straight+",
+      "3b": "Dealer starts <straight, improves to straight+, loses to drawer straight+",
+      "4": "Dealer two pair/trips final beats drawer pair-only",
+      "4b": "Dealer two pair/trips loses to drawer straight+",
+      "5": "Dealer AA beats or ties drawer face pair",
+      "5c": "Dealer AA loses to drawer straight+",
+      "6": "Dealer KK beats or ties drawer face pair",
+      "6b": "Dealer KK loses to higher drawer face pair",
+      "6c": "Dealer KK loses to drawer straight+",
+      "7": "Dealer QQ beats or ties drawer face pair",
+      "7b": "Dealer QQ loses to higher drawer face pair",
+      "7c": "Dealer QQ loses to drawer straight+",
+      "8": "Dealer JJ ties drawer JJ",
+      "8b": "Dealer JJ loses to higher drawer face pair",
+      "8c": "Dealer JJ loses to drawer straight+"
+    },
+    "seed": 20260808,
+    "n_dealer_per_class": 400,
+    "n_callers_per_dealer": 25,
+    "mc_draws_when_dealer_draws": 8,
+    "cascade_ffs13": "deferred (deal rate ~0.03%)"
+  },
+  "opener_combo_counts": {
+    "pair_J": 89760,
+    "pair_Q": 89760,
+    "pair_K": 89760,
+    "pair_A": 137904,
+    "two_pair": 106920,
+    "two_pair_aces_up": 31680,
+    "trips": 48400,
+    "trips_K": 4400,
+    "trips_A": 10560,
+    "straight": 20532,
+    "flush": 7804,
+    "full_house": 4368,
+    "four_of_a_kind": 828,
+    "straight_flush": 204,
+    "five_aces": 1
+  },
+  "rows": [
+    {
+      "opener_class": "pair_J",
+      "n_dealer_combos": 89760,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.608487,
+        "tie": 0.0,
+        "caller_wins": 0.391512
+      },
+      "cases": {
+        "1": 0.0,
+        "1b": 0.0,
+        "2": 0.0,
+        "3": 0.004075,
+        "3b": 0.0003,
+        "4": 0.0,
+        "4b": 0.0,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.047275,
+        "8c": 0.344237
+      },
+      "caller_final": {
+        "miss": 0.407875,
+        "straight_plus": 0.348313,
+        "pair_low": 0.176875,
+        "face_pair": 0.066937
+      },
+      "dealer_final_straight_plus": 0.013237
+    },
+    {
+      "opener_class": "pair_Q",
+      "n_dealer_combos": 89760,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.61425,
+        "tie": 1.3e-05,
+        "caller_wins": 0.385738
+      },
+      "cases": {
+        "1": 0.0,
+        "1b": 0.0,
+        "2": 0.0,
+        "3": 0.0043,
+        "3b": 0.000287,
+        "4": 0.0,
+        "4b": 0.0,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.032225,
+        "7b": 0.044075,
+        "7c": 0.341662,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.402263,
+        "straight_plus": 0.345963,
+        "pair_low": 0.175475,
+        "face_pair": 0.0763
+      },
+      "dealer_final_straight_plus": 0.013737
+    },
+    {
+      "opener_class": "pair_K",
+      "n_dealer_combos": 89760,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.61815,
+        "tie": 0.0,
+        "caller_wins": 0.38185
+      },
+      "cases": {
+        "1": 0.0,
+        "1b": 0.0,
+        "2": 0.0,
+        "3": 0.004675,
+        "3b": 0.000237,
+        "4": 0.0,
+        "4b": 0.0,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.04105,
+        "6b": 0.039225,
+        "6c": 0.342625,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.405087,
+        "straight_plus": 0.3473,
+        "pair_low": 0.167338,
+        "face_pair": 0.080275
+      },
+      "dealer_final_straight_plus": 0.013737
+    },
+    {
+      "opener_class": "pair_A",
+      "n_dealer_combos": 137904,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.666362,
+        "tie": 0.000112,
+        "caller_wins": 0.333525
+      },
+      "cases": {
+        "1": 0.0,
+        "1b": 0.0,
+        "2": 0.0,
+        "3": 0.006975,
+        "3b": 0.003213,
+        "4": 0.0,
+        "4b": 0.0,
+        "5": 0.0467,
+        "5c": 0.330175,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.429762,
+        "straight_plus": 0.33715,
+        "pair_low": 0.183037,
+        "face_pair": 0.05005
+      },
+      "dealer_final_straight_plus": 0.031187
+    },
+    {
+      "opener_class": "two_pair",
+      "n_dealer_combos": 106920,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.658595,
+        "tie": 0.0,
+        "caller_wins": 0.341405
+      },
+      "cases": {
+        "1": 0.0,
+        "1b": 0.0,
+        "2": 0.0,
+        "3": 0.0,
+        "3b": 0.0,
+        "4": 0.249537,
+        "4b": 0.341405,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.409058,
+        "straight_plus": 0.341405,
+        "pair_low": 0.165519,
+        "face_pair": 0.084019
+      },
+      "dealer_final_straight_plus": 0.0
+    },
+    {
+      "opener_class": "two_pair_aces_up",
+      "n_dealer_combos": 31680,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.665902,
+        "tie": 0.0,
+        "caller_wins": 0.334098
+      },
+      "cases": {
+        "1": 0.0,
+        "1b": 0.0,
+        "2": 0.0,
+        "3": 0.0,
+        "3b": 0.0,
+        "4": 0.238107,
+        "4b": 0.334098,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.427795,
+        "straight_plus": 0.334098,
+        "pair_low": 0.18857,
+        "face_pair": 0.049537
+      },
+      "dealer_final_straight_plus": 0.0
+    },
+    {
+      "opener_class": "trips",
+      "n_dealer_combos": 48400,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.691275,
+        "tie": 0.0,
+        "caller_wins": 0.308725
+      },
+      "cases": {
+        "1": 0.0,
+        "1b": 0.0,
+        "2": 0.0,
+        "3": 0.032125,
+        "3b": 0.00205,
+        "4": 0.250175,
+        "4b": 0.308725,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.408975,
+        "straight_plus": 0.34085,
+        "pair_low": 0.167887,
+        "face_pair": 0.082287
+      },
+      "dealer_final_straight_plus": 0.102913
+    },
+    {
+      "opener_class": "trips_K",
+      "n_dealer_combos": 4400,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.686562,
+        "tie": 0.0,
+        "caller_wins": 0.313437
+      },
+      "cases": {
+        "1": 0.0,
+        "1b": 0.0,
+        "2": 0.0,
+        "3": 0.034,
+        "3b": 0.002175,
+        "4": 0.25765,
+        "4b": 0.313437,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.394912,
+        "straight_plus": 0.347438,
+        "pair_low": 0.174687,
+        "face_pair": 0.082962
+      },
+      "dealer_final_straight_plus": 0.105038
+    },
+    {
+      "opener_class": "trips_A",
+      "n_dealer_combos": 10560,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.711963,
+        "tie": 0.0,
+        "caller_wins": 0.288038
+      },
+      "cases": {
+        "1": 0.0,
+        "1b": 0.0,
+        "2": 0.0,
+        "3": 0.037613,
+        "3b": 0.004837,
+        "4": 0.242875,
+        "4b": 0.288038,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.431475,
+        "straight_plus": 0.32565,
+        "pair_low": 0.203925,
+        "face_pair": 0.03895
+      },
+      "dealer_final_straight_plus": 0.132587
+    },
+    {
+      "opener_class": "straight",
+      "n_dealer_combos": 20532,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.757981,
+        "tie": 0.010733,
+        "caller_wins": 0.231286
+      },
+      "cases": {
+        "1": 0.091612,
+        "1b": 0.061493,
+        "2": 0.231286,
+        "3": 0.0,
+        "3b": 0.0,
+        "4": 0.0,
+        "4b": 0.0,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.421937,
+        "straight_plus": 0.33363,
+        "pair_low": 0.18294,
+        "face_pair": 0.061493
+      },
+      "dealer_final_straight_plus": 1.0
+    },
+    {
+      "opener_class": "flush",
+      "n_dealer_combos": 7804,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.940051,
+        "tie": 2.6e-05,
+        "caller_wins": 0.059923
+      },
+      "cases": {
+        "1": 0.283991,
+        "1b": 0.062642,
+        "2": 0.059923,
+        "3": 0.0,
+        "3b": 0.0,
+        "4": 0.0,
+        "4b": 0.0,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.41484,
+        "straight_plus": 0.34394,
+        "pair_low": 0.178579,
+        "face_pair": 0.062642
+      },
+      "dealer_final_straight_plus": 1.0
+    },
+    {
+      "opener_class": "full_house",
+      "n_dealer_combos": 4368,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.976535,
+        "tie": 0.0,
+        "caller_wins": 0.023465
+      },
+      "cases": {
+        "1": 0.311735,
+        "1b": 0.07496,
+        "2": 0.023465,
+        "3": 0.0,
+        "3b": 0.0,
+        "4": 0.0,
+        "4b": 0.0,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.410979,
+        "straight_plus": 0.3352,
+        "pair_low": 0.17886,
+        "face_pair": 0.07496
+      },
+      "dealer_final_straight_plus": 1.0
+    },
+    {
+      "opener_class": "four_of_a_kind",
+      "n_dealer_combos": 828,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.97396,
+        "tie": 0.0,
+        "caller_wins": 0.02604
+      },
+      "cases": {
+        "1": 0.301188,
+        "1b": 0.070958,
+        "2": 0.02604,
+        "3": 0.0,
+        "3b": 0.0,
+        "4": 0.0,
+        "4b": 0.0,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.412177,
+        "straight_plus": 0.327228,
+        "pair_low": 0.189637,
+        "face_pair": 0.070958
+      },
+      "dealer_final_straight_plus": 1.0
+    },
+    {
+      "opener_class": "straight_flush",
+      "n_dealer_combos": 204,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 0.979409,
+        "tie": 0.003693,
+        "caller_wins": 0.016898
+      },
+      "cases": {
+        "1": 0.309353,
+        "1b": 0.045023,
+        "2": 0.016898,
+        "3": 0.0,
+        "3b": 0.0,
+        "4": 0.0,
+        "4b": 0.0,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.428333,
+        "straight_plus": 0.329944,
+        "pair_low": 0.1967,
+        "face_pair": 0.045023
+      },
+      "dealer_final_straight_plus": 1.0
+    },
+    {
+      "opener_class": "five_aces",
+      "n_dealer_combos": 1,
+      "n_dealer_samples": 400,
+      "n_caller_pairs": 10000,
+      "total_outcome_weight": 10000.0,
+      "mc_draws_when_dealer_draws": 8,
+      "outcomes": {
+        "dealer_wins": 1.0,
+        "tie": 0.0,
+        "caller_wins": 0.0
+      },
+      "cases": {
+        "1": 0.309353,
+        "1b": 0.038993,
+        "2": 0.0,
+        "3": 0.0,
+        "3b": 0.0,
+        "4": 0.0,
+        "4b": 0.0,
+        "5": 0.0,
+        "5c": 0.0,
+        "6": 0.0,
+        "6b": 0.0,
+        "6c": 0.0,
+        "7": 0.0,
+        "7b": 0.0,
+        "7c": 0.0,
+        "8": 0.0,
+        "8b": 0.0,
+        "8c": 0.0
+      },
+      "caller_final": {
+        "miss": 0.419856,
+        "straight_plus": 0.309353,
+        "pair_low": 0.231798,
+        "face_pair": 0.038993
+      },
+      "dealer_final_straight_plus": 1.0
+    }
+  ]
+}
