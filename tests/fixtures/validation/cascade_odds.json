@@ -1,0 +1,174 @@
+{
+  "meta": {
+    "total_hands": 2869685,
+    "unknown_cards": 48,
+    "seats_facing": 7,
+    "outs_denominator": "48 (independent events)",
+    "suit_haircut_bug_ffs": 0.15,
+    "suit_haircut_ffs_ffs": 0.12
+  },
+  "combos": {
+    "bug_2to1": 17280,
+    "ffs16": 1116,
+    "ffs13": 4224,
+    "call_2to1_total": 18396,
+    "bug_outs_mean": 16.625
+  },
+  "exact_pair_counts": {
+    "ordered_disjoint_bug_ffs16": 12237684,
+    "ordered_disjoint_ffs16_ffs16": 842556,
+    "ordered_disjoint_bug_ffs13": 47417400,
+    "ordered_disjoint_ffs16_ffs13": 3161976,
+    "total2": 4913773104240
+  },
+  "cascade_rates": {
+    "A_raw": 0.00010460041949362583,
+    "B_raw": 3.600832929125781e-06,
+    "C1_raw": 0.0004052956369274655,
+    "C2_raw": 2.702668380951633e-05,
+    "C_raw": 0.0004323223207369818,
+    "A_prime": 8.891035656958195e-05,
+    "B_prime": 3.168732977630687e-06,
+    "C_half": 0.0002161611603684909,
+    "cascade_to_2": 0.00030824024991570357
+  },
+  "effective_outs": {
+    "A_bug_ffs16": [
+      {
+        "label": "bug",
+        "outs": 14.945,
+        "notes": "mean bug 2:1 outs 16.625 minus ~1.68 blocked by FFS16 hole cards"
+      },
+      {
+        "label": "ffs16",
+        "outs": 13.81,
+        "notes": "16 outs; measured ~2.19 blocked by disjoint bug hand (includes bug)"
+      }
+    ],
+    "B_ffs16_ffs16": [
+      {
+        "label": "ffs16_a",
+        "outs": 14.52,
+        "notes": "16 outs minus ~1.48 blocked by other FFS16"
+      },
+      {
+        "label": "ffs16_b",
+        "outs": 14.52,
+        "notes": "symmetric"
+      }
+    ],
+    "C1_bug_ffs13": [
+      {
+        "label": "bug",
+        "outs": 14.945,
+        "notes": "reuse FFS16 blocker mean as proxy for FFS13 hole-card blockage on bug"
+      },
+      {
+        "label": "ffs13",
+        "outs": 11.02,
+        "notes": "13 outs; measured ~1.98 blocked by disjoint bug hand (includes bug)"
+      }
+    ],
+    "C2_ffs16_ffs13": [
+      {
+        "label": "ffs16",
+        "outs": 14.52,
+        "notes": "proxy: same mutual FFS blockage scale as B"
+      },
+      {
+        "label": "ffs13",
+        "outs": 11.52,
+        "notes": "proxy: ~1.48 outs blocked by FFS16 partner"
+      }
+    ]
+  },
+  "combined_vs_aa_plus": {
+    "seats_facing": 7,
+    "cascade": {
+      "cascade_to_2": 0.00030824024991570357,
+      "p_cascade_and_both_improve": 2.3721161197158573e-05,
+      "p_cascade_and_at_least_one_improves": 0.00014840957502032992,
+      "p_cascade_beats_aa_plus_approx": 0.00014840957502032992,
+      "aa_plus_win_assumption": "Caller improve to \u2265 straight beats opener AA / two pair / trips; ignores opener already holding straight+ / flush / boat.",
+      "components": {
+        "A_prime": {
+          "rate": 8.891035656958195e-05,
+          "outs_a": 14.945,
+          "outs_b": 13.81,
+          "p_both_hit": 0.08957918836805555,
+          "p_at_least_one_hit": 0.5094833116319445,
+          "rate_times_both": 7.964517579017567e-06,
+          "rate_times_at_least_one": 4.5298342903447626e-05,
+          "out_notes": [
+            "mean bug 2:1 outs 16.625 minus ~1.68 blocked by FFS16 hole cards",
+            "16 outs; measured ~2.19 blocked by disjoint bug hand (includes bug)"
+          ]
+        },
+        "B_prime": {
+          "rate": 3.168732977630687e-06,
+          "outs_a": 14.52,
+          "outs_b": 14.52,
+          "p_both_hit": 0.09150625,
+          "p_at_least_one_hit": 0.51349375,
+          "rate_times_both": 2.8995887203431804e-07,
+          "rate_times_at_least_one": 1.6271245794322474e-06,
+          "out_notes": [
+            "16 outs minus ~1.48 blocked by other FFS16",
+            "symmetric"
+          ]
+        },
+        "C_half_as_C1": {
+          "rate": 0.00020264781846373274,
+          "outs_a": 14.945,
+          "outs_b": 11.02,
+          "p_both_hit": 0.07148172743055556,
+          "p_at_least_one_hit": 0.4694557725694444,
+          "rate_times_both": 1.4485616123821248e-05,
+          "rate_times_at_least_one": 9.513418817640417e-05,
+          "out_notes": [
+            "reuse FFS16 blocker mean as proxy for FFS13 hole-card blockage on bug",
+            "13 outs; measured ~1.98 blocked by disjoint bug hand (includes bug)"
+          ]
+        },
+        "C_half_as_C2": {
+          "rate": 1.3513341904758167e-05,
+          "outs_a": 14.52,
+          "outs_b": 11.52,
+          "p_both_hit": 0.0726,
+          "p_at_least_one_hit": 0.4699,
+          "rate_times_both": 9.810686222854428e-07,
+          "rate_times_at_least_one": 6.349919361045862e-06,
+          "out_notes": [
+            "proxy: same mutual FFS blockage scale as B",
+            "proxy: ~1.48 outs blocked by FFS16 partner"
+          ]
+        }
+      },
+      "adjusted": {
+        "A_raw": 0.00010460041949362583,
+        "B_raw": 3.600832929125781e-06,
+        "C1_raw": 0.0004052956369274655,
+        "C2_raw": 2.702668380951633e-05,
+        "C_raw": 0.0004323223207369818,
+        "A_prime": 8.891035656958195e-05,
+        "B_prime": 3.168732977630687e-06,
+        "C_half": 0.0002161611603684909,
+        "cascade_to_2": 0.00030824024991570357
+      }
+    },
+    "single_16plus": {
+      "p_bug_among_seats": 0.04215096778914759,
+      "p_ffs16_among_seats_lin": 0.002722250003049115,
+      "p_cascade_raw_removed": 0.0005405235731597334,
+      "p_bug_single": 0.041641071732726506,
+      "p_ffs16_single": 0.0025834212338877215,
+      "p_hit_bug": 0.3463541666666667,
+      "p_hit_ffs16": 0.3333333333333333,
+      "p_single_16plus_hits_straight": 0.015283699110391286,
+      "p_single_beats_aa_plus_approx": 0.015283699110391286,
+      "aa_plus_win_assumption": "Improve to \u2265 straight beats opener AA / two pair / trips; same caveat as cascade path."
+    },
+    "p_combined_beats_aa_plus_approx": 0.015432108685411616,
+    "notes": "Combined \u2248 lone 16+ hit + cascade (\u22651 of 2 hits). Does not yet include draws to pairs beating JJ/QQ/KK only."
+  }
+}
