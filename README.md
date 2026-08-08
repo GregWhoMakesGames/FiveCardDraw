@@ -19,7 +19,7 @@ v1 solves **pre-draw only** (opening → call/raise vs open → raise/re-raise t
 
 **Not in v1:** sandbagging, post-draw play, full 8-way Nash, ante:bet ratio sweeps.
 
-**Important:** Current solver charts are a working pipeline, not verified strategy. Next work is dealer-seat opening equity validation — see [docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md](docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md).
+**Important:** Current solver charts are a working pipeline, not verified strategy. Calling-draw pot odds / cascade / face-pair outs live in PR validation fixtures; next work is the dealer vs drawer **showdown matrix** — see [docs/NEXT_STAGE_SHOWDOWN_MATRIX.md](docs/NEXT_STAGE_SHOWDOWN_MATRIX.md) and [docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md](docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md).
 
 ## Setup
 
