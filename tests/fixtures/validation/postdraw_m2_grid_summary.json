@@ -1,0 +1,221 @@
+{
+  "meta": {
+    "predraw_pot": 6.0,
+    "big_bet": 4.0,
+    "n_deals": 25000,
+    "seed": 20260808,
+    "opener_first": true,
+    "drawer_range": "call_2to1",
+    "doc": "docs/POSTDRAW_M2_FACE_PAIR_GRID.md",
+    "regenerate": "analyze-postdraw-m2 --n-deals 25000 --write-fixture",
+    "notes": [
+      "Opener always value-bets two pair+",
+      "Drawer always value-raises/bets straight+",
+      "One-pair call-downs match the drawer's aggression min rank"
+    ]
+  },
+  "findings": {
+    "default_check_one_pair": true,
+    "lead_aa_only_vs_passive_delta_d3": -0.3748,
+    "lead_jplus_vs_passive_delta_d3": -1.4606,
+    "lead_aa_vs_aa_stab_delta_d3": 0.0395
+  },
+  "sweep_lead": [
+    {
+      "lead": "never",
+      "vs_passive_drawer_ev_d3": 3.6662,
+      "vs_passive_drawer_ev_all": 2.8774,
+      "vs_AA_stab_no_raise": 3.2519,
+      "vs_AAJJ_stab_AAKK_raise": 2.2056
+    },
+    {
+      "lead": "AA",
+      "vs_passive_drawer_ev_d3": 3.2914,
+      "vs_passive_drawer_ev_all": 2.7104,
+      "vs_AA_stab_no_raise": 3.2914,
+      "vs_AAJJ_stab_AAKK_raise": 1.7956
+    },
+    {
+      "lead": "AA+KK",
+      "vs_passive_drawer_ev_d3": 2.9603,
+      "vs_passive_drawer_ev_all": 2.5628,
+      "vs_AA_stab_no_raise": 2.9603,
+      "vs_AAJJ_stab_AAKK_raise": 1.4427
+    },
+    {
+      "lead": "AA..QQ",
+      "vs_passive_drawer_ev_d3": 2.5862,
+      "vs_passive_drawer_ev_all": 2.3961,
+      "vs_AA_stab_no_raise": 2.5862,
+      "vs_AAJJ_stab_AAKK_raise": 1.4427
+    },
+    {
+      "lead": "AA..JJ",
+      "vs_passive_drawer_ev_d3": 2.2056,
+      "vs_passive_drawer_ev_all": 2.2265,
+      "vs_AA_stab_no_raise": 2.2056,
+      "vs_AAJJ_stab_AAKK_raise": 1.4427
+    }
+  ],
+  "sweep_stab": [
+    {
+      "stab": "never",
+      "ev_d3_if_opener_never_leads": 3.6662,
+      "ev_d3_if_opener_leads_AA": 3.2914,
+      "ev_d3_if_opener_leads_J+": 2.2056,
+      "stab_rate_if_check": 0.3434
+    },
+    {
+      "stab": "AA",
+      "ev_d3_if_opener_never_leads": 3.2519,
+      "ev_d3_if_opener_leads_AA": 3.2914,
+      "ev_d3_if_opener_leads_J+": 2.2056,
+      "stab_rate_if_check": 0.3905
+    },
+    {
+      "stab": "AA+KK",
+      "ev_d3_if_opener_never_leads": 2.9032,
+      "ev_d3_if_opener_leads_AA": 2.9384,
+      "ev_d3_if_opener_leads_J+": 2.2056,
+      "stab_rate_if_check": 0.3924
+    },
+    {
+      "stab": "AA..JJ",
+      "ev_d3_if_opener_never_leads": 2.2056,
+      "ev_d3_if_opener_leads_AA": 2.2056,
+      "ev_d3_if_opener_leads_J+": 2.2056,
+      "stab_rate_if_check": 0.4128
+    }
+  ],
+  "sweep_raise": [
+    {
+      "raise": "never",
+      "ev_d3_lead_AA": 3.2914,
+      "ev_d3_lead_J+": 2.2056,
+      "raise_rate_lead_AA": 0.1066,
+      "raise_rate_lead_J+": 0.3434
+    },
+    {
+      "raise": "AA",
+      "ev_d3_lead_AA": 2.877,
+      "ev_d3_lead_J+": 1.7913,
+      "raise_rate_lead_AA": 0.1135,
+      "raise_rate_lead_J+": 0.3905
+    },
+    {
+      "raise": "AA+KK",
+      "ev_d3_lead_AA": 2.8813,
+      "ev_d3_lead_J+": 1.4427,
+      "raise_rate_lead_AA": 0.1146,
+      "raise_rate_lead_J+": 0.3924
+    }
+  ],
+  "top_by_pair_final_d3": [
+    {
+      "policy": "lead=never|stab=never|raise=never",
+      "ev": 3.6662,
+      "n": 11141.0,
+      "lead_rate": 0.0,
+      "stab_rate": 0.3434,
+      "raise_rate": 0.0
+    },
+    {
+      "policy": "lead=never|stab=never|raise=AA",
+      "ev": 3.6662,
+      "n": 11141.0,
+      "lead_rate": 0.0,
+      "stab_rate": 0.3434,
+      "raise_rate": 0.0
+    },
+    {
+      "policy": "lead=never|stab=never|raise=AA+KK",
+      "ev": 3.6662,
+      "n": 11141.0,
+      "lead_rate": 0.0,
+      "stab_rate": 0.3434,
+      "raise_rate": 0.0
+    },
+    {
+      "policy": "lead=AA|stab=never|raise=never",
+      "ev": 3.2914,
+      "n": 11141.0,
+      "lead_rate": 0.3188,
+      "stab_rate": 0.2368,
+      "raise_rate": 0.1066
+    },
+    {
+      "policy": "lead=AA|stab=AA|raise=never",
+      "ev": 3.2914,
+      "n": 11141.0,
+      "lead_rate": 0.3188,
+      "stab_rate": 0.277,
+      "raise_rate": 0.1066
+    },
+    {
+      "policy": "lead=never|stab=AA|raise=never",
+      "ev": 3.2519,
+      "n": 11141.0,
+      "lead_rate": 0.0,
+      "stab_rate": 0.3905,
+      "raise_rate": 0.0
+    },
+    {
+      "policy": "lead=never|stab=AA|raise=AA",
+      "ev": 3.2519,
+      "n": 11141.0,
+      "lead_rate": 0.0,
+      "stab_rate": 0.3905,
+      "raise_rate": 0.0
+    },
+    {
+      "policy": "lead=never|stab=AA|raise=AA+KK",
+      "ev": 3.2519,
+      "n": 11141.0,
+      "lead_rate": 0.0,
+      "stab_rate": 0.3905,
+      "raise_rate": 0.0
+    }
+  ],
+  "bottom_by_pair_final_d3": [
+    {
+      "policy": "lead=AA+KK|stab=AA..JJ|raise=AA+KK",
+      "ev": 1.4427,
+      "n": 11141.0
+    },
+    {
+      "policy": "lead=AA..QQ|stab=AA..JJ|raise=AA+KK",
+      "ev": 1.4427,
+      "n": 11141.0
+    },
+    {
+      "policy": "lead=AA..JJ|stab=never|raise=AA+KK",
+      "ev": 1.4427,
+      "n": 11141.0
+    },
+    {
+      "policy": "lead=AA..JJ|stab=AA|raise=AA+KK",
+      "ev": 1.4427,
+      "n": 11141.0
+    },
+    {
+      "policy": "lead=AA..JJ|stab=AA+KK|raise=AA+KK",
+      "ev": 1.4427,
+      "n": 11141.0
+    },
+    {
+      "policy": "lead=AA..JJ|stab=AA..JJ|raise=AA+KK",
+      "ev": 1.4427,
+      "n": 11141.0
+    },
+    {
+      "policy": "lead=AA|stab=AA..JJ|raise=AA",
+      "ev": 1.7913,
+      "n": 11141.0
+    },
+    {
+      "policy": "lead=AA+KK|stab=AA..JJ|raise=AA",
+      "ev": 1.7913,
+      "n": 11141.0
+    }
+  ]
+}

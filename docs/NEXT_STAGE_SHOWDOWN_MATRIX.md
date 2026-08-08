@@ -5,6 +5,9 @@
 Calling-draw pot odds / cascade / face-pair outs are on `main` (merged PR #3).
 Reuse `tests/fixtures/validation/`.
 
+**Follow-on (done):** opener-first face-pair post-draw betting grid — see
+[POSTDRAW_M2_FACE_PAIR_GRID.md](POSTDRAW_M2_FACE_PAIR_GRID.md).
+
 **Do not** re-solve full 8-seat opens. Stay on dealer-opener × drawing-caller **post-draw showdown** probabilities.
 
 ---

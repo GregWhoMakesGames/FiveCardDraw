@@ -506,6 +506,8 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
         f"Deals: {payload['meta']['n_deals']}, pot into draw `${payload['meta']['predraw_pot']}`, "
         f"big bet `${payload['meta']['big_bet']}`.",
         "",
+        "Narrative findings: `docs/POSTDRAW_M2_FACE_PAIR_GRID.md`.",
+        "",
         "## Lead sweep (opener one-pair bet threshold)",
         "",
         "| Lead | EV d3 vs passive | EV d3 vs AA stab | EV d3 vs stab J+ & raise KK+ |",
@@ -559,6 +561,84 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
     return path
 
 
+def default_summary_fixture_path() -> Path:
+    return (
+        Path(__file__).resolve().parents[3]
+        / "tests"
+        / "fixtures"
+        / "validation"
+        / "postdraw_m2_grid_summary.json"
+    )
+
+
+def build_summary_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    """Compact checked-in summary (no per-policy row dump)."""
+    by_lead = {r["lead"]: r for r in payload["sweep_lead"]}
+
+    def round_row(row: dict[str, Any]) -> dict[str, Any]:
+        out: dict[str, Any] = {}
+        for k, v in row.items():
+            if isinstance(v, float):
+                out[k] = round(v, 4)
+            else:
+                out[k] = v
+        return out
+
+    return {
+        "meta": {
+            "predraw_pot": payload["meta"]["predraw_pot"],
+            "big_bet": payload["meta"]["big_bet"],
+            "n_deals": payload["meta"]["n_deals"],
+            "seed": payload["meta"]["seed"],
+            "opener_first": payload["meta"]["opener_first"],
+            "drawer_range": payload["meta"]["drawer_range"],
+            "doc": "docs/POSTDRAW_M2_FACE_PAIR_GRID.md",
+            "regenerate": "analyze-postdraw-m2 --n-deals 25000 --write-fixture",
+            "notes": payload["meta"]["notes"],
+        },
+        "findings": {
+            "default_check_one_pair": True,
+            "lead_aa_only_vs_passive_delta_d3": round(
+                by_lead["AA"]["vs_passive_drawer_ev_d3"]
+                - by_lead["never"]["vs_passive_drawer_ev_d3"],
+                4,
+            ),
+            "lead_jplus_vs_passive_delta_d3": round(
+                by_lead["AA..JJ"]["vs_passive_drawer_ev_d3"]
+                - by_lead["never"]["vs_passive_drawer_ev_d3"],
+                4,
+            ),
+            "lead_aa_vs_aa_stab_delta_d3": round(
+                by_lead["AA"]["vs_AA_stab_no_raise"]
+                - by_lead["never"]["vs_AA_stab_no_raise"],
+                4,
+            ),
+        },
+        "sweep_lead": [round_row(r) for r in payload["sweep_lead"]],
+        "sweep_stab": [round_row(r) for r in payload["sweep_stab"]],
+        "sweep_raise": [round_row(r) for r in payload["sweep_raise"]],
+        "top_by_pair_final_d3": [round_row(r) for r in payload["top_by_pair_final_d3"]],
+        "bottom_by_pair_final_d3": [
+            round_row(r) for r in payload["bottom_by_pair_final_d3"]
+        ],
+    }
+
+
+def write_summary_fixture(
+    payload: dict[str, Any], path: Path | None = None
+) -> Path:
+    path = path or default_summary_fixture_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    summary = build_summary_payload(payload)
+    path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
+def load_summary_fixture(path: Path | None = None) -> dict[str, Any]:
+    path = path or default_summary_fixture_path()
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def main() -> None:
     import argparse
 
@@ -567,17 +647,24 @@ def main() -> None:
     p.add_argument("--seed", type=int, default=20260808)
     p.add_argument("--quick", action="store_true")
     p.add_argument("-o", "--output", type=Path, default=None)
+    p.add_argument(
+        "--write-fixture",
+        action="store_true",
+        help="Also refresh tests/fixtures/validation/postdraw_m2_grid_summary.json",
+    )
     args = p.parse_args()
     n = 4_000 if args.quick else args.n_deals
     payload = run_grid(n_deals=n, seed=args.seed, progress=True)
     out = args.output or Path("outputs/validation/postdraw_m2_grid.json")
     out.parent.mkdir(parents=True, exist_ok=True)
-    # Store compact summary without full rows in md path; keep rows in json
     out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     md = out.with_suffix(".md")
     write_markdown_summary(payload, md)
     print(f"Wrote {out}")
     print(f"Wrote {md}")
+    if args.write_fixture:
+        fix = write_summary_fixture(payload)
+        print(f"Wrote fixture {fix}")
     print()
     print("Lead sweep (EV on pair-final d=3):")
     for r in payload["sweep_lead"]:
