@@ -19,6 +19,8 @@ v1 solves **pre-draw only** (opening → call/raise vs open → raise/re-raise t
 
 **Not in v1:** sandbagging, post-draw play, full 8-way Nash, ante:bet ratio sweeps.
 
+**Important:** Current solver charts are a working pipeline, not verified strategy. Next work is dealer-seat opening equity validation — see [docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md](docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md).
+
 ## Setup
 
 ```bash

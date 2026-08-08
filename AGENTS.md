@@ -26,3 +26,17 @@ See [README.md](README.md) for `pytest`, `solve-predraw`, `audit-abstraction`, a
 - Raise cap: `--max-raises 3` (default, bet+3) vs `--max-raises 1` (smaller tree). Comparison CSV is written automatically.
 - Solver is **position-by-position approximate GTO**, not full 8-way Nash. No sandbagging in v1. Equity uses abstracted strength/draw scores, not full remaining-deck enumeration each decision.
 - Hand eval is pure Python in v1; `python -m fivecarddraw.bench` documents the aspirational Numba target (≥2e6/s) vs current throughput.
+- **Do not treat current opening CSVs as correct strategy.** Early-position opens are known to be too loose vs combo-weighted domination/raise pressure (see validation doc).
+
+### Next stage (start here on a fresh agent)
+
+**Read first:** [docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md](docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md)
+
+Build dealer-seat opening equity **validation fixtures** and mathematical acceptance tests. This is **not pre-draw-only**: must include one-card draw improvement for non-opening drawing callers, fine-grained trips+/straight/flush opener splits, and **card removal**. Branch from updated `main`. Prefer a new Cloud Agent chat so context stays small.
+
+### Handoff checklist for new agents
+
+1. `git fetch origin main && git checkout main && git pull origin main`
+2. Create `cursor/<short-name>-14c6` (or the suffix required by the run)
+3. `pip install -e ".[dev]" && pytest -q`
+4. Implement validation per the next-stage doc; do not expand into full UTG re-solve until dealer fixtures exist
