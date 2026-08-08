@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "stakes": "$0.25 ante / $2-$4",
+    "outs_denominator": 48,
+    "outs_definition": "keep4 + draw => category >= straight",
+    "first_call": {
+      "pot_facing": 4.0,
+      "to_call": 2.0,
+      "required_odds": "2:1",
+      "required_equity": 0.3333333333333333,
+      "min_outs": 16
+    },
+    "second_call": {
+      "pot_facing": 6.0,
+      "to_call": 2.0,
+      "required_odds": "3:1",
+      "required_equity": 0.25,
+      "min_outs": 12
+    }
+  },
+  "call_2to1": {
+    "total_combos": 18396,
+    "with_bug": 17280,
+    "without_bug": 1116,
+    "outs_histogram": {
+      "16": 15552,
+      "19": 2088,
+      "22": 756
+    },
+    "by_class": [
+      {
+        "class": "bug_straight_draw|bug=True",
+        "combos": 11772,
+        "outs_min": 16,
+        "outs_max": 16
+      },
+      {
+        "class": "bug_sf_draw|bug=True",
+        "combos": 5508,
+        "outs_min": 16,
+        "outs_max": 22
+      },
+      {
+        "class": "four_flush_straight|bug=False",
+        "combos": 1116,
+        "outs_min": 16,
+        "outs_max": 16
+      }
+    ]
+  },
+  "call_3to1_candidates": {
+    "total_combos": 54792,
+    "with_bug": 49452,
+    "without_bug": 5340,
+    "ffs13_combos": 4224,
+    "ffs16_combos": 1116,
+    "note": "All non-opening one-card draws with outs/48 >= 1/4; includes the 2:1 subset."
+  },
+  "bug_outs_among_2to1": {
+    "histogram": {
+      "16": 14436,
+      "19": 2088,
+      "22": 756
+    },
+    "mean": 16.625
+  }
+}

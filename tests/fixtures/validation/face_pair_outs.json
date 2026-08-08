@@ -1,0 +1,940 @@
+{
+  "meta": {
+    "out_definition": "keep4 + draw => HandCategory.ONE_PAIR with pair rank in {J,Q,K,A}; higher categories (straight+) excluded from these outs",
+    "caller_sets": {
+      "call_2to1": "bug 2:1 + FFS16 (outs/48 \u2265 1/3)",
+      "bug_2to1": "bug-assisted 2:1 only",
+      "ffs16": "no-bug four_flush_straight with 16 outs",
+      "ffs13": "no-bug four_flush_straight with 13 outs (cascade-only)"
+    }
+  },
+  "sets": {
+    "call_2to1": {
+      "set": "call_2to1",
+      "n_hands": 18396,
+      "n_with_face_pair_draw": 15444,
+      "fraction_with_face_pair_draw": 0.83953,
+      "by_target": {
+        "AA": {
+          "hands_that_can_make": 13248,
+          "outs_dist": {
+            "3": 4680,
+            "4": 8568
+          },
+          "pure_pair_outs_dist": {
+            "3": 4680,
+            "4": 8568
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 13248
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        },
+        "KK": {
+          "hands_that_can_make": 660,
+          "outs_dist": {
+            "3": 660
+          },
+          "pure_pair_outs_dist": {
+            "3": 660
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 660
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        },
+        "QQ": {
+          "hands_that_can_make": 2556,
+          "outs_dist": {
+            "3": 2556
+          },
+          "pure_pair_outs_dist": {
+            "3": 2556
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 2556
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        },
+        "JJ": {
+          "hands_that_can_make": 4320,
+          "outs_dist": {
+            "3": 4320
+          },
+          "pure_pair_outs_dist": {
+            "3": 4320
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 4320
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        }
+      },
+      "by_draw_class": {
+        "bug_sf_draw": {
+          "AA": 4680,
+          "JJ": 1128,
+          "QQ": 840,
+          "KK": 564
+        },
+        "bug_straight_draw": {
+          "AA": 8568,
+          "JJ": 2868,
+          "QQ": 1512
+        },
+        "four_flush_straight": {
+          "JJ": 324,
+          "QQ": 204,
+          "KK": 96
+        }
+      },
+      "fine_buckets": [
+        {
+          "draw_class": "bug_straight_draw",
+          "target": "AA",
+          "face_pair_outs": 4,
+          "pure_pair_outs": 4,
+          "also_straight_plus_outs": 0,
+          "hands": 8568
+        },
+        {
+          "draw_class": "bug_sf_draw",
+          "target": "AA",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 4680
+        },
+        {
+          "draw_class": "bug_straight_draw",
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 2868
+        },
+        {
+          "draw_class": "bug_straight_draw",
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 1512
+        },
+        {
+          "draw_class": "bug_sf_draw",
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 1128
+        },
+        {
+          "draw_class": "bug_sf_draw",
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 840
+        },
+        {
+          "draw_class": "bug_sf_draw",
+          "target": "KK",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 564
+        },
+        {
+          "draw_class": "four_flush_straight",
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 324
+        },
+        {
+          "draw_class": "four_flush_straight",
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 204
+        },
+        {
+          "draw_class": "four_flush_straight",
+          "target": "KK",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 96
+        }
+      ],
+      "multi_target_hands": {
+        "AA": 10536,
+        "AA+JJ": 1944,
+        "QQ+JJ": 1704,
+        "AA+QQ": 300,
+        "AA+QQ+JJ": 180,
+        "KK+QQ+JJ": 180,
+        "JJ": 120,
+        "AA+KK": 96,
+        "AA+KK+JJ": 96,
+        "KK+JJ": 96,
+        "AA+KK+QQ": 96,
+        "KK+QQ": 96
+      },
+      "examples": [
+        {
+          "hand": "2c 2d 3c 6c Bu",
+          "keep": "2c 3c 6c Bu",
+          "discard": "2d",
+          "draw_class": "bug_sf_draw",
+          "straight_plus_outs": 16,
+          "target": "AA",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Ad",
+            "Ah",
+            "As"
+          ]
+        },
+        {
+          "hand": "4c 4d 5c 6d Bu",
+          "keep": "4c 5c 6d Bu",
+          "discard": "4d",
+          "draw_class": "bug_straight_draw",
+          "straight_plus_outs": 16,
+          "target": "AA",
+          "face_pair_outs": 4,
+          "pure_pair_outs": 4,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Ac",
+            "Ad",
+            "Ah",
+            "As"
+          ]
+        },
+        {
+          "hand": "5c 7d 8d Jd Bu",
+          "keep": "7d 8d Jd Bu",
+          "discard": "5c",
+          "draw_class": "bug_sf_draw",
+          "straight_plus_outs": 16,
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Jc",
+            "Jh",
+            "Js"
+          ]
+        },
+        {
+          "hand": "6c 8d 9d Qd Bu",
+          "keep": "8d 9d Qd Bu",
+          "discard": "6c",
+          "draw_class": "bug_sf_draw",
+          "straight_plus_outs": 16,
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Qc",
+            "Qh",
+            "Qs"
+          ]
+        },
+        {
+          "hand": "7c 9d Td Kd Bu",
+          "keep": "9d Td Kd Bu",
+          "discard": "7c",
+          "draw_class": "bug_sf_draw",
+          "straight_plus_outs": 16,
+          "target": "KK",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Kc",
+            "Kh",
+            "Ks"
+          ]
+        },
+        {
+          "hand": "2c 9c Tc Jd Bu",
+          "keep": "9c Tc Jd Bu",
+          "discard": "2c",
+          "draw_class": "bug_straight_draw",
+          "straight_plus_outs": 16,
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Jc",
+            "Jh",
+            "Js"
+          ]
+        },
+        {
+          "hand": "2c Tc Jc Qd Bu",
+          "keep": "Tc Jc Qd Bu",
+          "discard": "2c",
+          "draw_class": "bug_straight_draw",
+          "straight_plus_outs": 16,
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Qc",
+            "Qh",
+            "Qs"
+          ]
+        },
+        {
+          "hand": "2d 8c 9c Tc Jc",
+          "keep": "8c 9c Tc Jc",
+          "discard": "2d",
+          "draw_class": "four_flush_straight",
+          "straight_plus_outs": 16,
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Jd",
+            "Jh",
+            "Js"
+          ]
+        },
+        {
+          "hand": "2d 9c Tc Jc Qc",
+          "keep": "9c Tc Jc Qc",
+          "discard": "2d",
+          "draw_class": "four_flush_straight",
+          "straight_plus_outs": 16,
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Qd",
+            "Qh",
+            "Qs"
+          ]
+        },
+        {
+          "hand": "2d Tc Jc Qc Kc",
+          "keep": "Tc Jc Qc Kc",
+          "discard": "2d",
+          "draw_class": "four_flush_straight",
+          "straight_plus_outs": 16,
+          "target": "KK",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Kd",
+            "Kh",
+            "Ks"
+          ]
+        }
+      ],
+      "observation": "For these caller keeps, face-pair outs never coincide with straight+ outs (also_straight_plus_outs always 0): a card that makes a straight/flush ranks as that, not as one pair."
+    },
+    "bug_2to1": {
+      "set": "bug_2to1",
+      "n_hands": 17280,
+      "n_with_face_pair_draw": 15120,
+      "fraction_with_face_pair_draw": 0.875,
+      "by_target": {
+        "AA": {
+          "hands_that_can_make": 13248,
+          "outs_dist": {
+            "3": 4680,
+            "4": 8568
+          },
+          "pure_pair_outs_dist": {
+            "3": 4680,
+            "4": 8568
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 13248
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        },
+        "KK": {
+          "hands_that_can_make": 564,
+          "outs_dist": {
+            "3": 564
+          },
+          "pure_pair_outs_dist": {
+            "3": 564
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 564
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        },
+        "QQ": {
+          "hands_that_can_make": 2352,
+          "outs_dist": {
+            "3": 2352
+          },
+          "pure_pair_outs_dist": {
+            "3": 2352
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 2352
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        },
+        "JJ": {
+          "hands_that_can_make": 3996,
+          "outs_dist": {
+            "3": 3996
+          },
+          "pure_pair_outs_dist": {
+            "3": 3996
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 3996
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        }
+      },
+      "by_draw_class": {
+        "bug_sf_draw": {
+          "AA": 4680,
+          "JJ": 1128,
+          "QQ": 840,
+          "KK": 564
+        },
+        "bug_straight_draw": {
+          "AA": 8568,
+          "JJ": 2868,
+          "QQ": 1512
+        }
+      },
+      "fine_buckets": [
+        {
+          "draw_class": "bug_straight_draw",
+          "target": "AA",
+          "face_pair_outs": 4,
+          "pure_pair_outs": 4,
+          "also_straight_plus_outs": 0,
+          "hands": 8568
+        },
+        {
+          "draw_class": "bug_sf_draw",
+          "target": "AA",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 4680
+        },
+        {
+          "draw_class": "bug_straight_draw",
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 2868
+        },
+        {
+          "draw_class": "bug_straight_draw",
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 1512
+        },
+        {
+          "draw_class": "bug_sf_draw",
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 1128
+        },
+        {
+          "draw_class": "bug_sf_draw",
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 840
+        },
+        {
+          "draw_class": "bug_sf_draw",
+          "target": "KK",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 564
+        }
+      ],
+      "multi_target_hands": {
+        "AA": 10536,
+        "AA+JJ": 1944,
+        "QQ+JJ": 1596,
+        "AA+QQ": 300,
+        "AA+QQ+JJ": 180,
+        "AA+KK": 96,
+        "AA+KK+JJ": 96,
+        "KK+JJ": 96,
+        "AA+KK+QQ": 96,
+        "KK+QQ": 96,
+        "KK+QQ+JJ": 84
+      },
+      "examples": [
+        {
+          "hand": "2c 2d 3c 6c Bu",
+          "keep": "2c 3c 6c Bu",
+          "discard": "2d",
+          "draw_class": "bug_sf_draw",
+          "straight_plus_outs": 16,
+          "target": "AA",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Ad",
+            "Ah",
+            "As"
+          ]
+        },
+        {
+          "hand": "4c 4d 5c 6d Bu",
+          "keep": "4c 5c 6d Bu",
+          "discard": "4d",
+          "draw_class": "bug_straight_draw",
+          "straight_plus_outs": 16,
+          "target": "AA",
+          "face_pair_outs": 4,
+          "pure_pair_outs": 4,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Ac",
+            "Ad",
+            "Ah",
+            "As"
+          ]
+        },
+        {
+          "hand": "5c 7d 8d Jd Bu",
+          "keep": "7d 8d Jd Bu",
+          "discard": "5c",
+          "draw_class": "bug_sf_draw",
+          "straight_plus_outs": 16,
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Jc",
+            "Jh",
+            "Js"
+          ]
+        },
+        {
+          "hand": "6c 8d 9d Qd Bu",
+          "keep": "8d 9d Qd Bu",
+          "discard": "6c",
+          "draw_class": "bug_sf_draw",
+          "straight_plus_outs": 16,
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Qc",
+            "Qh",
+            "Qs"
+          ]
+        },
+        {
+          "hand": "7c 9d Td Kd Bu",
+          "keep": "9d Td Kd Bu",
+          "discard": "7c",
+          "draw_class": "bug_sf_draw",
+          "straight_plus_outs": 16,
+          "target": "KK",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Kc",
+            "Kh",
+            "Ks"
+          ]
+        },
+        {
+          "hand": "2c 9c Tc Jd Bu",
+          "keep": "9c Tc Jd Bu",
+          "discard": "2c",
+          "draw_class": "bug_straight_draw",
+          "straight_plus_outs": 16,
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Jc",
+            "Jh",
+            "Js"
+          ]
+        },
+        {
+          "hand": "2c Tc Jc Qd Bu",
+          "keep": "Tc Jc Qd Bu",
+          "discard": "2c",
+          "draw_class": "bug_straight_draw",
+          "straight_plus_outs": 16,
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Qc",
+            "Qh",
+            "Qs"
+          ]
+        }
+      ],
+      "observation": "For these caller keeps, face-pair outs never coincide with straight+ outs (also_straight_plus_outs always 0): a card that makes a straight/flush ranks as that, not as one pair."
+    },
+    "ffs16": {
+      "set": "ffs16",
+      "n_hands": 1116,
+      "n_with_face_pair_draw": 324,
+      "fraction_with_face_pair_draw": 0.29032,
+      "by_target": {
+        "AA": {
+          "hands_that_can_make": 0,
+          "outs_dist": {},
+          "pure_pair_outs_dist": {},
+          "also_straight_plus_outs_dist": {},
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        },
+        "KK": {
+          "hands_that_can_make": 96,
+          "outs_dist": {
+            "3": 96
+          },
+          "pure_pair_outs_dist": {
+            "3": 96
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 96
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        },
+        "QQ": {
+          "hands_that_can_make": 204,
+          "outs_dist": {
+            "3": 204
+          },
+          "pure_pair_outs_dist": {
+            "3": 204
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 204
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        },
+        "JJ": {
+          "hands_that_can_make": 324,
+          "outs_dist": {
+            "3": 324
+          },
+          "pure_pair_outs_dist": {
+            "3": 324
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 324
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        }
+      },
+      "by_draw_class": {
+        "four_flush_straight": {
+          "JJ": 324,
+          "QQ": 204,
+          "KK": 96
+        }
+      },
+      "fine_buckets": [
+        {
+          "draw_class": "four_flush_straight",
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 324
+        },
+        {
+          "draw_class": "four_flush_straight",
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 204
+        },
+        {
+          "draw_class": "four_flush_straight",
+          "target": "KK",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 96
+        }
+      ],
+      "multi_target_hands": {
+        "JJ": 120,
+        "QQ+JJ": 108,
+        "KK+QQ+JJ": 96
+      },
+      "examples": [
+        {
+          "hand": "2d 8c 9c Tc Jc",
+          "keep": "8c 9c Tc Jc",
+          "discard": "2d",
+          "draw_class": "four_flush_straight",
+          "straight_plus_outs": 16,
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Jd",
+            "Jh",
+            "Js"
+          ]
+        },
+        {
+          "hand": "2d 9c Tc Jc Qc",
+          "keep": "9c Tc Jc Qc",
+          "discard": "2d",
+          "draw_class": "four_flush_straight",
+          "straight_plus_outs": 16,
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Qd",
+            "Qh",
+            "Qs"
+          ]
+        },
+        {
+          "hand": "2d Tc Jc Qc Kc",
+          "keep": "Tc Jc Qc Kc",
+          "discard": "2d",
+          "draw_class": "four_flush_straight",
+          "straight_plus_outs": 16,
+          "target": "KK",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Kd",
+            "Kh",
+            "Ks"
+          ]
+        }
+      ],
+      "observation": "For these caller keeps, face-pair outs never coincide with straight+ outs (also_straight_plus_outs always 0): a card that makes a straight/flush ranks as that, not as one pair."
+    },
+    "ffs13": {
+      "set": "ffs13",
+      "n_hands": 4224,
+      "n_with_face_pair_draw": 2064,
+      "fraction_with_face_pair_draw": 0.48864,
+      "by_target": {
+        "AA": {
+          "hands_that_can_make": 948,
+          "outs_dist": {
+            "3": 948
+          },
+          "pure_pair_outs_dist": {
+            "3": 948
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 948
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        },
+        "KK": {
+          "hands_that_can_make": 660,
+          "outs_dist": {
+            "3": 660
+          },
+          "pure_pair_outs_dist": {
+            "3": 660
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 660
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        },
+        "QQ": {
+          "hands_that_can_make": 912,
+          "outs_dist": {
+            "3": 912
+          },
+          "pure_pair_outs_dist": {
+            "3": 912
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 912
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        },
+        "JJ": {
+          "hands_that_can_make": 1176,
+          "outs_dist": {
+            "3": 1176
+          },
+          "pure_pair_outs_dist": {
+            "3": 1176
+          },
+          "also_straight_plus_outs_dist": {
+            "0": 1176
+          },
+          "note": "outs_dist: among hands that can make this pair, how many one-card outs finish as exactly that one pair."
+        }
+      },
+      "by_draw_class": {
+        "four_flush_straight": {
+          "AA": 948,
+          "JJ": 1176,
+          "QQ": 912,
+          "KK": 660
+        }
+      },
+      "fine_buckets": [
+        {
+          "draw_class": "four_flush_straight",
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 1176
+        },
+        {
+          "draw_class": "four_flush_straight",
+          "target": "AA",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 948
+        },
+        {
+          "draw_class": "four_flush_straight",
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 912
+        },
+        {
+          "draw_class": "four_flush_straight",
+          "target": "KK",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "hands": 660
+        }
+      ],
+      "multi_target_hands": {
+        "AA": 528,
+        "JJ": 396,
+        "QQ+JJ": 240,
+        "QQ": 132,
+        "KK+JJ": 120,
+        "KK+QQ": 120,
+        "KK+QQ+JJ": 108,
+        "AA+QQ+JJ": 108,
+        "AA+KK+JJ": 108,
+        "AA+KK+QQ": 108,
+        "AA+KK+QQ+JJ": 96
+      },
+      "examples": [
+        {
+          "hand": "2c 2d 3c 4c Ac",
+          "keep": "2c 3c 4c Ac",
+          "discard": "2d",
+          "draw_class": "four_flush_straight",
+          "straight_plus_outs": 13,
+          "target": "AA",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Ad",
+            "Ah",
+            "As"
+          ]
+        },
+        {
+          "hand": "2d 7c 8c 9c Jc",
+          "keep": "7c 8c 9c Jc",
+          "discard": "2d",
+          "draw_class": "four_flush_straight",
+          "straight_plus_outs": 13,
+          "target": "JJ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Jd",
+            "Jh",
+            "Js"
+          ]
+        },
+        {
+          "hand": "2d 8c 9c Tc Qc",
+          "keep": "8c 9c Tc Qc",
+          "discard": "2d",
+          "draw_class": "four_flush_straight",
+          "straight_plus_outs": 13,
+          "target": "QQ",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Qd",
+            "Qh",
+            "Qs"
+          ]
+        },
+        {
+          "hand": "2d 9c Tc Jc Kc",
+          "keep": "9c Tc Jc Kc",
+          "discard": "2d",
+          "draw_class": "four_flush_straight",
+          "straight_plus_outs": 13,
+          "target": "KK",
+          "face_pair_outs": 3,
+          "pure_pair_outs": 3,
+          "also_straight_plus_outs": 0,
+          "example_out_cards": [
+            "Kd",
+            "Kh",
+            "Ks"
+          ]
+        }
+      ],
+      "observation": "For these caller keeps, face-pair outs never coincide with straight+ outs (also_straight_plus_outs always 0): a card that makes a straight/flush ranks as that, not as one pair."
+    }
+  }
+}
