@@ -16,6 +16,8 @@ def test_aaq85_differs_from_aa852():
     assert a.label() != q.label()
     assert q.count == 1
     assert a.count == 0
+    assert "F1" in q.detail
+    assert "F0" in a.detail
 
 
 def test_open_legal_flag():
@@ -28,4 +30,4 @@ def test_open_legal_flag():
 def test_bug_sf_draw_classified():
     # Suited connectors + bug — strong SF draw class
     key = bucket_hand(parse_hand("Bu 9c 8c 7c 2d"))
-    assert "bug" in key.draw
+    assert key.draw.startswith("bug")

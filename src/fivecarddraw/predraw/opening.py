@@ -12,7 +12,6 @@ from fivecarddraw.predraw.model import (
     blocker_open_multiplier,
     effective_hand_score,
     equity_vs_range,
-    normalize_weights,
     open_freq_prior,
 )
 from fivecarddraw.rules import GameConfig, SEAT_NAMES
@@ -26,16 +25,9 @@ class OpeningResult:
     records: list[dict]
 
 
-def _mass_open_prob(feat: BucketFeatures, open_freq: np.ndarray) -> float:
-    """Unconditional P(a random hand opens) under open_freq policy."""
+def _mass_weighted(feat: BucketFeatures, freq: np.ndarray) -> float:
     w = feat.weight
-    return float(np.sum(w * open_freq) / w.sum())
-
-
-def _range_after_open(feat: BucketFeatures, open_freq: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    w = feat.weight * open_freq
-    scores = np.array([effective_hand_score(feat, i) for i in range(len(w))])
-    return scores, w
+    return float(np.sum(w * freq) / w.sum())
 
 
 def solve_opening(
@@ -48,15 +40,15 @@ def solve_opening(
     Assumptions (explicit):
     - No sandbagging: open-legal hands either open or pass; they do not check strong hands.
     - Later seats use already-solved policies; earlier seats assume those policies.
-    - Multiway interactions after open are approximated via steal / single-call EV.
+    - Multiway interactions after open are approximated via steal / multi-caller EV.
     """
     n_seats = config.num_players
     n_buckets = len(feat.labels)
     open_freq = np.zeros((n_seats, n_buckets), dtype=np.float64)
     open_ev = np.zeros((n_seats, n_buckets), dtype=np.float64)
 
-    # Initialize late-position prior for bootstrapping dealer
     prior = open_freq_prior(feat, config)
+    scores = np.array([effective_hand_score(feat, i) for i in range(n_buckets)])
 
     seat_iter = range(n_seats - 1, -1, -1)
     if show_progress:
@@ -64,28 +56,31 @@ def solve_opening(
 
     for seat in seat_iter:
         behind = n_seats - seat - 1
-        # Policy of a representative player still to act:
-        # use next seat's solved policy if available, else prior.
         if seat + 1 < n_seats:
-            behind_policy = open_freq[seat + 1]
-            # Blend remaining seats toward average of solved later seats
             later = open_freq[seat + 1 :]
-            behind_policy = later.mean(axis=0) if later.size else prior
+            behind_open = later.mean(axis=0)
         else:
-            behind_policy = prior
+            behind_open = prior
 
-        p_open_raw = _mass_open_prob(feat, behind_policy)
-        call_scores, call_w = _range_after_open(feat, behind_policy)
-        # Cold-callers also include big draws that cannot open — approximate by
-        # adding draw-heavy pass hands into a "continue" range at reduced weight.
-        continue_w = call_w.copy()
+        p_open_raw = _mass_weighted(feat, behind_open)
+
+        # Hands that continue vs an open: openers + strong draws (cannot open).
+        continue_freq = behind_open.copy()
         for i in range(n_buckets):
             if feat.open_legal[i]:
                 continue
             if feat.draw_power[i] >= 0.55:
-                continue_w[i] += feat.weight[i] * 0.35
+                continue_freq[i] = max(continue_freq[i], 0.55)
+            elif feat.draw_power[i] >= 0.35:
+                continue_freq[i] = max(continue_freq[i], 0.20)
+        p_cont_raw = _mass_weighted(feat, continue_freq)
 
-        records_seat: list[dict] = []
+        # Range weights for equity when called / raised
+        call_w = feat.weight * continue_freq
+        open_w = feat.weight * behind_open
+        if call_w.sum() <= 0:
+            call_w = feat.weight * feat.open_legal.astype(np.float64)
+
         bucket_range = range(n_buckets)
         if show_progress:
             bucket_range = tqdm(
@@ -102,69 +97,87 @@ def solve_opening(
                 continue
 
             mult = blocker_open_multiplier(feat, i)
-            p_open_one = float(np.clip(p_open_raw * mult, 0.0, 0.95))
-            p_steal = (1.0 - p_open_one) ** behind if behind > 0 else 1.0
+            p_cont = float(np.clip(p_cont_raw * mult, 0.01, 0.90))
+            p_open_one = float(np.clip(p_open_raw * mult, 0.0, 0.85))
 
-            # Steal: win starting pot (antes). Fold EV = 0 at decision node.
+            # Steal only if nobody continues (call or raise)
+            p_steal = (1.0 - p_cont) ** behind if behind > 0 else 1.0
+
             pot0 = config.starting_pot
             sb = config.small_bet
-            ev_steal = pot0
+            hero = scores[i]
 
-            # When not stealing: approximate as getting exactly one caller who matched.
-            # Pot ~ pot0 + 2*sb, we have invested sb; equity vs continue range.
-            hero = effective_hand_score(feat, i)
-            eq = equity_vs_range(hero, call_scores, continue_w if continue_w.sum() else call_w)
-            pot_called = pot0 + 2 * sb
-            # Net chip EV relative to fold: -sb + eq * pot_called
-            ev_called = -sb + eq * pot_called
-
-            # Raise pressure: with small probability someone raises; then we continue
-            # only with stronger hands. Approximate EV penalty for medium hands.
-            p_raise = min(0.25, 0.08 * behind) * (0.5 + 0.5 * p_open_one)
-            if hero >= 0.62:
-                ev_raised = -2 * sb + 0.58 * (pot0 + 4 * sb)  # rough
-            elif hero >= 0.45:
-                ev_raised = -2 * sb + 0.40 * (pot0 + 4 * sb)
+            # Expected continuers conditional on ≥1 continuer
+            if behind == 0:
+                exp_cont = 0.0
             else:
-                ev_raised = -2 * sb  # fold to raise often → lose open+call
+                # Unconditional expected continuers; if steal fails use at least 1
+                exp_cont = max(1.0, behind * p_cont)
 
+            # Equity vs a calling-oriented range (down-weight premium made hands a bit
+            # so one high pair is not crushed by an opener-heavy two-pair range).
+            call_w_adj = call_w.copy()
+            for j in range(n_buckets):
+                if feat.strength[j] >= 0.70:
+                    call_w_adj[j] *= 0.55
+            eq_hu = equity_vs_range(hero, scores, call_w_adj)
+            # Soft multiway penalty (power laws are too harsh on premium pairs)
+            eq_multi = eq_hu / (1.0 + 0.28 * max(0.0, exp_cont - 1.0))
+            eq_multi = float(np.clip(eq_multi, 0.02, 0.95))
+
+            pot_called = pot0 + sb * (1.0 + exp_cont)
+            ev_steal = pot0
+            ev_called = -sb + eq_multi * pot_called
+
+            # Raise pressure from behind (subset of continuers)
+            p_raise_one = min(p_open_one * 0.30, 0.10)
+            p_face_raise = 1.0 - (1.0 - p_raise_one) ** behind if behind else 0.0
+            if hero >= 0.62:
+                ev_raised = -2 * sb + 0.58 * (pot0 + 4 * sb)
+            elif hero >= 0.52:
+                ev_raised = -2 * sb + 0.42 * (pot0 + 4 * sb)
+            elif hero >= 0.45:
+                ev_raised = -1.25 * sb
+            else:
+                ev_raised = -sb
+
+            # Mix: when not steal, sometimes raised vs called
+            p_action = 1.0 - p_steal
             ev = (
                 p_steal * ev_steal
-                + (1.0 - p_steal) * (1.0 - p_raise) * ev_called
-                + (1.0 - p_steal) * p_raise * ev_raised
+                + p_action * (1.0 - p_face_raise) * ev_called
+                + p_action * p_face_raise * ev_raised
             )
-            open_ev[seat, i] = ev
 
-            # Pure strategy unless near indifference
-            if ev > 0.05 * sb:
+            # Position risk premium scales up for weaker openers (JJ more than AA)
+            weakness = float(np.clip(0.70 - hero, 0.0, 0.40))
+            risk_premium = (0.05 * sb * behind) * (1.0 + 3.0 * weakness)
+            adj_ev = ev - risk_premium
+            open_ev[seat, i] = adj_ev
+
+            if adj_ev > 0.08 * sb:
                 freq = 1.0
-            elif ev < -0.05 * sb:
+            elif adj_ev < -0.08 * sb:
                 freq = 0.0
             else:
-                # Mix near indifference
-                freq = float(np.clip(0.5 + ev / sb, 0.0, 1.0))
+                freq = float(np.clip(0.5 + adj_ev / sb, 0.0, 1.0))
             open_freq[seat, i] = freq
-
-        # After solving seat, keep policy for earlier seats
 
     records: list[dict] = []
     for seat in range(n_seats):
         for i in range(n_buckets):
-            if not feat.open_legal[i] and open_freq[seat, i] == 0:
-                # Skip pass-only non-openers in opening chart for readability
+            if not feat.open_legal[i]:
                 continue
-            if open_freq[seat, i] <= 0 and open_ev[seat, i] <= 0:
-                # Still include open-legal folds? Include open-legal with any EV for charts
-                if not feat.open_legal[i]:
-                    continue
-            action = "Open" if open_freq[seat, i] >= 0.999 else (
-                "Pass" if open_freq[seat, i] <= 0.001 else f"Mix:{open_freq[seat, i]:.2f}"
-            )
-            if open_freq[seat, i] <= 0.001 and feat.open_legal[i]:
-                # include borderline passes for open-legal only when EV computed
-                if open_ev[seat, i] < -0.25 * config.small_bet:
-                    # omit clear passes to keep Super System–style tables shorter
-                    continue
+            freq = float(open_freq[seat, i])
+            # Keep opens and near-indifferent; drop clear passes for table length
+            if freq <= 0.001 and open_ev[seat, i] < -0.25 * config.small_bet:
+                continue
+            if freq >= 0.999:
+                action = "Open"
+            elif freq <= 0.001:
+                action = "Pass"
+            else:
+                action = f"Mix:{freq:.2f}"
             records.append(
                 {
                     "seat": SEAT_NAMES[seat],
@@ -172,13 +185,13 @@ def solve_opening(
                     "bucket": feat.labels[i],
                     "weight": feat.weight[i],
                     "action": action,
-                    "open_freq": round(float(open_freq[seat, i]), 4),
+                    "open_freq": round(freq, 4),
                     "ev_open": round(float(open_ev[seat, i]), 4),
-                    "open_legal": bool(feat.open_legal[i]),
+                    "open_legal": True,
+                    "score": round(float(scores[i]), 3),
                 }
             )
 
-    # Sort: seat, then open_freq desc, weight desc
     records.sort(key=lambda r: (r["seat_index"], -r["open_freq"], -r["weight"]))
     return OpeningResult(open_freq=open_freq, open_ev=open_ev, records=records)
 

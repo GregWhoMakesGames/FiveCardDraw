@@ -82,33 +82,37 @@ def _category_strength(category: str, detail: str) -> float:
     }.get(category, 0.1)
 
     if category == "one_pair" and detail.startswith("pair"):
-        # pair14:... etc
-        try:
-            pair_rank = int(detail.split(":")[0].replace("pair", ""))
-            base = 0.15 + (pair_rank - 2) * (0.35 / 12.0)
-        except ValueError:
-            pass
+        # Premium openers need clear separation from mid/low pairs.
+        token = detail.split(":")[0].replace("pair", "")
+        rank_map = {
+            "A": 0.64,
+            "K": 0.58,
+            "Q": 0.54,
+            "J": 0.50,
+            "mid": 0.32,
+            "low": 0.24,
+        }
+        if token in rank_map:
+            base = rank_map[token]
     return float(np.clip(base, 0.0, 1.0))
 
 
 def _draw_power(draw: str, category: str) -> float:
-    if draw.startswith("made_"):
+    if draw in {"made", "made_straight+", "made_trips", "made_two_pair", "made_quads", "made_boat", "made_five_aces"}:
         return 0.0
     mapping = {
+        # Coarse bins from abstraction._draw_bin_coarse
+        "bug_sf_strong": 0.92,
+        "bug_flushish": 0.75,
+        "bug_straightish": 0.55,
+        "four_flush": 0.60,
+        "straightish": 0.28,
+        "three_flush": 0.20,
+        "bug_ace": 0.25,
+        "none": 0.05,
+        # Legacy fine bins (smoke tests / older labels)
         "bug_sf_draw_high": 0.95,
         "bug_sf_draw_med": 0.80,
-        "bug_flush_or_better": 0.85,
-        "bug_flush_draw": 0.70,
-        "bug_sf_draw_low": 0.55,
-        "four_flush": 0.60,
-        "bug_straight_draw_4": 0.65,
-        "bug_straight_draw_3": 0.50,
-        "bug_straight_draw_2": 0.35,
-        "straight_draw_4": 0.40,
-        "straight_draw_3": 0.28,
-        "straight_draw_2": 0.18,
-        "three_flush": 0.20,
-        "bug_ace_material": 0.25,
         "no_draw": 0.05,
     }
     return mapping.get(draw, 0.1)

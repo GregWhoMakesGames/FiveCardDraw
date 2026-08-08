@@ -52,12 +52,21 @@ Useful flags:
 | File | Contents |
 | --- | --- |
 | `outputs/opening_by_seat.csv` | Open/Pass (and mixes) by seat × bucket |
+| `outputs/opening_chart_readable.csv` | Super System–style class × seat actions |
 | `outputs/opening_summary.csv` | Aggregate open % by seat |
 | `outputs/call_raise_vs_open.csv` | Fold/Call/Raise including non-opening draws |
 | `outputs/raise_tree.csv` | Facing raise / re-raise / cap lines |
 | `outputs/raise_cap_comparison.csv` | bet+3 vs bet+1 row counts |
 | `outputs/abstraction_audit.txt` | Bucket count + AA852/AAT43/AAQ85 checks |
 | `outputs/solve_meta.json` | Config, timings, listed approximations |
+
+### Performance (measured on Cloud Agent VM)
+
+| Stage | Typical time |
+| --- | --- |
+| Abstraction build (2.87M hands) | ~90–100s (then cached) |
+| Opening + response + raise tree | ~1–2s with cache |
+| Bucket count | ~384 (target: a few hundred) |
 
 Progress bars (via `tqdm`) show stage completion and ETA while solving.
 

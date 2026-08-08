@@ -43,13 +43,43 @@ def _kicker_bin(rank: int) -> str:
     if rank == 14:
         return "A"
     if rank in FACE_RANKS:
-        # Preserve Q vs K vs J somewhat — still coarse
-        if rank == 13:
-            return "K"
-        if rank == 12:
-            return "Q"
-        return "J"
+        return "F"  # collapse J/Q/K kickers; face *count* still separates AAQ85
     return "x"
+
+
+def _pair_rank_bin(pair: int) -> str:
+    """Coarse pair ranks to keep bucket count near a few hundred."""
+    if pair >= 14:
+        return "A"
+    if pair >= 13:
+        return "K"
+    if pair >= 12:
+        return "Q"
+    if pair >= 11:
+        return "J"
+    if pair >= 8:
+        return "mid"
+    return "low"
+
+
+def _draw_bin_coarse(draw: str) -> str:
+    if draw.startswith("made_"):
+        return "made"
+    if draw in {"bug_sf_draw_high", "bug_sf_draw_med"}:
+        return "bug_sf_strong"
+    if draw in {"bug_flush_or_better", "bug_flush_draw", "bug_sf_draw_low"}:
+        return "bug_flushish"
+    if draw.startswith("bug_straight_draw"):
+        return "bug_straightish"
+    if draw == "four_flush":
+        return "four_flush"
+    if draw.startswith("straight_draw"):
+        return "straightish"
+    if draw == "three_flush":
+        return "three_flush"
+    if draw == "bug_ace_material":
+        return "bug_ace"
+    return "none"
 
 
 def _draw_outs_class(cards: tuple[Card, ...]) -> str:
@@ -162,45 +192,52 @@ def bucket_hand(cards: Iterable[Card]) -> BucketKey:
     physical_aces = sum(1 for c in cards_t if not c.is_bug and c.rank == 14)
     aces = physical_aces + (1 if has_bug else 0)
     open_legal = can_open_jacks_or_better(cards_t)
-    draw = _draw_outs_class(cards_t)
+    draw = _draw_bin_coarse(_draw_outs_class(cards_t))
     cat = value.category_name
 
     if value.category == HandCategory.ONE_PAIR:
         pair = value.tiebreak[0]
         kickers = value.tiebreak[1:]
-        kbins = "".join(_kicker_bin(k) for k in kickers)
-        # Collapse low/mid patterns without faces: AA852 ~ AAT43 => pair=A, kbins without F
-        detail = f"pair{pair}:{kbins}"
+        # Face presence in kickers only (order-insensitive)
+        face_kick = sum(1 for k in kickers if k in FACE_RANKS or k == 14)
+        # Ace kicker separate from JQK for blocker flavor
+        ace_kick = 1 if any(k == 14 for k in kickers) else 0
+        face_kick_jqk = sum(1 for k in kickers if k in FACE_RANKS)
+        detail = f"pair{_pair_rank_bin(pair)}:F{face_kick_jqk}A{ace_kick}"
     elif value.category == HandCategory.TWO_PAIR:
-        detail = f"tp{value.tiebreak[0]}_{value.tiebreak[1]}:{_kicker_bin(value.tiebreak[2])}"
+        hi, lo = value.tiebreak[0], value.tiebreak[1]
+        detail = f"tp{_pair_rank_bin(hi)}_{_pair_rank_bin(lo)}"
     elif value.category == HandCategory.THREE_OF_A_KIND:
-        trips = value.tiebreak[0]
-        kbins = "".join(_kicker_bin(k) for k in value.tiebreak[1:])
-        detail = f"trips{trips}:{kbins}"
+        detail = f"trips{_pair_rank_bin(value.tiebreak[0])}"
     elif value.category == HandCategory.HIGH_CARD:
         top = value.tiebreak[0]
-        kbins = "".join(_kicker_bin(k) for k in value.tiebreak[:5])
-        detail = f"hc{top}:{kbins}"
+        top_bin = _pair_rank_bin(top) if top >= 11 else ("T" if top == 10 else "x")
+        detail = f"hc{top_bin}:F{faces}"
     elif value.category in (
         HandCategory.STRAIGHT,
         HandCategory.FLUSH,
         HandCategory.STRAIGHT_FLUSH,
     ):
-        detail = f"high{value.tiebreak[0]}"
+        # Coarse high card bins
+        high = value.tiebreak[0]
+        detail = "broadway" if high >= 11 else ("mid" if high >= 8 else "wheelish")
     elif value.category == HandCategory.FULL_HOUSE:
-        detail = f"fh{value.tiebreak[0]}_{value.tiebreak[1]}"
+        detail = f"fh{_pair_rank_bin(value.tiebreak[0])}"
     elif value.category == HandCategory.FOUR_OF_A_KIND:
-        detail = f"quad{value.tiebreak[0]}"
+        detail = f"quad{_pair_rank_bin(value.tiebreak[0])}"
     elif value.category == HandCategory.FIVE_ACES:
         detail = "five_aces"
     else:
         detail = "na"
 
+    # Face count for pairs already partly in detail; keep count field but bin it
+    face_bin = min(faces, 3)
+
     return BucketKey(
         category=cat,
         detail=detail,
-        count=faces,
-        aces=aces,
+        count=face_bin,
+        aces=min(aces, 3),
         has_bug=has_bug,
         draw=draw,
         open_legal=open_legal,

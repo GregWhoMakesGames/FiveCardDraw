@@ -53,10 +53,13 @@ def run_predraw_solve(
     write_csv(open_df, output_dir / "opening_by_seat.csv")
     summary_df = strategy_df_from_records(opening_summary(opening, feat, config))
     write_csv(summary_df, output_dir / "opening_summary.csv")
+    readable_df = _opening_readable_chart(open_df)
+    write_csv(readable_df, output_dir / "opening_chart_readable.csv")
     if show_progress:
         print_table(summary_df, "Opening summary (% of all hands)")
+        print_table(readable_df, "Readable opening chart (by class)")
         print_table(
-            open_df[open_df["open_freq"] >= 0.5].head(50),
+            open_df[open_df["open_freq"] >= 0.5].head(40),
             "Sample opening chart (freq>=0.5)",
         )
 
@@ -105,6 +108,60 @@ def run_predraw_solve(
     if show_progress:
         print(json.dumps(meta, indent=2))
     return meta
+
+
+def _opening_readable_chart(open_df):
+    """Collapse bucket rows into Super System–style class × seat actions."""
+    import pandas as pd
+
+    if open_df is None or open_df.empty:
+        return pd.DataFrame()
+
+    def hand_class(bucket: str) -> str:
+        parts = bucket.split("|")
+        cat, detail = parts[0], parts[1]
+        if cat == "one_pair":
+            return detail.split(":")[0].replace("pair", "pair_")
+        if cat == "two_pair":
+            return "two_pair"
+        if cat in {"three_of_a_kind", "straight", "flush", "full_house", "four_of_a_kind", "straight_flush", "five_aces"}:
+            return cat
+        return cat
+
+    rows = []
+    for seat, sdf in open_df.groupby("seat", sort=False):
+        sdf = sdf.copy()
+        sdf["hand_class"] = sdf["bucket"].map(hand_class)
+        for cls, cdf in sdf.groupby("hand_class"):
+            w = cdf["weight"].sum()
+            if w <= 0:
+                continue
+            freq = float((cdf["weight"] * cdf["open_freq"]).sum() / w)
+            if freq >= 0.85:
+                action = "Open"
+            elif freq <= 0.15:
+                action = "Pass"
+            else:
+                action = f"Mix:{freq:.2f}"
+            rows.append(
+                {
+                    "seat": seat,
+                    "hand_class": cls,
+                    "action": action,
+                    "open_freq": round(freq, 3),
+                    "combos": round(w, 1),
+                }
+            )
+    out = pd.DataFrame(rows)
+    if out.empty:
+        return out
+    # Pivot-friendly sort
+    seat_order = {n: i for i, n in enumerate(
+        ["UTG", "UTG+1", "UTG+2", "Lojack", "Hijack", "Cutoff", "Button", "Dealer"]
+    )}
+    out["seat_index"] = out["seat"].map(seat_order)
+    out = out.sort_values(["seat_index", "hand_class"]).drop(columns=["seat_index"])
+    return out.reset_index(drop=True)
 
 
 def _save_abstraction_cache(path: Path, table: AbstractionTable) -> None:

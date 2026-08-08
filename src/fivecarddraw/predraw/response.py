@@ -11,7 +11,6 @@ from fivecarddraw.predraw.model import (
     BucketFeatures,
     effective_hand_score,
     equity_vs_range,
-    normalize_weights,
 )
 from fivecarddraw.predraw.opening import OpeningResult
 from fivecarddraw.rules import GameConfig, SEAT_NAMES
@@ -24,15 +23,6 @@ class ResponseResult:
     # call_freq[hero_seat, bucket], raise_freq[hero_seat, bucket] vs a typical earlier open
     call_freq: np.ndarray
     raise_freq: np.ndarray
-
-
-def _opener_range(
-    feat: BucketFeatures, opening: OpeningResult, opener_seat: int
-) -> tuple[np.ndarray, np.ndarray]:
-    freq = opening.open_freq[opener_seat]
-    w = feat.weight * freq
-    scores = np.array([effective_hand_score(feat, i) for i in range(len(w))])
-    return scores, w
 
 
 def solve_responses(
@@ -60,8 +50,7 @@ def solve_responses(
         seat_iter = tqdm(list(seat_iter), desc="response seats", unit="seat")
 
     for hero in seat_iter:
-        opener_seat = 0 if hero == 1 else hero - 1
-        # Prefer earliest opener model for multiway feel: average opens of seats before hero
+        # Average opens of seats before hero as the opener model
         opener_freq = opening.open_freq[:hero].mean(axis=0)
         opp_scores = np.array([effective_hand_score(feat, i) for i in range(n_buckets)])
         opp_w = feat.weight * opener_freq
