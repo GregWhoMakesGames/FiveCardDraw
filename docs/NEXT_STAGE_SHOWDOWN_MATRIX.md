@@ -1,8 +1,17 @@
 # Next stage: dealer vs drawing-caller showdown matrix
 
-**Status:** Handoff for a fresh agent. Calling-draw pot odds / cascade / face-pair outs are on `main` (merged PR #3). Reuse `tests/fixtures/validation/`.
+**Status:** Implemented — see `src/fivecarddraw/validation/showdown_matrix.py`,
+`tests/fixtures/validation/showdown_matrix.json`, CLI `analyze-showdown-matrix`.
+Calling-draw pot odds / cascade / face-pair outs are on `main` (merged PR #3).
+Reuse `tests/fixtures/validation/`.
 
-**Do not** re-solve full 8-seat opens. Stay on dealer-opener × drawing-caller **post-draw showdown** probabilities.
+**Follow-on (done):** opener-first face-pair post-draw betting grid — see
+[POSTDRAW_M2_FACE_PAIR_GRID.md](POSTDRAW_M2_FACE_PAIR_GRID.md).
+
+**Next:** opener draw-count mixes + checking-range protection — see
+[NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md).
+
+**Do not** re-solve full 8-seat opens. Stay on dealer-opener × drawing-caller **post-draw** analysis.
 
 ---
 

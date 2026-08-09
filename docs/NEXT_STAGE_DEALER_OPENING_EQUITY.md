@@ -1,6 +1,6 @@
 # Next stage: dealer-seat opening equity validation data
 
-**Status:** Calling-draw pot odds / cascade / face-pair outs implemented (see `tests/fixtures/validation/` and PR #3). **Next implementation work:** [NEXT_STAGE_SHOWDOWN_MATRIX.md](NEXT_STAGE_SHOWDOWN_MATRIX.md).
+**Status:** Calling-draw pot odds / cascade / face-pair outs implemented (see `tests/fixtures/validation/` and PR #3). Showdown matrix + M2 face-pair post-draw grid: [NEXT_STAGE_SHOWDOWN_MATRIX.md](NEXT_STAGE_SHOWDOWN_MATRIX.md), [POSTDRAW_M2_FACE_PAIR_GRID.md](POSTDRAW_M2_FACE_PAIR_GRID.md). **Next:** [NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md).
 
 ## Goal
 
