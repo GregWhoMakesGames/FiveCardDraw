@@ -955,6 +955,8 @@ def run_stage_b(
                     ),
                     "d1_rate": r["public_d_rate"].get("1", 0.0),
                     "d1_rate_m2": m2_row["public_d_rate"].get("1", 0.0),
+                    "d2_rate": r["public_d_rate"].get("2", 0.0),
+                    "d2_rate_m2": m2_row["public_d_rate"].get("2", 0.0),
                 }
             )
 

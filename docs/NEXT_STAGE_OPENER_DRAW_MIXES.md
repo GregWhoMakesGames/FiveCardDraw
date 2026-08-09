@@ -75,18 +75,19 @@ with JJ.
 
 ### B — Draw defaults under M2 betting (check one pair; AA stab)
 
-| Draw policy | Δ opener EV vs M2 locked |
-| --- | ---: |
-| quads `d=1` only | ~0 (quads rare) |
-| **two pair `d=1` + quads `d=1`** (trips stay `d=2`) | **+0.140** |
-| **two pair + trips + quads all `d=1`** | **+0.125** |
-| trips stand + quads `d=1` | −0.065 |
+| Draw policy | Δ opener EV vs M2 locked | d=1 rate | d=2 rate |
+| --- | ---: | ---: | ---: |
+| quads `d=1` only | ~0 (quads rare) | 0.001 | 0.099 |
+| **two pair `d=1` + quads `d=1`** (trips stay `d=2`) | **+0.140** | 0.215 | 0.099 |
+| **two pair + trips + quads all `d=1`** | **+0.125** | **0.314** | **0** |
+| trips stand + quads `d=1` | −0.065 | 0.001 | 0 |
 
 Unified `d=1` (trips with two pair / quads) costs ~0.014 vs keeping trips on
 `d=2`, but makes the draw-one line a single public bucket (~31% of deals vs
 ~21% with two pair alone) — the natural home for later **pair `d=1`
 concealment**. Pure improvement still likes trips `d=2`; use trips `d=1` when
-building that coherent `d=1` range.
+building that coherent `d=1` range. With trips on `d=1`, public `d=2` drops to
+zero (no residual trips-looking line).
 
 ### C — Checking-range protection (draw = quads `d=1`; pairs `d=3`; two pair stand; trips `d=2`)
 
