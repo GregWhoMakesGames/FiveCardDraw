@@ -121,17 +121,24 @@ Full factorial grid with pairs fixed at `d=3`:
 | trips `d=2` | `tp1_tr2_q1` | **+0.140** | d=1 ≈ 21.5% (TP+quads); **d=2 ≈ 9.9%** (trips) |
 | trips `d=1` | `tp1_tr1_q1` | **+0.125** | d=1 ≈ 31.4% (TP+trips+quads); **d=2 = 0** |
 
-**Product direction (pair concealment — to validate later, not in C):**
+**Product direction (after C; pair EV still to verify):**
 
-- Prefer measuring C under **both** forks, default emphasis on **`tp1_tr2_q1`**
-  (higher EV; leaves a trips-looking `d=2` line that pairs could later join for
-  concealment while still allowing pair boat+ on `d=2`).
-- Unified trips `d=1` is only ~0.014 behind, but if pairs must join `d=1` to
-  conceal, Stage A says pair `d=1` has **zero boat+** and worse showdown than
-  `d=3`. Pair `d=2` still has boat+ (~1%). That favors keeping trips on `d=2`
-  *if* pair concealment is the next product goal — but **pair-mix EV is not in
-  the Stage B grid** (pairs were fixed `d=3`); treat “significant EV loss” as
-  Stage A–grounded direction, not a measured post-draw chip Δ yet.
+Both trips forks are live strategies under locked two pair `d=1` / quads `d=1` /
+pairs `d=3` for Stage C:
+
+| Strategy | Trips | Intent |
+| --- | --- | --- |
+| **Keep trips `d=2`** (`tp1_tr2_q1`) | Higher B EV (+0.140) | Leaves a public `d=2` lane; pairs *could* later mix into `d=2` for concealment while still allowing pair boat+ |
+| **Unify trips `d=1`** (`tp1_tr1_q1`) | Give up ~0.014 B EV | Strengthens / conceals **two pair** on a single public `d=1` line with trips+quads, while **leaving single pairs on `d=3`** (no requirement that pairs join `d=1`) |
+
+Run C under **both**. Neither fork requires moving pairs off `d=3` in C.
+
+**Open verification (not C):** Stage A showdown already ranks aggregate JJ–AA
+`d=3` ahead of `d=2` (win and boat+), and AA alone too (win ~0.673 vs 0.657;
+boat+ ~0.018 vs 0.012). Confirm that **post-draw EV** (with betting) still has
+pair `d=3` > `d=2` before committing concealment mixes — that chip Δ is not in
+the Stage B grid (pairs were fixed at `d=3`). Pair `d=1` remains worse on
+improvement (zero boat+).
 
 ### C — Checking-range protection (stale fixture note)
 
@@ -256,8 +263,8 @@ after C.
 
 | Run | `two_pair_d` | `trips_d` | `quads_d` | `pair_d` | Why |
 | --- | ---: | ---: | ---: | ---: | --- |
-| **C-primary** | 1 | **2** | 1 | 3 | Max B EV; keeps public `d=2` |
-| **C-unified** | 1 | **1** | 1 | 3 | Unified `d=1`; no public `d=2` |
+| **C-primary** | 1 | **2** | 1 | 3 | Max B EV; public `d=2` lane (optional later pair conceal) |
+| **C-unified** | 1 | **1** | 1 | 3 | Give ~0.014 EV to unify/conceal two pair on `d=1`; pairs stay `d=3` |
 
 Use `stage_b_draw_policy(1, 2, 1)` and `stage_b_draw_policy(1, 1, 1)` (or
 equivalents). **Replace** the old Stage C default `B_QUADS_D1` (`two_pair_d=0`).

@@ -36,9 +36,12 @@ Stages **A** and **B** are done (12-cell draw grid). Continue at **Step C** —
 checking-range protection — under the post-B draw defaults:
 
 - Locked: two pair `d=1`, quads `d=1`, pairs `d=3`
-- Fork: trips `d=2` (`tp1_tr2_q1`, primary) vs trips `d=1` (`tp1_tr1_q1`)
+- Fork: trips `d=2` (`tp1_tr2_q1`) vs trips `d=1` (`tp1_tr1_q1`) — both valid
+  (EV vs two-pair concealment on `d=1` with pairs still `d=3`)
 - Old C fixture used **two pair stand** — re-run; do not trust old magnitudes
-- Do **not** start pair `d≠3` concealment yet (see PAIR_CONCEALMENT after C)
+- Do **not** start pair `d≠3` mixes in C; after C, verify pair post-draw EV
+  `d=3` vs `d=2` before concealment work
+  (see [NEXT_STAGE_PAIR_CONCEALMENT.md](docs/NEXT_STAGE_PAIR_CONCEALMENT.md))
 
 Already done: [docs/POSTDRAW_M2_FACE_PAIR_GRID.md](docs/POSTDRAW_M2_FACE_PAIR_GRID.md),
 [docs/NEXT_STAGE_SHOWDOWN_MATRIX.md](docs/NEXT_STAGE_SHOWDOWN_MATRIX.md),
