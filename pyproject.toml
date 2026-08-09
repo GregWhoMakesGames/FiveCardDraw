@@ -27,6 +27,8 @@ analyze-cascade-odds = "fivecarddraw.validation.cascade_odds:main"
 analyze-face-pair-outs = "fivecarddraw.validation.face_pair_outs:main"
 analyze-showdown-matrix = "fivecarddraw.validation.showdown_matrix:main"
 analyze-postdraw-m2 = "fivecarddraw.validation.postdraw_betting_m2:main"
+analyze-postdraw-draw-mixes = "fivecarddraw.validation.postdraw_draw_mixes:main"
+analyze-opener-draw-beliefs = "fivecarddraw.validation.opener_draw_beliefs:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

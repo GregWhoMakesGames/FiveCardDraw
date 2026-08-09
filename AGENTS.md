@@ -30,22 +30,24 @@ See [README.md](README.md) for `pytest`, `solve-predraw`, `audit-abstraction`, a
 
 ### Next stage (start here on a fresh agent)
 
-**Read first:** [docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md)
+**Read first:** [docs/NEXT_STAGE_PAIR_CONCEALMENT.md](docs/NEXT_STAGE_PAIR_CONCEALMENT.md)
 
-Extend opener **draw-count mixes** (trips / two pair / pair with `d∈{0,1,2,3}`)
-and test **checking-range protection** (mix strong finals into checks so drawer
-face-pair stabs become unprofitable or indifferent). Reuse showdown + M2
-infrastructure; do not redo the `d=3` face-pair lead grid.
+Step 0 belief tables are **done** (`analyze-opener-draw-beliefs`, fixture
+`tests/fixtures/validation/opener_draw_beliefs.json`). Continue at **Step 1**
+(pair-rank showdown vs drawer final family), then Step 2 concealment EV under
+Exploit-d3. Do not re-run Step 0; do not conflate pat d=0 checks with d=3
+protection.
 
-Already done (showdown + M2): [docs/NEXT_STAGE_SHOWDOWN_MATRIX.md](docs/NEXT_STAGE_SHOWDOWN_MATRIX.md),
-[docs/POSTDRAW_M2_FACE_PAIR_GRID.md](docs/POSTDRAW_M2_FACE_PAIR_GRID.md).
+Already done: [docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md),
+[docs/POSTDRAW_M2_FACE_PAIR_GRID.md](docs/POSTDRAW_M2_FACE_PAIR_GRID.md),
+[docs/NEXT_STAGE_SHOWDOWN_MATRIX.md](docs/NEXT_STAGE_SHOWDOWN_MATRIX.md).
 
 Parent context: [docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md](docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md).
 
 ### Handoff checklist for new agents
 
 1. `git fetch origin main && git checkout main && git pull origin main`
-2. Create `cursor/<short-name>-3c3d` (or the suffix required by the run)
+2. Create `cursor/<short-name>-cf12` (or the suffix required by the run)
 3. `pip install -e ".[dev]" && pytest -q`
-4. Implement per `docs/NEXT_STAGE_OPENER_DRAW_MIXES.md` (A→B→C); do not UTG re-solve
-5. Read `docs/POSTDRAW_M2_FACE_PAIR_GRID.md` before changing post-draw betting assumptions
+4. Read `docs/NEXT_STAGE_PAIR_CONCEALMENT.md`; start at Step 1
+5. Do not expand into full UTG strategy work or sandbagging
