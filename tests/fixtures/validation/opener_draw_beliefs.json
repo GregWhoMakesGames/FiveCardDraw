@@ -1,0 +1,644 @@
+{
+  "meta": {
+    "step": 0,
+    "seed": 20260809,
+    "n_per_cell": 4000,
+    "drawer_range": "call_2to1",
+    "doc": "docs/NEXT_STAGE_PAIR_CONCEALMENT.md",
+    "regenerate": "analyze-opener-draw-beliefs --write-fixture",
+    "notes": [
+      "P(class|d) is exact from inventory weights under pure draw policies",
+      "P(final|class,d) is MC vs 2:1 callers with card removal",
+      "Beliefs are opener-marginal (caller removal averaged in MC finals only)"
+    ]
+  },
+  "inventory_counts": {
+    "pair_J": 89760,
+    "pair_Q": 89760,
+    "pair_K": 89760,
+    "pair_A": 137904,
+    "two_pair": 106920,
+    "two_pair_aces_up": 31680,
+    "trips": 48400,
+    "trips_K": 4400,
+    "trips_A": 10560,
+    "straight": 20532,
+    "flush": 7804,
+    "full_house": 4368,
+    "four_of_a_kind": 828,
+    "straight_flush": 204,
+    "five_aces": 1
+  },
+  "inventory_prior_family": {
+    "four_of_a_kind": 0.00129,
+    "other_straight_plus": 0.05119,
+    "pair": 0.63337,
+    "trips": 0.09856,
+    "two_pair": 0.21559
+  },
+  "highlights": {
+    "inventory_prior_family": {
+      "four_of_a_kind": 0.00129,
+      "other_straight_plus": 0.05119,
+      "pair": 0.63337,
+      "trips": 0.09856,
+      "two_pair": 0.21559
+    },
+    "d3_under_pairs_d3": {
+      "draw_policy": "pairs_d3",
+      "p_d3": 0.63337,
+      "d3_pair_family_mass": 1.0,
+      "p_family_given_d3": {
+        "pair": 1.0
+      },
+      "p_family_given_d2": {
+        "trips": 1.0
+      },
+      "p_family_given_d1": {
+        "four_of_a_kind": 1.0
+      },
+      "p_family_given_d0": {
+        "other_straight_plus": 0.19188,
+        "two_pair": 0.80812
+      }
+    },
+    "d3_under_pairs_d2": {
+      "draw_policy": "pairs_d2",
+      "p_d3": 0.0,
+      "d3_pair_family_mass": 0.0,
+      "p_family_given_d3": {},
+      "p_family_given_d2": {
+        "pair": 0.86535,
+        "trips": 0.13465
+      },
+      "p_family_given_d1": {
+        "four_of_a_kind": 1.0
+      },
+      "p_family_given_d0": {
+        "other_straight_plus": 0.19188,
+        "two_pair": 0.80812
+      }
+    },
+    "d3_under_pairs_d1": {
+      "draw_policy": "pairs_d1",
+      "p_d3": 0.0,
+      "d3_pair_family_mass": 0.0,
+      "p_family_given_d3": {},
+      "p_family_given_d2": {
+        "trips": 1.0
+      },
+      "p_family_given_d1": {
+        "four_of_a_kind": 0.00203,
+        "pair": 0.99797
+      },
+      "p_family_given_d0": {
+        "other_straight_plus": 0.19188,
+        "two_pair": 0.80812
+      }
+    },
+    "d3_under_pairs_stand": {
+      "draw_policy": "pairs_stand",
+      "p_d3": 0.0,
+      "d3_pair_family_mass": 0.0,
+      "p_family_given_d3": {},
+      "p_family_given_d2": {
+        "trips": 1.0
+      },
+      "p_family_given_d1": {
+        "four_of_a_kind": 1.0
+      },
+      "p_family_given_d0": {
+        "other_straight_plus": 0.05687,
+        "pair": 0.70363,
+        "two_pair": 0.2395
+      }
+    },
+    "note": "Under pairs_d3, public d=3 is 100% pair-family by construction. Diverting all pairs to d=2/d=1/stand empties d=3 and pollutes those lines; Step 2 asks whether rank-selective diversion is +EV vs Exploit-d3 drawer stabs."
+  },
+  "beliefs_by_policy": [
+    {
+      "draw_policy": "m2_locked",
+      "draw": {
+        "pair_d": 3,
+        "two_pair_d": 0,
+        "trips_d": 2,
+        "quads_d": 0
+      },
+      "p_public_d": {
+        "0": 0.26807,
+        "1": 0.0,
+        "2": 0.09856,
+        "3": 0.63337
+      },
+      "p_family_given_d": {
+        "0": {
+          "four_of_a_kind": 0.00481,
+          "other_straight_plus": 0.19096,
+          "two_pair": 0.80424
+        },
+        "2": {
+          "trips": 1.0
+        },
+        "3": {
+          "pair": 1.0
+        }
+      },
+      "d3_pair_family_mass": 1.0,
+      "p_class_given_d3": {
+        "pair_A": 0.33868,
+        "pair_J": 0.22044,
+        "pair_K": 0.22044,
+        "pair_Q": 0.22044
+      }
+    },
+    {
+      "draw_policy": "quads_d1",
+      "draw": {
+        "pair_d": 3,
+        "two_pair_d": 0,
+        "trips_d": 2,
+        "quads_d": 1
+      },
+      "p_public_d": {
+        "0": 0.26678,
+        "1": 0.00129,
+        "2": 0.09856,
+        "3": 0.63337
+      },
+      "p_family_given_d": {
+        "0": {
+          "other_straight_plus": 0.19188,
+          "two_pair": 0.80812
+        },
+        "1": {
+          "four_of_a_kind": 1.0
+        },
+        "2": {
+          "trips": 1.0
+        },
+        "3": {
+          "pair": 1.0
+        }
+      },
+      "d3_pair_family_mass": 1.0,
+      "p_class_given_d3": {
+        "pair_A": 0.33868,
+        "pair_J": 0.22044,
+        "pair_K": 0.22044,
+        "pair_Q": 0.22044
+      }
+    },
+    {
+      "draw_policy": "two_pair_d1_quads_d1",
+      "draw": {
+        "pair_d": 3,
+        "two_pair_d": 1,
+        "trips_d": 2,
+        "quads_d": 1
+      },
+      "p_public_d": {
+        "0": 0.05119,
+        "1": 0.21688,
+        "2": 0.09856,
+        "3": 0.63337
+      },
+      "p_family_given_d": {
+        "0": {
+          "other_straight_plus": 1.0
+        },
+        "1": {
+          "four_of_a_kind": 0.00594,
+          "two_pair": 0.99406
+        },
+        "2": {
+          "trips": 1.0
+        },
+        "3": {
+          "pair": 1.0
+        }
+      },
+      "d3_pair_family_mass": 1.0,
+      "p_class_given_d3": {
+        "pair_A": 0.33868,
+        "pair_J": 0.22044,
+        "pair_K": 0.22044,
+        "pair_Q": 0.22044
+      }
+    },
+    {
+      "draw_policy": "pairs_d3",
+      "draw": {
+        "pair_d": 3,
+        "two_pair_d": 0,
+        "trips_d": 2,
+        "quads_d": 1
+      },
+      "p_public_d": {
+        "0": 0.26678,
+        "1": 0.00129,
+        "2": 0.09856,
+        "3": 0.63337
+      },
+      "p_family_given_d": {
+        "0": {
+          "other_straight_plus": 0.19188,
+          "two_pair": 0.80812
+        },
+        "1": {
+          "four_of_a_kind": 1.0
+        },
+        "2": {
+          "trips": 1.0
+        },
+        "3": {
+          "pair": 1.0
+        }
+      },
+      "d3_pair_family_mass": 1.0,
+      "p_class_given_d3": {
+        "pair_A": 0.33868,
+        "pair_J": 0.22044,
+        "pair_K": 0.22044,
+        "pair_Q": 0.22044
+      }
+    },
+    {
+      "draw_policy": "pairs_d2",
+      "draw": {
+        "pair_d": 2,
+        "two_pair_d": 0,
+        "trips_d": 2,
+        "quads_d": 1
+      },
+      "p_public_d": {
+        "0": 0.26678,
+        "1": 0.00129,
+        "2": 0.73193,
+        "3": 0.0
+      },
+      "p_family_given_d": {
+        "0": {
+          "other_straight_plus": 0.19188,
+          "two_pair": 0.80812
+        },
+        "1": {
+          "four_of_a_kind": 1.0
+        },
+        "2": {
+          "pair": 0.86535,
+          "trips": 0.13465
+        }
+      },
+      "d3_pair_family_mass": 0.0,
+      "p_class_given_d3": null
+    },
+    {
+      "draw_policy": "pairs_d1",
+      "draw": {
+        "pair_d": 1,
+        "two_pair_d": 0,
+        "trips_d": 2,
+        "quads_d": 1
+      },
+      "p_public_d": {
+        "0": 0.26678,
+        "1": 0.63466,
+        "2": 0.09856,
+        "3": 0.0
+      },
+      "p_family_given_d": {
+        "0": {
+          "other_straight_plus": 0.19188,
+          "two_pair": 0.80812
+        },
+        "1": {
+          "four_of_a_kind": 0.00203,
+          "pair": 0.99797
+        },
+        "2": {
+          "trips": 1.0
+        }
+      },
+      "d3_pair_family_mass": 0.0,
+      "p_class_given_d3": null
+    },
+    {
+      "draw_policy": "pairs_stand",
+      "draw": {
+        "pair_d": 0,
+        "two_pair_d": 0,
+        "trips_d": 2,
+        "quads_d": 1
+      },
+      "p_public_d": {
+        "0": 0.90016,
+        "1": 0.00129,
+        "2": 0.09856,
+        "3": 0.0
+      },
+      "p_family_given_d": {
+        "0": {
+          "other_straight_plus": 0.05687,
+          "pair": 0.70363,
+          "two_pair": 0.2395
+        },
+        "1": {
+          "four_of_a_kind": 1.0
+        },
+        "2": {
+          "trips": 1.0
+        }
+      },
+      "d3_pair_family_mass": 0.0,
+      "p_class_given_d3": null
+    }
+  ],
+  "finals_by_class_d": [
+    {
+      "opener_class": "pair_J",
+      "n_draw": 3,
+      "n": 4000.0,
+      "p_final": {
+        "four_of_a_kind": 0.00225,
+        "full_house": 0.009,
+        "one_pair": 0.71325,
+        "trips": 0.11,
+        "two_pair": 0.1655
+      },
+      "p_bucket": {
+        "boat_plus": 0.01125,
+        "one_pair": 0.71325,
+        "trips": 0.11,
+        "two_pair": 0.1655
+      }
+    },
+    {
+      "opener_class": "pair_J",
+      "n_draw": 2,
+      "n": 4000.0,
+      "p_final": {
+        "four_of_a_kind": 0.00125,
+        "full_house": 0.00875,
+        "one_pair": 0.7385,
+        "trips": 0.072,
+        "two_pair": 0.1795
+      },
+      "p_bucket": {
+        "boat_plus": 0.01,
+        "one_pair": 0.7385,
+        "trips": 0.072,
+        "two_pair": 0.1795
+      }
+    },
+    {
+      "opener_class": "pair_J",
+      "n_draw": 1,
+      "n": 4000.0,
+      "p_final": {
+        "one_pair": 0.83325,
+        "trips": 0.04275,
+        "two_pair": 0.124
+      },
+      "p_bucket": {
+        "one_pair": 0.83325,
+        "trips": 0.04275,
+        "two_pair": 0.124
+      }
+    },
+    {
+      "opener_class": "pair_J",
+      "n_draw": 0,
+      "n": 4000.0,
+      "p_final": {
+        "one_pair": 1.0
+      },
+      "p_bucket": {
+        "one_pair": 1.0
+      }
+    },
+    {
+      "opener_class": "pair_A",
+      "n_draw": 3,
+      "n": 4000.0,
+      "p_final": {
+        "four_of_a_kind": 0.00475,
+        "full_house": 0.01225,
+        "one_pair": 0.6655,
+        "straight_plus_other": 0.0175,
+        "trips": 0.14525,
+        "two_pair": 0.15475
+      },
+      "p_bucket": {
+        "boat_plus": 0.0345,
+        "one_pair": 0.6655,
+        "trips": 0.14525,
+        "two_pair": 0.15475
+      }
+    },
+    {
+      "opener_class": "pair_A",
+      "n_draw": 2,
+      "n": 4000.0,
+      "p_final": {
+        "four_of_a_kind": 0.00125,
+        "full_house": 0.00925,
+        "one_pair": 0.71125,
+        "straight_plus_other": 0.01625,
+        "trips": 0.1025,
+        "two_pair": 0.1595
+      },
+      "p_bucket": {
+        "boat_plus": 0.02675,
+        "one_pair": 0.71125,
+        "trips": 0.1025,
+        "two_pair": 0.1595
+      }
+    },
+    {
+      "opener_class": "pair_A",
+      "n_draw": 1,
+      "n": 4000.0,
+      "p_final": {
+        "one_pair": 0.80325,
+        "straight_plus_other": 0.0205,
+        "trips": 0.05275,
+        "two_pair": 0.1235
+      },
+      "p_bucket": {
+        "boat_plus": 0.0205,
+        "one_pair": 0.80325,
+        "trips": 0.05275,
+        "two_pair": 0.1235
+      }
+    },
+    {
+      "opener_class": "pair_A",
+      "n_draw": 0,
+      "n": 4000.0,
+      "p_final": {
+        "one_pair": 1.0
+      },
+      "p_bucket": {
+        "one_pair": 1.0
+      }
+    },
+    {
+      "opener_class": "pair_Q",
+      "n_draw": 3,
+      "n": 4000.0,
+      "p_final": {
+        "four_of_a_kind": 0.0025,
+        "full_house": 0.0095,
+        "one_pair": 0.70725,
+        "trips": 0.1175,
+        "two_pair": 0.16325
+      },
+      "p_bucket": {
+        "boat_plus": 0.012,
+        "one_pair": 0.70725,
+        "trips": 0.1175,
+        "two_pair": 0.16325
+      }
+    },
+    {
+      "opener_class": "pair_Q",
+      "n_draw": 2,
+      "n": 4000.0,
+      "p_final": {
+        "four_of_a_kind": 0.00025,
+        "full_house": 0.00675,
+        "one_pair": 0.7325,
+        "trips": 0.08025,
+        "two_pair": 0.18025
+      },
+      "p_bucket": {
+        "boat_plus": 0.007,
+        "one_pair": 0.7325,
+        "trips": 0.08025,
+        "two_pair": 0.18025
+      }
+    },
+    {
+      "opener_class": "pair_K",
+      "n_draw": 3,
+      "n": 4000.0,
+      "p_final": {
+        "four_of_a_kind": 0.00275,
+        "full_house": 0.011,
+        "one_pair": 0.69775,
+        "trips": 0.1245,
+        "two_pair": 0.164
+      },
+      "p_bucket": {
+        "boat_plus": 0.01375,
+        "one_pair": 0.69775,
+        "trips": 0.1245,
+        "two_pair": 0.164
+      }
+    },
+    {
+      "opener_class": "pair_K",
+      "n_draw": 2,
+      "n": 4000.0,
+      "p_final": {
+        "four_of_a_kind": 0.00175,
+        "full_house": 0.01175,
+        "one_pair": 0.726,
+        "trips": 0.07725,
+        "two_pair": 0.18325
+      },
+      "p_bucket": {
+        "boat_plus": 0.0135,
+        "one_pair": 0.726,
+        "trips": 0.07725,
+        "two_pair": 0.18325
+      }
+    },
+    {
+      "opener_class": "two_pair",
+      "n_draw": 0,
+      "n": 4000.0,
+      "p_final": {
+        "two_pair": 1.0
+      },
+      "p_bucket": {
+        "two_pair": 1.0
+      }
+    },
+    {
+      "opener_class": "two_pair",
+      "n_draw": 1,
+      "n": 4000.0,
+      "p_final": {
+        "full_house": 0.08375,
+        "two_pair": 0.91625
+      },
+      "p_bucket": {
+        "boat_plus": 0.08375,
+        "two_pair": 0.91625
+      }
+    },
+    {
+      "opener_class": "trips",
+      "n_draw": 2,
+      "n": 4000.0,
+      "p_final": {
+        "four_of_a_kind": 0.0485,
+        "full_house": 0.062,
+        "trips": 0.8895
+      },
+      "p_bucket": {
+        "boat_plus": 0.1105,
+        "trips": 0.8895
+      }
+    },
+    {
+      "opener_class": "trips",
+      "n_draw": 1,
+      "n": 4000.0,
+      "p_final": {
+        "four_of_a_kind": 0.01925,
+        "full_house": 0.06925,
+        "trips": 0.9115
+      },
+      "p_bucket": {
+        "boat_plus": 0.0885,
+        "trips": 0.9115
+      }
+    },
+    {
+      "opener_class": "trips",
+      "n_draw": 0,
+      "n": 4000.0,
+      "p_final": {
+        "trips": 1.0
+      },
+      "p_bucket": {
+        "trips": 1.0
+      }
+    },
+    {
+      "opener_class": "four_of_a_kind",
+      "n_draw": 1,
+      "n": 4000.0,
+      "p_final": {
+        "five_aces": 0.00575,
+        "four_of_a_kind": 0.99425
+      },
+      "p_bucket": {
+        "boat_plus": 1.0
+      }
+    },
+    {
+      "opener_class": "four_of_a_kind",
+      "n_draw": 0,
+      "n": 4000.0,
+      "p_final": {
+        "four_of_a_kind": 1.0
+      },
+      "p_bucket": {
+        "boat_plus": 1.0
+      }
+    }
+  ]
+}
