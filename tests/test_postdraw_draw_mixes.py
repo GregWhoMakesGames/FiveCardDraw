@@ -11,13 +11,16 @@ from fivecarddraw.hand_rank import HandCategory, HandValue, evaluate_hand
 from fivecarddraw.validation.postdraw_betting_m2 import Policy as M2Policy
 from fivecarddraw.validation.postdraw_draw_mixes import (
     B_QUADS_D1,
+    B_TP_TRIPS_QUADS_D1,
     M2_DRAW,
+    STAGE_B_DRAW_POLICIES,
     CheckMix,
     LEGAL_DRAW_COUNTS,
     MixDeal,
     MixPolicy,
     opener_draw_plan_for_action,
     play_mix_deal,
+    stage_b_draw_policy,
     _face_pair_counterfactual_ev,
 )
 
@@ -145,7 +148,7 @@ def test_check_mix_lets_strong_hand_check():
     assert flags["opener_strong_check"]
     assert flags["drawer_stab"]  # AA face pair stabs
     assert flags["opener_call_stab"]  # strong calls
-    # Call 4 into pot 6 → pot 14; opener trips beats AA → +10 net? 
+    # Call 4 into pot 6 → pot 14; opener trips beats AA → +10 net?
     # invested 4, win 14 → +10
     assert ev == 10.0
 
@@ -175,6 +178,20 @@ def test_draw_policy_defaults():
     assert B_QUADS_D1.n_draw_for("four_of_a_kind") == 1
     assert B_QUADS_D1.n_draw_for("straight") == 0
     assert B_QUADS_D1.n_draw_for("pair_K") == 3
+    # Unified public d=1: two pair, trips, and quads all draw one.
+    assert B_TP_TRIPS_QUADS_D1.two_pair_d == 1
+    assert B_TP_TRIPS_QUADS_D1.trips_d == 1
+    assert B_TP_TRIPS_QUADS_D1.quads_d == 1
+    assert B_TP_TRIPS_QUADS_D1.pair_d == 3
+    assert B_TP_TRIPS_QUADS_D1.n_draw_for("trips") == 1
+    assert B_TP_TRIPS_QUADS_D1.n_draw_for("two_pair") == 1
+    assert B_TP_TRIPS_QUADS_D1.n_draw_for("four_of_a_kind") == 1
+    assert B_TP_TRIPS_QUADS_D1.n_draw_for("pair_A") == 3
+    # Full Stage B factorial grid
+    assert len(STAGE_B_DRAW_POLICIES) == 12
+    dims = {(p.two_pair_d, p.trips_d, p.quads_d) for p in STAGE_B_DRAW_POLICIES}
+    assert dims == {(tp, tr, q) for tp in (0, 1) for tr in (0, 1, 2) for q in (0, 1)}
+    assert stage_b_draw_policy(1, 1, 1).name == "tp1_tr1_q1"
 
 
 def test_fixture_summary_patterns():
@@ -193,12 +210,33 @@ def test_fixture_summary_patterns():
     # Two pair d=1 should create some boat+ vs zero when standing
     assert findings["two_pair_d1_boat_plus"] > findings["two_pair_stand_boat_plus"]
 
+    # Stage B: full 12-cell grid under AA stab
+    b_comps = data["stage_b"]["comparisons_vs_m2"]
+    aa = [c for c in b_comps if "stab=AA|" in c["bet_policy"]]
+    assert len(aa) == 12
+    assert findings["stage_b_grid_n"] == 12
+    for c in aa:
+        assert "quads_d" in c and "trips_d" in c and "two_pair_d" in c
+        assert "d1_rate" in c and "d2_rate" in c
+    dims = {(c["two_pair_d"], c["trips_d"], c["quads_d"]) for c in aa}
+    assert dims == {(tp, tr, q) for tp in (0, 1) for tr in (0, 1, 2) for q in (0, 1)}
+
+    unified = next(c for c in aa if c["draw_policy"] == "tp1_tr1_q1")
+    tp_d1 = next(c for c in aa if c["draw_policy"] == "tp1_tr2_q1")
+    trips_stand = next(c for c in aa if c["draw_policy"] == "tp0_tr0_q1")
+    baseline = next(c for c in aa if c["draw_policy"] == "tp0_tr2_q0")
+    assert baseline["delta_vs_m2"] == 0.0
+    assert trips_stand["delta_vs_m2"] < unified["delta_vs_m2"] < tp_d1["delta_vs_m2"]
+    assert findings["tp_trips_quads_d1_delta_ev_vs_m2_aa_stab"] == unified["delta_vs_m2"]
+
     assert "recommendations" in data and len(data["recommendations"]) >= 5
     quads_rec = next(r for r in data["recommendations"] if r["class"] == "four_of_a_kind")
     assert "d=1" in quads_rec["draw_action"]
+    trips_rec = next(r for r in data["recommendations"] if r["class"] == "trips")
+    assert "d=1" in trips_rec["draw_action"]
 
     # Stage C structure
     assert data["stage_c"]["summaries"]
-    aa = next(s for s in data["stage_c"]["summaries"] if "stab=AA|" in s["stab"])
-    assert "best_check_mix" in aa
-    assert aa["baseline_stab_delta"] is not None
+    aa_c = next(s for s in data["stage_c"]["summaries"] if "stab=AA|" in s["stab"])
+    assert "best_check_mix" in aa_c
+    assert aa_c["baseline_stab_delta"] is not None

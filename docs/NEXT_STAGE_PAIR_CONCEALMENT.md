@@ -67,15 +67,27 @@ Do **not** re-enumerate inventories for Step 0; reuse the fixture.
 
 ## Remaining plan (for next agent)
 
+**Prerequisite:** finish opener-draw-mixes **Step C** under `tp1_tr2_q1` and
+`tp1_tr1_q1` first ([NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md)).
+
 ### Step 1 — Pair rank × draw: showdown-only
 
 Per `pair_J`…`pair_A` × \(d\in\{0,1,2,3\}\): win/tie/lose vs drawer **final family**
 (miss / face pair / straight+). Confirm JJ vs AA improvement asymmetry.
+Also pin that aggregate / per-rank showdown still has **`d=3` ≥ `d=2`** (boat+ and
+win) before claiming concealment must overcome a large improvement gap.
 
 ### Step 2 — Concealment EV (main)
 
-Background: trips d=2 bet; two pair stand or d=1 (sensitivity); quads d=1 bet;
-straight+ stand/bet.
+First quantify **post-draw EV** of pure pair `d=3` vs `d=2` (and `d=1`) under the
+chosen background draw + check policy from Step C — confirm the assumption that
+`d=3` is higher EV than `d=2` for single pairs with betting, not only showdown.
+
+Background forks (pairs still mostly `d=3`):
+
+- trips `d=2`, two pair `d=1`, quads `d=1` — optional later pair mixes into `d=2`
+- trips `d=1`, two pair `d=1`, quads `d=1` — two-pair concealment on `d=1` without
+  moving pairs off `d=3`
 
 Pair knobs: pure d; rank-split (JJ–QQ d=3, KK/AA mix off d=3).
 
