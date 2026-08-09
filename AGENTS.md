@@ -30,22 +30,22 @@ See [README.md](README.md) for `pytest`, `solve-predraw`, `audit-abstraction`, a
 
 ### Next stage (start here on a fresh agent)
 
-**Showdown matrix + M2 face-pair betting grid are implemented.**
+**Read first:** [docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md)
 
-- Showdown: [docs/NEXT_STAGE_SHOWDOWN_MATRIX.md](docs/NEXT_STAGE_SHOWDOWN_MATRIX.md)
-  (`analyze-showdown-matrix`, `tests/fixtures/validation/showdown_matrix.json`)
-- Post-draw M2 knobs: [docs/POSTDRAW_M2_FACE_PAIR_GRID.md](docs/POSTDRAW_M2_FACE_PAIR_GRID.md)
-  (`analyze-postdraw-m2`, `tests/fixtures/validation/postdraw_m2_grid_summary.json`)
+Extend opener **draw-count mixes** (trips / two pair / pair with `d∈{0,1,2,3}`)
+and test **checking-range protection** (mix strong finals into checks so drawer
+face-pair stabs become unprofitable or indifferent). Reuse showdown + M2
+infrastructure; do not redo the `d=3` face-pair lead grid.
+
+Already done (showdown + M2): [docs/NEXT_STAGE_SHOWDOWN_MATRIX.md](docs/NEXT_STAGE_SHOWDOWN_MATRIX.md),
+[docs/POSTDRAW_M2_FACE_PAIR_GRID.md](docs/POSTDRAW_M2_FACE_PAIR_GRID.md).
 
 Parent context: [docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md](docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md).
-
-**Do not** expand into full UTG re-solve until product asks. Optional follow-ups:
-two-pair stand vs draw-1, cascade FFS13, or M3/M4 post-draw equilibrium.
 
 ### Handoff checklist for new agents
 
 1. `git fetch origin main && git checkout main && git pull origin main`
 2. Create `cursor/<short-name>-3c3d` (or the suffix required by the run)
 3. `pip install -e ".[dev]" && pytest -q`
-4. Prefer extending validation fixtures over changing the pre-draw solver
+4. Implement per `docs/NEXT_STAGE_OPENER_DRAW_MIXES.md` (A→B→C); do not UTG re-solve
 5. Read `docs/POSTDRAW_M2_FACE_PAIR_GRID.md` before changing post-draw betting assumptions

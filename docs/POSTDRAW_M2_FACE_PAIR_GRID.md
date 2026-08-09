@@ -5,6 +5,9 @@ CLI `analyze-postdraw-m2`, summary fixture
 `tests/fixtures/validation/postdraw_m2_grid_summary.json`, tests
 `tests/test_postdraw_m2.py`.
 
+**Next implementation work:** [NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md)
+(draw-count mixes + protecting check ranges). Do not redo this `d=3` grid.
+
 Parent showdown work: [NEXT_STAGE_SHOWDOWN_MATRIX.md](NEXT_STAGE_SHOWDOWN_MATRIX.md).
 
 This is **not** a full post-draw Nash solve. It is a small policy grid that

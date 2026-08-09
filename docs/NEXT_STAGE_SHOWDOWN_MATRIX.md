@@ -8,7 +8,10 @@ Reuse `tests/fixtures/validation/`.
 **Follow-on (done):** opener-first face-pair post-draw betting grid — see
 [POSTDRAW_M2_FACE_PAIR_GRID.md](POSTDRAW_M2_FACE_PAIR_GRID.md).
 
-**Do not** re-solve full 8-seat opens. Stay on dealer-opener × drawing-caller **post-draw showdown** probabilities.
+**Next:** opener draw-count mixes + checking-range protection — see
+[NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md).
+
+**Do not** re-solve full 8-seat opens. Stay on dealer-opener × drawing-caller **post-draw** analysis.
 
 ---
 
