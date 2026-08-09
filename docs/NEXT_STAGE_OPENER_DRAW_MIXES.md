@@ -42,10 +42,19 @@ are uncommon enough to **disregard in v1** of this stage (especially since many
 2:1 callers already hold the bug). Document if you measure otherwise; do not
 block the main grid on them.
 
-**Pat straight+ must stand.** Those hands cannot be mixed into `d=3` to “balance”
-pair draws. Protection of pair lines must come from **other** draw counts and/or
-from **post-draw check mixes**, not from standing pat with a straight while
-drawing three with JJ.
+**Most pat straight+ must stand** (straight, flush, full house, straight flush,
+five aces). Those hands cannot join `d=3` to balance pair draws.
+
+**Exception — four of a kind may draw one:** discard the kicker, keep the quads.
+That does not break the hand. Against this calling range the drawer cannot make
+four of a kind, so there is no showdown downside to the redraw, and the public
+`d=1` line picks up a nutted combo that helps protect openers who draw one with
+two pair / trips / pairs. Prefer **often or always** `d=1` with quads in
+baseline policies unless a measured reason appears not to.
+
+Protection of pair `d=3` lines must still come from **other** draw counts and/or
+**post-draw check mixes**, not from standing with a straight while drawing three
+with JJ.
 
 ---
 
@@ -58,6 +67,8 @@ Answer, with combo-weighted EV (and small grids / mixes), when the opener should
 | **Trips** | draw 2 (default keep trips), draw 1, stand pat |
 | **Two pair** | draw 1 (keep both pairs, discard kicker), stand pat |
 | **One pair JJ–AA** | draw 3 (default), draw 2, draw 1, stand pat |
+| **Four of a kind** | draw 1 (keep quads, discard kicker; **preferred**), stand pat |
+| **Other straight+** (straight, flush, full house, SF, five aces) | stand pat only |
 
 Then, **conditional on public \(d\)**, choose post-draw bet vs check (opener
 first), and the drawer’s stab/raise replies — especially whether the opener can
@@ -66,15 +77,17 @@ make “bet when checked to” with face pairs **unprofitable or indifferent** b
 
 ### Product hypothesis to test
 
-> Because pat straight+ cannot join the `d=3` bucket, the opener cannot protect
-> pair draws by mixing monsters into draw-three. But by **checking** a mix of
-> strong finals (e.g. some two pair / trips / boats after `d\in\{0,1,2\}`) with
-> weak one-pair checks, the opener can protect the checking range, reduce the
+> Pat straight / flush / boat / SF cannot join `d=3`, so the opener cannot
+> protect pair draws by mixing those monsters into draw-three. **Quads can join
+> `d=1`** (discard kicker) with no showdown cost vs this caller, which helps
+> protect the draw-one line. Separately, by **checking** a mix of strong finals
+> (e.g. some two pair / trips / boats / quads after `d\in\{0,1,2\}`) with weak
+> one-pair checks, the opener can protect the checking range, reduce the
 > drawer’s stab EV, and raise overall opener EV vs the M2 “always bet two pair+”
 > baseline.
 
 Confirm or refute with numbers. If true, report the smallest mixes that work
-(e.g. “check 30% of trips after `d=2`”, “check all two pair after stand”, …).
+(e.g. “always `d=1` with quads”, “check 30% of trips after `d=2`”, …).
 
 ---
 
@@ -107,11 +120,13 @@ for opener_hand in class:
 | Trips | `d=2` | Keep trips; discard two kickers |
 | Trips | `d=1` | Keep trips + one kicker (pin which) |
 | Trips | `d=0` | Stand |
-| Straight+ | `d=0` only | Always stand |
+| Four of a kind | `d=1` | Keep quads; discard kicker (**baseline: prefer this**) |
+| Four of a kind | `d=0` | Stand |
+| Other straight+ | `d=0` only | Straight / flush / full house / SF / five aces always stand |
 
-Breaking the made hand (e.g. discarding one pair of two pair) is **out of
-scope** unless M1-style improvement tables show a clear exception — default to
-non-breaking.
+Breaking the made hand (e.g. discarding one pair of two pair, or discarding a
+quad) is **out of scope** unless M1-style improvement tables show a clear
+exception — default to non-breaking. Quads `d=1` is **not** breaking.
 
 ### Public buckets to report separately
 
@@ -119,12 +134,15 @@ Always stratify results by public \(d\):
 
 - `d=3` — nearly pure “was one pair” (M2 already covers betting here)
 - `d=2` — trips-looking (but pairs drawing two can pollute)
-- `d=1` — two-pair-looking / pair-drawing-one / trips-drawing-one
-- `d=0` — pat: straight+ plus any standing two pair / trips / pairs
+- `d=1` — two-pair-looking / pair-drawing-one / trips-drawing-one / **quads
+  discarding a kicker**
+- `d=0` — pat: straight / flush / boat / SF / five aces, plus any standing two
+  pair / trips / pairs / quads
 
-The point of pair `d\in\{0,1,2\}` and trips/two-pair deviations is partly to
-**pollute** these signals and to feed strong hands into check ranges after those
-\(d\) values.
+The point of pair `d\in\{0,1,2\}`, trips/two-pair deviations, and **quads
+`d=1`** is partly to **pollute** these signals and to feed strong hands into
+check (and bet) ranges after those \(d\) values. Quads into `d=1` is the clean
+nutted pollution of the draw-one line.
 
 ---
 
@@ -144,9 +162,10 @@ the improvement half of the tradeoff (same spirit as showdown matrix case 3/4).
 ### B — Baseline post-draw with new draw defaults
 
 Pick a single draw policy vector (e.g. trips always `d=2`, two pair always
-`d=1` or always stand, pairs always `d=3`) and reuse M2 betting
-(always bet two pair+; one-pair lead/check grid). Compare opener EV to the
-checked-in M2 summary. This isolates **draw choice** before mixing checks.
+`d=1` or always stand, pairs always `d=3`, **quads always `d=1`**, other
+straight+ stand) and reuse M2 betting (always bet two pair+; one-pair
+lead/check grid). Compare opener EV to the checked-in M2 summary. This isolates
+**draw choice** before mixing checks.
 
 ### C — Checking-range protection grid (main goal)
 
@@ -192,8 +211,9 @@ mixes change the bet-into range enough that matched thresholds break.
 
 - Full multiway; cascade FFS13 unless product asks
 - Pre-draw raises / sandbagging
-- Mixing pat straight+ into `d>0` (illegal for these hands under “don’t break /
-  don’t discard winners”)
+- Mixing straight / flush / boat / SF / five aces into `d>0` (those must stand)
+- Treating quads `d=1` as “breaking” — it is allowed and encouraged for `d=1`
+  protection
 - Full CFR equilibrium on the whole tree (optional later if grids stall)
 - UTG open re-solve
 
