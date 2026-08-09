@@ -78,8 +78,15 @@ with JJ.
 | Draw policy | Δ opener EV vs M2 locked |
 | --- | ---: |
 | quads `d=1` only | ~0 (quads rare) |
-| **two pair `d=1` + quads `d=1`** | **+0.140** |
+| **two pair `d=1` + quads `d=1`** (trips stay `d=2`) | **+0.140** |
+| **two pair + trips + quads all `d=1`** | **+0.125** |
 | trips stand + quads `d=1` | −0.065 |
+
+Unified `d=1` (trips with two pair / quads) costs ~0.014 vs keeping trips on
+`d=2`, but makes the draw-one line a single public bucket (~31% of deals vs
+~21% with two pair alone) — the natural home for later **pair `d=1`
+concealment**. Pure improvement still likes trips `d=2`; use trips `d=1` when
+building that coherent `d=1` range.
 
 ### C — Checking-range protection (draw = quads `d=1`; pairs `d=3`; two pair stand; trips `d=2`)
 
@@ -101,7 +108,7 @@ straights into draw-three.
 | --- | --- | --- | --- |
 | Four of a kind | **d=1** (discard kicker) | Bet value | Showdown ≈ stand; pollutes public d=1 |
 | Other straight+ | Stand only | Always bet | Cannot join d=3 |
-| Trips | **d=2** | Mostly bet; thin check mix OK | Do not stand for concealment |
+| Trips | **d=2** (EV) or **d=1** (unified `d=1`) | Mostly bet; thin check mix OK | `d=1` joins TP/quads for pair-d=1 pollution later |
 | Two pair | **d=1** | Bet most; **check ~30–100%** vs face stabs | Improvement + protection |
 | Pair JJ–AA | **d=3** | Check (M2); thin AA lead vs narrow stabs | d∈{0,1,2} only as pollution |
 
@@ -211,11 +218,13 @@ the improvement half of the tradeoff (same spirit as showdown matrix case 3/4).
 
 ### B — Baseline post-draw with new draw defaults
 
-Pick a single draw policy vector (e.g. trips always `d=2`, two pair always
-`d=1` or always stand, pairs always `d=3`, **quads always `d=1`**, other
+Pick a single draw policy vector (e.g. trips always `d=2` or **`d=1`**, two pair
+always `d=1` or always stand, pairs always `d=3`, **quads always `d=1`**, other
 straight+ stand) and reuse M2 betting (always bet two pair+; one-pair
 lead/check grid). Compare opener EV to the checked-in M2 summary. This isolates
-**draw choice** before mixing checks.
+**draw choice** before mixing checks. Include a **unified public `d=1`** vector
+(trips + two pair + quads all draw one) as the setup for later pair-`d=1`
+concealment.
 
 ### C — Checking-range protection grid (main goal)
 

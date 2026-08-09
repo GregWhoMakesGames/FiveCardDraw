@@ -11,6 +11,7 @@ from fivecarddraw.hand_rank import HandCategory, HandValue, evaluate_hand
 from fivecarddraw.validation.postdraw_betting_m2 import Policy as M2Policy
 from fivecarddraw.validation.postdraw_draw_mixes import (
     B_QUADS_D1,
+    B_TP_TRIPS_QUADS_D1,
     M2_DRAW,
     CheckMix,
     LEGAL_DRAW_COUNTS,
@@ -175,6 +176,15 @@ def test_draw_policy_defaults():
     assert B_QUADS_D1.n_draw_for("four_of_a_kind") == 1
     assert B_QUADS_D1.n_draw_for("straight") == 0
     assert B_QUADS_D1.n_draw_for("pair_K") == 3
+    # Unified public d=1: two pair, trips, and quads all draw one.
+    assert B_TP_TRIPS_QUADS_D1.two_pair_d == 1
+    assert B_TP_TRIPS_QUADS_D1.trips_d == 1
+    assert B_TP_TRIPS_QUADS_D1.quads_d == 1
+    assert B_TP_TRIPS_QUADS_D1.pair_d == 3
+    assert B_TP_TRIPS_QUADS_D1.n_draw_for("trips") == 1
+    assert B_TP_TRIPS_QUADS_D1.n_draw_for("two_pair") == 1
+    assert B_TP_TRIPS_QUADS_D1.n_draw_for("four_of_a_kind") == 1
+    assert B_TP_TRIPS_QUADS_D1.n_draw_for("pair_A") == 3
 
 
 def test_fixture_summary_patterns():
@@ -193,9 +203,33 @@ def test_fixture_summary_patterns():
     # Two pair d=1 should create some boat+ vs zero when standing
     assert findings["two_pair_d1_boat_plus"] > findings["two_pair_stand_boat_plus"]
 
+    # Stage B includes unified tp+trips+quads d=1
+    b_comps = data["stage_b"]["comparisons_vs_m2"]
+    unified = [
+        c
+        for c in b_comps
+        if c["draw_policy"] == "tp_trips_quads_d1" and "stab=AA|" in c["bet_policy"]
+    ]
+    assert unified, "expected tp_trips_quads_d1 in Stage B comparisons"
+    # Between trips-stand (negative) and trips-d=2 + tp-d=1 (best positive)
+    tp_d1 = next(
+        c
+        for c in b_comps
+        if c["draw_policy"] == "two_pair_d1_quads_d1" and "stab=AA|" in c["bet_policy"]
+    )
+    trips_stand = next(
+        c
+        for c in b_comps
+        if c["draw_policy"] == "trips_stand_quads_d1" and "stab=AA|" in c["bet_policy"]
+    )
+    assert trips_stand["delta_vs_m2"] < unified[0]["delta_vs_m2"] < tp_d1["delta_vs_m2"]
+    assert findings["tp_trips_quads_d1_delta_ev_vs_m2_aa_stab"] == unified[0]["delta_vs_m2"]
+
     assert "recommendations" in data and len(data["recommendations"]) >= 5
     quads_rec = next(r for r in data["recommendations"] if r["class"] == "four_of_a_kind")
     assert "d=1" in quads_rec["draw_action"]
+    trips_rec = next(r for r in data["recommendations"] if r["class"] == "trips")
+    assert "d=1" in trips_rec["draw_action"]
 
     # Stage C structure
     assert data["stage_c"]["summaries"]

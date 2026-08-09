@@ -179,6 +179,12 @@ B_QUADS_D1 = DrawPolicy(name="quads_d1", pair_d=3, two_pair_d=0, trips_d=2, quad
 B_TP_D1_QUADS_D1 = DrawPolicy(
     name="two_pair_d1_quads_d1", pair_d=3, two_pair_d=1, trips_d=2, quads_d=1
 )
+# Unified public d=1: two pair + trips + quads all draw one (pairs still d=3).
+# Opens later pair-d=1 concealment into the same line; Stage A says trips d=1
+# boat+/win sit between stand and d=2.
+B_TP_TRIPS_QUADS_D1 = DrawPolicy(
+    name="tp_trips_quads_d1", pair_d=3, two_pair_d=1, trips_d=1, quads_d=1
+)
 # Trips stand (conceal as pat).
 B_TRIPS_STAND_QUADS_D1 = DrawPolicy(
     name="trips_stand_quads_d1", pair_d=3, two_pair_d=0, trips_d=0, quads_d=1
@@ -861,7 +867,13 @@ def run_stage_b(
         if progress:
             print("Stage B: using shared callers + opener inventory…")
 
-    draw_policies = [M2_DRAW, B_QUADS_D1, B_TP_D1_QUADS_D1, B_TRIPS_STAND_QUADS_D1]
+    draw_policies = [
+        M2_DRAW,
+        B_QUADS_D1,
+        B_TP_D1_QUADS_D1,
+        B_TP_TRIPS_QUADS_D1,
+        B_TRIPS_STAND_QUADS_D1,
+    ]
     # M2 betting baseline: check one pair; narrow stab AA / AA+KK; no face raise
     bet_policies = [
         M2Policy(None, None, None),  # passive face
@@ -1147,11 +1159,35 @@ def build_recommendations(
         )
 
     trips = h["trips_d2_vs_stand_boat_plus"]
-    trips_draw = "d=2 (keep trips)"
+    # Pure improvement still prefers d=2; unified d=1 (with TP/quads) is the
+    # concealment / pair-d=1-pollution vector measured in Stage B.
+    unified = next(
+        (
+            c
+            for c in stage_b["comparisons_vs_m2"]
+            if c["draw_policy"] == "tp_trips_quads_d1" and "stab=AA|" in c["bet_policy"]
+        ),
+        None,
+    )
+    tp_d1 = next(
+        (
+            c
+            for c in stage_b["comparisons_vs_m2"]
+            if c["draw_policy"] == "two_pair_d1_quads_d1"
+            and "stab=AA|" in c["bet_policy"]
+        ),
+        None,
+    )
+    trips_draw = "d=2 (keep trips); d=1 joins unified public d=1 with TP/quads"
     trips_note = (
         f"boat+ d2={trips['d2']:.3f} d1={trips['d1']:.3f} stand={trips['stand']:.3f}; "
         f"win d2={trips['d2_p_win']:.3f} stand={trips['stand_p_win']:.3f}"
     )
+    if unified is not None and tp_d1 is not None:
+        trips_note += (
+            f"; unified tp+trips+quads d=1 ΔEV={unified['delta_vs_m2']:+.3f} "
+            f"vs tp+quads d=1 / trips d=2 ΔEV={tp_d1['delta_vs_m2']:+.3f}"
+        )
 
     # Stage C: pick best check mix under AA stab band + smallest helpful mix
     c_sum = next(
@@ -1240,12 +1276,17 @@ def build_recommendations(
         },
         {
             "class": "checking-range protection",
-            "draw_action": "quads→d=1; two pair→d=1; pairs stay d=3; trips d=2",
+            "draw_action": (
+                "quads→d=1; two pair→d=1; trips d=2 (EV) or d=1 (unified d=1); "
+                "pairs stay d=3 (d=1 pollution optional later)"
+            ),
             "postdraw_bet_check": check_note,
             "notes": (
                 "Hypothesis confirmed under fixed narrow drawer stabs: mixing "
                 "two pair into checks raises opener EV and deepens stab losses. "
-                "Boat+ check mixes alone do not help. Pat straight+ cannot join d=3."
+                "Boat+ check mixes alone do not help. Pat straight+ cannot join d=3. "
+                "Unified trips+TP+quads d=1 keeps the draw-one line coherent for "
+                "later pair-d=1 concealment."
             ),
         },
     ]
@@ -1405,14 +1446,18 @@ def _derive_findings(payload: dict[str, Any]) -> dict[str, Any]:
         (s for s in payload["stage_c"]["summaries"] if "stab=AA|" in s["stab"]),
         payload["stage_c"]["summaries"][0],
     )
-    b_quads = next(
-        (
-            c
-            for c in payload["stage_b"]["comparisons_vs_m2"]
-            if c["draw_policy"] == "quads_d1" and "stab=AA|" in c["bet_policy"]
-        ),
-        None,
-    )
+
+    def _b_delta(name: str) -> float | None:
+        row = next(
+            (
+                c
+                for c in payload["stage_b"]["comparisons_vs_m2"]
+                if c["draw_policy"] == name and "stab=AA|" in c["bet_policy"]
+            ),
+            None,
+        )
+        return row["delta_vs_m2"] if row else None
+
     return {
         "quads_prefer_d1": a["quads_d1_vs_stand"]["d1_p_win"]
         + 0.02
@@ -1422,10 +1467,12 @@ def _derive_findings(payload: dict[str, Any]) -> dict[str, Any]:
         "two_pair_d1_boat_plus": a["two_pair_d1_vs_stand_boat_plus"]["d1"],
         "two_pair_stand_boat_plus": a["two_pair_d1_vs_stand_boat_plus"]["stand"],
         "trips_d2_boat_plus": a["trips_d2_vs_stand_boat_plus"]["d2"],
+        "trips_d1_boat_plus": a["trips_d2_vs_stand_boat_plus"]["d1"],
         "trips_stand_boat_plus": a["trips_d2_vs_stand_boat_plus"]["stand"],
-        "quads_d1_delta_ev_vs_m2_aa_stab": (
-            b_quads["delta_vs_m2"] if b_quads else None
-        ),
+        "quads_d1_delta_ev_vs_m2_aa_stab": _b_delta("quads_d1"),
+        "two_pair_d1_quads_d1_delta_ev_vs_m2_aa_stab": _b_delta("two_pair_d1_quads_d1"),
+        "tp_trips_quads_d1_delta_ev_vs_m2_aa_stab": _b_delta("tp_trips_quads_d1"),
+        "trips_stand_quads_d1_delta_ev_vs_m2_aa_stab": _b_delta("trips_stand_quads_d1"),
         "check_mix_helps_opener_vs_aa_stab": c_aa["best_delta_vs_baseline"] > 0.0,
         "check_mix_can_make_aa_stab_unprofitable": c_aa["unprofitable_stab_count"] > 0,
         "best_check_mix_vs_aa_stab": c_aa["best_check_mix"],
@@ -1458,8 +1505,15 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
         f"- Two pair boat+ : stand={f['two_pair_stand_boat_plus']:.4f} → "
         f"d1={f['two_pair_d1_boat_plus']:.4f}",
         f"- Trips boat+ : stand={f['trips_stand_boat_plus']:.4f} → "
+        f"d1={f.get('trips_d1_boat_plus', float('nan')):.4f} → "
         f"d2={f['trips_d2_boat_plus']:.4f}",
         f"- Quads d=1 ΔEV vs M2 (AA stab): {f['quads_d1_delta_ev_vs_m2_aa_stab']}",
+        f"- Two pair d=1 + quads d=1 ΔEV: "
+        f"{f.get('two_pair_d1_quads_d1_delta_ev_vs_m2_aa_stab')}",
+        f"- Unified tp+trips+quads d=1 ΔEV: "
+        f"{f.get('tp_trips_quads_d1_delta_ev_vs_m2_aa_stab')}",
+        f"- Trips stand + quads d=1 ΔEV: "
+        f"{f.get('trips_stand_quads_d1_delta_ev_vs_m2_aa_stab')}",
         f"- Check mix helps opener vs AA stab: **{f['check_mix_helps_opener_vs_aa_stab']}** "
         f"(best `{f['best_check_mix_vs_aa_stab']}`)",
         f"- Can make AA face-stab unprofitable: "
