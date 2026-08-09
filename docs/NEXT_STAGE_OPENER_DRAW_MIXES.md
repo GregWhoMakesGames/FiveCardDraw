@@ -1,7 +1,10 @@
 # Next stage: opener draw-count mixes + protected checking ranges
 
-**Status:** Handoff for a fresh agent. Do **not** redo the showdown matrix or the
-M2 `d=3` face-pair lead/stab/raise grid — those are done.
+**Status:** Implemented. Code `src/fivecarddraw/validation/postdraw_draw_mixes.py`,
+CLI `analyze-postdraw-draw-mixes`, summary fixture
+`tests/fixtures/validation/postdraw_draw_mixes_summary.json`, tests
+`tests/test_postdraw_draw_mixes.py`. Narrative below; regenerate with
+`analyze-postdraw-draw-mixes --n-deals 20000 --write-fixture`.
 
 **Read first (in order):**
 
@@ -22,6 +25,7 @@ Parent ladder: [NEXT_STAGE_DEALER_OPENING_EQUITY.md](NEXT_STAGE_DEALER_OPENING_E
 | --- | --- |
 | `showdown_matrix` | HU showdown vs 2:1 callers after pinned non-breaking draws |
 | `postdraw_betting_m2` | With pairs always `d=3`, two pair stand, trips `d=2`, straight+ stand: **default check JJ–AA**; lead AA only as a thin reply to narrow drawer stabs; drawer face-pair stab/raise should stay **narrow** |
+| `postdraw_draw_mixes` | A→B→C ladder: draw mechanical tables, new draw defaults, check-mix protection (this doc) |
 
 ### Locked game facts that still apply
 
@@ -58,6 +62,51 @@ with JJ.
 
 ---
 
+## Findings (seed 20260809)
+
+### A — Draw mechanical tables
+
+| Class | Action | Result |
+| --- | --- | --- |
+| Pair AA | d=3 vs d∈{0,1,2} | **d=3 best** showdown win (~0.673) and boat+ (~0.018) |
+| Two pair | d=1 vs stand | boat+ **0 → 0.086**; win **0.667 → 0.681** |
+| Trips | d=2 vs stand | boat+ **0 → 0.101**; win **0.643 → 0.697** (d=1 boat+ 0.086) |
+| Quads | d=1 vs stand | win **≈ equal** (0.976 vs 0.978); d=1 sometimes → five aces |
+
+### B — Draw defaults under M2 betting (check one pair; AA stab)
+
+| Draw policy | Δ opener EV vs M2 locked |
+| --- | ---: |
+| quads `d=1` only | ~0 (quads rare) |
+| **two pair `d=1` + quads `d=1`** | **+0.140** |
+| trips stand + quads `d=1` | −0.065 |
+
+### C — Checking-range protection (draw = quads `d=1`; pairs `d=3`; two pair stand; trips `d=2`)
+
+Against fixed narrow drawer stabs (`AA` face pair when checked to):
+
+- Baseline (always bet two pair+): drawer AA face-stab Δ already **−0.42** (unprofitable).
+- **Check 30% of two pair:** opener EV **+0.12**; stab Δ **−1.12**.
+- **Always check two pair:** opener EV **+0.39**; stab Δ **−2.05** (best vs stubborn stabber).
+- Checking boat+ alone does **not** help opener EV; trips checks help moderately.
+
+**Hypothesis:** confirmed for (1) quads→`d=1` showdown-safe pollution and (2) mixing
+two pair into checks to punish face-pair stabs / raise opener EV. Pat straight+
+still cannot join `d=3`; protection is check mixes + `d=1` pollution, not sandbagging
+straights into draw-three.
+
+### Recommendation table
+
+| Class | Draw action | Post-draw bet/check | Notes |
+| --- | --- | --- | --- |
+| Four of a kind | **d=1** (discard kicker) | Bet value | Showdown ≈ stand; pollutes public d=1 |
+| Other straight+ | Stand only | Always bet | Cannot join d=3 |
+| Trips | **d=2** | Mostly bet; thin check mix OK | Do not stand for concealment |
+| Two pair | **d=1** | Bet most; **check ~30–100%** vs face stabs | Improvement + protection |
+| Pair JJ–AA | **d=3** | Check (M2); thin AA lead vs narrow stabs | d∈{0,1,2} only as pollution |
+
+---
+
 ## Goal of this stage
 
 Answer, with combo-weighted EV (and small grids / mixes), when the opener should:
@@ -88,6 +137,7 @@ make “bet when checked to” with face pairs **unprofitable or indifferent** b
 
 Confirm or refute with numbers. If true, report the smallest mixes that work
 (e.g. “always `d=1` with quads”, “check 30% of trips after `d=2`”, …).
+**Confirmed** — see Findings above (`always d=1` with quads; check ≥30% of two pair).
 
 ---
 
@@ -195,15 +245,11 @@ mixes change the bet-into range enough that matched thresholds break.
 
 ## Deliverables
 
-1. Code under `src/fivecarddraw/validation/` (e.g. extend `postdraw_betting_m2.py`
-   or add `postdraw_draw_mixes.py`) + CLI
-2. Fixture summary JSON under `tests/fixtures/validation/` for key EV cells
-3. `pytest` pins (tolerance OK for MC)
-4. Short markdown in `outputs/validation/` (gitignored) + update this doc’s
-   **Status** when done
-5. Clear recommendation table:
-
-   | Class | Draw action | Post-draw bet/check | Notes |
+1. Code under `src/fivecarddraw/validation/` (`postdraw_draw_mixes.py`) + CLI — **done**
+2. Fixture summary JSON under `tests/fixtures/validation/` — **done**
+3. `pytest` pins (tolerance OK for MC) — **done**
+4. Short markdown in `outputs/validation/` (gitignored) + this doc’s **Status** — **done**
+5. Clear recommendation table — **see Findings**
 
 ---
 
@@ -219,10 +265,13 @@ mixes change the bet-into range enough that matched thresholds break.
 
 ---
 
-## Handoff checklist
+## How to regenerate
 
-1. Merge or rebase onto `main` including showdown matrix + M2 docs/fixtures
-2. `pip install -e ".[dev]" && pytest -q`
-3. Read M2 findings before inventing new betting defaults
-4. Implement A → B → C; stop at a recommendation table
-5. Do **not** expand into full UTG strategy work
+```bash
+pip install -e ".[dev]"
+analyze-postdraw-draw-mixes --n-deals 20000 --write-fixture
+pytest -q tests/test_postdraw_draw_mixes.py
+```
+
+`outputs/` is gitignored. The **summary fixture** is checked in (seed `20260809`,
+6k deals/A-cell, 20k deals B/C).
