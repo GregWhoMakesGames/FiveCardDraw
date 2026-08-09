@@ -75,19 +75,33 @@ with JJ.
 
 ### B — Draw defaults under M2 betting (check one pair; AA stab)
 
-| Draw policy | Δ opener EV vs M2 locked | d=1 rate | d=2 rate |
-| --- | ---: | ---: | ---: |
-| quads `d=1` only | ~0 (quads rare) | 0.001 | 0.099 |
-| **two pair `d=1` + quads `d=1`** (trips stay `d=2`) | **+0.140** | 0.215 | 0.099 |
-| **two pair + trips + quads all `d=1`** | **+0.125** | **0.314** | **0** |
-| trips stand + quads `d=1` | −0.065 | 0.001 | 0 |
+Full factorial grid with pairs fixed at `d=3`:
 
-Unified `d=1` (trips with two pair / quads) costs ~0.014 vs keeping trips on
-`d=2`, but makes the draw-one line a single public bucket (~31% of deals vs
-~21% with two pair alone) — the natural home for later **pair `d=1`
-concealment**. Pure improvement still likes trips `d=2`; use trips `d=1` when
-building that coherent `d=1` range. With trips on `d=1`, public `d=2` drops to
-zero (no residual trips-looking line).
+- quads \(d \in \{0,1\}\)
+- trips \(d \in \{0,1,2\}\)
+- two pair \(d \in \{0,1\}\)
+
+→ **12 policies**. (Earlier tables only listed a few hand-picked cells.)
+
+| quads | trips | two pair | Δ EV vs M2 | d=1 rate | d=2 rate |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 | 0 | 0 | −0.065 | 0 | 0 |
+| 0 | 0 | 1 | +0.075 | 0.214 | 0 |
+| 0 | 1 | 0 | −0.014 | 0.099 | 0 |
+| 0 | 1 | 1 | +0.125 | 0.313 | 0 |
+| 0 | 2 | 0 | **0** (M2) | 0 | 0.099 |
+| 0 | 2 | 1 | **+0.140** | 0.214 | 0.099 |
+| 1 | 0 | 0 | −0.065 | 0.001 | 0 |
+| 1 | 0 | 1 | +0.075 | 0.215 | 0 |
+| 1 | 1 | 0 | −0.014 | 0.100 | 0 |
+| 1 | 1 | 1 | +0.125 | 0.314 | 0 |
+| 1 | 2 | 0 | 0 | 0.001 | 0.099 |
+| 1 | 2 | 1 | **+0.140** | 0.215 | 0.099 |
+
+Quads `d=0` vs `d=1` does not move all-deal EV at this sample (too rare);
+prefer `d=1` for public-signal pollution. Best pure EV: two pair `d=1` + trips
+`d=2`. Unified public `d=1` (two pair + trips + quads all `d=1`) is **+0.125** —
+only ~0.014 behind — and zeroes the `d=2` line for later pair-`d=1` concealment.
 
 ### C — Checking-range protection (draw = quads `d=1`; pairs `d=3`; two pair stand; trips `d=2`)
 
@@ -219,13 +233,12 @@ the improvement half of the tradeoff (same spirit as showdown matrix case 3/4).
 
 ### B — Baseline post-draw with new draw defaults
 
-Pick a single draw policy vector (e.g. trips always `d=2` or **`d=1`**, two pair
-always `d=1` or always stand, pairs always `d=3`, **quads always `d=1`**, other
-straight+ stand) and reuse M2 betting (always bet two pair+; one-pair
-lead/check grid). Compare opener EV to the checked-in M2 summary. This isolates
-**draw choice** before mixing checks. Include a **unified public `d=1`** vector
-(trips + two pair + quads all draw one) as the setup for later pair-`d=1`
-concealment.
+Pick the full Stage B draw grid (pairs always `d=3`; **all** 
+`two_pair∈{0,1} × trips∈{0,1,2} × quads∈{0,1}` = 12 policies) and reuse M2
+betting (always bet two pair+; one-pair lead/check grid). Compare opener EV to
+the M2 locked cell (`tp0_tr2_q0`). This isolates **draw choice** before mixing
+checks. The unified public `d=1` cell (`tp1_tr1_q1`) is the setup for later
+pair-`d=1` concealment.
 
 ### C — Checking-range protection grid (main goal)
 
