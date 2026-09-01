@@ -19,6 +19,7 @@ This folder is the **human-readable research paper**, split into chapters so par
 - [../NEXT_STAGE_OPENER_DRAW_MIXES.md](../NEXT_STAGE_OPENER_DRAW_MIXES.md)
 - [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md)
 - [../NEXT_STAGE_NONBLUFF_EV.md](../NEXT_STAGE_NONBLUFF_EV.md)
+- [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md)
 
 ---
 
@@ -121,6 +122,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 1 | Strong draws: call vs raise vs mix (combo-weighted EV) | [Ch.2 §2.9](ch02_drawing_callers.md) | CO represent-bluffs |
 | 2 | CO bluff after BN open (return-to-actor: CO passed with no legal opener; others fold) — call/raise with underpair / high card? | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for value-range shape |
 | 3 | BN Stage C check mixes / remaining Ch.3–4 | Ch.3–4 | Parallel OK with #1 if different files |
+| 3b | BN 3-bet vs call / cap when both make straight+ (post-draw is bet+1 today) | [Ch.3 §3.5](ch03_dealer_opening.md); [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md) | Parallel OK with C; do not redo class × *d* grid |
 | 4 | CO open/pass; HJ sandbagging | Ch.5 | After #2 template exists |
 
 ---
