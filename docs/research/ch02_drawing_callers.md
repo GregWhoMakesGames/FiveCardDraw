@@ -178,9 +178,51 @@ Use this when asking whether a thin opener (JJ–KK) loses to a drawer who “on
 
 ---
 
-## 2.8 Raises, not only calls
+## 2.8 Raises, not only calls (status quo)
 
-**Calls** are pinned by pot odds + outs as above. **Raises** with drawing hands are a separate EV question (semi-bluff / deny equity / build pot). Current validation focuses on **open + call only** into a $6 pot for post-draw grids. Raising draws remains on the roadmap once opener post-draw policies stabilize; do not treat the 18,396 set as an automatic raise range.
+**Calls** are pinned by pot odds + outs as above. **Raises** with drawing hands are a separate EV question (semi-bluff / deny equity / build pot). Current validation focuses on **open + call only** into a $6 pot for post-draw grids. Do **not** treat the 18,396 set as an automatic raise range until §2.9 is done.
+
+---
+
+## 2.9 Next step — Call, raise, or mix with strong draws (planned)
+
+**Priority:** do this **before** CO bluff-representation work in [Ch.5](ch05_later_seats.md). The value of *looking like* a strong draw depends on how often real strong draws **raise** vs **call**.
+
+### Product question
+
+Given a hand from the 2:1 inventory (bug SF / bug straight / four-flush-straight, outs ≥ 16), facing an open (BN laboratory first: seats 1–7 unable / BN open-legal), should that hand:
+
+| Policy | Meaning |
+| --- | --- |
+| **Always call** | Pay $2 into $4; pot $6 into draw; no extra fold equity |
+| **Always raise** | Build pot / deny BN’s price / sometimes fold out worse continues |
+| **Mixed strategy** | Combo- or class-weighted mix of call and raise (and, rarely, fold if EV ≤ 0 after blockers) |
+
+Answer with **combo-weighted EV** (and small grids), not intuition alone. Stratify at least by draw class and outs bucket (16 / 19 / 22).
+
+### Why it matters for later chapters
+
+1. **BN opener defense** (Ch.3–4) — raise frequency changes pot size, BN’s continue range, and post-draw stack-off shape.
+2. **CO bluffs that “represent” draws** (Ch.5) — if strong draws almost never raise, a CO raise with trash is an empty threat; if strong draws often raise, a one-card bluff raise has a credible story.
+
+### Suggested investigation shape
+
+1. Fix opener class grid (start: BN JJ–AA / two pair / trips / straight+; reuse showdown discard policies).
+2. For each drawer combo (or stratified sample of the 18,396), compare EV(call) vs EV(raise) vs EV(fold) under pinned BN replies (fold / call / re-raise caps).
+3. Report mixes by class × outs; pin whether any subclass is pure raise or pure call.
+4. Refresh post-draw M2 / draw-mix assumptions if the pre-draw line is no longer “open + call only.”
+
+### Out of scope for this step
+
+- Multiway cascades (optional sensitivity only; ~0.03% deal rate)
+- CO trash bluffs (Ch.5 — after this)
+- Changing ante:bet
+
+### Deliverables (when implemented)
+
+- Code + CLI under `validation/` (e.g. draw raise/call grid)
+- Fixture summary + pytest pins
+- Update this section’s findings table and the [INDEX ledger](INDEX.md#solve-progress-ledger) status for the BN-vs-drawer slice
 
 ---
 

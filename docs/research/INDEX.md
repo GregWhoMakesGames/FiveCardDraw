@@ -9,7 +9,7 @@ This folder is the **human-readable research paper**, split into chapters so par
 | Stakes (v1) | $0.25 ante ($2 pot), $2 / $4 limit |
 | Codebase | [`fivecarddraw`](../../README.md) |
 | Audience | Researchers and poker-curious readers (basic poker OK) |
-| Status | Living document. Ch.1–2 filled; Ch.3–5 stubs |
+| Status | Living document. Ch.1–2 filled; Ch.3–4 stubs; Ch.5 planned next steps |
 
 **Technical handoffs** (implementation detail, denser than chapters):
 
@@ -57,10 +57,10 @@ Use **seats 1–8** in all research prose. Code may still use 0-based indices in
 | Ch. | File | Topic | Suggested owner |
 | ---: | --- | --- | --- |
 | 1 | [ch01_roadmap.md](ch01_roadmap.md) | Order of operations + deal-share framing | Roadmap / coordination |
-| 2 | [ch02_drawing_callers.md](ch02_drawing_callers.md) | Non-opening draws that call/raise; procedures | Drawing-call validation |
+| 2 | [ch02_drawing_callers.md](ch02_drawing_callers.md) | Non-opening draws; **next: call/raise/mix** (§2.9) | Drawing-call validation |
 | 3 | [ch03_dealer_opening.md](ch03_dealer_opening.md) | BN opening + post-draw equity (stub) | Dealer / showdown / M2 |
 | 4 | [ch04_draw_mixes.md](ch04_draw_mixes.md) | Opener draw mixes + check protection (stub) | Draw mixes / Stage C |
-| 5 | [ch05_later_seats.md](ch05_later_seats.md) | CO, HJ (seat 6), sandbagging (planned) | Later seats |
+| 5 | [ch05_later_seats.md](ch05_later_seats.md) | CO open climb; **CO represent-bluff** (§5.2); HJ | Later seats |
 | A | [appendix_a_rules.md](appendix_a_rules.md) | Game rules | Shared (rare edits) |
 | B | [appendix_b_code.md](appendix_b_code.md) | Code map / CLIs | Shared (rare edits) |
 | C | [appendix_c_crosswalk.md](appendix_c_crosswalk.md) | Doc crosswalk | Shared (rare edits) |
@@ -113,6 +113,15 @@ Unconditional \(P(\ge 1\) of 7 seats is a 2:1 caller\() \approx 4.4\%\). The ste
 
 Update the **Status** column in this ledger when a chapter’s owner claims a slice solved — prefer editing **only this table** in `INDEX.md`, not copying percentages into chapter bodies.
 
+### Immediate research queue
+
+| Order | Work | Chapter | Blocks |
+| ---: | --- | --- | --- |
+| 1 | Strong draws: call vs raise vs mix (combo-weighted EV) | [Ch.2 §2.9](ch02_drawing_callers.md) | CO represent-bluffs |
+| 2 | CO bluff-represent underpair / high card (call/raise + draw 1) after BN opens, seats 1–6 gone | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for credibility |
+| 3 | BN Stage C check mixes / remaining Ch.3–4 | Ch.3–4 | Parallel OK with #1 if different files |
+| 4 | CO open/pass; HJ sandbagging | Ch.5 | After #2 template exists |
+
 ---
 
 ## Parallel agents (fewer conflicts)
@@ -134,3 +143,4 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | --- | --- |
 | 2026-09-01 | Initial monolithic `RESEARCH_PAPER.md` |
 | 2026-09-01 | Split into `docs/research/` chapters; seats 1–8 + hold’em names; granular solve-progress ledger; parallel-agent notes |
+| 2026-09-01 | Document next queue: Ch.2 call/raise/mix; Ch.5 CO represent-bluff |

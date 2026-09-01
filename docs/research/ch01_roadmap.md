@@ -97,7 +97,14 @@ Do **not** expand that plan until late-position non-sandbagging work and Stage C
 
 ---
 
-## 1.7 Later (not scheduled in this draft)
+## 1.7 Immediate research queue (ordered)
+
+1. **Ch.2 §2.9** — Strong draws: always call, always raise, or mix (BN-open laboratory first).
+2. **Ch.5 §5.2** — CO bluff-represent with underpair / high card (depends on §2.9).
+3. Continue Ch.3–4 BN post-draw / Stage C as scheduled in those chapters.
+4. CO open/pass chart; then HJ sandbagging.
+
+## 1.8 Later (not scheduled in this draft)
 
 - Full UTG / early-seat re-solve with combo-weighted raise pressure
 - Multiway post-draw pots
