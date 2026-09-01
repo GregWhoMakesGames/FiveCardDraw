@@ -52,14 +52,6 @@ Caller keep-4 **d=1** beats standing with the dealt five (ΔEV_caller about +$2�
 
 **Bluff delta comes next.** This table is the honest cell. Later work can add miss stabs, BN check-mixes (Stage C), and pair `d≠3` concealment, and report ΔEV against these numbers — not a new baseline. CO return-to-actor bluffs after a BN open live in [Ch.5 §5.2](ch05_later_seats.md).
 
-Post-draw **cap / reraise** (bet + 3 raises when both have straight+) is **not** in this table — the street is bet + one raise, then BN calls. Ticket: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md).
-
----
-
-## 3.5 Post-draw cap when both make straight+ (not done)
-
-M2 / non-bluff EV stop at **bet + one raise**. When BN value-bets and the caller raises a made straight+, BN today **always calls** — there is no 3-bet or cap. That node is a small slice (both at least a straight, or BN boat+ vs caller straight+) but the pot can grow from $22 to $38. Fine split (7-high straight vs queen-high flush, etc.) lives in the handoff, not here, until implemented.
-
 ---
 
 ## Code ownership (for parallel agents)
