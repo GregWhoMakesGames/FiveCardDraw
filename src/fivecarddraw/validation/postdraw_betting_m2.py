@@ -5,7 +5,9 @@ Assumptions (locked):
   - Drawer always keep4 / draw 1 (2:1 range).
   - Opener non-breaking draws: pairs d=3, trips d=2, two pair stand, straight+ stand.
   - Post-draw: opener acts first; one street at big bet ($4).
-  - Max one bet + one raise on this street (drawer may raise; opener then call/fold).
+  - Default max one bet + one raise (`max_raises=1`: drawer may raise; opener
+    then call/fold). Pass `max_raises=3` plus a `CapPolicy` for BN 3-bet /
+    caller cap (see `postdraw_cap.py`). Existing M2 / non-bluff CLIs stay at 1.
 
 Knobs searched:
   - opener_lead_min: bet one-pair finals with pair rank >= this (None = never lead pairs)
@@ -30,8 +32,8 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from fivecarddraw.cards import card_from_id
-from fivecarddraw.hand_rank import HandCategory, HandValue, evaluate_hand
-from fivecarddraw.rules import DEFAULT_CONFIG
+from fivecarddraw.hand_rank import CATEGORY_NAMES, HandCategory, HandValue, evaluate_hand
+from fivecarddraw.rules import DEFAULT_CONFIG, StreetState
 from fivecarddraw.validation.draw_call_odds import DrawHandResult
 from fivecarddraw.validation.showdown_matrix import (
     OPENER_CLASSES,
@@ -44,6 +46,8 @@ from fivecarddraw.validation.showdown_matrix import (
 ANTE_POT = DEFAULT_CONFIG.starting_pot  # 2.0
 PREDRAW_POT = ANTE_POT + 2 * DEFAULT_CONFIG.small_bet  # 6.0 after open+call
 BIG = DEFAULT_CONFIG.big_bet  # 4.0
+# Full cap: bet + 3 raises = four $4 increments each → $6 + $32 = $38.
+CAP_POT = PREDRAW_POT + 8 * BIG
 
 LEAD_LABELS = {
     None: "never",
@@ -63,6 +67,61 @@ RAISE_LABELS = {
     14: "AA",
     13: "AA+KK",
 }
+
+
+def _cat_plus_label(min_cat: int | None) -> str:
+    if min_cat is None:
+        return "never"
+    return CATEGORY_NAMES[HandCategory(min_cat)] + "+"
+
+
+@dataclass(frozen=True, slots=True)
+class CapPolicy:
+    """Honest 3-bet / cap thresholds when `max_raises >= 3`.
+
+    Categories are `HandCategory` ints. `None` means never take that action.
+    Two pair / trips never 3-bet unless `opener_3bet_min` is set that low
+    (bluff 3-bets are out of scope for the cap study).
+    """
+
+    opener_3bet_min: int | None = None  # 3-bet a raise if category >= min
+    drawer_cap_min: int | None = None  # cap a 3-bet if category >= min
+    drawer_call_3bet_min: int | None = HandCategory.STRAIGHT  # fold below
+    opener_call_cap_min: int | None = HandCategory.TWO_PAIR  # fold cap below
+
+    @property
+    def key(self) -> str:
+        return (
+            f"3bet={_cat_plus_label(self.opener_3bet_min)}|"
+            f"cap={_cat_plus_label(self.drawer_cap_min)}|"
+            f"call3={_cat_plus_label(self.drawer_call_3bet_min)}"
+        )
+
+    def opener_three_bets(self, v: HandValue) -> bool:
+        return (
+            self.opener_3bet_min is not None and v.category >= self.opener_3bet_min
+        )
+
+    def opener_calls_cap(self, v: HandValue) -> bool:
+        return (
+            self.opener_call_cap_min is not None
+            and v.category >= self.opener_call_cap_min
+        )
+
+    def caller_vs_three_bet(self, v: HandValue) -> str:
+        """Return 'fold', 'call', or 'cap' given the caller's final."""
+        if (
+            self.drawer_call_3bet_min is not None
+            and v.category < self.drawer_call_3bet_min
+        ):
+            return "fold"
+        if self.drawer_cap_min is not None and v.category >= self.drawer_cap_min:
+            return "cap"
+        return "call"
+
+
+# Default: call the raise, never 3-bet / never cap (today's M2 street).
+CALL_IT_DOWN = CapPolicy()
 
 
 @dataclass(frozen=True, slots=True)
@@ -113,7 +172,7 @@ class StreetStats:
         self.n += 1.0
         self.opener_ev += ev
         for k, v in flags.items():
-            if v:
+            if v and hasattr(self, k):
                 setattr(self, k, getattr(self, k) + 1.0)
 
     def as_dict(self) -> dict[str, float]:
@@ -223,11 +282,138 @@ def _PAIR_RANK_FROM_CLASS(cls: str) -> int | None:
     return {"pair_J": 11, "pair_Q": 12, "pair_K": 13, "pair_A": 14}.get(cls)
 
 
-def play_deal(deal: Deal, policy: Policy) -> tuple[float, dict[str, bool]]:
+def postdraw_initial_state(max_raises: int = 1) -> StreetState:
+    """Empty post-draw street: pot $6, nothing in yet."""
+    return StreetState(
+        pot=PREDRAW_POT,
+        bet_size=BIG,
+        amount_to_call=0.0,
+        raises_used=0,
+        max_raises=max_raises,
+        opener_seat=None,
+    )
+
+
+def street_after_bet_and_raise(max_raises: int = 3) -> StreetState:
+    """BN has bet $4, caller has raised. BN faces $4 into $18."""
+    return postdraw_initial_state(max_raises).after_open(seat=7).after_raise()
+
+
+def showdown_ev_bn(
+    opener: HandValue, drawer: HandValue, o_in: float, pot: float
+) -> float:
+    if opener > drawer:
+        return -o_in + pot
+    if opener < drawer:
+        return -o_in
+    return -o_in + pot / 2.0
+
+
+def play_raise_node(
+    deal: Deal,
+    *,
+    bn_vs_raise: str,
+    caller_vs_3bet: str = "call",
+    bn_vs_cap: str = "call",
+    max_raises: int = 3,
+) -> tuple[float, dict[str, bool]]:
+    """BN EV from post-draw start, given this deal is already a raise node.
+
+    Chip path: BN already bet, caller already raised (`street_after_bet_and_raise`).
+    `bn_vs_raise` is 'fold' | 'call' | 'three_bet'.
+    `caller_vs_3bet` is 'fold' | 'call' | 'cap'.
+    `bn_vs_cap` is 'fold' | 'call'.
+    """
+    flags = {
+        "drawer_raise": True,
+        "opener_fold_to_raise": False,
+        "opener_call_raise": False,
+        "opener_3bet": False,
+        "drawer_fold_to_3bet": False,
+        "drawer_call_3bet": False,
+        "drawer_cap": False,
+        "opener_fold_to_cap": False,
+        "opener_call_cap": False,
+        "showdown": False,
+        "opener_wins_sd": False,
+    }
+    st = street_after_bet_and_raise(max_raises)
+    o_in = BIG
+
+    if bn_vs_raise == "fold":
+        flags["opener_fold_to_raise"] = True
+        return -o_in, flags
+
+    if bn_vs_raise == "call":
+        flags["opener_call_raise"] = True
+        st = st.after_call()
+        o_in += st.bet_size
+        flags["showdown"] = True
+        ev = showdown_ev_bn(deal.opener_final, deal.drawer_final, o_in, st.pot)
+        flags["opener_wins_sd"] = deal.opener_final > deal.drawer_final
+        return ev, flags
+
+    if bn_vs_raise != "three_bet":
+        raise ValueError(f"unknown bn_vs_raise: {bn_vs_raise}")
+    if not st.can_raise:
+        raise ValueError("cannot 3-bet: raise cap reached")
+
+    flags["opener_3bet"] = True
+    add = st.amount_to_call + st.bet_size
+    st = st.after_raise()
+    o_in += add
+
+    if caller_vs_3bet == "fold":
+        flags["drawer_fold_to_3bet"] = True
+        return -o_in + st.pot, flags
+
+    if caller_vs_3bet == "call":
+        flags["drawer_call_3bet"] = True
+        st = st.after_call()
+        flags["showdown"] = True
+        ev = showdown_ev_bn(deal.opener_final, deal.drawer_final, o_in, st.pot)
+        flags["opener_wins_sd"] = deal.opener_final > deal.drawer_final
+        return ev, flags
+
+    if caller_vs_3bet != "cap":
+        raise ValueError(f"unknown caller_vs_3bet: {caller_vs_3bet}")
+    if not st.can_raise:
+        raise ValueError("cannot cap: raise cap reached")
+
+    flags["drawer_cap"] = True
+    st = st.after_raise()
+
+    if bn_vs_cap == "fold":
+        flags["opener_fold_to_cap"] = True
+        return -o_in, flags
+
+    if bn_vs_cap != "call":
+        raise ValueError(f"unknown bn_vs_cap: {bn_vs_cap}")
+    flags["opener_call_cap"] = True
+    st = st.after_call()
+    o_in += st.bet_size
+    flags["showdown"] = True
+    ev = showdown_ev_bn(deal.opener_final, deal.drawer_final, o_in, st.pot)
+    flags["opener_wins_sd"] = deal.opener_final > deal.drawer_final
+    return ev, flags
+
+
+def play_deal(
+    deal: Deal,
+    policy: Policy,
+    *,
+    max_raises: int = 1,
+    cap_policy: CapPolicy | None = None,
+) -> tuple[float, dict[str, bool]]:
     """Opener net chips from post-draw start (pot already PREDRAW_POT).
 
     Δ = -postdraw_invested + (pot if win) + (pot/2 if tie); folds award pot.
+
+    `max_raises=1` (default) is the M2 / non-bluff street: bet + one raise,
+    then call/fold. `max_raises=3` plus a `CapPolicy` enables BN 3-bet and
+    caller cap. `cap_policy=None` is call-it-down (never 3-bet).
     """
+    cap_policy = cap_policy or CALL_IT_DOWN
     flags = {
         "opener_pair_lead": False,
         "opener_pair_check": False,
@@ -237,6 +423,12 @@ def play_deal(deal: Deal, policy: Policy) -> tuple[float, dict[str, bool]]:
         "opener_call_stab": False,
         "opener_fold_to_raise": False,
         "opener_call_raise": False,
+        "opener_3bet": False,
+        "drawer_fold_to_3bet": False,
+        "drawer_call_3bet": False,
+        "drawer_cap": False,
+        "opener_fold_to_cap": False,
+        "opener_call_cap": False,
         "showdown": False,
         "opener_wins_sd": False,
     }
@@ -268,21 +460,36 @@ def play_deal(deal: Deal, policy: Policy) -> tuple[float, dict[str, bool]]:
             and policy.drawer_raise_min is not None
             and d_face >= policy.drawer_raise_min
         ):
-            flags["drawer_raise"] = True
-            pot += 2 * BIG
             call = o_strong or (
                 o_pair is not None
                 and policy.drawer_raise_min is not None
                 and o_pair >= policy.drawer_raise_min
             )
-            if call:
-                flags["opener_call_raise"] = True
-                o_in += BIG
-                pot += BIG
-                flags["showdown"] = True
-            else:
+            if not call:
+                flags["drawer_raise"] = True
                 flags["opener_fold_to_raise"] = True
                 return -o_in, flags
+            three_bet = (
+                max_raises > 1 and cap_policy.opener_three_bets(deal.opener_final)
+            )
+            bn_act = "three_bet" if three_bet else "call"
+            caller_act = (
+                cap_policy.caller_vs_three_bet(deal.drawer_final)
+                if three_bet
+                else "call"
+            )
+            bn_cap = (
+                "call" if cap_policy.opener_calls_cap(deal.opener_final) else "fold"
+            )
+            ev, node_flags = play_raise_node(
+                deal,
+                bn_vs_raise=bn_act,
+                caller_vs_3bet=caller_act,
+                bn_vs_cap=bn_cap,
+                max_raises=max_raises,
+            )
+            flags.update(node_flags)
+            return ev, flags
         elif d_face is not None:
             pot += BIG
             flags["showdown"] = True
