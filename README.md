@@ -30,7 +30,8 @@ Validation fixtures cover drawing-call odds, showdown matrix, opener-first
 post-draw face-pair betting, and opener draw-count / check-mix protection — see
 [docs/NEXT_STAGE_SHOWDOWN_MATRIX.md](docs/NEXT_STAGE_SHOWDOWN_MATRIX.md),
 [docs/POSTDRAW_M2_FACE_PAIR_GRID.md](docs/POSTDRAW_M2_FACE_PAIR_GRID.md),
-[docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md), and
+[docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md),
+[docs/NEXT_STAGE_POSTDRAW_CAP.md](docs/NEXT_STAGE_POSTDRAW_CAP.md), and
 [docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md](docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md).
 
 ## Setup

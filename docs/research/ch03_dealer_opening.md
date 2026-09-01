@@ -29,6 +29,12 @@ With pairs drawing three and opener (BN) acting first: **checking JJ–AA** beat
 
 ---
 
+## 3.4 Post-draw cap when both make straight+ (not done)
+
+M2 (and the honest class × d EV grid, when present) stop at **bet + one raise**. When BN value-bets and the caller raises a made straight+, BN today **always calls** — there is no 3-bet or cap. That node is a small slice (both at least a straight, or BN boat+ vs caller straight+) but the pot can grow from $22 to $38. Fine split (7-high straight vs queen-high flush, etc.) lives in the handoff until implemented: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md).
+
+---
+
 ## Code ownership (for parallel agents)
 
 | Path | Role |

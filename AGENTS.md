@@ -42,8 +42,15 @@ Default code milestone remains Stage C in
 [docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md).
 
 **Narrative next queue** (research paper): (1) Ch.2 strong-draw call/raise/mix,
-(2) Ch.5 CO bluff after BN open (return-to-actor; weaker than strong draws) —
+(2) Ch.5 CO bluff after BN open (return-to-actor; weaker than strong draws),
+(3b) post-draw cap / BN 3-bet vs call when both make straight+ —
+[docs/NEXT_STAGE_POSTDRAW_CAP.md](docs/NEXT_STAGE_POSTDRAW_CAP.md) —
 see [docs/research/INDEX.md](docs/research/INDEX.md) “Immediate research queue.”
+
+**If assigned post-draw cap:** read
+[docs/NEXT_STAGE_POSTDRAW_CAP.md](docs/NEXT_STAGE_POSTDRAW_CAP.md) first.
+Extend `play_deal`; keep M2 default `max_raises=1`. Do not redo the class × d
+grid, Stage C, or pair concealment.
 
 **Read first for Stage C code:** [docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md)
 
