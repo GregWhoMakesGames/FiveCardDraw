@@ -9,7 +9,7 @@ This folder is the **human-readable research paper**, split into chapters so par
 | Stakes (v1) | $0.25 ante ($2 pot), $2 / $4 limit |
 | Codebase | [`fivecarddraw`](../../README.md) |
 | Audience | Researchers and poker-curious readers (basic poker OK) |
-| Status | Living document. Ch.1–2 filled; Ch.3–4 stubs; Ch.5 planned next steps |
+| Status | Living document. Ch.1–2 filled; Ch.3 non-bluff EV table; Ch.4 stub pending Stage C; Ch.5 planned |
 
 **Technical handoffs** (implementation detail, denser than chapters):
 
@@ -18,6 +18,7 @@ This folder is the **human-readable research paper**, split into chapters so par
 - [../POSTDRAW_M2_FACE_PAIR_GRID.md](../POSTDRAW_M2_FACE_PAIR_GRID.md)
 - [../NEXT_STAGE_OPENER_DRAW_MIXES.md](../NEXT_STAGE_OPENER_DRAW_MIXES.md)
 - [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md)
+- [../NEXT_STAGE_NONBLUFF_EV.md](../NEXT_STAGE_NONBLUFF_EV.md)
 
 ---
 
@@ -27,7 +28,7 @@ This project builds a **reproducible, bottom-up** analysis of fixed-limit five-c
 
 **Why the problem is hard.** Eight players, a 53-card deck (52 + bug), pre-draw and post-draw streets, and a public “cards drawn” signal create a decision space far larger than heads-up hold’em. Early-position opens face seven players behind; late-position steals look easy until drawing callers with huge outs enter the pot. We **slice** the game into validation ladders with exact or Monte Carlo ground truth, then expand seat by seat — and we track **what fraction of deals** each slice covers (see [Solve-progress ledger](#solve-progress-ledger)).
 
-**What we have done so far.** Base engine + pre-draw pipeline (charts not trusted); drawing-call inventory (18,396 2:1 combos); dealer opener showdown / post-draw betting / draw-count grids (Stage C check-mix next); public-draw belief tables.
+**What we have done so far.** Base engine + pre-draw pipeline (charts not trusted); drawing-call inventory (18,396 2:1 combos); dealer opener showdown / post-draw betting / draw-count grids; **non-bluff EV by class × d** (bluff delta next); Stage C check-mix next; public-draw belief tables.
 
 **Central claim (working).** Late position is the right laboratory. Seat naming and the progressive deal-share breakdown live in this index so every chapter uses the same language.
 
@@ -99,7 +100,7 @@ After seats 1–7 lack openers and BN has an open-legal hand, BN’s open faces 
 | Slice | Formula (planning) | ≈ % of *all* deals | Status | Home chapter |
 | --- | --- | ---: | --- | --- |
 | BN can open (steal), **nobody** has 2:1 call odds | \(q_{\mathrm{neither}}^{7} \cdot p_{\mathrm{open}}\) | **~3.6%** | **Solved** for open-legal made hands: EV(open) ≈ +$2 ante pot | Ch.3 § folded-to-BN sanity |
-| BN can open (steal), **≥1** seat has a good calling hand (2:1 outs) | \(\bigl[(1-p_{\mathrm{open}})^{7} - q_{\mathrm{neither}}^{7}\bigr] \cdot p_{\mathrm{open}}\) | **~0.20%** | **In progress** — inventory done (Ch.2); showdown/betting/draws in progress (Ch.3–4) | Ch.2 + Ch.3–4 |
+| BN can open (steal), **≥1** seat has a good calling hand (2:1 outs) | \(\bigl[(1-p_{\mathrm{open}})^{7} - q_{\mathrm{neither}}^{7}\bigr] \cdot p_{\mathrm{open}}\) | **~0.20%** | **In progress** — inventory + showdown + M2 + **non-bluff EV by class × d** done (Ch.2–4); Stage C check-mix + bluff delta next | Ch.2 + Ch.3–4 |
 
 Unconditional \(P(\ge 1\) of 7 seats is a 2:1 caller\() \approx 4.4\%\). The steal-into-drawer band is much smaller because it also requires seats 1–7 all non-open-legal **and** BN open-legal — still the strategically important laboratory for thin opens.
 
@@ -141,6 +142,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
+| 2026-09-01 | Non-bluff EV by BN class × d vs 2:1 caller (Ch.3 §3.4); bluff delta next |
 | 2026-09-01 | Initial monolithic `RESEARCH_PAPER.md` |
 | 2026-09-01 | Split into `docs/research/` chapters; seats 1–8 + hold’em names; granular solve-progress ledger; parallel-agent notes |
 | 2026-09-01 | Document next queue: Ch.2 call/raise/mix; Ch.5 CO bluff after BN open |
