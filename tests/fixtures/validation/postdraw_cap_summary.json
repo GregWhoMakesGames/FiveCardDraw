@@ -1,0 +1,1149 @@
+{
+  "meta": {
+    "seed": 20260902,
+    "n_range": 40000,
+    "n_per_class_extra": 4000,
+    "n_node_weighted": 7559,
+    "n_node_with_extra": 22299,
+    "predraw_pot": 6.0,
+    "big_bet": 4.0,
+    "cap_pot": 38.0,
+    "max_raises_default_m2": 1,
+    "max_raises_this_module": 3,
+    "matchup": "BN (seat 8) opener vs one 2:1 drawing caller",
+    "predraw": "open + call only (no raise)",
+    "honest_m2_policy": "lead=never|stab=AA|raise=never",
+    "locked_bn_draw": {
+      "name": "tp1_tr2_q1",
+      "pair_d": 3,
+      "two_pair_d": 1,
+      "trips_d": 2,
+      "quads_d": 1
+    },
+    "hold_caller_vs_3bet": "3bet=flush+|cap=straight_flush+|call3=straight+",
+    "node": "BN two_pair+ (bets) \u2229 caller straight+ (raises)",
+    "bluff_3bet_two_pair_trips": "out of scope",
+    "doc": "docs/NEXT_STAGE_POSTDRAW_CAP.md",
+    "regenerate": "analyze-postdraw-cap --n-range 40000 --n-per-class 4000 --write-fixture",
+    "notes": [
+      "M2 / non-bluff EV tables stay bet+1 (call the raise). This module does not rewrite those cells.",
+      "Unilateral BN \u0394 holds caller at cap SF / call rest.",
+      "Unilateral caller \u0394 is reported vs BN flush+ 3-bet and vs BN boat+ 3-bet."
+    ]
+  },
+  "node_mass_by_class": [
+    {
+      "opener_class": "pair_J",
+      "n": 5578.0,
+      "p_class": 0.1394,
+      "p_bn_bets": 0.2775,
+      "p_caller_straight_plus": 0.3302,
+      "p_raise_node": 0.095,
+      "p_class_given_node": 0.0701,
+      "n_node": 530.0
+    },
+    {
+      "opener_class": "pair_Q",
+      "n": 5665.0,
+      "p_class": 0.1416,
+      "p_bn_bets": 0.2904,
+      "p_caller_straight_plus": 0.3336,
+      "p_raise_node": 0.0985,
+      "p_class_given_node": 0.0738,
+      "n_node": 558.0
+    },
+    {
+      "opener_class": "pair_K",
+      "n": 5488.0,
+      "p_class": 0.1372,
+      "p_bn_bets": 0.2892,
+      "p_caller_straight_plus": 0.3446,
+      "p_raise_node": 0.1077,
+      "p_class_given_node": 0.0782,
+      "n_node": 591.0
+    },
+    {
+      "opener_class": "pair_A",
+      "n": 8668.0,
+      "p_class": 0.2167,
+      "p_bn_bets": 0.321,
+      "p_caller_straight_plus": 0.3327,
+      "p_raise_node": 0.1087,
+      "p_class_given_node": 0.1246,
+      "n_node": 942.0
+    },
+    {
+      "opener_class": "two_pair",
+      "n": 6584.0,
+      "p_class": 0.1646,
+      "p_bn_bets": 1.0,
+      "p_caller_straight_plus": 0.3326,
+      "p_raise_node": 0.3326,
+      "p_class_given_node": 0.2897,
+      "n_node": 2190.0
+    },
+    {
+      "opener_class": "two_pair_aces_up",
+      "n": 1994.0,
+      "p_class": 0.0498,
+      "p_bn_bets": 1.0,
+      "p_caller_straight_plus": 0.3375,
+      "p_raise_node": 0.3375,
+      "p_class_given_node": 0.089,
+      "n_node": 673.0
+    },
+    {
+      "opener_class": "trips",
+      "n": 2995.0,
+      "p_class": 0.0749,
+      "p_bn_bets": 1.0,
+      "p_caller_straight_plus": 0.3402,
+      "p_raise_node": 0.3402,
+      "p_class_given_node": 0.1348,
+      "n_node": 1019.0
+    },
+    {
+      "opener_class": "trips_K",
+      "n": 247.0,
+      "p_class": 0.0062,
+      "p_bn_bets": 1.0,
+      "p_caller_straight_plus": 0.3644,
+      "p_raise_node": 0.3644,
+      "p_class_given_node": 0.0119,
+      "n_node": 90.0
+    },
+    {
+      "opener_class": "trips_A",
+      "n": 597.0,
+      "p_class": 0.0149,
+      "p_bn_bets": 1.0,
+      "p_caller_straight_plus": 0.3183,
+      "p_raise_node": 0.3183,
+      "p_class_given_node": 0.0251,
+      "n_node": 190.0
+    },
+    {
+      "opener_class": "straight",
+      "n": 1338.0,
+      "p_class": 0.0335,
+      "p_bn_bets": 1.0,
+      "p_caller_straight_plus": 0.3513,
+      "p_raise_node": 0.3513,
+      "p_class_given_node": 0.0622,
+      "n_node": 470.0
+    },
+    {
+      "opener_class": "flush",
+      "n": 490.0,
+      "p_class": 0.0123,
+      "p_bn_bets": 1.0,
+      "p_caller_straight_plus": 0.3551,
+      "p_raise_node": 0.3551,
+      "p_class_given_node": 0.023,
+      "n_node": 174.0
+    },
+    {
+      "opener_class": "full_house",
+      "n": 280.0,
+      "p_class": 0.007,
+      "p_bn_bets": 1.0,
+      "p_caller_straight_plus": 0.3714,
+      "p_raise_node": 0.3714,
+      "p_class_given_node": 0.0138,
+      "n_node": 104.0
+    },
+    {
+      "opener_class": "four_of_a_kind",
+      "n": 62.0,
+      "p_class": 0.0015,
+      "p_bn_bets": 1.0,
+      "p_caller_straight_plus": 0.4194,
+      "p_raise_node": 0.4194,
+      "p_class_given_node": 0.0034,
+      "n_node": 26.0
+    },
+    {
+      "opener_class": "straight_flush",
+      "n": 14.0,
+      "p_class": 0.0003,
+      "p_bn_bets": 1.0,
+      "p_caller_straight_plus": 0.1429,
+      "p_raise_node": 0.1429,
+      "p_class_given_node": 0.0003,
+      "n_node": 2.0
+    }
+  ],
+  "policy_grid": [
+    {
+      "bn_3bet": "call_it_down",
+      "caller_vs_3bet": "call_no_cap",
+      "policy": "3bet=never|cap=never|call3=straight+",
+      "n": 7559.0,
+      "ev_bn": -5.3239,
+      "ev_caller": 11.3239,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.0,
+      "p_cap": 0.0,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.0
+    },
+    {
+      "bn_3bet": "call_it_down",
+      "caller_vs_3bet": "cap_sf",
+      "policy": "3bet=never|cap=straight_flush+|call3=straight+",
+      "n": 7559.0,
+      "ev_bn": -5.3239,
+      "ev_caller": 11.3239,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.0,
+      "p_cap": 0.0,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.0
+    },
+    {
+      "bn_3bet": "call_it_down",
+      "caller_vs_3bet": "cap_flush+",
+      "policy": "3bet=never|cap=flush+|call3=straight+",
+      "n": 7559.0,
+      "ev_bn": -5.3239,
+      "ev_caller": 11.3239,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.0,
+      "p_cap": 0.0,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.0
+    },
+    {
+      "bn_3bet": "call_it_down",
+      "caller_vs_3bet": "fold_straight_cap_sf",
+      "policy": "3bet=never|cap=straight_flush+|call3=flush+",
+      "n": 7559.0,
+      "ev_bn": -5.3239,
+      "ev_caller": 11.3239,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.0,
+      "p_cap": 0.0,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.0
+    },
+    {
+      "bn_3bet": "straight+",
+      "caller_vs_3bet": "call_no_cap",
+      "policy": "3bet=straight+|cap=never|call3=straight+",
+      "n": 7559.0,
+      "ev_bn": -5.0672,
+      "ev_caller": 11.0672,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.1791,
+      "p_cap": 0.0,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.2566
+    },
+    {
+      "bn_3bet": "straight+",
+      "caller_vs_3bet": "cap_sf",
+      "policy": "3bet=straight+|cap=straight_flush+|call3=straight+",
+      "n": 7559.0,
+      "ev_bn": -5.127,
+      "ev_caller": 11.127,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.1791,
+      "p_cap": 0.0149,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.1968
+    },
+    {
+      "bn_3bet": "straight+",
+      "caller_vs_3bet": "cap_flush+",
+      "policy": "3bet=straight+|cap=flush+|call3=straight+",
+      "n": 7559.0,
+      "ev_bn": -5.117,
+      "ev_caller": 11.1169,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.1791,
+      "p_cap": 0.0611,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.2069
+    },
+    {
+      "bn_3bet": "straight+",
+      "caller_vs_3bet": "fold_straight_cap_sf",
+      "policy": "3bet=straight+|cap=straight_flush+|call3=flush+",
+      "n": 7559.0,
+      "ev_bn": -4.9779,
+      "ev_caller": 10.9779,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.1791,
+      "p_cap": 0.0149,
+      "p_caller_fold_3bet": 0.118,
+      "delta_ev_bn_vs_call_it_down": 0.3459
+    },
+    {
+      "bn_3bet": "flush+",
+      "caller_vs_3bet": "call_no_cap",
+      "policy": "3bet=flush+|cap=never|call3=straight+",
+      "n": 7559.0,
+      "ev_bn": -4.9582,
+      "ev_caller": 10.9582,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.1126,
+      "p_cap": 0.0,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.3656
+    },
+    {
+      "bn_3bet": "flush+",
+      "caller_vs_3bet": "cap_sf",
+      "policy": "3bet=flush+|cap=straight_flush+|call3=straight+",
+      "n": 7559.0,
+      "ev_bn": -4.9952,
+      "ev_caller": 10.9952,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.1126,
+      "p_cap": 0.0093,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.3286
+    },
+    {
+      "bn_3bet": "flush+",
+      "caller_vs_3bet": "cap_flush+",
+      "policy": "3bet=flush+|cap=flush+|call3=straight+",
+      "n": 7559.0,
+      "ev_bn": -4.9032,
+      "ev_caller": 10.9032,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.1126,
+      "p_cap": 0.0349,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.4207
+    },
+    {
+      "bn_3bet": "flush+",
+      "caller_vs_3bet": "fold_straight_cap_sf",
+      "policy": "3bet=flush+|cap=straight_flush+|call3=flush+",
+      "n": 7559.0,
+      "ev_bn": -5.3059,
+      "ev_caller": 11.3059,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.1126,
+      "p_cap": 0.0093,
+      "p_caller_fold_3bet": 0.0777,
+      "delta_ev_bn_vs_call_it_down": 0.018
+    },
+    {
+      "bn_3bet": "boat+",
+      "caller_vs_3bet": "call_no_cap",
+      "policy": "3bet=full_house+|cap=never|call3=straight+",
+      "n": 7559.0,
+      "ev_bn": -5.0169,
+      "ev_caller": 11.0169,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.0889,
+      "p_cap": 0.0,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.3069
+    },
+    {
+      "bn_3bet": "boat+",
+      "caller_vs_3bet": "cap_sf",
+      "policy": "3bet=full_house+|cap=straight_flush+|call3=straight+",
+      "n": 7559.0,
+      "ev_bn": -5.0413,
+      "ev_caller": 11.0413,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.0889,
+      "p_cap": 0.0061,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.2826
+    },
+    {
+      "bn_3bet": "boat+",
+      "caller_vs_3bet": "cap_flush+",
+      "policy": "3bet=full_house+|cap=flush+|call3=straight+",
+      "n": 7559.0,
+      "ev_bn": -4.9619,
+      "ev_caller": 10.9619,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.0889,
+      "p_cap": 0.0259,
+      "p_caller_fold_3bet": 0.0,
+      "delta_ev_bn_vs_call_it_down": 0.3619
+    },
+    {
+      "bn_3bet": "boat+",
+      "caller_vs_3bet": "fold_straight_cap_sf",
+      "policy": "3bet=full_house+|cap=straight_flush+|call3=flush+",
+      "n": 7559.0,
+      "ev_bn": -5.2932,
+      "ev_caller": 11.2932,
+      "p_bn_wins": 0.1201,
+      "p_tie": 0.003,
+      "p_3bet": 0.0889,
+      "p_cap": 0.0061,
+      "p_caller_fold_3bet": 0.063,
+      "delta_ev_bn_vs_call_it_down": 0.0307
+    }
+  ],
+  "bn_family": [
+    {
+      "bucket": "two_pair_or_trips",
+      "n": 12280.0,
+      "p_bn_wins": 0.0,
+      "ev_bn_call": -8.0,
+      "ev_bn_3bet": -12.2779,
+      "delta_3bet_vs_call": -4.2778,
+      "recommend": "call",
+      "bluff_3bet_out_of_scope": true
+    },
+    {
+      "bucket": "boat_plus",
+      "n": 6545.0,
+      "p_bn_wins": 0.9403,
+      "ev_bn_call": 12.7143,
+      "ev_bn_3bet": 16.1801,
+      "delta_3bet_vs_call": 3.4659,
+      "recommend": "three_bet"
+    },
+    {
+      "bucket": "straight",
+      "n": 1907.0,
+      "p_bn_wins": 0.2973,
+      "ev_bn_call": -1.0781,
+      "ev_bn_3bet": -2.8925,
+      "delta_3bet_vs_call": -1.8144,
+      "recommend": "call"
+    },
+    {
+      "bucket": "flush",
+      "n": 1567.0,
+      "p_bn_wins": 0.8219,
+      "ev_bn_call": 10.083,
+      "ev_bn_3bet": 12.2502,
+      "delta_3bet_vs_call": 2.1672,
+      "recommend": "three_bet"
+    }
+  ],
+  "bn_fine": [
+    {
+      "bucket": "two_pair",
+      "n": 6428.0,
+      "p_bn_wins": 0.0,
+      "ev_bn_call": -8.0,
+      "ev_bn_3bet": -12.2856,
+      "delta_3bet_vs_call": -4.2856,
+      "recommend": "call",
+      "bluff_3bet_out_of_scope": true
+    },
+    {
+      "bucket": "three_of_a_kind",
+      "n": 5852.0,
+      "p_bn_wins": 0.0,
+      "ev_bn_call": -8.0,
+      "ev_bn_3bet": -12.2693,
+      "delta_3bet_vs_call": -4.2693,
+      "recommend": "call",
+      "bluff_3bet_out_of_scope": true
+    },
+    {
+      "bucket": "full_house",
+      "n": 2322.0,
+      "p_bn_wins": 0.9354,
+      "ev_bn_call": 12.5788,
+      "ev_bn_3bet": 15.8036,
+      "delta_3bet_vs_call": 3.2248,
+      "recommend": "three_bet"
+    },
+    {
+      "bucket": "four_of_a_kind",
+      "n": 1654.0,
+      "p_bn_wins": 0.9105,
+      "ev_bn_call": 12.0314,
+      "ev_bn_3bet": 14.9577,
+      "delta_3bet_vs_call": 2.9262,
+      "recommend": "three_bet"
+    },
+    {
+      "bucket": "straight_flush",
+      "n": 1323.0,
+      "p_bn_wins": 0.9297,
+      "ev_bn_call": 12.5949,
+      "ev_bn_3bet": 16.0779,
+      "delta_3bet_vs_call": 3.483,
+      "recommend": "three_bet"
+    },
+    {
+      "bucket": "five_aces",
+      "n": 1246.0,
+      "p_bn_wins": 1.0,
+      "ev_bn_call": 14.0,
+      "ev_bn_3bet": 18.6132,
+      "delta_3bet_vs_call": 4.6132,
+      "recommend": "three_bet"
+    },
+    {
+      "bucket": "flush_A",
+      "n": 934.0,
+      "p_bn_wins": 0.8437,
+      "ev_bn_call": 10.561,
+      "ev_bn_3bet": 12.7837,
+      "delta_3bet_vs_call": 2.2227,
+      "recommend": "three_bet"
+    },
+    {
+      "bucket": "flush_K",
+      "n": 280.0,
+      "p_bn_wins": 0.8036,
+      "ev_bn_call": 9.6786,
+      "ev_bn_3bet": 11.9071,
+      "delta_3bet_vs_call": 2.2286,
+      "recommend": "three_bet"
+    },
+    {
+      "bucket": "straight_A",
+      "n": 237.0,
+      "p_bn_wins": 0.5907,
+      "ev_bn_call": 5.0886,
+      "ev_bn_3bet": 5.443,
+      "delta_3bet_vs_call": 0.3544,
+      "recommend": "three_bet"
+    },
+    {
+      "bucket": "straight_Q",
+      "n": 210.0,
+      "p_bn_wins": 0.5286,
+      "ev_bn_call": 3.9952,
+      "ev_bn_3bet": 4.0524,
+      "delta_3bet_vs_call": 0.0571,
+      "recommend": "three_bet"
+    },
+    {
+      "bucket": "straight_5",
+      "n": 194.0,
+      "p_bn_wins": 0.0,
+      "ev_bn_call": -7.8866,
+      "ev_bn_3bet": -12.1134,
+      "delta_3bet_vs_call": -4.2268,
+      "recommend": "call"
+    },
+    {
+      "bucket": "straight_7",
+      "n": 194.0,
+      "p_bn_wins": 0.0464,
+      "ev_bn_call": -6.4124,
+      "ev_bn_3bet": -10.1237,
+      "delta_3bet_vs_call": -3.7113,
+      "recommend": "call"
+    },
+    {
+      "bucket": "straight_K",
+      "n": 189.0,
+      "p_bn_wins": 0.5291,
+      "ev_bn_call": 4.0476,
+      "ev_bn_3bet": 3.9206,
+      "delta_3bet_vs_call": -0.127,
+      "recommend": "call"
+    },
+    {
+      "bucket": "straight_6",
+      "n": 186.0,
+      "p_bn_wins": 0.0215,
+      "ev_bn_call": -6.9946,
+      "ev_bn_3bet": -10.8441,
+      "delta_3bet_vs_call": -3.8495,
+      "recommend": "call"
+    },
+    {
+      "bucket": "straight_T",
+      "n": 186.0,
+      "p_bn_wins": 0.3548,
+      "ev_bn_call": 0.3387,
+      "ev_bn_3bet": -0.9516,
+      "delta_3bet_vs_call": -1.2903,
+      "recommend": "call"
+    },
+    {
+      "bucket": "straight_J",
+      "n": 180.0,
+      "p_bn_wins": 0.4278,
+      "ev_bn_call": 1.6556,
+      "ev_bn_3bet": 0.6778,
+      "delta_3bet_vs_call": -0.9778,
+      "recommend": "call"
+    },
+    {
+      "bucket": "flush_Q",
+      "n": 177.0,
+      "p_bn_wins": 0.7514,
+      "ev_bn_call": 8.5311,
+      "ev_bn_3bet": 10.2938,
+      "delta_3bet_vs_call": 1.7627,
+      "recommend": "three_bet"
+    },
+    {
+      "bucket": "straight_9",
+      "n": 177.0,
+      "p_bn_wins": 0.2429,
+      "ev_bn_call": -2.2203,
+      "ev_bn_3bet": -4.4576,
+      "delta_3bet_vs_call": -2.2373,
+      "recommend": "call"
+    },
+    {
+      "bucket": "straight_8",
+      "n": 154.0,
+      "p_bn_wins": 0.1104,
+      "ev_bn_call": -4.9286,
+      "ev_bn_3bet": -7.9416,
+      "delta_3bet_vs_call": -3.013,
+      "recommend": "call"
+    },
+    {
+      "bucket": "flush_J",
+      "n": 89.0,
+      "p_bn_wins": 0.8539,
+      "ev_bn_call": 10.7865,
+      "ev_bn_3bet": 13.3933,
+      "delta_3bet_vs_call": 2.6067,
+      "recommend": "three_bet"
+    },
+    {
+      "bucket": "flush_low",
+      "n": 87.0,
+      "p_bn_wins": 0.7586,
+      "ev_bn_call": 8.6897,
+      "ev_bn_3bet": 10.4368,
+      "delta_3bet_vs_call": 1.7471,
+      "recommend": "three_bet"
+    }
+  ],
+  "caller_family_vs_bn_flush_plus": [
+    {
+      "bucket": "straight",
+      "n": 4894.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "flush",
+      "n": 2402.0,
+      "p_bn_wins": 0.9505,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -10.5137,
+      "ev_caller_cap": -14.1174,
+      "delta_cap_vs_call": -3.6037,
+      "delta_fold_vs_call": 2.5137,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "boat_plus",
+      "n": 816.0,
+      "p_bn_wins": 0.3247,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": 7.9448,
+      "ev_caller_cap": 9.2635,
+      "delta_cap_vs_call": 1.3186,
+      "delta_fold_vs_call": -15.9449,
+      "recommend": "cap"
+    }
+  ],
+  "caller_fine_vs_bn_flush_plus": [
+    {
+      "bucket": "straight_flush",
+      "n": 816.0,
+      "p_bn_wins": 0.3247,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": 7.9448,
+      "ev_caller_cap": 9.2635,
+      "delta_cap_vs_call": 1.3186,
+      "delta_fold_vs_call": -15.9449,
+      "recommend": "cap"
+    },
+    {
+      "bucket": "flush_A",
+      "n": 723.0,
+      "p_bn_wins": 0.8396,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -7.1867,
+      "ev_caller_cap": -9.9032,
+      "delta_cap_vs_call": -2.7165,
+      "delta_fold_vs_call": -0.8133,
+      "recommend": "call"
+    },
+    {
+      "bucket": "flush_low",
+      "n": 658.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_7",
+      "n": 649.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_8",
+      "n": 616.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_9",
+      "n": 603.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_Q",
+      "n": 555.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_J",
+      "n": 538.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_T",
+      "n": 538.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_6",
+      "n": 492.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_K",
+      "n": 453.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "flush_K",
+      "n": 375.0,
+      "p_bn_wins": 0.992,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -11.76,
+      "ev_caller_cap": -15.696,
+      "delta_cap_vs_call": -3.936,
+      "delta_fold_vs_call": 3.76,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "flush_Q",
+      "n": 351.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "flush_J",
+      "n": 295.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_A",
+      "n": 260.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_5",
+      "n": 190.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    }
+  ],
+  "caller_family_vs_bn_boat_plus": [
+    {
+      "bucket": "straight",
+      "n": 3903.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "flush",
+      "n": 1986.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "boat_plus",
+      "n": 656.0,
+      "p_bn_wins": 0.404,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": 5.4924,
+      "ev_caller_cap": 6.157,
+      "delta_cap_vs_call": 0.6646,
+      "delta_fold_vs_call": -13.4924,
+      "recommend": "cap"
+    }
+  ],
+  "caller_fine_vs_bn_boat_plus": [
+    {
+      "bucket": "straight_flush",
+      "n": 656.0,
+      "p_bn_wins": 0.404,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": 5.4924,
+      "ev_caller_cap": 6.157,
+      "delta_cap_vs_call": 0.6646,
+      "delta_fold_vs_call": -13.4924,
+      "recommend": "cap"
+    },
+    {
+      "bucket": "flush_low",
+      "n": 570.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "flush_A",
+      "n": 540.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_7",
+      "n": 520.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_8",
+      "n": 499.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_9",
+      "n": 478.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_Q",
+      "n": 444.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_T",
+      "n": 430.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_J",
+      "n": 418.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_6",
+      "n": 413.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_K",
+      "n": 351.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "flush_K",
+      "n": 330.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "flush_Q",
+      "n": 300.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "flush_J",
+      "n": 246.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_A",
+      "n": 195.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    },
+    {
+      "bucket": "straight_5",
+      "n": 155.0,
+      "p_bn_wins": 1.0,
+      "ev_caller_fold": -8.0,
+      "ev_caller_call": -12.0,
+      "ev_caller_cap": -16.0,
+      "delta_cap_vs_call": -4.0,
+      "delta_fold_vs_call": 4.0,
+      "recommend": "fold"
+    }
+  ],
+  "findings": {
+    "p_raise_node_locked_range": 0.189,
+    "n_range": 40000,
+    "n_node_weighted": 7559,
+    "bn_straight_recommend": "call",
+    "bn_flush_recommend": "three_bet",
+    "bn_boat_plus_recommend": "three_bet",
+    "bn_two_pair_or_trips_recommend": "call",
+    "bn_straight_delta": -1.8144,
+    "bn_flush_delta": 2.1672,
+    "bn_boat_plus_delta": 3.4659,
+    "bn_two_pair_or_trips_delta": -4.2778,
+    "hypothesis_straight_calls": true,
+    "hypothesis_flush_3bets": true,
+    "hypothesis_boat_3bets": true,
+    "hypothesis_two_pair_trips_call": true,
+    "best_joint_on_node": {
+      "bn_3bet": "flush+",
+      "caller_vs_3bet": "cap_flush+",
+      "ev_bn": -4.9032,
+      "delta_vs_call_it_down": 0.4207
+    },
+    "call_it_down_ev_bn": -5.3239,
+    "flush_plus_cap_sf_ev_bn": -4.9952,
+    "boat_plus_cap_sf_ev_bn": -5.0413,
+    "straight_plus_cap_sf_ev_bn": -5.127,
+    "caller_vs_bn_flush_plus": {
+      "straight": "fold",
+      "flush": "fold",
+      "boat_plus": "cap"
+    },
+    "caller_vs_bn_boat_plus": {
+      "straight": "fold",
+      "flush": "fold",
+      "boat_plus": "cap"
+    },
+    "nonbluff_grid_excludes_cap": true,
+    "caller_should_not_cap_non_sf_vs_boat": true
+  },
+  "recommendations": [
+    {
+      "side": "BN",
+      "final": "two pair / trips",
+      "vs_raise": "call (no 3-bet; bluff 3-bet out of scope)",
+      "notes": "\u0394 3-bet vs call=-4.27785 behind a raising straight+ range."
+    },
+    {
+      "side": "BN",
+      "final": "straight",
+      "vs_raise": "call",
+      "notes": "\u0394=-1.81437. Caller raise range is straight/flush/SF (flush-heavy 2:1 keeps)."
+    },
+    {
+      "side": "BN",
+      "final": "flush",
+      "vs_raise": "three_bet",
+      "notes": "\u0394=2.1672. Value vs caller straights; still loses to SF (case 2)."
+    },
+    {
+      "side": "BN",
+      "final": "boat / quads / SF / five aces",
+      "vs_raise": "three_bet",
+      "notes": "\u0394=3.46585. Always ahead of caller straights."
+    },
+    {
+      "side": "caller",
+      "final": "straight vs BN flush+ 3-bet",
+      "vs_3bet": "fold",
+      "notes": "Often behind a flush+ 3-bet range."
+    },
+    {
+      "side": "caller",
+      "final": "flush vs BN flush+ 3-bet",
+      "vs_3bet": "fold",
+      "notes": "Ahead of BN straights (if those 3-bet) / some flushes; behind boats."
+    },
+    {
+      "side": "caller",
+      "final": "non-SF vs BN boat+ 3-bet",
+      "vs_3bet": "fold/call, do not cap",
+      "notes": "vs boat+ 3-bet: {'straight': 'fold', 'flush': 'fold', 'boat_plus': 'cap'}"
+    },
+    {
+      "side": "caller",
+      "final": "straight flush",
+      "vs_3bet": "cap",
+      "notes": "Value vs BN flushes and boats; loses only to quads / five aces / better SF."
+    }
+  ]
+}

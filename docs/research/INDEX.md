@@ -9,7 +9,7 @@ This folder is the **human-readable research paper**, split into chapters so par
 | Stakes (v1) | $0.25 ante ($2 pot), $2 / $4 limit |
 | Codebase | [`fivecarddraw`](../../README.md) |
 | Audience | Researchers and poker-curious readers (basic poker OK) |
-| Status | Living document. Ch.1–2 filled; Ch.3 non-bluff EV table; Ch.4 stub pending Stage C; Ch.5 planned |
+| Status | Living document. Ch.1–2 filled; Ch.3 non-bluff EV + cap; Ch.4 stub pending Stage C; Ch.5 planned |
 
 **Technical handoffs** (implementation detail, denser than chapters):
 
@@ -19,6 +19,7 @@ This folder is the **human-readable research paper**, split into chapters so par
 - [../NEXT_STAGE_OPENER_DRAW_MIXES.md](../NEXT_STAGE_OPENER_DRAW_MIXES.md)
 - [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md)
 - [../NEXT_STAGE_NONBLUFF_EV.md](../NEXT_STAGE_NONBLUFF_EV.md)
+- [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md)
 
 ---
 
@@ -28,7 +29,7 @@ This project builds a **reproducible, bottom-up** analysis of fixed-limit five-c
 
 **Why the problem is hard.** Eight players, a 53-card deck (52 + bug), pre-draw and post-draw streets, and a public “cards drawn” signal create a decision space far larger than heads-up hold’em. Early-position opens face seven players behind; late-position steals look easy until drawing callers with huge outs enter the pot. We **slice** the game into validation ladders with exact or Monte Carlo ground truth, then expand seat by seat — and we track **what fraction of deals** each slice covers (see [Solve-progress ledger](#solve-progress-ledger)).
 
-**What we have done so far.** Base engine + pre-draw pipeline (charts not trusted); drawing-call inventory (18,396 2:1 combos); dealer opener showdown / post-draw betting / draw-count grids; **non-bluff EV by class × d** (bluff delta next); Stage C check-mix next; public-draw belief tables.
+**What we have done so far.** Base engine + pre-draw pipeline (charts not trusted); drawing-call inventory (18,396 2:1 combos); dealer opener showdown / post-draw betting / draw-count grids; **non-bluff EV by class × d**; post-draw **cap / 3-bet vs call** on the raise node; Stage C check-mix next; public-draw belief tables.
 
 **Central claim (working).** Late position is the right laboratory. Seat naming and the progressive deal-share breakdown live in this index so every chapter uses the same language.
 
@@ -59,7 +60,7 @@ Use **seats 1–8** in all research prose. Code may still use 0-based indices in
 | ---: | --- | --- | --- |
 | 1 | [ch01_roadmap.md](ch01_roadmap.md) | Order of operations + deal-share framing | Roadmap / coordination |
 | 2 | [ch02_drawing_callers.md](ch02_drawing_callers.md) | Non-opening draws; **next: call/raise/mix** (§2.9) | Drawing-call validation |
-| 3 | [ch03_dealer_opening.md](ch03_dealer_opening.md) | BN opening + post-draw equity (stub) | Dealer / showdown / M2 |
+| 3 | [ch03_dealer_opening.md](ch03_dealer_opening.md) | BN opening + post-draw equity (incl. cap) | Dealer / showdown / M2 |
 | 4 | [ch04_draw_mixes.md](ch04_draw_mixes.md) | Opener draw mixes + check protection (stub) | Draw mixes / Stage C |
 | 5 | [ch05_later_seats.md](ch05_later_seats.md) | CO open climb; **CO bluff after BN open** (§5.2); HJ | Later seats |
 | A | [appendix_a_rules.md](appendix_a_rules.md) | Game rules | Shared (rare edits) |

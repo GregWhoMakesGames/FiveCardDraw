@@ -161,23 +161,79 @@ its own fixture.
 
 1. BN **straight** should usually **call** a raise, not 3-bet: caller’s raise
    range is straight/flush/SF, and many 2:1 keeps are flush-heavy (FFS + bug SF).
+   **Confirmed** at the family level (Δ = −1.81). Ace-high (broadway) is a thin
+   exception (Δ = +0.35) vs a calling range; wheel–jack-high should not 3-bet.
 2. BN **flush** 3-bets for value vs caller straights; still loses to SF (case 2).
    Queen-high vs ace-high flush may change 3-bet vs call.
+   **Confirmed** 3-bet for all flush highs including `flush_low` / Q / K / A
+   (Δ ≈ +1.7 to +2.6). Rank does **not** flip the decision vs a calling range.
 3. BN **boat+** always 3-bets; caller should not cap a non-SF into that.
+   **Confirmed** (boat+ Δ = +3.47). Caller straight/flush should **fold** (not
+   cap) vs a boat+ 3-bet; SF caps.
 4. Calling it down (today) **understates** BN EV for flush+ and **overstates**
    it for thin straights if they would 3-bet into flushes.
+   **Confirmed** in direction: on the node, call-it-down EV_bn = −5.32;
+   flush+ 3-bet / cap-SF = −5.00 (Δ = +0.33). Thin straights that 3-bet lose
+   extra. This does **not** rewrite the class × d table.
+
+**Equilibrium caveat.** Unilateral caller EV vs a BN **flush+** 3-bet says
+straight *and* flush should **fold** (only SF continues). If the caller
+actually folds that wide, BN’s flush 3-bet stops getting paid by worse and
+joint node EV collapses to ≈ call-it-down (`flush+ / fold_straight_cap_sf`
+Δ = +0.02). The recommended line below holds the handoff’s **calling**
+responder (cap SF, call rest) for BN’s 3-bet/call choice, then reports the
+caller’s best response separately.
 
 ---
 
 ## Deliverables
 
-1. Street helper with `max_raises=3` (default M2 path stays `1`)
-2. CLI + `outputs/validation/` tables + checked-in summary fixture
-3. Pytest: pot math at cap; 3-bet vs call Δ for a nut BN vs a straight caller;
-   coarse pins that BN straights do not auto-3-bet if the numbers say so
-4. Short findings in this doc + [research/ch03_dealer_opening.md](research/ch03_dealer_opening.md)
-   (cap section; number it after whatever is already on `main`)
-5. Do **not** claim the non-bluff class × *d* table already includes cap EV
+1. Street helper with `max_raises=3` (default M2 path stays `1`) — **done**
+2. CLI `analyze-postdraw-cap` + `outputs/validation/` tables + fixture
+   `tests/fixtures/validation/postdraw_cap_summary.json` — **done**
+3. Pytest: pot math at cap; nut BN vs straight Δ; BN straights do not auto-3-bet
+4. Findings in this section + [research/ch03_dealer_opening.md](research/ch03_dealer_opening.md) §3.5
+5. The non-bluff class × *d* table is still bet+1 (explicitly excluded)
+
+---
+
+## Findings (seed 20260902)
+
+Combo-weighted locked BN draws (`tp1_tr2_q1`) vs all 2:1, caller keep-4 d=1:
+**40,000** deals, **7,559** on the raise node (P = 0.189). Extra per-class deals
+fill fine buckets. Unilateral BN Δ holds caller at **cap SF / call rest**.
+
+Full cap pot is **$38** (four $4 bets each + $6). Call-it-down on this node is
+a **$22** showdown.
+
+### BN vs the raise
+
+| BN final | n | P(win) | EV call | EV 3-bet | Δ | Action |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| two pair / trips | 12,280 | 0.00 | −8.00 | −12.28 | −4.28 | **call** (no bluff 3-bet) |
+| straight | 1,907 | 0.30 | −1.08 | −2.89 | −1.81 | **call** |
+| flush | 1,567 | 0.82 | +10.08 | +12.25 | +2.17 | **3-bet** |
+| boat+ | 6,545 | 0.94 | +12.71 | +16.18 | +3.47 | **3-bet** |
+
+Fine split: every flush high 3-bets. Straights: wheel–J **call**; broadway A
+**thin 3-bet** (Δ = +0.35); Q-high ≈ 0. Boats / quads / SF / five aces all 3-bet.
+
+### Caller vs a 3-bet
+
+Vs BN **flush+** 3-bet: straight fold (drawing dead to the range), flush fold
+(EV call −10.5 vs fold −8), SF/boat_plus **cap**. Vs BN **boat+** 3-bet:
+straight and flush **fold**; SF **cap**. Do not cap a non-SF into boats.
+
+### Joint node EV (combo-weighted)
+
+Call-it-down EV_bn = **−5.32** (this node is caller-heavy: two pair/trips lose
+to the raising straight+). Best BN line vs a calling/capping caller is
+**3-bet flush+** (EV_bn −4.96 to −4.90 depending on whether flushes cap).
+3-betting all straight+ is worse than flush+ because thin straights pay off
+flushes.
+
+**Do not substitute these for the non-bluff class × d cells.** Cap EV is a
+delta on this rare-but-expensive node only.
 
 ---
 
@@ -191,13 +247,9 @@ its own fixture.
 
 ---
 
-## Handoff checklist
+## Handoff checklist (this ticket — done)
 
-1. On `main`: `pip install -e ".[dev]" && pytest -q`
-2. Read `play_deal` in `postdraw_betting_m2.py` (the raise branch) and
-   `GameConfig.max_raises`. If `docs/NEXT_STAGE_NONBLUFF_EV.md` exists, use it
-   as the call-it-down baseline; otherwise reuse M2 + showdown cases.
-3. Implement cap street + fine buckets; keep `max_raises=1` as the default for
-   existing CLIs
-4. Condition on BN-bet ∩ caller-straight+; do not re-grid all class × *d*
-5. Update Ch.3 with 3-bet vs call recommendations by fine hand
+1. `play_deal` default `max_raises=1`; cap path uses `StreetState` / `max_raises=3`
+2. `analyze-postdraw-cap` conditions on BN-bet ∩ caller-straight+
+3. Fixture + Ch.3 §3.5 updated; class × d table not rewritten
+4. Next code milestone remains Stage C ([NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md))

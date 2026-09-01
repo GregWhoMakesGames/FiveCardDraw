@@ -265,3 +265,14 @@ def test_fixture_summary_patterns():
     assert by_fam["boat_plus"]["recommend"] == "three_bet"
     assert by_fam["two_pair_or_trips"]["recommend"] == "call"
     assert by_fam["two_pair_or_trips"].get("bluff_3bet_out_of_scope") is True
+    assert f["p_raise_node_locked_range"] == 0.189
+    assert f["n_node_weighted"] == 7559
+    assert f["bn_straight_delta"] == -1.8144
+    assert f["bn_flush_delta"] == 2.1672
+    assert f["bn_boat_plus_delta"] == 3.4659
+    assert f["call_it_down_ev_bn"] == -5.3239
+    by_fine = {r["bucket"]: r for r in data["bn_fine"]}
+    assert by_fine["straight_A"]["recommend"] == "three_bet"
+    assert by_fine["straight_5"]["recommend"] == "call"
+    assert by_fine["flush_Q"]["recommend"] == "three_bet"
+    assert by_fine["flush_A"]["recommend"] == "three_bet"

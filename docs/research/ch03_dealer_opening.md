@@ -3,7 +3,7 @@
 > Seat map and solve-progress ledger: **[INDEX.md](INDEX.md)**.  
 > Headline findings; implementation detail lives in the handoff docs.
 
-**Ledger role.** Claims the **only-BN-can-open / no caller** slice as solved, and owns showdown + M2 betting + **non-bluff EV by class × d** for **BN vs 2:1 drawers**.
+**Ledger role.** Claims the **only-BN-can-open / no caller** slice as solved, and owns showdown + M2 betting + **non-bluff EV by class × d** + **post-draw cap / 3-bet** for **BN vs 2:1 drawers**.
 
 ---
 
@@ -50,7 +50,28 @@ CLI: `analyze-postdraw-nonbluff-ev`. Detail: [../NEXT_STAGE_NONBLUFF_EV.md](../N
 
 Caller keep-4 **d=1** beats standing with the dealt five (ΔEV_caller about +$2–4 vs representative BN classes). EV is reported for **both** seats (`EV_bn + EV_caller = $6` sunk pot). Case 1–8c mass is attached to the same deals as a link to §3.2, not as a substitute for EV.
 
-**Bluff delta comes next.** This table is the honest cell. Later work can add miss stabs, BN check-mixes (Stage C), and pair `d≠3` concealment, and report ΔEV against these numbers — not a new baseline. CO return-to-actor bluffs after a BN open live in [Ch.5 §5.2](ch05_later_seats.md). Post-draw **cap / 3-bet vs call** (this street is bet+1) is a separate ticket: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md).
+**Bluff delta comes next.** This table is the honest cell. Later work can add miss stabs, BN check-mixes (Stage C), and pair `d≠3` concealment, and report ΔEV against these numbers — not a new baseline. CO return-to-actor bluffs after a BN open live in [Ch.5 §5.2](ch05_later_seats.md). The §3.4 grid is **bet+1** (call the raise); 3-bet / cap is §3.5 and is **not** already in those cells.
+
+---
+
+## 3.5 Post-draw cap (bet + 3 raises)
+
+On the raise node — BN has value-bet two pair+ and the 2:1 caller has raised with a made straight+ — full cap is four $4 increments each (pot **$38** vs today’s **$22** call-it-down). Combo-weighted P(node) ≈ **0.19** under locked draws.
+
+CLI: `analyze-postdraw-cap`. Detail: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md). Fixture: `tests/fixtures/validation/postdraw_cap_summary.json`.
+
+**BN vs the raise** (unilateral Δ vs a caller who caps SF and calls otherwise):
+
+| BN final | Action | Δ 3-bet vs call |
+| --- | --- | ---: |
+| Two pair / trips | Call (no bluff 3-bet) | −4.28 |
+| Straight | **Call** (broadway A is a thin 3-bet) | −1.81 |
+| Flush (any high) | **3-bet** | +2.17 |
+| Boat / quads / SF / five aces | **3-bet** | +3.47 |
+
+**Caller vs a 3-bet:** fold a non-SF into BN boat+ (and, unilaterally, into BN flush+); cap SF. Do not cap a straight or flush into boats.
+
+Call-it-down **understates** BN EV on this node for flush+ (node EV_bn −5.32 → about −5.00 if BN 3-bets flush+ and the caller still calls). It does not rewrite §3.4.
 
 ---
 
@@ -59,6 +80,7 @@ Caller keep-4 **d=1** beats standing with the dealt five (ΔEV_caller about +$2�
 | Path | Role |
 | --- | --- |
 | `src/fivecarddraw/validation/showdown_matrix.py` | Showdown matrix |
-| `src/fivecarddraw/validation/postdraw_betting_m2.py` | M2 face-pair grid |
+| `src/fivecarddraw/validation/postdraw_betting_m2.py` | M2 face-pair grid + cap street helper |
 | `src/fivecarddraw/validation/postdraw_nonbluff_ev.py` | Non-bluff class × d EV |
-| Matching fixtures + `tests/test_showdown_matrix.py`, `tests/test_postdraw_m2.py`, `tests/test_postdraw_nonbluff_ev.py` | CI |
+| `src/fivecarddraw/validation/postdraw_cap.py` | Post-draw 3-bet / cap on the raise node |
+| Matching fixtures + `tests/test_showdown_matrix.py`, `tests/test_postdraw_m2.py`, `tests/test_postdraw_nonbluff_ev.py`, `tests/test_postdraw_cap.py` | CI |
