@@ -60,6 +60,8 @@ Same template as BN: open/pass for open-legal classes, response vs open, then po
 
 **Ledger slice:** “CO can open” after seats 1–6 unable (~4.9%) plus CO-open lines inside the early-six mass later.
 
+**Also planned (after Ch.2 raise/call mixes):** when BN opens and seats 1–6 are gone, should CO ever **bluff-continue** with underpairs / high-card hands by calling or raising and drawing one to **represent** a strong draw? See [Ch.5 §5.2](ch05_later_seats.md).
+
 ---
 
 ## 1.4 Deal-share framing (read the ledger)
