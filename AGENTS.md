@@ -30,9 +30,11 @@ See [README.md](README.md) for `pytest`, `solve-predraw`, `audit-abstraction`, a
 
 ### Research overview (human-readable)
 
-[docs/RESEARCH_PAPER.md](docs/RESEARCH_PAPER.md) — executive summary, table of
-contents, research roadmap, and drawing-caller procedures. Prefer that doc when
-explaining the project; keep stage handoffs below for implementation detail.
+[docs/research/INDEX.md](docs/research/INDEX.md) — executive summary, seats 1–8
+(UTG…BN), solve-progress ledger, and chapter TOC. Chapters live as separate
+files under `docs/research/` (one agent / one chapter preferred). Prefer the
+index when explaining the project; keep stage handoffs below for implementation
+detail.
 
 ### Next stage (start here on a fresh agent)
 

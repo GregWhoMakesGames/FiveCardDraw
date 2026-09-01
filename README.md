@@ -21,8 +21,10 @@ v1 solves **pre-draw only** (opening → call/raise vs open → raise/re-raise t
 
 **Important:** Current solver charts are a working pipeline, not verified strategy.
 
-**Start here for the research arc:** [docs/RESEARCH_PAPER.md](docs/RESEARCH_PAPER.md)
-(executive summary, roadmap, and drawing-caller procedures for a general audience).
+**Start here for the research arc:** [docs/research/INDEX.md](docs/research/INDEX.md)
+(executive summary, seat map, solve-progress ledger, and chapter TOC).
+Chapters are split under `docs/research/` so parallel agents can edit different
+sections with fewer conflicts. Legacy redirect: [docs/RESEARCH_PAPER.md](docs/RESEARCH_PAPER.md).
 
 Validation fixtures cover drawing-call odds, showdown matrix, opener-first
 post-draw face-pair betting, and opener draw-count / check-mix protection — see
