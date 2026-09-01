@@ -35,17 +35,20 @@ Heads-up laboratory: BN opened, one 2:1 caller (call-only pre-draw → pot $6; b
 
 CLI: `analyze-postdraw-nonbluff-ev`. Detail: [../NEXT_STAGE_NONBLUFF_EV.md](../NEXT_STAGE_NONBLUFF_EV.md). Fixture: `tests/fixtures/validation/postdraw_nonbluff_ev_summary.json`.
 
-**Best non-bluff draw (BN EV vs the 2:1 set, caller keep-4 d=1):**
+**Best non-bluff draw (BN EV vs the 2:1 set, caller keep-4 d=1; seed 20260901, 4k deals/cell):**
 
-| BN class | Best d | Honest post-draw |
-| --- | ---: | --- |
-| Pair JJ–AA | **d=3** | Check the pair; bet if it improves to two pair+ |
-| Two pair | **d=1** | Always value-bet |
-| Trips | **d=2** (d=1 is the unified-line fork) | Always value-bet |
-| Quads | **d=1** (EV-neutral vs stand) | Always value-bet |
-| Other straight+ | Stand | Always value-bet |
+| BN class | Chip-max d | EV_bn | Honest post-draw |
+| --- | ---: | ---: | --- |
+| Pair JJ–AA | **stand (d=0)** | JJ +3.56 / AA +2.68 | Check the pair; bet if it improves to two pair+ |
+| Two pair | **d=1** | +2.10 | Always value-bet |
+| Trips | **d=2** (d=1 unified-line fork) | +2.33 | Always value-bet |
+| Quads | stand ≈ **d=1** (prefer d=1 for signal) | ~+8.4 | Always value-bet |
+| Straight | Stand | +3.80 | Always value-bet (loses some case-2 pots) |
+| Flush+ | Stand | +7.8 to +8.5 | Always value-bet |
 
-Caller keep-4 **d=1** beats standing with the dealt five. EV is reported for **both** seats (`EV_bn + EV_caller = $6` sunk pot). Case 1–8c mass is attached to the same deals as a link to §3.2, not as a substitute for EV.
+**Pairs nuance.** Drawing three **raises P(win)** (JJ 0.59 → 0.62) but **lowers chips**, because improved two pair+ auto-bet into the caller’s ~34% straight+. Stages A/B still lock pairs at **d=3** so they do not pollute public d=0 with pat straight+. Among drawing options, d=3 still ≥ d=2 for AA/JJ — that is the concealment bar.
+
+Caller keep-4 **d=1** beats standing with the dealt five (ΔEV_caller about +$2–4 vs representative BN classes). EV is reported for **both** seats (`EV_bn + EV_caller = $6` sunk pot). Case 1–8c mass is attached to the same deals as a link to §3.2, not as a substitute for EV.
 
 **Bluff delta comes next.** This table is the honest cell. Later work can add miss stabs, BN check-mixes (Stage C), and pair `d≠3` concealment, and report ΔEV against these numbers — not a new baseline. CO return-to-actor bluffs after a BN open live in [Ch.5 §5.2](ch05_later_seats.md).
 

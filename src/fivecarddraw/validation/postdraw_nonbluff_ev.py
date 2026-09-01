@@ -654,6 +654,18 @@ def _derive_findings(
         "pair_J_d3_beats_d2": beats(pair_j, 3, 2, 0.05),
         "pair_A_best_d": max(pair_a, key=pair_a.get) if pair_a else None,
         "pair_J_best_d": max(pair_j, key=pair_j.get) if pair_j else None,
+        "pair_stand_is_chip_max": (
+            bool(pair_a)
+            and bool(pair_j)
+            and max(pair_a, key=pair_a.get) == 0
+            and max(pair_j, key=pair_j.get) == 0
+        ),
+        "pair_J_d0_p_win": None
+        if cell("pair_J", 0) is None
+        else cell("pair_J", 0)["p_bn_wins_final"],
+        "pair_J_d3_p_win": None
+        if cell("pair_J", 3) is None
+        else cell("pair_J", 3)["p_bn_wins_final"],
         "two_pair_ev_by_d": tp,
         "two_pair_d1_beats_stand": beats(tp, 1, 0, 0.02),
         "trips_ev_by_d": trips,
@@ -680,18 +692,23 @@ def _derive_findings(
 
 
 def build_recommendations(findings: dict[str, Any]) -> list[dict[str, str]]:
-    best = findings["best_d_by_class"]
+    pair_note = (
+        f"pair_A EV by d={findings['pair_A_ev_by_d']}; "
+        f"pair_J EV by d={findings['pair_J_ev_by_d']}. "
+        "Standing wins more chips because d=3 two-pair+ auto-bets and pays "
+        "off the caller’s ~34% straight+ (win rate can rise while EV falls). "
+        "A/B still lock pairs at d=3 so they do not pollute public d=0 with "
+        "pat straight+. Concealment (d≠3) is later."
+    )
     return [
         {
             "side": "BN",
             "class": "pair JJ–AA",
-            "nonbluff_d": "d=3" if best.get("pair_A") == 3 else f"d={best.get('pair_A')}",
-            "postdraw": "check one pair; value-bet two pair+ (no check mix)",
-            "notes": (
-                f"pair_A EV by d={findings['pair_A_ev_by_d']}; "
-                f"pair_J EV by d={findings['pair_J_ev_by_d']}. "
-                "Pair concealment (d≠3) is later, after this EV table."
+            "nonbluff_d": (
+                "stand (d=0) max chips; d=3 is the range-construction lock"
             ),
+            "postdraw": "check one pair; value-bet two pair+ (no check mix)",
+            "notes": pair_note,
         },
         {
             "side": "BN",
@@ -934,6 +951,8 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
         "",
         f"- Pair AA best d={f['pair_A_best_d']}; EV by d={f['pair_A_ev_by_d']}",
         f"- Pair JJ best d={f['pair_J_best_d']}; EV by d={f['pair_J_ev_by_d']}",
+        f"- Pair stand is chip-max (honest betting): **{f.get('pair_stand_is_chip_max')}** "
+        f"(JJ P(win) d=0={f.get('pair_J_d0_p_win')} vs d=3={f.get('pair_J_d3_p_win')})",
         f"- Two pair d=1 beats stand: **{f['two_pair_d1_beats_stand']}** "
         f"{f['two_pair_ev_by_d']}",
         f"- Trips d=2 vs d=1 vs stand: {f['trips_ev_by_d']}",

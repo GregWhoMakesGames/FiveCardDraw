@@ -133,9 +133,12 @@ pairs `d=3` for Stage C:
 
 Run C under **both**. Neither fork requires moving pairs off `d=3` in C.
 
-**Open verification (done in non-bluff EV grid):** Stage A showdown already ranks aggregate JJ–AA
-`d=3` ahead of `d=2` (win and boat+), and AA alone too. Post-draw **EV** under honest
-betting confirms the same ranking — see [NEXT_STAGE_NONBLUFF_EV.md](NEXT_STAGE_NONBLUFF_EV.md).
+**Open verification (done in non-bluff EV grid):** Stage A showdown ranks aggregate JJ–AA
+`d=3` ahead of `d=2` on P(win) / boat+. Post-draw **EV** under honest betting still
+has pair `d=3` ≥ `d=2` for AA and JJ, but **standing (d=0) is the chip-max**
+non-bluff line — drawing creates two pair+ that auto-bet into ~34% straight+.
+Keep pairs on **d=3 for range construction** (cannot pollute public d=0).
+See [NEXT_STAGE_NONBLUFF_EV.md](NEXT_STAGE_NONBLUFF_EV.md).
 Pair `d=1` remains worse on improvement (zero boat+). Concealment mixes still wait until after C.
 
 ### C — Checking-range protection (stale fixture note)

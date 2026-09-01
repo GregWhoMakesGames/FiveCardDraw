@@ -244,10 +244,14 @@ def test_fixture_summary_patterns():
     assert data["findings"]["bluff_deferred"] is True
 
     findings = data["findings"]
-    # Pair d=3 is the max-EV non-bluff improvement line (MC tolerance).
+    # Chip-max non-bluff d for pairs is stand; d=3 still beats d=2 (concealment bar).
+    assert findings["pair_stand_is_chip_max"] is True
+    assert findings["pair_A_best_d"] == 0
+    assert findings["pair_J_best_d"] == 0
     assert findings["pair_A_d3_beats_d2"] is True
     assert findings["pair_J_d3_beats_d2"] is True
-    assert findings["pair_A_best_d"] == 3
+    # Drawing can raise P(win) while lowering EV (value-bet improved hands vs straight+).
+    assert findings["pair_J_d3_p_win"] > findings["pair_J_d0_p_win"] - 0.01
     assert findings["two_pair_d1_beats_stand"] is True
     assert findings["trips_d2_beats_stand"] is True
     # Quads d=1 is EV-neutral vs stand (signal only).
@@ -255,8 +259,8 @@ def test_fixture_summary_patterns():
     assert abs(findings["quads_d1_vs_stand_delta"]) < 0.35
 
     best = {r["opener_class"]: r for r in data["best_bn_draw"]}
-    assert best["pair_A"]["best_bn_d"] == 3
-    assert best["pair_J"]["best_bn_d"] == 3
+    assert best["pair_A"]["best_bn_d"] == 0
+    assert best["pair_J"]["best_bn_d"] == 0
     assert best["two_pair"]["best_bn_d"] == 1
     assert best["trips"]["best_bn_d"] in (1, 2)
     assert best["straight"]["best_bn_d"] == 0

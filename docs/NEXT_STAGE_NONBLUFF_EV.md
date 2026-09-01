@@ -82,23 +82,55 @@ Seed `20260901`. `outputs/` is gitignored.
 
 ---
 
-## Findings (seed 20260901)
+## Findings (seed 20260901, 4000 deals/cell)
 
-Filled from the checked-in summary fixture after the MC run. Headline:
+EV is incremental chips from the post-draw node (`EV_bn + EV_caller = $6`). Honest
+policy: `lead=never|stab=AA|raise=never`.
 
-- **Pairs (JJ–AA):** max-EV non-bluff draw is **d=3** (improvement), matching
-  Stage A P(win) / boat+. Post-draw EV (with honest betting) still ranks d=3
-  ahead of d=2 — this is the number pair-concealment work must beat.
-- **Two pair:** **d=1** beats stand on EV, matching Stage B.
-- **Trips:** **d=2** remains the primary EV max; d=1 is the unified-line fork.
-- **Quads:** d=1 ≈ stand (EV-neutral); prefer d=1 for public-signal pollution.
-- **Other straight+:** stand only; always value-bet.
-- **Caller:** keep-4 **d=1** beats standing with the dealt five vs every
-  representative BN class in the fork. Subclass EV is reported vs the locked
-  BN range (bug SF draws hit more often than bug straight draws).
+### BN best non-bluff draw vs all 2:1 (caller d=1)
 
-Exact magnitudes: `tests/fixtures/validation/postdraw_nonbluff_ev_summary.json`
-and `outputs/validation/postdraw_nonbluff_ev.md`.
+| BN class | Chip-max d | EV_bn | EV_caller | Notes |
+| --- | ---: | ---: | ---: | --- |
+| pair_J | **0** | +3.56 | +2.45 | d=3 EV +3.08; P(win) 0.59→0.62 while EV **falls** |
+| pair_Q | **0** | +3.49 | +2.51 | d=3 +2.96 |
+| pair_K | **0** | +3.60 | +2.40 | d=3 +3.09 |
+| pair_A | **0** | +2.68 | +3.32 | d=3 +2.61 (within ~1 SE of stand); thin lead-AA +2.69 |
+| two_pair | **1** | +2.10 | +3.90 | stand +1.62 |
+| two_pair_aces_up | **1** | +2.08 | +3.92 | stand +1.75 |
+| trips | **2** | +2.33 | +3.67 | d=1 +2.14; stand +1.81 |
+| trips_K | **1** | +2.26 | +3.74 | d=2 +2.09 (fork noise; keep both) |
+| trips_A | **2** | +2.41 | +3.59 | |
+| straight | **0** | +3.80 | +2.20 | Loses to completed flush/SF (case 2) |
+| flush | **0** | +7.79 | −1.79 | Beats drawer straight+ (case 1) |
+| full_house / quads / SF / five aces | **0** | ~+8.4–8.5 | ~−2.4 | Quads d=1 Δ=−0.11 (EV-neutral; prefer d=1 for signal) |
+
+**Pairs: chips vs win rate.** Under this honest line, **standing is the chip-max
+non-bluff draw** for JJ–AA. Drawing three raises showdown P(win) (JJ 0.59 → 0.62)
+but the extra two-pair+ hands **auto-bet** and pay off the caller’s ~34%
+straight+ (raise/call). That is why Stage A’s “d=3 best improvement” does not
+automatically mean d=3 best **EV**.
+
+**Do not put pairs on public d=0 in the range.** Pat straight+ must stand; mixing
+pairs into d=0 pollutes that line. Stages A/B still **lock pairs at d=3** for
+construction. Among drawing options, **d=3 ≥ d=2** for AA and JJ (the
+concealment bar). Pair `d≠3` mixes remain after Stage C.
+
+**Two pair / trips / quads** match A/B: two pair **d=1** (+0.48 vs stand); trips
+**d=2** primary vs **d=1** unified fork; quads d=1 ≈ stand.
+
+### Caller
+
+Keep-4 **d=1** beats standing with the dealt five by **+$2.2 to +$4.1** EV_caller
+vs representative BN classes. Subclass EV_caller vs the locked BN range
+(`tp1_tr2_q1`): bug SF draw **+3.66**, four-flush-straight **+3.24**, bug
+straight draw **+3.08** (SF draws hit more often).
+
+### Case 1–8c
+
+Same deals attach showdown-matrix case mass (final hands, not betting folds).
+Example: pair_J d=3 case **8c** ≈ 0.33 (JJ loses to drawer straight+). Straight
+BN EV is much lower than flush BN EV because of case **2**.
+
 
 ---
 

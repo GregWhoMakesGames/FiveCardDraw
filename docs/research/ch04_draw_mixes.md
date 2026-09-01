@@ -17,7 +17,7 @@
 | Other straight+ | Stand | Cannot join d=3 to “protect” pairs |
 | Trips | **d=2** (primary) or **d=1** (unified) | Live fork for Stage C |
 
-Non-bluff **post-draw EV** (honest betting, not just P(win)) confirms the same ranking: pair **d=3** still beats d=2 for both JJ and AA vs the 2:1 caller; two pair **d=1** and trips **d=2** remain the EV maxima. That pair d=3 vs d=2 chip delta is the number concealment mixes must beat. CLI: `analyze-postdraw-nonbluff-ev`. Detail: [../NEXT_STAGE_NONBLUFF_EV.md](../NEXT_STAGE_NONBLUFF_EV.md) and [Ch.3 §3.4](ch03_dealer_opening.md).
+Non-bluff **post-draw EV** (honest betting, not just P(win)) is more subtle than Stage A’s improvement tables: **standing** is the chip-max non-bluff line for pairs (drawing three raises P(win) but the extra two pair+ auto-bets pay off ~34% straight+). Stages A/B still **lock pairs at d=3** so they do not pollute public d=0. Among drawing options, pair **d=3 ≥ d=2** for AA and JJ — that chip delta is the number concealment mixes must beat. Two pair **d=1** and trips **d=2** remain the EV maxima. CLI: `analyze-postdraw-nonbluff-ev`. Detail: [../NEXT_STAGE_NONBLUFF_EV.md](../NEXT_STAGE_NONBLUFF_EV.md) and [Ch.3 §3.4](ch03_dealer_opening.md).
 
 ---
 
