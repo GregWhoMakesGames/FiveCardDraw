@@ -28,6 +28,12 @@ See [README.md](README.md) for `pytest`, `solve-predraw`, `audit-abstraction`, a
 - Hand eval is pure Python in v1; `python -m fivecarddraw.bench` documents the aspirational Numba target (≥2e6/s) vs current throughput.
 - **Do not treat current opening CSVs as correct strategy.** Early-position opens are known to be too loose vs combo-weighted domination/raise pressure (see validation doc).
 
+### Research overview (human-readable)
+
+[docs/RESEARCH_PAPER.md](docs/RESEARCH_PAPER.md) — executive summary, table of
+contents, research roadmap, and drawing-caller procedures. Prefer that doc when
+explaining the project; keep stage handoffs below for implementation detail.
+
 ### Next stage (start here on a fresh agent)
 
 **Read first:** [docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md)

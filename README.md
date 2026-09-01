@@ -20,6 +20,10 @@ v1 solves **pre-draw only** (opening → call/raise vs open → raise/re-raise t
 **Not in v1:** sandbagging, post-draw play, full 8-way Nash, ante:bet ratio sweeps.
 
 **Important:** Current solver charts are a working pipeline, not verified strategy.
+
+**Start here for the research arc:** [docs/RESEARCH_PAPER.md](docs/RESEARCH_PAPER.md)
+(executive summary, roadmap, and drawing-caller procedures for a general audience).
+
 Validation fixtures cover drawing-call odds, showdown matrix, opener-first
 post-draw face-pair betting, and opener draw-count / check-mix protection — see
 [docs/NEXT_STAGE_SHOWDOWN_MATRIX.md](docs/NEXT_STAGE_SHOWDOWN_MATRIX.md),
