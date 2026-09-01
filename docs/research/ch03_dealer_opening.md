@@ -50,7 +50,7 @@ CLI: `analyze-postdraw-nonbluff-ev`. Detail: [../NEXT_STAGE_NONBLUFF_EV.md](../N
 
 Caller keep-4 **d=1** beats standing with the dealt five (ΔEV_caller about +$2–4 vs representative BN classes). EV is reported for **both** seats (`EV_bn + EV_caller = $6` sunk pot). Case 1–8c mass is attached to the same deals as a link to §3.2, not as a substitute for EV.
 
-**Bluff delta comes next.** This table is the honest cell. Later work can add miss stabs, BN check-mixes (Stage C), and pair `d≠3` concealment, and report ΔEV against these numbers — not a new baseline. CO return-to-actor bluffs after a BN open live in [Ch.5 §5.2](ch05_later_seats.md).
+**Bluff delta comes next.** This table is the honest cell. Later work can add miss stabs, BN check-mixes (Stage C), and pair `d≠3` concealment, and report ΔEV against these numbers — not a new baseline. CO return-to-actor bluffs after a BN open live in [Ch.5 §5.2](ch05_later_seats.md). Post-draw **cap / 3-bet vs call** (this street is bet+1) is a separate ticket: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md).
 
 ---
 
