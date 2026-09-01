@@ -60,7 +60,7 @@ Same template as BN: open/pass for open-legal classes, response vs open, then po
 
 **Ledger slice:** “CO can open” after seats 1–6 unable (~4.9%) plus CO-open lines inside the early-six mass later.
 
-**Also planned (after Ch.2 raise/call mixes):** when BN opens and seats 1–6 are gone, should CO ever **bluff-continue** with underpairs / high-card hands by calling or raising and drawing one to **represent** a strong draw? See [Ch.5 §5.2](ch05_later_seats.md).
+**Also planned (after Ch.2 raise/call mixes):** return-to-actor line — CO passed for lack of a legal opener; BN opens; others fold; should CO ever **call/raise with less than a strong draw** as a bluff? See [Ch.5 §5.2](ch05_later_seats.md).
 
 ---
 
@@ -102,7 +102,7 @@ Do **not** expand that plan until late-position non-sandbagging work and Stage C
 ## 1.7 Immediate research queue (ordered)
 
 1. **Ch.2 §2.9** — Strong draws: always call, always raise, or mix (BN-open laboratory first).
-2. **Ch.5 §5.2** — CO bluff-represent with underpair / high card (depends on §2.9).
+2. **Ch.5 §5.2** — After BN opens (CO had passed with no legal opener; others fold): call/raise with less than a strong draw as a bluff? (depends on §2.9).
 3. Continue Ch.3–4 BN post-draw / Stage C as scheduled in those chapters.
 4. CO open/pass chart; then HJ sandbagging.
 

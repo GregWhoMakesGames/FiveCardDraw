@@ -203,7 +203,7 @@ Answer with **combo-weighted EV** (and small grids), not intuition alone. Strati
 ### Why it matters for later chapters
 
 1. **BN opener defense** (Ch.3–4) — raise frequency changes pot size, BN’s continue range, and post-draw stack-off shape.
-2. **CO bluffs that “represent” draws** (Ch.5) — if strong draws almost never raise, a CO raise with trash is an empty threat; if strong draws often raise, a one-card bluff raise has a credible story.
+2. **CO bluffs with weaker hands** (Ch.5) — after BN opens on the return-to-actor line, real draws call/raise; whether underpairs / high cards should ever do the same as a bluff depends on that value mix.
 
 ### Suggested investigation shape
 

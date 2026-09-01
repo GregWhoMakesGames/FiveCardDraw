@@ -60,7 +60,7 @@ Use **seats 1–8** in all research prose. Code may still use 0-based indices in
 | 2 | [ch02_drawing_callers.md](ch02_drawing_callers.md) | Non-opening draws; **next: call/raise/mix** (§2.9) | Drawing-call validation |
 | 3 | [ch03_dealer_opening.md](ch03_dealer_opening.md) | BN opening + post-draw equity (stub) | Dealer / showdown / M2 |
 | 4 | [ch04_draw_mixes.md](ch04_draw_mixes.md) | Opener draw mixes + check protection (stub) | Draw mixes / Stage C |
-| 5 | [ch05_later_seats.md](ch05_later_seats.md) | CO open climb; **CO represent-bluff** (§5.2); HJ | Later seats |
+| 5 | [ch05_later_seats.md](ch05_later_seats.md) | CO open climb; **CO bluff after BN open** (§5.2); HJ | Later seats |
 | A | [appendix_a_rules.md](appendix_a_rules.md) | Game rules | Shared (rare edits) |
 | B | [appendix_b_code.md](appendix_b_code.md) | Code map / CLIs | Shared (rare edits) |
 | C | [appendix_c_crosswalk.md](appendix_c_crosswalk.md) | Doc crosswalk | Shared (rare edits) |
@@ -118,7 +118,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | Order | Work | Chapter | Blocks |
 | ---: | --- | --- | --- |
 | 1 | Strong draws: call vs raise vs mix (combo-weighted EV) | [Ch.2 §2.9](ch02_drawing_callers.md) | CO represent-bluffs |
-| 2 | CO bluff-represent underpair / high card (call/raise + draw 1) after BN opens, seats 1–6 gone | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for credibility |
+| 2 | CO bluff after BN open (return-to-actor: CO passed with no legal opener; others fold) — call/raise with underpair / high card? | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for value-range shape |
 | 3 | BN Stage C check mixes / remaining Ch.3–4 | Ch.3–4 | Parallel OK with #1 if different files |
 | 4 | CO open/pass; HJ sandbagging | Ch.5 | After #2 template exists |
 
