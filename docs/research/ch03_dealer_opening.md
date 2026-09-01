@@ -1,9 +1,9 @@
 # Chapter 3 — Dealer (BN) opening and post-draw equity
 
 > Seat map and solve-progress ledger: **[INDEX.md](INDEX.md)**.  
-> Stub — expand in a later revision. Headline findings only.
+> Headline findings; implementation detail lives in the handoff docs.
 
-**Ledger role.** Claims the **only-BN-can-open / no caller** slice as solved, and owns showdown + M2 betting for **BN vs 2:1 drawers**.
+**Ledger role.** Claims the **only-BN-can-open / no caller** slice as solved, and owns showdown + M2 betting + **non-bluff EV by class × d** for **BN vs 2:1 drawers**.
 
 ---
 
@@ -29,10 +29,33 @@ With pairs drawing three and opener (BN) acting first: **checking JJ–AA** beat
 
 ---
 
+## 3.4 Non-bluff max-EV by class × cards drawn
+
+Heads-up laboratory: BN opened, one 2:1 caller (call-only pre-draw → pot $6; big bet $4; BN first). Honest line: BN value-bets two pair+ and **checks** one pair; caller value-bets/raises straight+, stabs **AA** when checked, never raises a face pair. **No bluffs and no check-protection mixes.**
+
+CLI: `analyze-postdraw-nonbluff-ev`. Detail: [../NEXT_STAGE_NONBLUFF_EV.md](../NEXT_STAGE_NONBLUFF_EV.md). Fixture: `tests/fixtures/validation/postdraw_nonbluff_ev_summary.json`.
+
+**Best non-bluff draw (BN EV vs the 2:1 set, caller keep-4 d=1):**
+
+| BN class | Best d | Honest post-draw |
+| --- | ---: | --- |
+| Pair JJ–AA | **d=3** | Check the pair; bet if it improves to two pair+ |
+| Two pair | **d=1** | Always value-bet |
+| Trips | **d=2** (d=1 is the unified-line fork) | Always value-bet |
+| Quads | **d=1** (EV-neutral vs stand) | Always value-bet |
+| Other straight+ | Stand | Always value-bet |
+
+Caller keep-4 **d=1** beats standing with the dealt five. EV is reported for **both** seats (`EV_bn + EV_caller = $6` sunk pot). Case 1–8c mass is attached to the same deals as a link to §3.2, not as a substitute for EV.
+
+**Bluff delta comes next.** This table is the honest cell. Later work can add miss stabs, BN check-mixes (Stage C), and pair `d≠3` concealment, and report ΔEV against these numbers — not a new baseline. CO return-to-actor bluffs after a BN open live in [Ch.5 §5.2](ch05_later_seats.md).
+
+---
+
 ## Code ownership (for parallel agents)
 
 | Path | Role |
 | --- | --- |
 | `src/fivecarddraw/validation/showdown_matrix.py` | Showdown matrix |
 | `src/fivecarddraw/validation/postdraw_betting_m2.py` | M2 face-pair grid |
-| Matching fixtures + `tests/test_showdown_matrix.py`, `tests/test_postdraw_m2.py` | CI |
+| `src/fivecarddraw/validation/postdraw_nonbluff_ev.py` | Non-bluff class × d EV |
+| Matching fixtures + `tests/test_showdown_matrix.py`, `tests/test_postdraw_m2.py`, `tests/test_postdraw_nonbluff_ev.py` | CI |

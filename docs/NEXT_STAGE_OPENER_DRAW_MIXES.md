@@ -133,12 +133,10 @@ pairs `d=3` for Stage C:
 
 Run C under **both**. Neither fork requires moving pairs off `d=3` in C.
 
-**Open verification (not C):** Stage A showdown already ranks aggregate JJ–AA
-`d=3` ahead of `d=2` (win and boat+), and AA alone too (win ~0.673 vs 0.657;
-boat+ ~0.018 vs 0.012). Confirm that **post-draw EV** (with betting) still has
-pair `d=3` > `d=2` before committing concealment mixes — that chip Δ is not in
-the Stage B grid (pairs were fixed at `d=3`). Pair `d=1` remains worse on
-improvement (zero boat+).
+**Open verification (done in non-bluff EV grid):** Stage A showdown already ranks aggregate JJ–AA
+`d=3` ahead of `d=2` (win and boat+), and AA alone too. Post-draw **EV** under honest
+betting confirms the same ranking — see [NEXT_STAGE_NONBLUFF_EV.md](NEXT_STAGE_NONBLUFF_EV.md).
+Pair `d=1` remains worse on improvement (zero boat+). Concealment mixes still wait until after C.
 
 ### C — Checking-range protection (stale fixture note)
 

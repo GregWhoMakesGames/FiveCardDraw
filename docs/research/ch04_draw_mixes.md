@@ -17,6 +17,8 @@
 | Other straight+ | Stand | Cannot join d=3 to “protect” pairs |
 | Trips | **d=2** (primary) or **d=1** (unified) | Live fork for Stage C |
 
+Non-bluff **post-draw EV** (honest betting, not just P(win)) confirms the same ranking: pair **d=3** still beats d=2 for both JJ and AA vs the 2:1 caller; two pair **d=1** and trips **d=2** remain the EV maxima. That pair d=3 vs d=2 chip delta is the number concealment mixes must beat. CLI: `analyze-postdraw-nonbluff-ev`. Detail: [../NEXT_STAGE_NONBLUFF_EV.md](../NEXT_STAGE_NONBLUFF_EV.md) and [Ch.3 §3.4](ch03_dealer_opening.md).
+
 ---
 
 ## 4.2 Stage C (next implementation)
@@ -27,7 +29,7 @@ Protect checking ranges by mixing strong finals into checks (not by standing wit
 
 ## 4.3 After C — pair concealment
 
-Only if post-draw EV still ranks pair `d=3` above `d=2`. Detail: [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md).
+Non-bluff post-draw EV already ranks pair `d=3` above `d=2` (Ch.3 §3.4). Concealment mixes are still **after C**. Detail: [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md).
 
 ---
 

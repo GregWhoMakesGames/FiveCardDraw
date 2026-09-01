@@ -29,6 +29,7 @@ analyze-showdown-matrix = "fivecarddraw.validation.showdown_matrix:main"
 analyze-postdraw-m2 = "fivecarddraw.validation.postdraw_betting_m2:main"
 analyze-postdraw-draw-mixes = "fivecarddraw.validation.postdraw_draw_mixes:main"
 analyze-opener-draw-beliefs = "fivecarddraw.validation.opener_draw_beliefs:main"
+analyze-postdraw-nonbluff-ev = "fivecarddraw.validation.postdraw_nonbluff_ev:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
