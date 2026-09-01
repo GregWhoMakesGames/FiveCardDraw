@@ -143,4 +143,5 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | --- | --- |
 | 2026-09-01 | Initial monolithic `RESEARCH_PAPER.md` |
 | 2026-09-01 | Split into `docs/research/` chapters; seats 1–8 + hold’em names; granular solve-progress ledger; parallel-agent notes |
-| 2026-09-01 | Document next queue: Ch.2 call/raise/mix; Ch.5 CO represent-bluff |
+| 2026-09-01 | Document next queue: Ch.2 call/raise/mix; Ch.5 CO bluff after BN open |
+| 2026-09-01 | Pin §5.2 return-to-actor (CO passed with no legal opener); clarify bluff = call/raise with less than strong draws |
