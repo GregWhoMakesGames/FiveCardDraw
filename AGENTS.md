@@ -28,9 +28,24 @@ See [README.md](README.md) for `pytest`, `solve-predraw`, `audit-abstraction`, a
 - Hand eval is pure Python in v1; `python -m fivecarddraw.bench` documents the aspirational Numba target (≥2e6/s) vs current throughput.
 - **Do not treat current opening CSVs as correct strategy.** Early-position opens are known to be too loose vs combo-weighted domination/raise pressure (see validation doc).
 
-### Next stage (start here on a fresh agent)
+### Research overview (human-readable)
 
-**Read first:** [docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md)
+[docs/research/INDEX.md](docs/research/INDEX.md) — executive summary, seats 1–8
+(UTG…BN), solve-progress ledger, and chapter TOC. Chapters live as separate
+files under `docs/research/` (one agent / one chapter preferred). Prefer the
+index when explaining the project; keep stage handoffs below for implementation
+detail.
+
+### Next stage (implementation agents)
+
+Default code milestone remains Stage C in
+[docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md).
+
+**Narrative next queue** (research paper): (1) Ch.2 strong-draw call/raise/mix,
+(2) Ch.5 CO bluff after BN open (return-to-actor; weaker than strong draws) —
+see [docs/research/INDEX.md](docs/research/INDEX.md) “Immediate research queue.”
+
+**Read first for Stage C code:** [docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md)
 
 Stages **A** and **B** are done (12-cell draw grid). Continue at **Step C** —
 checking-range protection — under the post-B draw defaults:
