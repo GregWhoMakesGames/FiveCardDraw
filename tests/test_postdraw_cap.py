@@ -25,6 +25,7 @@ from fivecarddraw.validation.postdraw_cap import (
     fine_bucket,
     on_raise_node,
     on_raise_node_pre_c,
+    three_bet_lines_from_by_d,
 )
 from fivecarddraw.validation.postdraw_nonbluff_ev import (
     CALLER_ALL,
@@ -288,6 +289,120 @@ def test_on_raise_node():
     assert not on_raise_node(miss)
 
 
+def test_three_bet_lines_from_by_d():
+    """Line 1 = d=2∪d=3 (trips air); Line 2 = d=0 (flush calls vs flush+)."""
+    by_d = {
+        "d0": {
+            "n": 10,
+            "trips_air_n": 0,
+            "two_pair_n": 0,
+            "bn_family_n": {"flush": 6.0, "straight": 4.0},
+            "caller_vs_bn_flush_plus": {
+                "flush": {
+                    "n": 4.0,
+                    "recommend": "call",
+                    "ev_caller_fold": -8.0,
+                    "ev_caller_call": -7.0,
+                    "ev_caller_cap": -10.0,
+                }
+            },
+            "caller_vs_bn_boat_plus": {
+                "flush": {
+                    "n": 2.0,
+                    "recommend": "fold",
+                    "ev_caller_fold": -8.0,
+                    "ev_caller_call": -12.0,
+                    "ev_caller_cap": -16.0,
+                }
+            },
+        },
+        "d1": {
+            "n": 3,
+            "trips_air_n": 0,
+            "two_pair_n": 0,
+            "bn_family_n": {"boat_plus": 3.0},
+            "caller_vs_bn_flush_plus": {
+                "flush": {
+                    "n": 2.0,
+                    "recommend": "fold",
+                    "ev_caller_fold": -8.0,
+                    "ev_caller_call": -12.0,
+                    "ev_caller_cap": -16.0,
+                }
+            },
+            "caller_vs_bn_boat_plus": {
+                "flush": {
+                    "n": 2.0,
+                    "recommend": "fold",
+                    "ev_caller_fold": -8.0,
+                    "ev_caller_call": -12.0,
+                    "ev_caller_cap": -16.0,
+                }
+            },
+        },
+        "d2": {
+            "n": 8,
+            "trips_air_n": 7,
+            "two_pair_n": 0,
+            "bn_family_n": {"trips": 7.0, "boat_plus": 1.0},
+            "caller_vs_bn_flush_plus": {
+                "flush": {
+                    "n": 3.0,
+                    "recommend": "fold",
+                    "ev_caller_fold": -8.0,
+                    "ev_caller_call": -12.0,
+                    "ev_caller_cap": -16.0,
+                }
+            },
+            "caller_vs_bn_boat_plus": {
+                "flush": {
+                    "n": 3.0,
+                    "recommend": "fold",
+                    "ev_caller_fold": -8.0,
+                    "ev_caller_call": -12.0,
+                    "ev_caller_cap": -16.0,
+                }
+            },
+        },
+        "d3": {
+            "n": 5,
+            "trips_air_n": 4,
+            "two_pair_n": 0,
+            "bn_family_n": {"trips": 4.0, "boat_plus": 1.0},
+            "caller_vs_bn_flush_plus": {
+                "flush": {
+                    "n": 2.0,
+                    "recommend": "fold",
+                    "ev_caller_fold": -8.0,
+                    "ev_caller_call": -12.0,
+                    "ev_caller_cap": -16.0,
+                }
+            },
+            "caller_vs_bn_boat_plus": {
+                "flush": {
+                    "n": 2.0,
+                    "recommend": "fold",
+                    "ev_caller_fold": -8.0,
+                    "ev_caller_call": -12.0,
+                    "ev_caller_cap": -16.0,
+                }
+            },
+        },
+    }
+    lines = three_bet_lines_from_by_d(by_d)
+    assert lines["line1_trips_draw"]["n"] == 13
+    assert lines["line1_trips_draw"]["trips_air_n"] == 11
+    assert lines["line1_trips_draw"]["has_trips_air"]
+    assert lines["line1_trips_draw"]["flush_vs_flush_plus"] == "fold"
+    assert not lines["line1_trips_draw"]["flush_prefers_call_vs_flush_plus"]
+    assert lines["line2_pat_straight_plus"]["n"] == 10
+    assert not lines["line2_pat_straight_plus"]["has_trips_air"]
+    assert lines["line2_pat_straight_plus"]["flush_vs_flush_plus"] == "call"
+    assert lines["line2_pat_straight_plus"]["flush_prefers_call_vs_flush_plus"]
+    assert lines["d1_boats_quads"]["n"] == 3
+    assert not lines["d1_boats_quads"]["has_trips_air"]
+
+
 def test_fixture_summary_patterns():
     assert FIXTURE.exists(), "run analyze-postdraw-cap --write-fixture"
     data = json.loads(FIXTURE.read_text(encoding="utf-8"))
@@ -323,7 +438,32 @@ def test_fixture_summary_patterns():
     by_d = data["node_by_d"]
     assert by_d["d0"]["trips_air_n"] == 0
     assert by_d["d0"]["line"] == "pat_straight_plus"
-    assert by_d["d2"]["has_trips_air"] or by_d["d3"]["has_trips_air"]
+    assert by_d["d0"]["caller_vs_bn_flush_plus"]["flush"]["recommend"] == "call"
+    assert by_d["d1"]["line"] == "draw1_boats_quads"
+    assert not by_d["d1"]["has_trips_air"]
+    assert by_d["d2"]["has_trips_air"]
+    assert by_d["d3"]["has_trips_air"]
+    assert by_d["d2"]["caller_vs_bn_flush_plus"]["flush"]["recommend"] == "fold"
+    assert by_d["d3"]["caller_vs_bn_flush_plus"]["flush"]["recommend"] == "fold"
+    assert f["p_raise_node_locked_range"] == 0.0903
+    assert f["n_node_weighted"] == 3612
+    assert f["two_pair_on_node_n"] == 0
+    assert f["p_raise_node_pre_c"] == 0.189
+    assert f["call_it_down_ev_bn"] == -2.3995
+    assert f["d0_flush_prefers_call_vs_flush_plus"] is True
+    lines = f["three_bet_lines"]
+    assert lines["line1_trips_draw"]["has_trips_air"] is True
+    assert lines["line1_trips_draw"]["ds"] == [2, 3]
+    assert lines["line1_trips_draw"]["flush_vs_flush_plus"] == "fold"
+    assert lines["line1_trips_draw"]["flush_prefers_call_vs_flush_plus"] is False
+    assert lines["line2_pat_straight_plus"]["has_trips_air"] is False
+    assert lines["line2_pat_straight_plus"]["ds"] == [0]
+    assert lines["line2_pat_straight_plus"]["flush_vs_flush_plus"] == "call"
+    assert lines["line2_pat_straight_plus"]["flush_prefers_call_vs_flush_plus"] is True
+    assert lines["d1_boats_quads"]["has_trips_air"] is False
+    assert f["line1_has_trips_air"] is True
+    assert f["line2_has_trips_air"] is False
+    assert f["line2_flush_prefers_call_vs_flush_plus"] is True
     by_fine = {r["bucket"]: r for r in data["bn_fine"]}
     assert by_fine["straight_A"]["recommend"] == "three_bet"
     assert by_fine["straight_5"]["recommend"] == "call"

@@ -6,7 +6,7 @@ with BN 3-bet / caller cap / BN call-cap under `max_raises=3`.
 
 Does **not** re-run the class × d EV grid. Condition on the raise node
 **after Stage C**: BN bets trips+ (two pair checks) ∩ caller straight+.
-Split reports by public \(d\). Bluff 3-bets with trips are Ring 1
+Split reports by public d. Bluff 3-bets with trips are Ring 1
 (`postdraw_bluff`); this module is the value line + node mass.
 
 Doc: `docs/NEXT_STAGE_POSTDRAW_CAP.md`.
@@ -564,9 +564,26 @@ def build_recommendations(findings: dict[str, Any]) -> list[dict[str, str]]:
         },
         {
             "side": "caller",
-            "final": "flush vs BN flush+ 3-bet",
-            "vs_3bet": (findings["caller_vs_bn_flush_plus"].get("flush") or "call"),
-            "notes": "Ahead of BN straights (if those 3-bet) / some flushes; behind boats.",
+            "final": "flush vs BN flush+ 3-bet (Line 1, d=2/3)",
+            "vs_3bet": "fold (no-air value 3-bet is boat+)",
+            "notes": (
+                "Trips-draw line. Flush is drawing dead to boats. "
+                "Ring 1 mixes trips air until flushes are indifferent."
+            ),
+        },
+        {
+            "side": "caller",
+            "final": "flush vs BN flush+ 3-bet (Line 2, d=0)",
+            "vs_3bet": (
+                "call"
+                if findings.get("line2_flush_prefers_call_vs_flush_plus")
+                or findings.get("d0_flush_prefers_call_vs_flush_plus")
+                else (findings["caller_vs_bn_flush_plus"].get("flush") or "call")
+            ),
+            "notes": (
+                "Pat line. BN stood; a 3-bet is usually a flush, rarely a boat. "
+                "Do not fold all flushes. Mix/Nash still OPEN."
+            ),
         },
         {
             "side": "caller",
@@ -597,6 +614,116 @@ def _line_name(d: int) -> str:
     if d == 3:
         return "pair_draw"
     return f"d{d}"
+
+
+# First-class 3-bet information sets after Stage C (public d is observed).
+THREE_BET_LINE_SPECS: tuple[dict[str, Any], ...] = (
+    {
+        "id": "line1_trips_draw",
+        "label": "Line 1 — trips draw",
+        "ds": (2, 3),
+        "role": "bluff_and_value",
+        "air": "unimproved_trips",
+        "notes": (
+            "BN drew two (trips) or three (pair that made trips). "
+            "Value 3-bet is boat+. Air is unimproved trips. "
+            "Caller flush vs a no-air flush+ 3-bet folds (those 3-bets are boats)."
+        ),
+    },
+    {
+        "id": "line2_pat_straight_plus",
+        "label": "Line 2 — pat straight+",
+        "ds": (0,),
+        "role": "value_only",
+        "air": "none",
+        "notes": (
+            "BN stood. No trips or two pair on this public line. "
+            "Value 3-bet is flush + rare starting boat+. No trips air. "
+            "Caller flush vs flush+ prefers call."
+        ),
+    },
+    {
+        "id": "d1_boats_quads",
+        "label": "d=1 boats/quads (not a bluff line)",
+        "ds": (1,),
+        "role": "nuts_value",
+        "air": "none",
+        "notes": (
+            "Two pair that boated plus quads. Unimproved two pair checked. "
+            "A 3-bet is almost always nuts. Caller fold-non-SF."
+        ),
+    },
+)
+
+
+def three_bet_lines_from_by_d(by_d: dict[str, Any]) -> dict[str, Any]:
+    """Aggregate public-d slices into the two 3-bet lines (+ d=1 nuts)."""
+    out: dict[str, Any] = {}
+    for spec in THREE_BET_LINE_SPECS:
+        slices = [by_d[f"d{d}"] for d in spec["ds"] if f"d{d}" in by_d]
+        n = sum(int(s.get("n") or 0) for s in slices)
+        trips = sum(float(s.get("trips_air_n") or 0) for s in slices)
+        two_pair = sum(float(s.get("two_pair_n") or 0) for s in slices)
+        bn_fam: dict[str, float] = {}
+        for s in slices:
+            for k, v in (s.get("bn_family_n") or {}).items():
+                bn_fam[k] = bn_fam.get(k, 0.0) + float(v)
+
+        flush_recs: list[str] = []
+        boat_recs: list[str] = []
+        call_w = fold_w = 0.0
+        flush_n = 0.0
+        for s in slices:
+            fl = (s.get("caller_vs_bn_flush_plus") or {}).get("flush")
+            bt = (s.get("caller_vs_bn_boat_plus") or {}).get("flush")
+            if fl:
+                flush_recs.append(str(fl["recommend"]))
+                nn = float(fl.get("n") or 0)
+                call_w += float(fl["ev_caller_call"]) * nn
+                fold_w += float(fl["ev_caller_fold"]) * nn
+                flush_n += nn
+            if bt:
+                boat_recs.append(str(bt["recommend"]))
+
+        agreed_flush = (
+            flush_recs[0]
+            if flush_recs and all(r == flush_recs[0] for r in flush_recs)
+            else ("mixed" if flush_recs else None)
+        )
+        agreed_boat = (
+            boat_recs[0]
+            if boat_recs and all(r == boat_recs[0] for r in boat_recs)
+            else ("mixed" if boat_recs else None)
+        )
+        flush_call = (call_w / flush_n) if flush_n else None
+        flush_fold = (fold_w / flush_n) if flush_n else None
+        prefers_call = (
+            flush_call is not None
+            and flush_fold is not None
+            and flush_call >= flush_fold
+        )
+        out[spec["id"]] = {
+            "label": spec["label"],
+            "ds": list(spec["ds"]),
+            "role": spec["role"],
+            "air": spec["air"],
+            "notes": spec["notes"],
+            "n": n,
+            "trips_air_n": trips,
+            "two_pair_n": two_pair,
+            "has_trips_air": trips > 0,
+            "bn_family_n": {k: bn_fam[k] for k in sorted(bn_fam)},
+            "flush_vs_flush_plus": agreed_flush,
+            "flush_vs_boat_plus": agreed_boat,
+            "flush_ev_call_vs_flush_plus": (
+                None if flush_call is None else round(flush_call, 4)
+            ),
+            "flush_ev_fold_vs_flush_plus": (
+                None if flush_fold is None else round(flush_fold, 4)
+            ),
+            "flush_prefers_call_vs_flush_plus": prefers_call,
+        }
+    return out
 
 
 def node_slice_report(
@@ -772,6 +899,18 @@ def run_analysis(
         1 for x in node_weighted if family_bucket(x.opener_final) == "two_pair"
     )
     findings["by_d"] = by_d
+    lines = three_bet_lines_from_by_d(by_d)
+    findings["three_bet_lines"] = lines
+    line1 = lines.get("line1_trips_draw", {})
+    line2 = lines.get("line2_pat_straight_plus", {})
+    findings["line1_has_trips_air"] = bool(line1.get("has_trips_air"))
+    findings["line2_has_trips_air"] = bool(line2.get("has_trips_air"))
+    findings["line1_flush_prefers_call_vs_flush_plus"] = bool(
+        line1.get("flush_prefers_call_vs_flush_plus")
+    )
+    findings["line2_flush_prefers_call_vs_flush_plus"] = bool(
+        line2.get("flush_prefers_call_vs_flush_plus")
+    )
     flush_d0 = by_d.get("d0", {}).get("caller_vs_bn_flush_plus", {}).get("flush")
     if flush_d0:
         findings["d0_flush_prefers_call_vs_flush_plus"] = (
@@ -817,7 +956,8 @@ def run_analysis(
                 "does not rewrite those cells.",
                 "Unilateral BN Δ holds caller at cap SF / call rest.",
                 "Unilateral caller Δ is reported vs BN flush+ 3-bet and vs BN boat+ 3-bet.",
-                "Reports are split by public d (pat d=0 vs trips-draw d=2 / pair-draw d=3).",
+                "Reports are split by public d and grouped as Line 1 (d=2∪d=3) "
+                "and Line 2 (d=0). d=1 is nuts-only (not a bluff line).",
             ],
         },
         "node_mass_by_class": mass,
@@ -946,6 +1086,31 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
                 f"{sl.get('trips_air_n', 0):.0f} | {sl.get('two_pair_n', 0):.0f} | "
                 f"{fl.get('recommend', '—')} | {bt.get('recommend', '—')} |"
             )
+    three_lines = f.get("three_bet_lines") or {}
+    if three_lines:
+        lines += [
+            "",
+            "## Two 3-bet lines (Stage C information sets)",
+            "",
+            "| Line | d | n | trips air | flush vs flush+ | flush vs boat+ | Role |",
+            "| --- | --- | ---: | ---: | --- | --- | --- |",
+        ]
+        for key in (
+            "line1_trips_draw",
+            "line2_pat_straight_plus",
+            "d1_boats_quads",
+        ):
+            ln = three_lines.get(key)
+            if not ln:
+                continue
+            ds = ",".join(str(d) for d in ln.get("ds", []))
+            lines.append(
+                f"| {ln.get('label')} | {ds} | {ln.get('n')} | "
+                f"{ln.get('trips_air_n', 0):.0f} | "
+                f"{ln.get('flush_vs_flush_plus') or '—'} | "
+                f"{ln.get('flush_vs_boat_plus') or '—'} | "
+                f"{ln.get('role')} |"
+            )
     lines += [
         "",
         "## BN 3-bet vs call (unilateral; caller caps SF, calls rest)",
@@ -1036,6 +1201,9 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
         f"- BN boat+ 3-bets: **{f['hypothesis_boat_3bets']}** (Δ={f['bn_boat_plus_delta']})",
         f"- BN trips call only (bluff 3-bet is Ring 1): **{f.get('hypothesis_trips_call')}**",
         f"- Caller should not cap non-SF into boat+: **{f['caller_should_not_cap_non_sf_vs_boat']}**",
+        f"- Line 1 (d=2∪d=3) has trips air: **{f.get('line1_has_trips_air')}**",
+        f"- Line 2 (d=0) flush prefers call vs flush+: "
+        f"**{f.get('line2_flush_prefers_call_vs_flush_plus')}**",
         "",
         "Call-it-down **does not** include this cap EV. Flush+ 3-bets move node "
         f"EV_bn from {f['call_it_down_ev_bn']} (call-it-down) toward "

@@ -1,10 +1,11 @@
 # Next stage: post-draw bluff 3-bet (Ring 1 indifference)
 
-**Status:** Not started. Do **Ring 1 first**. Stage C (always check two pair)
-**changes the node and the air pool** — read
-[After Stage C](#after-stage-c-two-pair-never-reaches-this-line) before
-coding. Do not start Ring 2 (bucketed Nash) until Ring 1 has a checked-in
-fixture and the per-`d` indifference numbers are pinned.
+**Status:** Not started. Do **Ring 1 first**. The cap raise node is now
+the **Stage C** street (check two pair; bet trips+), split into two 3-bet
+lines — read [After Stage C](#after-stage-c-two-pair-never-reaches-this-line)
+and [POSTDRAW_STRATEGY_TREE.md](POSTDRAW_STRATEGY_TREE.md) before coding.
+Do not start Ring 2 (bucketed Nash) until Ring 1 has a checked-in fixture
+and the per-`d` indifference numbers are pinned.
 
 **Product question:** On the raise node, if the caller folds a straight or
 flush to a BN **value** 3-bet, BN is incentivized to bluff 3-bet some **trips**
@@ -30,15 +31,14 @@ Cap findings (seed 20260902, combo-weighted raise node):
 
 | Fact | Number |
 | --- | --- |
-| P(raise node) under locked BN draws | 0.189 |
+| P(raise node) under locked BN draws (Stage C) | **0.0903** (was 0.189 pre-C) |
 | Pot after BN 3-bet, $4 to caller | **$26** (break-even call equity \(4/30 \approx 13.3\%\)) |
 | Full cap pot | $38 |
-| Vs BN **flush+** 3-bet, no air | caller **straight** fold (call EV −12 vs fold −8) |
-| | caller **flush** fold (call EV −10.5 vs fold −8, ~5% equity) |
-| | caller SF / boat_plus **cap** |
-| Honest BN vs a *calling* responder | 3-bet flush+, call straights / two pair / trips |
+| Vs BN **flush+** 3-bet, no air, **Line 1** (`d=2,3`) | caller straight **fold**; flush **fold** (boats); SF **cap** |
+| Vs BN **flush+** 3-bet, no air, **Line 2** (`d=0`) | caller straight **fold**; flush **call** (EV −7.45 vs −8); SF **cap** |
+| Honest BN vs a *calling* responder | 3-bet flush+, call straights / trips (two pair not on node) |
 
-If the caller actually folds non-SF, a two-pair/trips **bluff 3-bet** that
+If the caller actually folds non-SF on Line 1, a trips **bluff 3-bet** that
 gets a fold is about **+14** EV_bn vs **−8** for calling and losing at $22.
 That invites air. As air enters the 3-bet range, flushes gain equity and
 start to call. The mix that stops the loop is the indifference frequency
@@ -55,9 +55,10 @@ caps. That is the textbook polar model.
 
 Stage C ([NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md)):
 BN **always checks two pair** (all public \(d\)); always bets trips and boat+.
-The checked-in cap fixture still uses the pre-C street (`p_bn_bets = 1` for
-two pair; node = BN two pair+ ∩ caller straight+). **Do not reuse that node
-definition or the pooled “fold all flushes” best response.**
+The checked-in cap fixture **is** the Stage C street (`on_raise_node` =
+trips+ bets ∩ caller straight+; `p_bn_bets` for two pair ≈ 0.08–0.10, only
+the boats). **Do not reuse the pre-C node (P = 0.189) or the pooled
+“fold all flushes” best response.** Quote Line 1 / Line 2.
 
 ### Does α / β change?
 
@@ -78,25 +79,25 @@ two reasons:
 
 1. **Two pair leaves the node entirely** (they check). Air candidates on a
    BN-bet line are **trips that did not boat** — not two pair ∪ trips.
-   Combo-weighted cap mass (seed 20260902, 7,559 node deals) plus Stage A
-   finals: ~3,985 unimproved two pair drop off; remaining air ≈ **2,260
-   trips**; remaining flush+ value ≈ **820**. In a still-pooled node,
-   β among trips is about **3×** the old β among two pair ∪ trips. α is
-   unchanged *in that pooled model*.
+   Measured Stage C node (seed 20260902, 3,612 deals): Line 1 air =
+   **2,258** unimproved trips vs **273** boat+ value (plus 38 rare S/F).
+   In a still-pooled model, β among trips is about **3×** the old β among
+   two pair ∪ trips. α is unchanged *in that pooled model*.
 2. **Public \(d\) splits the value range**, so α itself is not one number.
    The cap’s “flush has ~5% equity vs flush+” and the ~9% textbook α mix
    boats from *draws* into the same 3-bet as pat flushes. The caller sees
    \(d\).
 
-### Two lines that can 3-bet (both missed)
+### Two lines that can 3-bet (now measured)
 
-The cap / Ring 1 draft treated one pooled raise node. These are different
-info sets:
+These are different info sets. Cap fixture `findings.three_bet_lines`
+and [POSTDRAW_STRATEGY_TREE.md](POSTDRAW_STRATEGY_TREE.md) pin the
+no-air caller BR. Ring 1 still has to solve β on Line 1.
 
-| Line | BN start → public \(d\) | After C, BN bets with | 3-bet value | 3-bet air | Caller vs a 3-bet |
-| --- | --- | --- | --- | --- | --- |
-| **1 — trips draw** | Trips `d=2` (or `d=1` unified); pairs `d=3` that made trips | Unimproved trips, or boat+ | Boat+ from that draw | Unimproved **trips** only | Flush is drawing dead to boats. Fold-non-SF is plausible; α nearer full pot odds (~13%) |
-| **2 — pat straight+** | Straight / flush / rare boat+ **stand** (`d=0`) | The pat hand | Flush + rare starting boat+ | **None** (no trips/two pair on `d=0`) | BN is usually a straight or flush, rarely better than a flush. **Do not fold all flushes.** Call (or mix) at least some flushes; straights still lose to flush+ |
+| Line | BN start → public \(d\) | n | After C, BN bets with | 3-bet value | 3-bet air | Caller vs no-air flush+ |
+| --- | --- | ---: | --- | --- | --- | --- |
+| **1 — trips draw** | Trips `d=2`; pairs `d=3` that made trips | 2,569 | Unimproved trips, or boat+ | Boat+ from that draw | Unimproved **trips** (2,258) | Flush **fold** (drawing dead to boats). α nearer pot odds (~13%) |
+| **2 — pat straight+** | Straight / flush / rare boat+ **stand** (`d=0`) | 750 | The pat hand | Flush + rare starting boat+ | **None** | Flush **call** (EV −7.45 vs fold −8.00). Do not fold all flushes |
 
 C-primary extras (not a third bluff line):
 
@@ -106,13 +107,11 @@ C-primary extras (not a third bluff line):
   value). Two pair from pairs checks.
 
 Line 1 is the only remaining **bluff** 3-bet. Line 2 is a **value** 3-bet
-whose caller strategy was inferred from a boat-heavy pooled range and is
-likely too tight.
+whose no-air flush BR is now **call**, not fold.
 
-Ring 1 must solve α / β **per public \(d\)** (at least `d=0` vs `d∈{2,3}`;
-prefer `d=0,1,2,3`). Bluff bucket is **trips**, not two pair / trips.
-Redefine the raise node as Stage C betting: BN bets trips+ / boat+ (not
-two pair) ∩ caller straight+.
+Ring 1 must solve α / β **per public \(d\)** (at least Line 1 `d∈{2,3}`;
+report `d=0` / `d=1` with β = 0). Bluff bucket is **trips**, not two pair
+/ trips. The raise node is already Stage C: reuse `on_raise_node`.
 
 ---
 
@@ -120,9 +119,9 @@ two pair) ∩ caller straight+.
 
 Condition on the raise node **after Stage C**: BN **bets** (trips or boat+;
 two pair checks) ∩ caller straight+ (raises). Reuse `play_raise_node`,
-`family_bucket`, and the locked-range generator. **Rewrite** `on_raise_node`
-(or pass a Stage C bet flag) — the cap helper still treats two pair as a
-bet. Split the sample by public \(d\). Do **not** re-grid class × d.
+`on_raise_node`, `family_bucket`, `three_bet_lines_from_by_d`, and the
+locked-range generator. Split the sample by public \(d\) (Line 1 = `d∈{2,3}`,
+Line 2 = `d=0`). Do **not** re-grid class × d.
 
 ### BN strategy (polar, per public \(d\))
 
@@ -219,7 +218,7 @@ Ring 1.
 | --- | --- |
 | `play_raise_node` / `CapPolicy` / `StreetState` | Payoffs; max_raises=3 |
 | `family_bucket`, `fine_bucket` | Same labels as cap |
-| `on_raise_node` | **Stale** (assumes two pair bets). Filter: trips or boat+ ∩ caller straight+ |
+| `on_raise_node` | Stage C filter (trips+ bets ∩ caller straight+). Split by `deal.d` / `three_bet_lines_from_by_d` |
 | Locked range + 2:1 keep-4 | Same 18,396; `LOCKED_BN_DRAW` |
 | Cap fixture numbers | Honest no-air baseline for the delta |
 | `pot_odds_to_call` | Break-even equity |
@@ -246,7 +245,8 @@ or pre-draw trees.
    where the value range still includes flushes (`d=0`). On `d=2`/`d=3`
    value is already boat-heavy.
 6. On **`d=0`**, caller flushes **prefer call** (or mix) vs a no-air flush+
-   3-bet — the pooled “fold all flushes” BR does not survive the pat line.
+   3-bet — **confirmed** (EV call −7.45 ≥ fold −8.00, n=66). Mix/Nash still
+   open. The pooled “fold all flushes” BR does not survive the pat line.
 
 ---
 

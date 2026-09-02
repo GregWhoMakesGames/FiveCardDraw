@@ -1,7 +1,8 @@
 # Post-draw strategy tree (BN vs one 2:1 drawer)
 
-Status snapshot after Stage C. Locked vs open is marked on each node.
-Parent chapters: [research/ch03_dealer_opening.md](research/ch03_dealer_opening.md),
+Status snapshot after the Stage C cap re-filter. Locked vs open is marked
+on each node. Parent chapters:
+[research/ch03_dealer_opening.md](research/ch03_dealer_opening.md),
 [research/ch04_draw_mixes.md](research/ch04_draw_mixes.md).
 
 ```
@@ -28,57 +29,69 @@ Post-draw first action — Stage C street (locked)
       AA face pair                     BET $4 (narrow stab)
       miss / weaker                    CHECK
 
-Raise node (this ticket) = BN BET ∩ caller STRAIGHT+
-  Pre-C (stale):  included unimproved two pair. P(node) ≈ 0.189
-  Stage C:        two pair never bets. Air = unimproved trips only.
+Raise node = BN BET ∩ caller STRAIGHT+
+  Pre-C (retired for cap):  unimproved two pair sat here. P = 0.189 (7,559 / 40k)
+  Stage C (current):        two pair never bets. P = 0.0903 (3,612 / 40k)
+                            Air = unimproved trips only. two_pair_on_node_n = 0
 
-                    public d
+                    public d          n     share    air?
                    /   |    \    \
                  d=0  d=1   d=2  d=3
-                  |    |     |    |
+                 750   293  1299 1270
+                 21%    8%   36%  35%
+                  |     |     |    |
                LINE 2  nuts  LINE 1 LINE 1
                pat     boats trips  pair→trips
-               S/F/rare  quads draw   / boats
+               S/F/    quads draw   / boats
+               rare
                boats
+               no air  no air  trips  trips
+                               1155   1103
 ```
 
-## The two 3-bet lines
+## The two 3-bet lines (measured)
 
-After BN bets and the caller raises, pot $18, $4 to BN.
+After BN bets and the caller raises, pot $18, $4 to BN. Seed 20260902,
+combo-weighted locked draws (`tp1_tr2_q1`).
 
-### Line 1 — trips draw (`d=2`, and `d=3` from pairs)
+### Line 1 — trips draw (`d=2` ∪ `d=3`) — n = 2,569 (71% of node)
 
 BN started trips (or a pair that made trips). Public draw is not zero.
 
-| BN final | First action | vs raise | Notes |
-| --- | --- | --- | --- |
-| Boat+ | Bet | **3-bet** (value) | Locked from cap |
-| Trips (missed) | Bet | Call (honest) or mix **β** bluff 3-bet | Ring 1 OPEN |
-| Two pair | — | not here | Stage C check |
+| BN final | n on line | First action | vs raise | Status |
+| --- | ---: | --- | --- | --- |
+| Trips (missed) | 2,258 | Bet | Call (honest) or mix **β** bluff 3-bet | Value line **locked**; β **OPEN** (Ring 1) |
+| Boat+ | 273 | Bet | **3-bet** (value) | Locked |
+| Straight / flush | 38 | Bet | Call / 3-bet as family table | Rare (pair → made S/F) |
+| Two pair | 0 | — | not here | Stage C check |
 
-Caller vs a 3-bet on this line: BN is boat+ or a trips bluff. Flush is
-drawing dead to boats. Fold-non-SF is the polar hypothesis. α nearer pot
-odds (~13%). **Not solved yet** (Ring 1).
+Caller vs a **no-air** flush+ 3-bet on this line: those 3-bets are boats.
+Flush is drawing dead. Measured BR: straight **fold**, flush **fold**,
+SF **cap**. Fold-non-SF is the polar hypothesis. α nearer pot odds (~13%).
+**β / α not solved** (Ring 1).
 
-### Line 2 — pat straight+ (`d=0`)
+### Line 2 — pat straight+ (`d=0`) — n = 750 (21% of node)
 
 BN stood. No trips or two pair on this public line.
 
-| BN final | First action | vs raise | Notes |
-| --- | --- | --- | --- |
-| Flush / boat+ | Bet | **3-bet** (value) | Locked from cap |
-| Straight | Bet | **Call** (broadway A thin 3-bet) | Locked |
-| Trips / two pair | — | not here | They do not stand |
+| BN final | n on line | First action | vs raise | Status |
+| --- | ---: | --- | --- | --- |
+| Straight | 470 | Bet | **Call** (broadway A thin 3-bet) | Locked |
+| Flush | 174 | Bet | **3-bet** (value) | Locked |
+| Boat+ | 106 | Bet | **3-bet** (value) | Locked |
+| Trips / two pair | 0 | — | not here | They do not stand |
 
-Caller vs a 3-bet: BN is usually a straight or flush, rarely a starting
-boat. **Do not fold all flushes.** This BR was inferred from a pooled
-flush+ range that mixed in boats from *draws*. Re-measure on `d=0` only
-(this cap re-run). Mixing cap vs call with flushes is still OPEN.
+Caller vs a flush+ 3-bet: BN is usually a straight or flush (470+174),
+rarely a starting boat (106). Measured BR vs flush+: straight **fold**,
+flush **call** (EV −7.45 vs fold −8.00, n=66), SF **cap**.
+**Do not fold all flushes.** Mixing cap vs call, and Nash, still OPEN.
+There is **no trips air**, so Ring 1 cannot set flush indifference with β.
 
-### `d=1` (not a third bluff line)
+### `d=1` (not a third bluff line) — n = 293 (8% of node)
 
-Two pair that *boated* plus quads. Unimproved two pair checked. A 3-bet
-is almost always nuts. Caller fold-non-SF.
+Two pair that *boated* plus quads. Unimproved two pair checked. BN family
+on the node is 100% `boat_plus`. A 3-bet is almost always nuts. Caller
+fold-non-SF (measured).
 
 ---
 
@@ -92,12 +105,14 @@ is almost always nuts. Caller fold-non-SF.
 | Always bet trips / boat+ / pat straight+ | **Locked** |
 | Caller raise straight+; AA stab when checked | **Locked** |
 | M2 / non-bluff class × d **numbers** | Honest cell: two pair still *bets*. Not rewritten. Forward street is C. |
-| Raise-node filter | **This ticket:** Stage C (trips+ bets) |
-| Node mass / joint EV / caller BR **pooled** | Re-run under C; do not quote 0.189 / fold-all-flush |
-| Node + caller BR **by public d** | **This ticket** |
+| Raise-node filter | **Locked:** Stage C (trips+ bets). P(node)=0.0903 |
+| Node mass / joint EV **by public d** | **Locked** (this fixture) |
+| Pooled “fold all flushes” as a single BR | **Retired.** Quote Line 1 / Line 2 instead. |
 | BN 3-bet flush+ / boat+; call straights / trips | Value line **locked**; trips bluff OPEN |
+| Line 1 caller flush vs no-air flush+ | **fold** (measured) |
+| Line 2 caller flush vs no-air flush+ | **call** (measured) |
 | Line 1 α / β (trips bluff 3-bet) | **OPEN** — Ring 1 |
-| Line 2 caller flush call vs fold on d=0 | **This ticket measures**; mix/Nash OPEN |
+| Line 2 flush mix / Nash | **OPEN** (call ≥ fold is pinned; mix not solved) |
 | Cap / 5th street; Ring 2 node Nash | **OPEN** |
 | Pair concealment; Ch.2 raise/call; CO bluff | **OPEN** (other tickets) |
 
@@ -110,3 +125,6 @@ is almost always nuts. Caller fold-non-SF.
 | After BN bet + caller raise | $18 | $4 |
 | After BN 3-bet | $26 | $4 (break-even 4/30 ≈ 13.3%) |
 | Full cap | $38 | — |
+
+Joint EV on the Stage C node (combo-weighted): call-it-down EV_bn = **−2.40**;
+honest flush+ 3-bet / cap-SF = **−1.71**.

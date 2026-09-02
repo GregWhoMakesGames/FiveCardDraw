@@ -36,7 +36,7 @@ C-unified baseline EV 2.766 / best 3.133; same mix. Vs AA+KK, baseline drawer Δ
 
 Two pair also appears on public `d=3` (pair improvements), so a global two-pair check beats a `d=1`-only override. Detail: [../NEXT_STAGE_OPENER_DRAW_MIXES.md](../NEXT_STAGE_OPENER_DRAW_MIXES.md).
 
-**Cap / 3-bet follow-on.** Checking two pair means those hands never face a caller raise, so they are not 3-bet bluff candidates. The pre-C cap node (two pair+ bets ∩ caller straight+) and the pooled “fold all flushes” BR are stale. Next: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md).
+**Cap / 3-bet follow-on.** Checking two pair means those hands never face a caller raise, so they are not 3-bet bluff candidates. The raise node is re-filtered under Stage C (P = 0.0903; two lines by public \(d\)). Next is Ring 1: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md). Tree: [../POSTDRAW_STRATEGY_TREE.md](../POSTDRAW_STRATEGY_TREE.md).
 
 ---
 

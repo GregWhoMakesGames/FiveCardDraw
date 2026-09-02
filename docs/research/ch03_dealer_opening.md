@@ -60,27 +60,31 @@ On the raise node — BN has **bet** and the 2:1 caller has raised with a made s
 
 CLI: `analyze-postdraw-cap`. Detail: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md). Fixture: `tests/fixtures/validation/postdraw_cap_summary.json`.
 
-**BN vs the raise** (unilateral Δ vs a caller who caps SF and calls otherwise):
+Stage C re-filter (seed 20260902, 40k locked-range deals): P(node) = **0.0903** (3,612 deals). Pre-C, with two pair always betting, was 0.189 / 7,559. Unimproved two pair on the node: **0**.
+
+**BN vs the raise** (unilateral Δ vs a caller who caps SF and calls otherwise; extra-weighted):
 
 | BN final | Action | Δ 3-bet vs call |
 | --- | --- | ---: |
-| Two pair / trips | Call (no bluff 3-bet) | −4.28 |
+| Two pair | Not on this node (Stage C check) | — |
+| Trips | Call (no bluff 3-bet) | −4.27 |
 | Straight | **Call** (broadway A is a thin 3-bet) | −1.81 |
 | Flush (any high) | **3-bet** | +2.17 |
 | Boat / quads / SF / five aces | **3-bet** | +3.47 |
 
-**Caller vs a 3-bet:** fold a non-SF into BN boat+ (and, unilaterally, into BN flush+); cap SF. Do not cap a straight or flush into boats.
+**Two 3-bet lines** (caller sees public \(d\); do not quote a pooled fold-all-flush BR):
 
-Call-it-down **understates** BN EV on this node for flush+ (node EV_bn −5.32 → about −5.00 if BN 3-bets flush+ and the caller still calls). It does not rewrite §3.4.
+| Line | \(d\) | n | Air | Flush vs no-air flush+ |
+| --- | --- | ---: | --- | --- |
+| 1 — trips draw | 2 ∪ 3 | 2,569 | Unimproved trips (2,258) | **fold** |
+| 2 — pat straight+ | 0 | 750 | None | **call** (EV −7.45 vs fold −8.00) |
+| *(not a bluff line)* | 1 | 293 | None (boats/quads) | **fold** |
 
-That value line is **not** Nash, and the node is **stale vs Stage C**. The fixture assumes two pair always bets. After C, two pair checks, so they never reach caller-raise → BN 3-bet. Air on that line is **unimproved trips** only.
+Call-it-down EV_bn on the Stage C node is **−2.40** (was −5.32 when two pair sat on the node and lost). Honest flush+ 3-bet / cap-SF is **−1.71**. It does not rewrite §3.4.
 
-The pooled “fold all flushes vs flush+” BR (~5% equity) also ignores public \(d\). Two lines:
+That value line is **not** Nash. Line 1 still needs trips-air β so flushes are indifferent. Line 2 has no trips air; flush call ≥ fold is pinned, mix/Nash is open.
 
-1. **Trips draw** (`d=2`, or `d=3` from pairs): 3-bet is boat+ or a trips bluff. Fold-non-SF can be right; α / β are per-\(d\).
-2. **Pat straight+** (`d=0`): BN stood; a 3-bet is usually a straight or flush, rarely better than a flush. Caller should **not** fold all flushes.
-
-First bluff-library slice (trips-only air, split by \(d\); do not start a node Nash until those numbers are pinned): [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md). Cap staleness: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md).
+First bluff-library slice: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md). Detail + fixture: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md).
 
 ---
 
