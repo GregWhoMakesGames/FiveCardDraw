@@ -8,6 +8,7 @@ from pathlib import Path
 
 from fivecarddraw.hand_rank import HandCategory, HandValue
 from fivecarddraw.rules import pot_odds_to_call as rules_pot_odds
+from fivecarddraw.validation import bluff_indifference as bluff_mod
 from fivecarddraw.validation.bluff_indifference import (
     BLUFF_TWO_PAIR_TRIPS,
     BnPolarMix,
@@ -86,6 +87,20 @@ def test_pot_odds_to_call_4_over_30():
     assert pot_odds_to_call(26, 4) == 4 / 30
     assert POT_ODDS_CALL_3BET == 4 / 30
     assert pot_odds_to_call is rules_pot_odds
+    assert bluff_mod.__all__ == [
+        "BIG",
+        "BLUFF_TWO_PAIR_TRIPS",
+        "CALL_3BET",
+        "CATCHER_FLUSH",
+        "FOLD_RAISE_EV_BN",
+        "POT_AFTER_3BET",
+        "POT_ODDS_CALL_3BET",
+        "RING1_CALLER_CALL_FLUSH",
+        "RING1_CALLER_FOLD_CATCHERS",
+        "VALUE_BOAT_PLUS",
+        "VALUE_FLUSH_PLUS",
+    ]
+    assert all(name.isupper() for name in bluff_mod.__all__)
     st = street_after_bet_and_raise(max_raises=3).after_raise()
     assert st.pot == POT_AFTER_3BET
     assert st.amount_to_call == CALL_3BET
