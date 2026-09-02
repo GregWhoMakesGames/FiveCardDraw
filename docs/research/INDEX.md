@@ -20,6 +20,7 @@ This folder is the **human-readable research paper**, split into chapters so par
 - [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md)
 - [../NEXT_STAGE_NONBLUFF_EV.md](../NEXT_STAGE_NONBLUFF_EV.md)
 - [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md)
+- [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md)
 
 ---
 
@@ -122,6 +123,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 1 | Strong draws: call vs raise vs mix (combo-weighted EV) | [Ch.2 §2.9](ch02_drawing_callers.md) | CO represent-bluffs |
 | 2 | CO bluff after BN open (return-to-actor: CO passed with no legal opener; others fold) — call/raise with underpair / high card? | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for value-range shape |
 | 3 | BN Stage C check mixes / remaining Ch.3–4 | Ch.3–4 | Parallel OK with #1 if different files |
+| 3b | Post-draw **bluff 3-bet Ring 1** (indifference on the cap node) | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) | Needs cap street; **Ring 1 before Ring 2** |
 | 4 | CO open/pass; HJ sandbagging | Ch.5 | After #2 template exists |
 
 ---
@@ -148,3 +150,4 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 2026-09-01 | Split into `docs/research/` chapters; seats 1–8 + hold’em names; granular solve-progress ledger; parallel-agent notes |
 | 2026-09-01 | Document next queue: Ch.2 call/raise/mix; Ch.5 CO bluff after BN open |
 | 2026-09-01 | Pin §5.2 return-to-actor (CO passed with no legal opener); clarify bluff = call/raise with less than strong draws |
+| 2026-09-02 | Post-draw bluff 3-bet Ring 1 handoff (flush indifference on the cap node) |

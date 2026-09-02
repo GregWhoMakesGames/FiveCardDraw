@@ -73,6 +73,8 @@ CLI: `analyze-postdraw-cap`. Detail: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STA
 
 Call-it-down **understates** BN EV on this node for flush+ (node EV_bn −5.32 → about −5.00 if BN 3-bets flush+ and the caller still calls). It does not rewrite §3.4.
 
+That value line is **not** Nash: vs a flush+ 3-bet, the caller’s best response is already fold non-SF, which then invites bluff 3-bets with two pair/trips. First bluff-library slice (make flushes indifferent to calling the 3-bet; do not start a node Nash until that number is pinned): [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md).
+
 ---
 
 ## Code ownership (for parallel agents)
