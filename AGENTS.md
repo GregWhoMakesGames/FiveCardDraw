@@ -42,8 +42,11 @@ Default code milestone remains Stage C in
 [docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md).
 
 **Narrative next queue** (research paper): (1) Ch.2 strong-draw call/raise/mix,
-(2) Ch.5 CO bluff after BN open (return-to-actor; weaker than strong draws) —
-see [docs/research/INDEX.md](docs/research/INDEX.md) “Immediate research queue.”
+(2) Ch.5 CO bluff after BN open (return-to-actor; weaker than strong draws),
+(3) post-draw bluff 3-bet **Ring 1** on the cap node
+([docs/NEXT_STAGE_POSTDRAW_BLUFF.md](docs/NEXT_STAGE_POSTDRAW_BLUFF.md); do not
+start Ring 2 first) — see [docs/research/INDEX.md](docs/research/INDEX.md)
+“Immediate research queue.”
 
 **Read first for Stage C code:** [docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md)
 

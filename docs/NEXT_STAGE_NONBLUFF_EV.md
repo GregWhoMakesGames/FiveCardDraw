@@ -138,13 +138,15 @@ BN EV is much lower than flush BN EV because of case **2**.
 
 Do **not** redo this grid. Measure ΔEV vs the honest cell for:
 
-1. **Post-draw cap / BN 3-bet vs call** when both have straight+ (this street is
-   bet+1 only) — [NEXT_STAGE_POSTDRAW_CAP.md](NEXT_STAGE_POSTDRAW_CAP.md)
-2. Caller miss / wide face-pair stabs (deception)
-3. BN Stage C check-mixes of two pair+ (protection) under `tp1_tr2_q1` /
+1. **Post-draw cap / BN 3-bet vs call** when both have straight+ — **done**
+   ([NEXT_STAGE_POSTDRAW_CAP.md](NEXT_STAGE_POSTDRAW_CAP.md)); §3.4 cells stay bet+1
+2. **Post-draw bluff 3-bet Ring 1** (flush indifference on that node) —
+   [NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md). Ring 2 Nash waits.
+3. Caller miss / wide face-pair stabs (deception)
+4. BN Stage C check-mixes of two pair+ (protection) under `tp1_tr2_q1` /
    `tp1_tr1_q1` — [NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md)
-4. Pair `d≠3` concealment — [NEXT_STAGE_PAIR_CONCEALMENT.md](NEXT_STAGE_PAIR_CONCEALMENT.md)
-5. CO return-to-actor bluffs after BN open — Ch.5 §5.2
+5. Pair `d≠3` concealment — [NEXT_STAGE_PAIR_CONCEALMENT.md](NEXT_STAGE_PAIR_CONCEALMENT.md)
+6. CO return-to-actor bluffs after BN open — Ch.5 §5.2
 
 ---
 

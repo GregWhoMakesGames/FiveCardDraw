@@ -11,6 +11,7 @@
 | `analyze-postdraw-m2` | `validation/postdraw_betting_m2.py` | Face-pair bet/check/stab grid | Ch.3 |
 | `analyze-postdraw-draw-mixes` | `validation/postdraw_draw_mixes.py` | Draw-count A/B/C ladder | Ch.4 |
 | `analyze-postdraw-nonbluff-ev` | `validation/postdraw_nonbluff_ev.py` | Non-bluff EV by class × d | Ch.3–4 |
+| `analyze-postdraw-cap` | `validation/postdraw_cap.py` | Post-draw 3-bet / cap on the raise node | Ch.3 |
 | `analyze-opener-draw-beliefs` | `validation/opener_draw_beliefs.py` | Public-d belief tables | Ch.4 |
 
 Fixtures live under `tests/fixtures/validation/`. Generated markdown/JSON under `outputs/` is gitignored.
