@@ -95,12 +95,12 @@ def test_bug_completes_wheel():
 
 
 def test_bug_with_two_pair_is_not_a_boat():
-    """Bug is an ace, not fully wild — KK99+bug is aces-up two pair, not a full house."""
+    """Bug is an ace, not fully wild — KK99+bug is kings-up with an ace kicker, not a boat."""
     v = ev("Bu Kc Kd 9h 9s")
     assert v.category == HandCategory.TWO_PAIR
-    assert v.tiebreak[0] == 13
+    assert v.tiebreak[0] == 13  # kings up
     assert v.tiebreak[1] == 9
-    assert v.tiebreak[2] == 14
+    assert v.tiebreak[2] == 14  # ace kicker (the bug)
 
 
 def test_quads_beat_full_house():
