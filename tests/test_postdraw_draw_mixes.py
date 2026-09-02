@@ -16,6 +16,8 @@ from fivecarddraw.validation.postdraw_draw_mixes import (
     B_QUADS_D1,
     B_TP_D1_QUADS_D1,
     B_TP_TRIPS_QUADS_D1,
+    C_PRIMARY,
+    C_UNIFIED,
     LEGAL_DRAW_COUNTS,
     M2_DRAW,
     STAGE_B_DRAW_POLICIES,
@@ -319,9 +321,7 @@ def test_partial_trips_check_mix_is_not_pure():
     assert checks + bets == 200
 
 
-def test_check_mix_is_global_not_conditional_on_d():
-    """Current CheckMix ignores public d; C-primary two pair (d=1) and trips (d=2)
-    share one fraction. Stage C wants mixes reported/applied per d."""
+def test_check_mix_default_is_global_across_d():
     two_pair = _deal(
         bucket="two_pair",
         o_final=_hv(HandCategory.TWO_PAIR, 14, 9, 2),
@@ -342,6 +342,34 @@ def test_check_mix_is_global_not_conditional_on_d():
     _, f1 = play_mix_deal(two_pair, pol, random.Random(0))
     _, f0 = play_mix_deal(two_pair_pat, pol, random.Random(0))
     assert f1["opener_strong_check"] and f0["opener_strong_check"]
+
+
+def test_check_mix_by_d_can_check_two_pair_only_on_d1():
+    two_pair_d1 = _deal(
+        bucket="two_pair",
+        o_final=_hv(HandCategory.TWO_PAIR, 14, 9, 2),
+        o_pair=None,
+        o_strong=True,
+        d=1,
+        cls="two_pair",
+    )
+    two_pair_d0 = _deal(
+        bucket="two_pair",
+        o_final=_hv(HandCategory.TWO_PAIR, 14, 9, 2),
+        o_pair=None,
+        o_strong=True,
+        d=0,
+        cls="two_pair",
+    )
+    pol = MixPolicy(
+        m2=M2Policy(None, 14, None),
+        check_mix=CheckMix(0.0, 0.0, 0.0, by_d=((1, 1.0, 0.0, 0.0),)),
+    )
+    _, f1 = play_mix_deal(two_pair_d1, pol, random.Random(0))
+    _, f0 = play_mix_deal(two_pair_d0, pol, random.Random(0))
+    assert f1["opener_strong_check"]
+    assert not f0.get("opener_strong_check")
+    assert f0.get("opener_strong_bet") or f0.get("showdown")
 
 
 def test_evaluate_mix_policy_stratifies_by_public_d():
@@ -405,33 +433,23 @@ def test_c_primary_and_unified_forks_lock_pairs_d3():
     assert B_TP_D1_QUADS_D1.two_pair_d == 1
     assert B_TP_D1_QUADS_D1.trips_d == 2
     assert B_TP_TRIPS_QUADS_D1.trips_d == 1
+    assert C_PRIMARY.name == "tp1_tr2_q1"
+    assert C_UNIFIED.name == "tp1_tr1_q1"
+    assert C_PRIMARY.two_pair_d == 1 and C_PRIMARY.trips_d == 2
+    assert C_UNIFIED.two_pair_d == 1 and C_UNIFIED.trips_d == 1
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "run_stage_c still defaults to B_QUADS_D1 (two pair stand). "
-        "Stage C should default to C-primary tp1_tr2_q1 and also run C-unified."
-    ),
-)
 def test_run_stage_c_default_is_not_stale_two_pair_stand():
     src = inspect.getsource(run_stage_c)
     assert "B_QUADS_D1" not in src
-    assert "stage_b_draw_policy(1, 2, 1)" in src or "tp1_tr2_q1" in src
+    assert "C_PRIMARY" in src or "tp1_tr2_q1" in src or "stage_b_draw_policy(1, 2, 1)" in src
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "run_ladder still generates Stage C under B_QUADS_D1. "
-        "Need both C-primary (tp1_tr2_q1) and C-unified (tp1_tr1_q1)."
-    ),
-)
 def test_run_ladder_should_run_both_c_forks():
     src = inspect.getsource(run_ladder)
     assert "B_QUADS_D1" not in src
-    assert "tp1_tr2_q1" in src or "stage_b_draw_policy(1, 2, 1)" in src
-    assert "tp1_tr1_q1" in src or "stage_b_draw_policy(1, 1, 1)" in src
+    assert "C_PRIMARY" in src
+    assert "C_UNIFIED" in src
 
 
 def test_fixture_summary_patterns():
@@ -489,10 +507,13 @@ def test_fixture_summary_patterns():
     assert wins["d3"] > wins["d2"]
     assert findings["trips_d2_boat_plus"] > findings["trips_d1_boat_plus"]
 
-    # Stage C structure (magnitudes are stale until C is re-run under two_pair d=1)
+    # Stage C: C-primary at top level, C-unified nested
     c_meta = data["stage_c"]["meta"]
     assert c_meta["draw"]["pair_d"] == 3
-    assert set(c_meta["draw"]) >= {"pair_d", "two_pair_d", "trips_d", "quads_d"}
+    assert c_meta["draw"]["two_pair_d"] == 1
+    assert c_meta["draw"]["quads_d"] == 1
+    assert c_meta["draw"]["trips_d"] == 2
+    assert c_meta["draw_policy"] == "tp1_tr2_q1"
     aa_c = next(s for s in data["stage_c"]["summaries"] if "stab=AA|" in s["stab"])
     assert "best_check_mix" in aa_c
     assert aa_c["baseline_stab_delta"] is not None
@@ -501,24 +522,24 @@ def test_fixture_summary_patterns():
     for row in key_rows:
         assert "drawer_face_stab_delta" in row
         assert "strong_check_rate" in row
+        assert "by_d" in row
     stabs = {s["stab"] for s in data["stage_c"]["summaries"]}
     assert any("stab=AA|" in s and "raise=never" in s for s in stabs)
     assert any("AA+KK" in s for s in stabs)
 
+    unified_c = data["stage_c"]["unified"]
+    assert unified_c["meta"]["draw_policy"] == "tp1_tr1_q1"
+    assert unified_c["meta"]["draw"]["trips_d"] == 1
+    assert unified_c["meta"]["draw"]["two_pair_d"] == 1
+    assert findings["c_primary_draw_policy"] == "tp1_tr2_q1"
+    assert findings["c_unified_draw_policy"] == "tp1_tr1_q1"
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "Checked-in Stage C fixture used two_pair stand (draw_policy=quads_d1). "
-        "Re-run C-primary tp1_tr2_q1 and C-unified tp1_tr1_q1; do not trust old "
-        "check-mix magnitudes."
-    ),
-)
+
 def test_stage_c_fixture_uses_post_b_two_pair_d1():
     data = json.loads(FIXTURE.read_text(encoding="utf-8"))
     draw = data["stage_c"]["meta"]["draw"]
     assert draw["two_pair_d"] == 1
     assert draw["quads_d"] == 1
     assert draw["pair_d"] == 3
-    assert draw["trips_d"] in (1, 2)
-    assert data["stage_c"]["meta"]["draw_policy"] in ("tp1_tr2_q1", "tp1_tr1_q1")
+    assert draw["trips_d"] == 2
+    assert data["stage_c"]["meta"]["draw_policy"] == "tp1_tr2_q1"

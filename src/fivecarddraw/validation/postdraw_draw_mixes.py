@@ -199,6 +199,10 @@ def stage_b_draw_policies() -> tuple[DrawPolicy, ...]:
 STAGE_B_DRAW_POLICIES: tuple[DrawPolicy, ...] = stage_b_draw_policies()
 STAGE_B_BASELINE = stage_b_draw_policy(0, 2, 0)  # M2 locked dims
 
+# Stage C live forks (post-B locks: two pair d=1, quads d=1, pairs d=3).
+C_PRIMARY = stage_b_draw_policy(1, 2, 1)  # tp1_tr2_q1
+C_UNIFIED = stage_b_draw_policy(1, 1, 1)  # tp1_tr1_q1
+
 # Named aliases (legacy names) for beliefs / Stage C call sites. Same draw dims
 # as the corresponding grid cells; names preserved for checked-in fixtures.
 M2_DRAW = DrawPolicy(name="m2_locked", pair_d=3, two_pair_d=0, trips_d=2, quads_d=0)
@@ -543,20 +547,50 @@ def run_stage_a(
 class CheckMix:
     """Fraction of each strong bucket that *checks* instead of auto-betting.
 
+    Global fields apply at every public d. `by_d` is an optional list of
+    `(d, tp, tr, bp)` overrides so C-primary can set two pair on d=1
+    independently of trips on d=2 (and boat+ on pat d=0).
+
     One-pair lead still controlled by M2Policy.opener_lead_min.
     """
 
     check_frac_two_pair: float = 0.0
     check_frac_trips: float = 0.0
     check_frac_boat_plus: float = 0.0
+    by_d: tuple[tuple[int, float, float, float], ...] = ()
+
+    def fracs_at(self, d: int) -> tuple[float, float, float]:
+        for dd, tp, tr, bp in self.by_d:
+            if dd == d:
+                return tp, tr, bp
+        return (
+            self.check_frac_two_pair,
+            self.check_frac_trips,
+            self.check_frac_boat_plus,
+        )
+
+    def is_always_bet_strong(self) -> bool:
+        if (
+            self.check_frac_two_pair
+            or self.check_frac_trips
+            or self.check_frac_boat_plus
+        ):
+            return False
+        return all(tp == 0.0 and tr == 0.0 and bp == 0.0 for _d, tp, tr, bp in self.by_d)
 
     @property
     def key(self) -> str:
-        return (
+        base = (
             f"chk_tp={self.check_frac_two_pair:.2f}|"
             f"tr={self.check_frac_trips:.2f}|"
             f"bp={self.check_frac_boat_plus:.2f}"
         )
+        if not self.by_d:
+            return base
+        extra = ",".join(
+            f"d{d}:{tp:.2f}/{tr:.2f}/{bp:.2f}" for d, tp, tr, bp in self.by_d
+        )
+        return f"{base}|{extra}"
 
 
 @dataclass(frozen=True, slots=True)
@@ -571,13 +605,14 @@ class MixPolicy:
 
 def _opener_bets_strong(deal: MixDeal, check_mix: CheckMix, rng: random.Random) -> bool:
     """Whether opener bets a two-pair+ hand under the check mix."""
+    tp, tr, bp = check_mix.fracs_at(deal.d)
     bucket = deal.opener_bucket
     if bucket == "two_pair":
-        frac = check_mix.check_frac_two_pair
+        frac = tp
     elif bucket == "trips":
-        frac = check_mix.check_frac_trips
+        frac = tr
     elif bucket == "boat_plus":
-        frac = check_mix.check_frac_boat_plus
+        frac = bp
     else:
         return False
     if frac <= 0.0:
@@ -593,11 +628,7 @@ def play_mix_deal(
     """Same street accounting as M2, with optional strong-hand check mixes."""
     # Reuse M2 path when check mix is all-bet.
     cm = policy.check_mix
-    if (
-        cm.check_frac_two_pair == 0.0
-        and cm.check_frac_trips == 0.0
-        and cm.check_frac_boat_plus == 0.0
-    ):
+    if cm.is_always_bet_strong():
         # Convert to M2 Deal-compatible play via duck typing fields
         return m2_play_deal(deal, policy.m2)  # type: ignore[arg-type]
 
@@ -850,12 +881,7 @@ def evaluate_mix_policy(
         bet_first = bool(flags.get("opener_pair_lead") or flags.get("opener_strong_bet"))
         if not bet_first and deal.opener_two_pair_plus:
             # m2_play_deal path: strong always bets, no strong_* flags.
-            cm = policy.check_mix
-            if (
-                cm.check_frac_two_pair == 0.0
-                and cm.check_frac_trips == 0.0
-                and cm.check_frac_boat_plus == 0.0
-            ):
+            if policy.check_mix.is_always_bet_strong():
                 bet_first = True
         checked = not bet_first
 
@@ -1014,7 +1040,7 @@ def run_stage_c(
     inventory: dict[str, list[tuple[int, ...]]] | None = None,
 ) -> dict[str, Any]:
     """Search check mixes under fixed draw policy + narrow drawer stabs."""
-    draw_policy = draw_policy or B_QUADS_D1
+    draw_policy = draw_policy or C_PRIMARY
     if callers is None or inventory is None:
         if progress:
             print("Stage C: loading callers + opener inventory…")
@@ -1049,6 +1075,13 @@ def run_stage_c(
         CheckMix(0.0, 1.0, 0.0),  # always check trips
         CheckMix(0.0, 0.0, 1.0),  # always check boat+
         CheckMix(0.5, 0.5, 0.5),
+        # Per public d (C-primary: two pair on d=1, trips on d=2, pats on d=0)
+        CheckMix(0.0, 0.0, 0.0, by_d=((1, 0.3, 0.0, 0.0),)),
+        CheckMix(0.0, 0.0, 0.0, by_d=((1, 1.0, 0.0, 0.0),)),
+        CheckMix(0.0, 0.0, 0.0, by_d=((2, 0.0, 0.3, 0.0),)),
+        CheckMix(0.0, 0.0, 0.0, by_d=((2, 0.0, 1.0, 0.0),)),
+        CheckMix(0.0, 0.0, 0.0, by_d=((0, 0.0, 0.0, 0.3),)),
+        CheckMix(0.0, 0.0, 0.0, by_d=((1, 0.3, 0.0, 0.0), (2, 0.0, 0.3, 0.0))),
     ]
 
     rows = []
@@ -1068,6 +1101,9 @@ def run_stage_c(
                 "check_frac_two_pair": cm.check_frac_two_pair,
                 "check_frac_trips": cm.check_frac_trips,
                 "check_frac_boat_plus": cm.check_frac_boat_plus,
+                "by_d_mix": [
+                    {"d": d, "tp": tp, "tr": tr, "bp": bp} for d, tp, tr, bp in cm.by_d
+                ],
                 "all": st.as_dict(),
                 "by_d": by_d,
             }
@@ -1247,6 +1283,17 @@ def build_recommendations(
             f"; max-punish mix {bu['check_mix']} "
             f"stabΔ={bu['stab_delta']:+.3f} EVΔ={bu['delta_vs_baseline']:+.3f}"
         )
+    unified = stage_c.get("unified")
+    if unified:
+        u_sum = next(
+            (s for s in unified["summaries"] if "stab=AA|" in s["stab"]),
+            unified["summaries"][0],
+        )
+        check_note += (
+            f"; C-unified ({unified['meta']['draw_policy']}) best "
+            f"{u_sum['best_check_mix']} EVΔ={u_sum['best_delta_vs_baseline']:+.3f} "
+            f"stabΔ={u_sum['best_stab_delta']:+.3f}"
+        )
 
     # B comparison under AA stab — compact note: baseline + best + unified
     b_aa = [
@@ -1342,15 +1389,23 @@ def run_ladder(
         callers=callers,
         inventory=inventory,
     )
-    # Use quads_d1 as the draw base for C (isolates check mixes; two pair still stand)
-    stage_c = run_stage_c(
+    stage_c_primary = run_stage_c(
         n_deals=n_deals_bc,
         seed=seed,
         progress=progress,
-        draw_policy=B_QUADS_D1,
+        draw_policy=C_PRIMARY,
         callers=callers,
         inventory=inventory,
     )
+    stage_c_unified = run_stage_c(
+        n_deals=n_deals_bc,
+        seed=seed,
+        progress=progress,
+        draw_policy=C_UNIFIED,
+        callers=callers,
+        inventory=inventory,
+    )
+    stage_c = pack_stage_c(stage_c_primary, stage_c_unified)
     recs = build_recommendations(stage_a, stage_b, stage_c)
     return {
         "meta": {
@@ -1366,6 +1421,18 @@ def run_ladder(
         "stage_c": stage_c,
         "recommendations": recs,
     }
+
+
+def pack_stage_c(primary: dict[str, Any], unified: dict[str, Any]) -> dict[str, Any]:
+    """Primary fork at the top level; unified nested for the fixture / recs."""
+    packed = dict(primary)
+    packed["unified"] = unified
+    packed["meta"] = {
+        **primary["meta"],
+        "fork": "primary",
+        "forks": [C_PRIMARY.name, C_UNIFIED.name],
+    }
+    return packed
 
 
 def build_summary_payload(payload: dict[str, Any]) -> dict[str, Any]:
@@ -1413,27 +1480,9 @@ def build_summary_payload(payload: dict[str, Any]) -> dict[str, Any]:
         if r["bet_policy"] == "lead=never|stab=AA|raise=never"
     ]
 
-    # Slim C: summaries + top rows per stab band
-    c_slim_rows = []
-    for s in c["summaries"]:
-        band = [r for r in c["rows"] if r["stab"] == s["stab"]]
-        # keep baseline + best + best_unprof if any
-        keep_keys = {CheckMix().key, s["best_check_mix"]}
-        if s.get("best_unprofitable"):
-            keep_keys.add(s["best_unprofitable"]["check_mix"])
-        for r in band:
-            if r["check_mix"] in keep_keys:
-                c_slim_rows.append(
-                    {
-                        "stab": r["stab"],
-                        "check_mix": r["check_mix"],
-                        "ev": r["all"]["opener_ev"],
-                        "stab_rate": r["all"]["drawer_stab_rate"],
-                        "strong_check_rate": r["all"]["opener_strong_check_rate"],
-                        "face_stab_nodes": r["all"]["face_stab_nodes"],
-                        "drawer_face_stab_delta": r["all"]["drawer_face_stab_delta"],
-                    }
-                )
+    stage_c_slim = _slim_c_fork(c)
+    if "unified" in c:
+        stage_c_slim["unified"] = _slim_c_fork(c["unified"])
 
     return round_obj(
         {
@@ -1454,15 +1503,51 @@ def build_summary_payload(payload: dict[str, Any]) -> dict[str, Any]:
                 "comparisons_vs_m2": b["comparisons_vs_m2"],
                 "rows_vs_aa_stab": b_aa,
             },
-            "stage_c": {
-                "meta": c["meta"],
-                "summaries": c["summaries"],
-                "key_rows": c_slim_rows,
-            },
+            "stage_c": stage_c_slim,
             "recommendations": payload["recommendations"],
             "findings": _derive_findings(payload),
         }
     )
+
+
+def _slim_c_row(r: dict[str, Any]) -> dict[str, Any]:
+    by_d = {}
+    for key in ("d0", "d1", "d2", "d3"):
+        cell = r.get("by_d", {}).get(key)
+        if not cell:
+            continue
+        by_d[key] = {
+            "ev": cell["opener_ev"],
+            "stab_delta": cell.get("drawer_face_stab_delta"),
+            "strong_check_rate": cell.get("opener_strong_check_rate"),
+        }
+    return {
+        "stab": r["stab"],
+        "check_mix": r["check_mix"],
+        "ev": r["all"]["opener_ev"],
+        "stab_rate": r["all"]["drawer_stab_rate"],
+        "strong_check_rate": r["all"]["opener_strong_check_rate"],
+        "face_stab_nodes": r["all"]["face_stab_nodes"],
+        "drawer_face_stab_delta": r["all"]["drawer_face_stab_delta"],
+        "by_d": by_d,
+    }
+
+
+def _slim_c_fork(c: dict[str, Any]) -> dict[str, Any]:
+    c_slim_rows = []
+    for s in c["summaries"]:
+        band = [r for r in c["rows"] if r["stab"] == s["stab"]]
+        keep_keys = {CheckMix().key, s["best_check_mix"]}
+        if s.get("best_unprofitable"):
+            keep_keys.add(s["best_unprofitable"]["check_mix"])
+        for r in band:
+            if r["check_mix"] in keep_keys:
+                c_slim_rows.append(_slim_c_row(r))
+    return {
+        "meta": c["meta"],
+        "summaries": c["summaries"],
+        "key_rows": c_slim_rows,
+    }
 
 
 def _derive_findings(payload: dict[str, Any]) -> dict[str, Any]:
@@ -1471,6 +1556,16 @@ def _derive_findings(payload: dict[str, Any]) -> dict[str, Any]:
         (s for s in payload["stage_c"]["summaries"] if "stab=AA|" in s["stab"]),
         payload["stage_c"]["summaries"][0],
     )
+    u_aa = None
+    if payload["stage_c"].get("unified"):
+        u_aa = next(
+            (
+                s
+                for s in payload["stage_c"]["unified"]["summaries"]
+                if "stab=AA|" in s["stab"]
+            ),
+            None,
+        )
 
     def _b_delta(tp: int, tr: int, q: int) -> float | None:
         name = stage_b_draw_policy(tp, tr, q).name
@@ -1516,6 +1611,21 @@ def _derive_findings(payload: dict[str, Any]) -> dict[str, Any]:
         "best_check_mix_vs_aa_stab": c_aa["best_check_mix"],
         "baseline_aa_stab_delta": c_aa["baseline_stab_delta"],
         "best_aa_stab_delta": c_aa["best_stab_delta"],
+        "c_primary_draw_policy": payload["stage_c"]["meta"].get("draw_policy"),
+        "c_unified_draw_policy": (
+            payload["stage_c"]["unified"]["meta"]["draw_policy"]
+            if payload["stage_c"].get("unified")
+            else None
+        ),
+        "c_unified_best_check_mix_vs_aa_stab": (
+            u_aa["best_check_mix"] if u_aa else None
+        ),
+        "c_unified_best_delta_vs_baseline": (
+            u_aa["best_delta_vs_baseline"] if u_aa else None
+        ),
+        "c_unified_baseline_aa_stab_delta": (
+            u_aa["baseline_stab_delta"] if u_aa else None
+        ),
     }
 
 
@@ -1587,13 +1697,24 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
         json.dumps(summary["stage_b"]["comparisons_vs_m2"], indent=2),
         "```",
         "",
-        "## Stage C summaries",
+        "## Stage C summaries (C-primary)",
         "",
         "```json",
         json.dumps(summary["stage_c"]["summaries"], indent=2),
         "```",
         "",
     ]
+    if summary["stage_c"].get("unified"):
+        lines.extend(
+            [
+                "## Stage C unified (tp1_tr1_q1)",
+                "",
+                "```json",
+                json.dumps(summary["stage_c"]["unified"]["summaries"], indent=2),
+                "```",
+                "",
+            ]
+        )
     path.write_text("\n".join(lines), encoding="utf-8")
     return path
 
@@ -1623,6 +1744,57 @@ def load_summary_fixture(path: Path | None = None) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def refresh_stage_c_fixture(
+    *,
+    n_deals: int = 20_000,
+    seed: int = 20260809,
+    progress: bool = True,
+    path: Path | None = None,
+) -> Path:
+    """Re-run both C forks and patch the checked-in summary (keep A/B)."""
+    existing = load_summary_fixture(path)
+    if progress:
+        print("Stage C refresh: loading callers + opener inventory…")
+    callers = load_call_2to1_hands(progress=progress)
+    inventory = build_opener_inventory(progress=progress)
+    primary = run_stage_c(
+        n_deals=n_deals,
+        seed=seed,
+        progress=progress,
+        draw_policy=C_PRIMARY,
+        callers=callers,
+        inventory=inventory,
+    )
+    unified = run_stage_c(
+        n_deals=n_deals,
+        seed=seed,
+        progress=progress,
+        draw_policy=C_UNIFIED,
+        callers=callers,
+        inventory=inventory,
+    )
+    stage_c = pack_stage_c(primary, unified)
+    recs = build_recommendations(
+        {"highlights": existing["stage_a"]["highlights"]},
+        {"comparisons_vs_m2": existing["stage_b"]["comparisons_vs_m2"]},
+        stage_c,
+    )
+    findings = _derive_findings(
+        {
+            "stage_a": {"highlights": existing["stage_a"]["highlights"]},
+            "stage_b": {"comparisons_vs_m2": existing["stage_b"]["comparisons_vs_m2"]},
+            "stage_c": stage_c,
+        }
+    )
+    existing["stage_c"] = _slim_c_fork(stage_c)
+    existing["stage_c"]["unified"] = _slim_c_fork(unified)
+    existing["recommendations"] = recs
+    existing["findings"].update(findings)
+    path = path or default_summary_fixture_path()
+    path.write_text(json.dumps(existing, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
 def main() -> None:
     import argparse
 
@@ -1649,7 +1821,16 @@ def main() -> None:
     elif args.stage == "B":
         payload = {"stage_b": run_stage_b(n_deals=n_bc, seed=args.seed)}
     elif args.stage == "C":
-        payload = {"stage_c": run_stage_c(n_deals=n_bc, seed=args.seed)}
+        if args.write_fixture:
+            fix = refresh_stage_c_fixture(n_deals=n_bc, seed=args.seed)
+            print(f"Wrote fixture {fix}")
+            return
+        payload = {
+            "stage_c": pack_stage_c(
+                run_stage_c(n_deals=n_bc, seed=args.seed, draw_policy=C_PRIMARY),
+                run_stage_c(n_deals=n_bc, seed=args.seed, draw_policy=C_UNIFIED),
+            )
+        }
     else:
         payload = run_ladder(
             n_per_cell_a=n_a, n_deals_bc=n_bc, seed=args.seed, progress=True
