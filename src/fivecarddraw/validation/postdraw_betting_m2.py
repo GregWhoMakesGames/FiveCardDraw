@@ -15,7 +15,11 @@ Knobs searched:
   - drawer_raise_min: when bet into, raise face-pair finals with rank >= this
 
 Pinned non-knob behavior:
-  - Opener always leads two pair / trips / straight+ for value.
+  - Default (`opener_auto_bet_min=TWO_PAIR`): opener always leads two pair+
+    (historical M2 / non-bluff honest cell).
+  - Stage C street (`opener_auto_bet_min=THREE_OF_A_KIND`): check two pair;
+    still auto-bet trips+. Cap / 3-bet work uses this. Do **not** rewrite
+    the checked-in M2 / non-bluff fixtures.
   - Drawer always leads/raises straight+ for value; misses check/fold.
   - Opener vs stab/raise with one pair: call iff pair rank >= opponent's min
     aggression rank for that line (matched bluff-catch); always continue with
@@ -129,14 +133,34 @@ class Policy:
     opener_lead_min: int | None  # bet one-pair if rank >= min
     drawer_stab_min: int | None  # bet face-pair when checked to
     drawer_raise_min: int | None  # raise face-pair when bet into
+    # Category at which BN auto-bets (not a one-pair lead). TWO_PAIR = honest
+    # M2; THREE_OF_A_KIND = Stage C (check two pair).
+    opener_auto_bet_min: int = int(HandCategory.TWO_PAIR)
 
     @property
     def key(self) -> str:
-        return (
+        base = (
             f"lead={LEAD_LABELS[self.opener_lead_min]}|"
             f"stab={STAB_LABELS[self.drawer_stab_min]}|"
             f"raise={RAISE_LABELS[self.drawer_raise_min]}"
         )
+        if self.opener_auto_bet_min <= int(HandCategory.TWO_PAIR):
+            return base
+        return f"{base}|auto_bet={CATEGORY_NAMES[self.opener_auto_bet_min]}"
+
+
+# Forward street after Stage C. M2 / non-bluff CLIs keep HONEST_POLICY (two pair bets).
+STAGE_C_POLICY = Policy(
+    opener_lead_min=None,
+    drawer_stab_min=14,
+    drawer_raise_min=None,
+    opener_auto_bet_min=int(HandCategory.THREE_OF_A_KIND),
+)
+
+
+def bn_bets_stage_c(deal: Deal) -> bool:
+    """Stage C first action: bet trips+; check two pair and one pair."""
+    return deal.opener_final.category >= HandCategory.THREE_OF_A_KIND
 
 
 @dataclass(slots=True)
@@ -442,7 +466,7 @@ def play_deal(
     is_job_pair = o_pair is not None and o_pair >= 11 and not o_strong
 
     opener_bets = False
-    if o_strong:
+    if deal.opener_final.category >= policy.opener_auto_bet_min:
         opener_bets = True
     elif is_job_pair:
         if policy.opener_lead_min is not None and o_pair >= policy.opener_lead_min:

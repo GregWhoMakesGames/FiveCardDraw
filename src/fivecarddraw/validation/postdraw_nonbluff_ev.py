@@ -9,9 +9,11 @@ It pins an honest post-draw line and reports combo-weighted EV for each
 legal (class, d) cell so later work can measure a bluff delta against
 this baseline.
 
-Honest policy (no bluffs / no sandbagging):
+Honest policy (no bluffs / no sandbagging) — this is the **pre-C cell**:
   BN: always value-bet two pair+; check one pair JJ–AA (M2 default);
       never check-mix strong hands. Thin AA lead is a sensitivity only.
+  Forward street after Stage C checks two pair (`STAGE_C_POLICY` / cap node).
+  Do not rewrite this grid to absorb that mix.
   Caller: always bet/raise straight+ for value; when checked, stab AA
       (narrow value vs a checking pair); never raise a face pair into a
       two-pair+ betting range. Misses check or fold.

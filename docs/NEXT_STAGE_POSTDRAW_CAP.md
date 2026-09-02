@@ -1,10 +1,11 @@
 # Next stage: post-draw cap (bet + 3 raises) when both make straight+
 
-**Status:** Implemented in this PR (`src/fivecarddraw/validation/postdraw_cap.py`,
-CLI `analyze-postdraw-cap`). The non-bluff EV grid, M2, and draw-mixes streets
-remain **bet + one raise only** (`max_raises=1` default). They do **not**
-include BN 3-bet / caller cap EV. Findings are in the section at the bottom
-and in [research/ch03_dealer_opening.md](research/ch03_dealer_opening.md) §3.5.
+**Status:** Re-filtered under **Stage C** (BN checks two pair; bets trips+).
+Code `src/fivecarddraw/validation/postdraw_cap.py`, CLI `analyze-postdraw-cap`.
+Reports split by public \(d\). M2 / non-bluff class × d tables stay the
+honest always-bet-two-pair **bet+1** cells — they are not rewritten.
+Strategy tree: [POSTDRAW_STRATEGY_TREE.md](POSTDRAW_STRATEGY_TREE.md).
+Findings in this doc and [research/ch03_dealer_opening.md](research/ch03_dealer_opening.md) §3.5.
 
 **Product question:** After BN value-bets two pair+ and the 2:1 caller raises
 with a made straight+, should BN **reraise (3-bet, then maybe call a cap)** or

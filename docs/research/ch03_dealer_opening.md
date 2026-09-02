@@ -56,7 +56,7 @@ Caller keep-4 **d=1** beats standing with the dealt five (ΔEV_caller about +$2�
 
 ## 3.5 Post-draw cap (bet + 3 raises)
 
-On the raise node — BN has value-bet two pair+ and the 2:1 caller has raised with a made straight+ — full cap is four $4 increments each (pot **$38** vs today’s **$22** call-it-down). Combo-weighted P(node) ≈ **0.19** under locked draws.
+On the raise node — BN has **bet** and the 2:1 caller has raised with a made straight+ — full cap is four $4 increments each (pot **$38** vs today’s **$22** call-it-down). After Stage C, BN checks two pair, so the node is **trips+ bets ∩ caller straight+** (not two pair+). Tree: [../POSTDRAW_STRATEGY_TREE.md](../POSTDRAW_STRATEGY_TREE.md).
 
 CLI: `analyze-postdraw-cap`. Detail: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md). Fixture: `tests/fixtures/validation/postdraw_cap_summary.json`.
 

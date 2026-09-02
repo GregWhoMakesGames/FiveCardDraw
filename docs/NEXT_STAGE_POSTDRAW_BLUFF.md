@@ -181,9 +181,9 @@ must change.
 
 ## Ring 2 (not yet)
 
-Bucketed Nash on this node: BN and caller mix by family (optionally split by
-public \(d\)), actions {call, 3-bet} × {fold, call, cap}. Fictitious play or
-tiny CFR on `play_raise_node` payoffs.
+Bucketed Nash on each public-\(d\) node: BN and caller mix by family,
+actions {call, 3-bet} × {fold, call, cap}. Fictitious play or tiny CFR on
+`play_raise_node` payoffs.
 
 **Do not start Ring 2** until Ring 1’s fixture is on the branch and the
 hypotheses below are confirmed or refuted in that fixture. Ring 1 already
