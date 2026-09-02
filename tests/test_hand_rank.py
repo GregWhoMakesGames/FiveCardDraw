@@ -81,3 +81,49 @@ def test_full_house_beats_flush():
     boat = ev("As Ad Ac 9h 9s")
     flush = ev("Ah Kh Qh 4h 2h")
     assert boat > flush
+
+
+def test_bug_completes_wheel():
+    # A345 + bug fills the 2 → 5-high wheel. 2345 + bug is a *6-high* (bug=6).
+    v = ev("Bu Ac 3d 4h 5s")
+    assert v.category == HandCategory.STRAIGHT
+    assert v.tiebreak[0] == 5
+    six = ev("Bu 2c 3d 4h 5s")
+    assert six.category == HandCategory.STRAIGHT
+    assert six.tiebreak[0] == 6
+    assert six > v
+
+
+def test_bug_with_two_pair_is_not_a_boat():
+    """Bug is an ace, not fully wild — KK99+bug is aces-up two pair, not a full house."""
+    v = ev("Bu Kc Kd 9h 9s")
+    assert v.category == HandCategory.TWO_PAIR
+    assert v.tiebreak[0] == 13
+    assert v.tiebreak[1] == 9
+    assert v.tiebreak[2] == 14
+
+
+def test_quads_beat_full_house():
+    quads = ev("As Ad Ac Ah 2d")
+    boat = ev("Ks Kd Kc 9h 9s")
+    assert quads.category == HandCategory.FOUR_OF_A_KIND
+    assert quads > boat
+
+
+def test_identical_hands_tie():
+    a = ev("Js Jd 9c 8h 2d")
+    b = ev("Js Jd 9c 8h 2d")
+    assert a == b
+    assert not (a > b) and not (a < b)
+
+
+def test_trips_aces_with_bug():
+    v = ev("Bu As Ad 9h 2s")
+    assert v.category == HandCategory.THREE_OF_A_KIND
+    assert v.tiebreak[0] == 14
+
+
+def test_broadway_bug_straight():
+    v = ev("Bu Kc Qd Jh Ts")
+    assert v.category == HandCategory.STRAIGHT
+    assert v.tiebreak[0] == 14

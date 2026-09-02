@@ -30,6 +30,9 @@ def test_classify_opener_fine_splits():
     assert classify_opener(parse_hand("As Ks 9s 8s 2s")) == "flush"
     # Non-opener
     assert classify_opener(parse_hand("Ts Td 9c 8h 2d")) is None
+    assert classify_opener(parse_hand("Bu As Ad Ac Ah")) == "five_aces"
+    assert classify_opener(parse_hand("As Ad Ac Ah 9c")) == "four_of_a_kind"
+    assert classify_opener(parse_hand("Ks Kd Kc 8h 2d")) == "trips_K"
 
 
 def test_dealer_draw_policies_pinned():
@@ -42,6 +45,10 @@ def test_dealer_draw_policies_pinned():
     plan = dealer_draw_plan(tp, "two_pair_aces_up")
     assert plan.n_draw == 0
     assert len(plan.keep) == 5
+    # Frozen snapshot for the showdown matrix — not the Stage C two_pair d=1 lock.
+    quads = parse_hand("As Ad Ac Ah 9c")
+    qplan = dealer_draw_plan(quads, "four_of_a_kind")
+    assert qplan.n_draw == 0
 
     trips = parse_hand("9s 9d 9c 8h 2d")
     plan = dealer_draw_plan(trips, "trips")
