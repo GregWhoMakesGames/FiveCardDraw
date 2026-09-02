@@ -27,8 +27,9 @@ Chapters are split under `docs/research/` so parallel agents can edit different
 sections with fewer conflicts. Legacy redirect: [docs/RESEARCH_PAPER.md](docs/RESEARCH_PAPER.md).
 
 Validation fixtures cover drawing-call odds, showdown matrix, opener-first
-post-draw face-pair betting, opener draw-count / check-mix protection, and
-non-bluff EV by class × draw count — see
+post-draw face-pair betting, opener draw-count / check-mix protection,
+non-bluff EV by class × draw count, post-draw cap, and Ring 1 bluff 3-bet
+indifference — see
 [docs/NEXT_STAGE_SHOWDOWN_MATRIX.md](docs/NEXT_STAGE_SHOWDOWN_MATRIX.md),
 [docs/POSTDRAW_M2_FACE_PAIR_GRID.md](docs/POSTDRAW_M2_FACE_PAIR_GRID.md),
 [docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md),

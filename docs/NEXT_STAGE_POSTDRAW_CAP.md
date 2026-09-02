@@ -237,12 +237,11 @@ delta on this rare-but-expensive node only.
 
 ---
 
-## Next: bluff 3-bet (Ring 1)
+## Next: bluff 3-bet Ring 2 (not this ticket)
 
-Honest flush+ 3-bet vs a folding caller is **not** equilibrium. First
-bluff-library ticket: mix two pair/trips as air until **flushes** are
-indifferent to calling the 3-bet. Do **not** start bucketed Nash until that
-fixture exists — [NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md).
+Ring 1 is **pinned** — [NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md)
+(β* = 0.0155, α* = 0.102). Bucketed Nash / CFR on this node is a later ticket.
+Do not start Ring 2 in the same PR as Ring 1.
 
 ---
 

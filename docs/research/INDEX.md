@@ -9,7 +9,7 @@ This folder is the **human-readable research paper**, split into chapters so par
 | Stakes (v1) | $0.25 ante ($2 pot), $2 / $4 limit |
 | Codebase | [`fivecarddraw`](../../README.md) |
 | Audience | Researchers and poker-curious readers (basic poker OK) |
-| Status | Living document. Ch.1–2 filled; Ch.3 non-bluff EV + cap; Ch.4 stub pending Stage C; Ch.5 planned |
+| Status | Living document. Ch.1–2 filled; Ch.3 non-bluff EV + cap + Ring 1 bluff 3-bet; Ch.4 stub pending Stage C; Ch.5 planned |
 
 **Technical handoffs** (implementation detail, denser than chapters):
 
@@ -102,7 +102,7 @@ After seats 1–7 lack openers and BN has an open-legal hand, BN’s open faces 
 | Slice | Formula (planning) | ≈ % of *all* deals | Status | Home chapter |
 | --- | --- | ---: | --- | --- |
 | BN can open (steal), **nobody** has 2:1 call odds | \(q_{\mathrm{neither}}^{7} \cdot p_{\mathrm{open}}\) | **~3.6%** | **Solved** for open-legal made hands: EV(open) ≈ +$2 ante pot | Ch.3 § folded-to-BN sanity |
-| BN can open (steal), **≥1** seat has a good calling hand (2:1 outs) | \(\bigl[(1-p_{\mathrm{open}})^{7} - q_{\mathrm{neither}}^{7}\bigr] \cdot p_{\mathrm{open}}\) | **~0.20%** | **In progress** — inventory + showdown + M2 + **non-bluff EV by class × d** done (Ch.2–4); Stage C check-mix + bluff delta next | Ch.2 + Ch.3–4 |
+| BN can open (steal), **≥1** seat has a good calling hand (2:1 outs) | \(\bigl[(1-p_{\mathrm{open}})^{7} - q_{\mathrm{neither}}^{7}\bigr] \cdot p_{\mathrm{open}}\) | **~0.20%** | **In progress** — inventory + showdown + M2 + non-bluff EV + cap + **Ring 1 bluff 3-bet** done (Ch.2–3); Stage C check-mix next | Ch.2 + Ch.3–4 |
 
 Unconditional \(P(\ge 1\) of 7 seats is a 2:1 caller\() \approx 4.4\%\). The steal-into-drawer band is much smaller because it also requires seats 1–7 all non-open-legal **and** BN open-legal — still the strategically important laboratory for thin opens.
 
@@ -123,7 +123,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 1 | Strong draws: call vs raise vs mix (combo-weighted EV) | [Ch.2 §2.9](ch02_drawing_callers.md) | CO represent-bluffs |
 | 2 | CO bluff after BN open (return-to-actor: CO passed with no legal opener; others fold) — call/raise with underpair / high card? | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for value-range shape |
 | 3 | BN Stage C check mixes / remaining Ch.3–4 | Ch.3–4 | Parallel OK with #1 if different files |
-| 3b | Post-draw **bluff 3-bet Ring 1** (indifference on the cap node) | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) | Needs cap street; **Ring 1 before Ring 2** |
+| 3b | Post-draw **bluff 3-bet Ring 2** (bucketed Nash on the cap node) | [Ch.3 §3.6](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) | Ring 1 pinned (β* = 0.0155, α* = 0.102); do not start until a dedicated ticket |
 | 4 | CO open/pass; HJ sandbagging | Ch.5 | After #2 template exists |
 
 ---
@@ -150,4 +150,5 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 2026-09-01 | Split into `docs/research/` chapters; seats 1–8 + hold’em names; granular solve-progress ledger; parallel-agent notes |
 | 2026-09-01 | Document next queue: Ch.2 call/raise/mix; Ch.5 CO bluff after BN open |
 | 2026-09-01 | Pin §5.2 return-to-actor (CO passed with no legal opener); clarify bluff = call/raise with less than strong draws |
+| 2026-09-02 | Post-draw bluff 3-bet Ring 1 pinned (Ch.3 §3.6; β* = 0.0155, α* = 0.102) |
 | 2026-09-02 | Post-draw bluff 3-bet Ring 1 handoff (flush indifference on the cap node) |

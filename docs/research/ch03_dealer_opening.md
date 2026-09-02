@@ -3,7 +3,7 @@
 > Seat map and solve-progress ledger: **[INDEX.md](INDEX.md)**.  
 > Headline findings; implementation detail lives in the handoff docs.
 
-**Ledger role.** Claims the **only-BN-can-open / no caller** slice as solved, and owns showdown + M2 betting + **non-bluff EV by class × d** + **post-draw cap / 3-bet** for **BN vs 2:1 drawers**.
+**Ledger role.** Claims the **only-BN-can-open / no caller** slice as solved, and owns showdown + M2 betting + **non-bluff EV by class × d** + **post-draw cap / 3-bet** + **Ring 1 bluff 3-bet indifference** for **BN vs 2:1 drawers**.
 
 ---
 
@@ -50,7 +50,7 @@ CLI: `analyze-postdraw-nonbluff-ev`. Detail: [../NEXT_STAGE_NONBLUFF_EV.md](../N
 
 Caller keep-4 **d=1** beats standing with the dealt five (ΔEV_caller about +$2–4 vs representative BN classes). EV is reported for **both** seats (`EV_bn + EV_caller = $6` sunk pot). Case 1–8c mass is attached to the same deals as a link to §3.2, not as a substitute for EV.
 
-**Bluff delta comes next.** This table is the honest cell. Later work can add miss stabs, BN check-mixes (Stage C), and pair `d≠3` concealment, and report ΔEV against these numbers — not a new baseline. CO return-to-actor bluffs after a BN open live in [Ch.5 §5.2](ch05_later_seats.md). The §3.4 grid is **bet+1** (call the raise); 3-bet / cap is §3.5 and is **not** already in those cells.
+**Bluff delta comes next.** This table is the honest cell. Later work can add miss stabs, BN check-mixes (Stage C), and pair `d≠3` concealment, and report ΔEV against these numbers — not a new baseline. CO return-to-actor bluffs after a BN open live in [Ch.5 §5.2](ch05_later_seats.md). The §3.4 grid is **bet+1** (call the raise); 3-bet / cap is §3.5 and the Ring 1 bluff mix is §3.6 — **neither** is already in these cells.
 
 ---
 
@@ -73,7 +73,30 @@ CLI: `analyze-postdraw-cap`. Detail: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STA
 
 Call-it-down **understates** BN EV on this node for flush+ (node EV_bn −5.32 → about −5.00 if BN 3-bets flush+ and the caller still calls). It does not rewrite §3.4.
 
-That value line is **not** Nash: vs a flush+ 3-bet, the caller’s best response is already fold non-SF, which then invites bluff 3-bets with two pair/trips. First bluff-library slice (make flushes indifferent to calling the 3-bet; do not start a node Nash until that number is pinned): [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md).
+That value line is **not** Nash: vs a flush+ 3-bet, the caller’s best response is already fold non-SF, which then invites bluff 3-bets with two pair/trips. Ring 1 pins the mix that makes flushes indifferent (§3.6). Ring 2 (node Nash) is a later ticket: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md).
+
+---
+
+## 3.6 Post-draw bluff 3-bet (Ring 1)
+
+On the same raise node as §3.5, BN 3-bets flush+ always, calls straights, and 3-bets two pair/trips with frequency **β**. Caller SF caps; flushes are the call-vs-fold indifference target. Root-find, not hand-tune.
+
+CLI: `analyze-postdraw-bluff`. Detail: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md). Fixture: `tests/fixtures/validation/postdraw_bluff_summary.json`.
+
+Seed 20260902, combo-weighted locked draws, 7,559 node deals:
+
+| Quantity | Value |
+| --- | ---: |
+| β* = P(3-bet \| two pair or trips) | **0.0155** |
+| α* = air share of 3-bets | **0.102** (solver; not the ~9% polar sketch) |
+| Flush EV_call − EV_fold | **0.00** (indifferent) |
+| Straight vs 3-bet | still **fold** |
+| SF vs 3-bet | still **cap** |
+| Node EV_bn at β* | −5.11 |
+| Δ vs call-it-down | **+0.21** |
+| Δ vs no-air flush+ 3-bet (fold non-SF) | **+0.26** |
+
+Boat+-only value needs more air (α* = 0.15). Family-level flush indifference blends ace-high (prefer call) with lower flushes (prefer fold). §3.4 / §3.5 tables do **not** already include these bluff 3-bets.
 
 ---
 
@@ -85,4 +108,6 @@ That value line is **not** Nash: vs a flush+ 3-bet, the caller’s best response
 | `src/fivecarddraw/validation/postdraw_betting_m2.py` | M2 face-pair grid + cap street helper |
 | `src/fivecarddraw/validation/postdraw_nonbluff_ev.py` | Non-bluff class × d EV |
 | `src/fivecarddraw/validation/postdraw_cap.py` | Post-draw 3-bet / cap on the raise node |
-| Matching fixtures + `tests/test_showdown_matrix.py`, `tests/test_postdraw_m2.py`, `tests/test_postdraw_nonbluff_ev.py`, `tests/test_postdraw_cap.py` | CI |
+| `src/fivecarddraw/validation/bluff_indifference.py` | Reusable indifference helpers (`strategy_ev`, `indifference_root`) |
+| `src/fivecarddraw/validation/postdraw_bluff.py` | Ring 1 polar 3-bet mix on the raise node |
+| Matching fixtures + `tests/test_showdown_matrix.py`, `tests/test_postdraw_m2.py`, `tests/test_postdraw_nonbluff_ev.py`, `tests/test_postdraw_cap.py`, `tests/test_postdraw_bluff.py` | CI |
