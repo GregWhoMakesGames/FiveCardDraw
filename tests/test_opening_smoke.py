@@ -44,3 +44,11 @@ def test_solve_pipeline_smoke():
 
     raises = solve_raise_tree(feat, opening, responses, cfg, show_progress=False)
     assert isinstance(raises.records, list)
+
+
+def test_junk_never_opens_any_seat():
+    feat = _tiny_features()
+    opening = solve_opening(feat, GameConfig(max_raises=1), show_progress=False)
+    assert opening.open_freq[:, 3].sum() == 0
+    # Open-illegal bug SF draw still does not open.
+    assert opening.open_freq[:, 2].sum() == 0

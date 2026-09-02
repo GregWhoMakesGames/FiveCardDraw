@@ -9,6 +9,7 @@ from fivecarddraw.validation.opener_draw_beliefs import (
     PAIR_D3,
     exact_beliefs_given_d,
 )
+from fivecarddraw.validation.postdraw_draw_mixes import stage_b_draw_policy
 from fivecarddraw.validation.showdown_matrix import OPENER_CLASSES
 
 
@@ -59,3 +60,32 @@ def test_fixture_d3_nakedness_and_structure():
     )
     assert aa3["p_final"]["one_pair"] > 0.6
     assert aa3["p_final"]["one_pair"] < jj3["p_final"]["one_pair"]
+
+
+def _equal_inventory() -> dict[str, list[tuple[int, ...]]]:
+    return {c: [tuple(range(5))] * 10 for c in OPENER_CLASSES}
+
+
+def test_c_primary_beliefs_public_lanes():
+    """Under tp1_tr2_q1: d=3 pairs only; d=2 trips; d=1 two pair+quads; d=0 pat straight+."""
+    b = exact_beliefs_given_d(_equal_inventory(), stage_b_draw_policy(1, 2, 1))
+    assert set(b["p_family_given_d"]["3"]) == {"pair"}
+    assert b["d3_pair_family_mass"] == 1.0
+    assert set(b["p_family_given_d"]["2"]) == {"trips"}
+    assert set(b["p_family_given_d"]["1"]) == {"two_pair", "four_of_a_kind"}
+    assert set(b["p_family_given_d"]["0"]) == {"other_straight_plus"}
+    assert "pair" not in b["p_family_given_d"]["0"]
+    assert "two_pair" not in b["p_family_given_d"]["0"]
+
+
+def test_c_unified_beliefs_empty_d2():
+    """Under tp1_tr1_q1 the public d=2 lane is empty; trips join d=1 with two pair."""
+    b = exact_beliefs_given_d(_equal_inventory(), stage_b_draw_policy(1, 1, 1))
+    assert "2" not in b["p_family_given_d"]
+    assert set(b["p_family_given_d"]["1"]) == {
+        "two_pair",
+        "trips",
+        "four_of_a_kind",
+    }
+    assert set(b["p_family_given_d"]["3"]) == {"pair"}
+    assert set(b["p_family_given_d"]["0"]) == {"other_straight_plus"}

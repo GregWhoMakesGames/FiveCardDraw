@@ -126,6 +126,12 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 3b | Post-draw **bluff 3-bet Ring 1** (indifference on the cap node) | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) | Needs cap street; **Ring 1 before Ring 2** |
 | 4 | CO open/pass; HJ sandbagging | Ch.5 | After #2 template exists |
 
+### Later (low priority)
+
+| Work | Chapter | Notes |
+| --- | --- | --- |
+| Trips `d=1` kicker: highest vs non-face / lowest | [Ch.4](ch04_draw_mixes.md) | v1 keeps highest-rank (bug=ace). Hypothesis: a face kicker is more often already in the 2:1 caller, so fewer boat outs remain. After Stage C. Detail: [../NEXT_STAGE_OPENER_DRAW_MIXES.md](../NEXT_STAGE_OPENER_DRAW_MIXES.md) |
+
 ---
 
 ## Parallel agents (fewer conflicts)
@@ -145,6 +151,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
+| 2026-09-02 | Later queue: trips `d=1` kicker rank (highest vs non-face) after Stage C |
 | 2026-09-01 | Non-bluff EV by BN class × d vs 2:1 caller (Ch.3 §3.4); bluff delta next |
 | 2026-09-01 | Initial monolithic `RESEARCH_PAPER.md` |
 | 2026-09-01 | Split into `docs/research/` chapters; seats 1–8 + hold’em names; granular solve-progress ledger; parallel-agent notes |

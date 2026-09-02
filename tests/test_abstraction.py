@@ -23,8 +23,15 @@ def test_aaq85_differs_from_aa852():
 def test_open_legal_flag():
     openers = bucket_hand(parse_hand("Js Jd 9c 4h 2d"))
     junk = bucket_hand(parse_hand("9s 8d 7c 4h 2d"))
+    tens = bucket_hand(parse_hand("Ts Td 9c 4h 2d"))
     assert openers.open_legal
     assert not junk.open_legal
+    assert not tens.open_legal
+
+
+def test_two_pair_is_open_legal_bucket():
+    key = bucket_hand(parse_hand("2s 2d 3c 3h 9d"))
+    assert key.open_legal
 
 
 def test_bug_sf_draw_classified():

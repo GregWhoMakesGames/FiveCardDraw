@@ -125,3 +125,111 @@ def test_fixture_summary_patterns():
     top = data["top_by_pair_final_d3"][0]
     assert top["policy"].startswith("lead=never|stab=never")
     assert top["ev"] == 3.6662
+
+
+def test_two_pair_value_bet_miss_folds():
+    deal = Deal(
+        opener_class="two_pair",
+        opener_start_pair=None,
+        d=1,
+        opener_final=_hv(HandCategory.TWO_PAIR, 14, 9, 2),
+        drawer_final=_hv(HandCategory.HIGH_CARD, 13, 12, 9, 8, 2),
+        opener_final_pair=None,
+        drawer_final_pair=None,
+        drawer_straight_plus=False,
+        opener_two_pair_plus=True,
+    )
+    ev, flags = play_deal(deal, Policy(None, None, None))
+    assert not flags["opener_pair_check"]
+    assert not flags["showdown"]
+    assert ev == 6.0
+
+
+def test_two_pair_value_bet_face_pair_calls_to_showdown():
+    deal = Deal(
+        opener_class="two_pair",
+        opener_start_pair=None,
+        d=1,
+        opener_final=_hv(HandCategory.TWO_PAIR, 14, 9, 2),
+        drawer_final=_hv(HandCategory.ONE_PAIR, 14, 9, 8, 2),
+        opener_final_pair=None,
+        drawer_final_pair=14,
+        drawer_straight_plus=False,
+        opener_two_pair_plus=True,
+    )
+    ev, flags = play_deal(deal, Policy(None, 14, None))
+    assert flags["showdown"]
+    assert flags["opener_wins_sd"]
+    assert ev == 10.0  # bet 4, called, pot 14, win → +10
+
+
+def test_kk_folds_aa_stab_aa_calls():
+    kk = Deal(
+        opener_class="pair_K",
+        opener_start_pair=13,
+        d=3,
+        opener_final=_hv(HandCategory.ONE_PAIR, 13, 9, 8, 2),
+        drawer_final=_hv(HandCategory.ONE_PAIR, 14, 9, 8, 2),
+        opener_final_pair=13,
+        drawer_final_pair=14,
+        drawer_straight_plus=False,
+        opener_two_pair_plus=False,
+    )
+    pol = Policy(None, 14, None)
+    ev, flags = play_deal(kk, pol)
+    assert flags["opener_fold_to_stab"]
+    assert ev == 0.0
+
+    aa = Deal(
+        opener_class="pair_A",
+        opener_start_pair=14,
+        d=3,
+        opener_final=_hv(HandCategory.ONE_PAIR, 14, 9, 8, 2),
+        drawer_final=_hv(HandCategory.ONE_PAIR, 14, 13, 8, 2),
+        opener_final_pair=14,
+        drawer_final_pair=14,
+        drawer_straight_plus=False,
+        opener_two_pair_plus=False,
+    )
+    ev, flags = play_deal(aa, pol)
+    assert flags["opener_call_stab"]
+    assert flags["showdown"]
+
+
+def test_check_check_tie_splits_pot():
+    v = _hv(HandCategory.ONE_PAIR, 14, 9, 8, 2)
+    deal = Deal(
+        opener_class="pair_A",
+        opener_start_pair=14,
+        d=3,
+        opener_final=v,
+        drawer_final=v,
+        opener_final_pair=14,
+        drawer_final_pair=14,
+        drawer_straight_plus=False,
+        opener_two_pair_plus=False,
+    )
+    # No face stab → both check; split the $6 pot.
+    ev, flags = play_deal(deal, Policy(None, None, None))
+    assert flags["showdown"]
+    assert ev == 3.0
+
+
+def test_aa_lead_folds_to_straight_plus_raise_when_no_raise_band():
+    """Straight+ always raises a bet; with raise_min=None a one-pair opener folds."""
+    deal = Deal(
+        opener_class="pair_A",
+        opener_start_pair=14,
+        d=3,
+        opener_final=_hv(HandCategory.ONE_PAIR, 14, 9, 8, 2),
+        drawer_final=_hv(HandCategory.FLUSH, 14, 12, 9, 8, 3),
+        opener_final_pair=14,
+        drawer_final_pair=None,
+        drawer_straight_plus=True,
+        opener_two_pair_plus=False,
+    )
+    ev, flags = play_deal(deal, Policy(14, None, None))
+    assert flags["opener_pair_lead"]
+    assert flags["drawer_raise"]
+    assert flags["opener_fold_to_raise"]
+    assert ev == -4.0

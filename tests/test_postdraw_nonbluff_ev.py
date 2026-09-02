@@ -74,10 +74,13 @@ def test_honest_policy_is_not_a_bluff_mix():
     assert HONEST_POLICY.opener_lead_min is None
     assert HONEST_POLICY.drawer_stab_min == 14
     assert HONEST_POLICY.drawer_raise_min is None
+    assert LOCKED_BN_DRAW.name == "tp1_tr2_q1"
     assert LOCKED_BN_DRAW.pair_d == 3
     assert LOCKED_BN_DRAW.two_pair_d == 1
     assert LOCKED_BN_DRAW.trips_d == 2
     assert LOCKED_BN_DRAW.quads_d == 1
+    # Same dims as Stage C-primary; not the stale two-pair-stand C fixture.
+    assert LOCKED_BN_DRAW.two_pair_d == 1
 
 
 def test_legal_draw_counts_match_locked_policies():
