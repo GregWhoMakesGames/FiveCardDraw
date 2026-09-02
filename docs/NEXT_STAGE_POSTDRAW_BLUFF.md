@@ -37,10 +37,12 @@ Cap findings (seed 20260902, combo-weighted raise node):
 | Honest BN vs a *calling* responder | 3-bet flush+, call straights / two pair / trips |
 
 If the caller actually folds non-SF, a two-pair/trips **bluff 3-bet** that
-gets a fold is about **+14** EV_bn vs **−8** for calling and losing at $22.
-That invites air. As air enters the 3-bet range, flushes gain equity and
-start to call. The mix that stops the loop is the indifference frequency
-below — not “bluff 0%” and not “bluff 100%.”
+gets a fold is about **+14** EV_bn vs **−4** for folding the raise (or **−8**
+for calling and losing at $22). Calling is strictly dominated: two pair/trips
+are drawing dead to a straight+ raiser and need ~18% equity to call $4 into
+$18. Ring 1 leftover is therefore **fold**, not call. As air enters the 3-bet
+range, flushes gain equity and start to call. The mix that stops the loop is
+the indifference frequency below — not “bluff 0%” and not “bluff 100%.”
 
 A **single** \(\alpha\) cannot make every caller hand indifferent to fold,
 call, **and** cap. Ring 1 asks only: make **flushes** indifferent to
@@ -61,7 +63,7 @@ Condition on the **same raise node** as the cap module: BN two pair+ (bets)
 | --- | --- |
 | flush, boat+ (FH / quads / SF / five aces) | **Always 3-bet** (value). Sensitivity: also report boat+ only. |
 | straight | **Always call** (Ring 1 does not mix broadway A). |
-| two pair / trips | Mix: 3-bet with frequency **β** (uniform in the family). Else call. |
+| two pair / trips | Mix: 3-bet with frequency **β** (uniform in the family). **Else fold.** |
 
 Report both:
 
@@ -97,8 +99,9 @@ Same seed family as cap (`20260902`) is fine if the generator is unchanged.
 - β*, α*, n in each family
 - Caller flush EV_fold, EV_call, EV_cap at β* (EV_call ≈ EV_fold)
 - Caller straight EV_fold vs EV_call at β* (pure fold or not)
-- Node EV_bn at β* vs (a) call-it-down and (b) honest flush+ 3-bet / cap-SF
-  **with no air** — this is the bluff delta
+- Node EV_bn at β* vs (a) call-it-down and (b) honest flush+ 3-bet / else-fold
+  two pair / cap-SF **with no air** — this is the bluff-only delta (leftover
+  fold is already in both the polar mix and that no-air line)
 - Sensitivity: value range = boat+ only (flushes do not 3-bet)
 
 ---
@@ -106,7 +109,7 @@ Same seed family as cap (`20260902`) is fine if the generator is unchanged.
 ## Ring 2 (not yet)
 
 Bucketed Nash on this node: BN and caller mix by family (optionally split by
-public \(d\)), actions {call, 3-bet} × {fold, call, cap}. Fictitious play or
+public \(d\)), actions {fold, call, 3-bet} × {fold, call, cap}. Fictitious play or
 tiny CFR on `play_raise_node` payoffs.
 
 **Do not start Ring 2** until Ring 1’s fixture is on the branch and the

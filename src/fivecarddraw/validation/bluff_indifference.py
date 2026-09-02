@@ -29,6 +29,7 @@ __all__ = [
     "CATCHER_FLUSH",
     "CallerEvs",
     "CallerMix",
+    "FOLD_RAISE_EV_BN",
     "IndifferenceResult",
     "NodePayoff",
     "POT_AFTER_3BET",
@@ -51,6 +52,8 @@ __all__ = [
 POT_AFTER_3BET = 26.0
 CALL_3BET = BIG  # 4.0
 POT_ODDS_CALL_3BET = pot_odds_to_call(POT_AFTER_3BET, CALL_3BET)  # 4/30
+# BN already bet $4; folding the raise surrenders that bet. Not the 3-bet steal.
+FOLD_RAISE_EV_BN = -BIG  # -4.0
 
 VALUE_FLUSH_PLUS = frozenset({"flush", "boat_plus"})
 VALUE_BOAT_PLUS = frozenset({"boat_plus"})
@@ -65,8 +68,13 @@ _FOLD_CAP_FAMILIES = frozenset({"two_pair_or_trips", "pair_or_worse"})
 class BnPolarMix:
     """BN 3-bet mix on the raise node.
 
-    Value buckets always 3-bet. Bluff buckets 3-bet with frequency `beta`.
-    Remaining families call. Vs a cap: bluff-bucket hands fold; others call.
+    Value buckets always 3-bet. Bluff buckets 3-bet with frequency `beta`;
+    otherwise they **fold** the raise (drawing dead to a straight+ raiser).
+    Remaining families (straights) call. Vs a cap: bluff-bucket hands fold;
+    others call.
+
+    Empty `value_buckets` and `bluff_buckets` is the call-it-down baseline
+    (always call the raise).
     """
 
     beta: float
@@ -79,6 +87,17 @@ class BnPolarMix:
         if bn_family in self.bluff_buckets:
             return float(self.beta)
         return 0.0
+
+    def leftover_vs_raise(self, bn_family: str) -> str:
+        """Action when not 3-betting: fold bluff buckets, else call."""
+        if bn_family in self.bluff_buckets:
+            return "fold"
+        return "call"
+
+    def leftover_ev_bn(self, p: NodePayoff) -> float:
+        if self.leftover_vs_raise(p.bn_family) == "fold":
+            return p.ev_bn_fold_raise
+        return p.ev_bn_call
 
     def folds_cap(self, bn_family: str) -> bool:
         return bn_family in self.bluff_buckets
@@ -112,6 +131,7 @@ class NodePayoff:
     bn_fine: str
     caller_fine: str
     ev_bn_call: float
+    ev_bn_fold_raise: float
     ev_bn_3bet_fold: float
     ev_bn_3bet_call: float
     ev_bn_3bet_cap_bn_call: float
@@ -163,6 +183,7 @@ def precompute_raise_node_payoffs(deals: Sequence[Any]) -> list[NodePayoff]:
     out: list[NodePayoff] = []
     for deal in deals:
         ev_call, _ = play_raise_node(deal, bn_vs_raise="call")
+        ev_fold_raise, _ = play_raise_node(deal, bn_vs_raise="fold")
         ev_fold, _ = play_raise_node(
             deal, bn_vs_raise="three_bet", caller_vs_3bet="fold"
         )
@@ -188,6 +209,7 @@ def precompute_raise_node_payoffs(deals: Sequence[Any]) -> list[NodePayoff]:
                 bn_fine=fine_bucket(deal.opener_final),
                 caller_fine=fine_bucket(deal.drawer_final),
                 ev_bn_call=ev_call,
+                ev_bn_fold_raise=ev_fold_raise,
                 ev_bn_3bet_fold=ev_fold,
                 ev_bn_3bet_call=ev_call3,
                 ev_bn_3bet_cap_bn_call=ev_cap_call,
@@ -230,7 +252,7 @@ def strategy_ev(
     for p in rows:
         p3 = bn_mix.p_three_bet(p.bn_family)
         p3_sum += p3
-        ev = (1.0 - p3) * p.ev_bn_call
+        ev = (1.0 - p3) * bn_mix.leftover_ev_bn(p)
         if p3 > 0.0:
             act = caller_mix.action(p.caller_family)
             ev += p3 * _three_bet_ev_bn(p, act, bn_mix)
@@ -403,7 +425,7 @@ def best_response(
     """Argmax action per own family bucket (no CFR).
 
     Pass a `BnPolarMix` to get the **caller's** BR vs that 3-bet mix.
-    Pass a `CallerMix` to get **BN's** BR (call vs 3-bet) vs that responder.
+    Pass a `CallerMix` to get **BN's** BR (fold vs call vs 3-bet) vs that responder.
     """
     rows = payoffs if payoffs is not None else precompute_raise_node_payoffs(deals or ())
     if isinstance(opponent_mix, BnPolarMix):
@@ -453,6 +475,7 @@ def _bn_best_response(
     rows = []
     for fam in families:
         n = 0.0
+        ev_fold = 0.0
         ev_call = 0.0
         ev_3bet = 0.0
         # A 3-bet from this family folds a cap iff it is a bluff family.
@@ -465,29 +488,36 @@ def _bn_best_response(
             if p.bn_family != fam:
                 continue
             n += 1.0
+            ev_fold += p.ev_bn_fold_raise
             ev_call += p.ev_bn_call
             act = caller_mix.action(p.caller_family)
             ev_3bet += _three_bet_ev_bn(p, act, probe)
         if n <= 0.0:
             continue
+        ev_fold /= n
         ev_call /= n
         ev_3bet /= n
-        delta = ev_3bet - ev_call
-        if abs(delta) <= ev_tol:
-            recommend = "indifferent"
-        elif delta > 0.0:
-            recommend = "three_bet"
-        else:
-            recommend = "call"
+        scored = (
+            ("fold", ev_fold),
+            ("call", ev_call),
+            ("three_bet", ev_3bet),
+        )
+        best_act, best_ev = max(scored, key=lambda kv: kv[1])
+        near = [a for a, e in scored if abs(e - best_ev) <= ev_tol]
+        recommend = "indifferent" if len(near) > 1 else best_act
         rows.append(
             {
                 "side": "bn",
                 "bucket": fam,
                 "n": n,
+                "ev_bn_fold_raise": round(ev_fold, 5),
                 "ev_bn_call": round(ev_call, 5),
                 "ev_bn_3bet": round(ev_3bet, 5),
-                "delta_3bet_vs_call": round(delta, 5),
+                "delta_3bet_vs_fold": round(ev_3bet - ev_fold, 5),
+                "delta_3bet_vs_call": round(ev_3bet - ev_call, 5),
+                "delta_fold_vs_call": round(ev_fold - ev_call, 5),
                 "recommend": recommend,
+                "near_best": near,
             }
         )
     return {"side": "bn", "rows": rows}

@@ -13,6 +13,7 @@ from fivecarddraw.validation.bluff_indifference import (
     BnPolarMix,
     CALL_3BET,
     CATCHER_FLUSH,
+    FOLD_RAISE_EV_BN,
     POT_AFTER_3BET,
     POT_ODDS_CALL_3BET,
     RING1_CALLER_FOLD_CATCHERS,
@@ -104,6 +105,44 @@ def test_steal_ev_when_caller_folds():
     assert ev == 14.0
     assert caller_ev_from_bn(ev) == -8.0
     assert abs(ev + caller_ev_from_bn(ev) - PREDRAW_POT) < 1e-9
+
+
+def test_fold_raise_is_minus_four_not_call():
+    """Two pair vs a straight+ raise: fold −4, call −8 (drawing dead)."""
+    deal = _deal(
+        o_final=_hv(HandCategory.TWO_PAIR, 14, 9, 2),
+        d_final=_hv(HandCategory.STRAIGHT, 7),
+    )
+    ev_fold, flags = play_raise_node(deal, bn_vs_raise="fold")
+    ev_call, _ = play_raise_node(deal, bn_vs_raise="call")
+    assert flags["opener_fold_to_raise"]
+    assert ev_fold == FOLD_RAISE_EV_BN == -4.0
+    assert ev_call == -8.0
+    pay = precompute_raise_node_payoffs([deal])
+    assert pay[0].ev_bn_fold_raise == -4.0
+    mix_fold = BnPolarMix(beta=0.0)  # leftover fold for two pair/trips
+    mix_call = BnPolarMix(
+        beta=0.0, value_buckets=frozenset(), bluff_buckets=frozenset()
+    )
+    assert mix_fold.leftover_vs_raise("two_pair_or_trips") == "fold"
+    assert mix_call.leftover_vs_raise("two_pair_or_trips") == "call"
+    ev0 = strategy_ev([deal], mix_fold, RING1_CALLER_FOLD_CATCHERS, payoffs=pay)
+    ev_cid = strategy_ev(
+        [deal], mix_call, RING1_CALLER_FOLD_CATCHERS, payoffs=pay
+    )
+    assert abs(ev0.ev_bn - (-4.0)) < 1e-9
+    assert abs(ev_cid.ev_bn - (-8.0)) < 1e-9
+    mix_half = BnPolarMix(beta=0.5)
+    evh = strategy_ev(
+        [deal], mix_half, RING1_CALLER_FOLD_CATCHERS, payoffs=pay
+    )
+    # (1−β)·(−4) + β·(+14) = 5
+    assert abs(evh.ev_bn - 5.0) < 1e-9
+    br = best_response([deal], RING1_CALLER_FOLD_CATCHERS, payoffs=pay)
+    by = {r["bucket"]: r for r in br["rows"]}
+    assert by["two_pair_or_trips"]["ev_bn_fold_raise"] == -4.0
+    assert by["two_pair_or_trips"]["ev_bn_call"] == -8.0
+    assert by["two_pair_or_trips"]["recommend"] == "three_bet"
 
 
 def test_play_deal_default_stays_max_raises_1():
@@ -229,6 +268,7 @@ def test_fixture_ring1_patterns():
     assert meta["n_node_weighted"] == 7559
     assert meta["value_3bet"] == "flush+"
     assert meta["bn_straights"] == "always call (not mixed)"
+    assert meta["bn_leftover_two_pair_trips"] == "fold"
     f = data["findings"]
     assert f["nonbluff_grid_excludes_bluff_3bet"] is True
     assert f["cap_table_excludes_bluff_3bet"] is True

@@ -79,7 +79,7 @@ That value line is **not** Nash: vs a flush+ 3-bet, the caller’s best response
 
 ## 3.6 Post-draw bluff 3-bet (Ring 1)
 
-On the same raise node as §3.5, BN 3-bets flush+ always, calls straights, and 3-bets two pair/trips with frequency **β**. Caller SF caps; flushes are the call-vs-fold indifference target. Root-find, not hand-tune.
+On the same raise node as §3.5, BN 3-bets flush+ always, calls straights, and 3-bets two pair/trips with frequency **β** (else **fold**). Caller SF caps; flushes are the call-vs-fold indifference target. Root-find, not hand-tune.
 
 CLI: `analyze-postdraw-bluff`. Detail: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md). Fixture: `tests/fixtures/validation/postdraw_bluff_summary.json`.
 

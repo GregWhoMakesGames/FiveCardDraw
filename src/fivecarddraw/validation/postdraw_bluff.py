@@ -1,8 +1,9 @@
 """Ring 1: post-draw bluff 3-bet indifference on the raise node.
 
 BN always 3-bets flush+, always calls straights, and 3-bets two pair/trips with
-frequency β. Caller SF caps; flushes are the call-vs-fold indifference target.
-Root-find β so flush EV_call = EV_fold. Report α = air share of 3-bets.
+frequency β; otherwise those hands **fold** the raise. Caller SF caps; flushes
+are the call-vs-fold indifference target. Root-find β so flush EV_call =
+EV_fold. Report α = air share of 3-bets.
 
 Reuses `play_raise_node` / `on_raise_node` / `family_bucket` / the cap deal
 generator. Does not re-grid class × d. Ring 2 (Nash/CFR) is out of scope.
@@ -266,6 +267,7 @@ def _derive_findings(primary: dict[str, Any], boat_only: dict[str, Any]) -> dict
         ]["ev_bn"],
         "delta_vs_call_it_down": d_cid,
         "delta_vs_no_air_flush_plus": d_no_air,
+        "leftover_two_pair_trips": "fold",
         "boat_plus_only_beta_star": boat_only["beta_star"],
         "boat_plus_only_alpha_star": boat_only["alpha_star"],
         "hypothesis_beta_in_unit_interval": 0.0 < beta < 1.0 and primary["bracketed"],
@@ -382,8 +384,9 @@ def run_analysis(
             "node": "BN two_pair+ (bets) ∩ caller straight+ (raises)",
             "ring": 1,
             "value_3bet": "flush+",
-            "bluff_3bet": "two_pair_or_trips mix β",
+            "bluff_3bet": "two_pair_or_trips mix β else fold",
             "bn_straights": "always call (not mixed)",
+            "bn_leftover_two_pair_trips": "fold",
             "catcher": "caller flush (call vs fold)",
             "sf": "always cap",
             "doc": "docs/NEXT_STAGE_POSTDRAW_BLUFF.md",
@@ -394,8 +397,12 @@ def run_analysis(
                 "β* is root-found on the combo-weighted raise-node sample. Extra "
                 "per-class deals fill thin flush cells and are labeled; they do "
                 "not enter the root-find.",
+                "Two pair/trips leftover vs the raise is fold, not call "
+                "(drawing dead to a straight+ raiser). β* lives on the 3-bet "
+                "subtree and does not depend on leftover.",
                 "M2 / non-bluff EV tables stay bet+1. The cap value table is the "
-                "no-air baseline; it does not already include bluff 3-bets.",
+                "no-air 3-bet-vs-call baseline; it does not already include "
+                "bluff 3-bets or leftover-fold.",
                 "Ring 2 (bucketed Nash / CFR) is out of scope.",
             ],
         },
@@ -473,7 +480,8 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
         f"(break-even {meta['pot_odds_call_3bet']:.4f} = 4/30).",
         "",
         "The non-bluff class × d table and the cap value table do **not** "
-        "already include bluff 3-bets. This is the polar mix on that node.",
+        "already include bluff 3-bets. Polar knobs: 3-bet flush+; call "
+        "straights; two pair/trips 3-bet with frequency β, **else fold**.",
         "",
         "Doc: `docs/NEXT_STAGE_POSTDRAW_BLUFF.md`.",
         "",
@@ -527,18 +535,18 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
         "| Line | EV_bn | Δ vs call-it-down |",
         "| --- | ---: | ---: |",
         f"| Call-it-down | {nev['call_it_down']['ev_bn']:.4f} | 0 |",
-        f"| No-air flush+ 3-bet / fold non-SF | "
+        f"| No-air flush+ 3-bet / else-fold two pair / fold non-SF | "
         f"{nev['no_air_flush_plus_fold_non_sf']['ev_bn']:.4f} | "
         f"{nev['no_air_flush_plus_fold_non_sf']['ev_bn'] - nev['call_it_down']['ev_bn']:+.4f} |",
-        f"| No-air flush+ 3-bet / call rest (cap SF) | "
+        f"| No-air flush+ 3-bet / else-fold two pair / call rest (cap SF) | "
         f"{nev['no_air_flush_plus_call_rest']['ev_bn']:.4f} | "
         f"{nev['no_air_flush_plus_call_rest']['ev_bn'] - nev['call_it_down']['ev_bn']:+.4f} |",
-        f"| β* polar (flush fold ≡ call) | "
+        f"| β* polar (else fold; flush fold ≡ call) | "
         f"{nev['beta_star_flush_folds']['ev_bn']:.4f} | "
         f"{p['delta_ev_bn_vs_call_it_down']:+.4f} |",
         "",
-        f"Bluff delta vs no-air flush+ 3-bet (fold non-SF): "
-        f"**{p['delta_ev_bn_vs_no_air_fold_non_sf']:+.4f}**.",
+        f"Bluff-only delta vs no-air flush+ 3-bet with else-fold leftover "
+        f"(fold non-SF): **{p['delta_ev_bn_vs_no_air_fold_non_sf']:+.4f}**.",
         "",
         "## Sensitivity: value range = boat+ only",
         "",
@@ -602,7 +610,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
             "Ring 1: root-find BN two-pair/trips 3-bet frequency so caller "
-            "flushes are indifferent to calling the 3-bet"
+            "flushes are indifferent to calling the 3-bet. Leftover two pair/"
+            "trips fold the raise."
         )
     )
     parser.add_argument("--n-range", type=int, default=DEFAULT_N_RANGE)
