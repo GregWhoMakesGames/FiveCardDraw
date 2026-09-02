@@ -35,7 +35,8 @@
     "regenerate": "analyze-postdraw-bluff --n-range 40000 --n-per-class 4000 --write-fixture",
     "notes": [
       "\u03b2* is root-found on the combo-weighted raise-node sample. Extra per-class deals fill thin flush cells and are labeled; they do not enter the root-find.",
-      "M2 / non-bluff EV tables stay bet+1. The cap value table is the no-air baseline; it does not already include bluff 3-bets.",
+      "Two pair/trips leftover vs the raise is fold, not call (drawing dead to a straight+ raiser). \u03b2* lives on the 3-bet subtree and does not depend on leftover.",
+      "M2 / non-bluff EV tables stay bet+1. The cap value table is the no-air 3-bet-vs-call baseline; it does not already include bluff 3-bets or leftover-fold.",
       "Ring 2 (bucketed Nash / CFR) is out of scope."
     ]
   },
@@ -116,16 +117,16 @@
     },
     "node_ev": {
       "beta_star_flush_folds": {
-        "ev_bn": -5.1107,
-        "ev_caller": 11.1107,
+        "ev_bn": -1.8781,
+        "ev_caller": 7.8781,
         "n": 7559.0,
         "p_3bet": 0.1253,
         "p_cap": 0.0101,
         "p_fold_3bet": 0.1152
       },
       "beta_star_flush_calls": {
-        "ev_bn": -5.1107,
-        "ev_caller": 11.1107,
+        "ev_bn": -1.8781,
+        "ev_caller": 7.8781,
         "n": 7559.0,
         "p_3bet": 0.1253,
         "p_cap": 0.0101,
@@ -140,25 +141,25 @@
         "p_fold_3bet": 0.0
       },
       "no_air_flush_plus_fold_non_sf": {
-        "ev_bn": -5.3688,
-        "ev_caller": 11.3688,
+        "ev_bn": -2.0853,
+        "ev_caller": 8.0853,
         "n": 7559.0,
         "p_3bet": 0.1126,
         "p_cap": 0.0093,
         "p_fold_3bet": 0.1033
       },
       "no_air_flush_plus_call_rest": {
-        "ev_bn": -4.9952,
-        "ev_caller": 10.9952,
+        "ev_bn": -1.7117,
+        "ev_caller": 7.7117,
         "n": 7559.0,
         "p_3bet": 0.1126,
         "p_cap": 0.0093,
         "p_fold_3bet": 0.0
       }
     },
-    "delta_ev_bn_vs_call_it_down": 0.2131,
-    "delta_ev_bn_vs_no_air_fold_non_sf": 0.2581,
-    "delta_ev_bn_vs_no_air_call_rest": -0.1155,
+    "delta_ev_bn_vs_call_it_down": 3.4457,
+    "delta_ev_bn_vs_no_air_fold_non_sf": 0.2072,
+    "delta_ev_bn_vs_no_air_call_rest": -0.1664,
     "caller_best_response": [
       {
         "side": "caller",
@@ -203,37 +204,61 @@
         "side": "bn",
         "bucket": "boat_plus",
         "n": 672.0,
+        "ev_bn_fold_raise": -4.0,
         "ev_bn_call": 12.494,
         "ev_bn_3bet": 11.9464,
+        "delta_3bet_vs_fold": 15.9464,
         "delta_3bet_vs_call": -0.5476,
-        "recommend": "call"
+        "delta_fold_vs_call": -16.4941,
+        "recommend": "call",
+        "near_best": [
+          "call"
+        ]
       },
       {
         "side": "bn",
         "bucket": "flush",
         "n": 179.0,
+        "ev_bn_fold_raise": -4.0,
         "ev_bn_call": 9.8212,
         "ev_bn_3bet": 9.9777,
+        "delta_3bet_vs_fold": 13.9777,
         "delta_3bet_vs_call": 0.1564,
-        "recommend": "three_bet"
+        "delta_fold_vs_call": -13.8212,
+        "recommend": "three_bet",
+        "near_best": [
+          "three_bet"
+        ]
       },
       {
         "side": "bn",
         "bucket": "straight",
         "n": 503.0,
+        "ev_bn_fold_raise": -4.0,
         "ev_bn_call": -1.505,
         "ev_bn_3bet": 11.4354,
+        "delta_3bet_vs_fold": 15.4354,
         "delta_3bet_vs_call": 12.9404,
-        "recommend": "three_bet"
+        "delta_fold_vs_call": -2.495,
+        "recommend": "three_bet",
+        "near_best": [
+          "three_bet"
+        ]
       },
       {
         "side": "bn",
         "bucket": "two_pair_or_trips",
         "n": 6205.0,
+        "ev_bn_fold_raise": -4.0,
         "ev_bn_call": -8.0,
         "ev_bn_3bet": 12.282,
+        "delta_3bet_vs_fold": 16.282,
         "delta_3bet_vs_call": 20.282,
-        "recommend": "three_bet"
+        "delta_fold_vs_call": 4.0,
+        "recommend": "three_bet",
+        "near_best": [
+          "three_bet"
+        ]
       }
     ]
   },
@@ -257,8 +282,8 @@
       "still_caps": false,
       "indifferent_call_fold": true
     },
-    "delta_ev_bn_vs_call_it_down": 0.2766,
-    "delta_ev_bn_vs_no_air_fold_non_sf": 0.3253
+    "delta_ev_bn_vs_call_it_down": 3.496,
+    "delta_ev_bn_vs_no_air_fold_non_sf": 0.2612
   },
   "caller_flush_fine_labeled": [
     {
@@ -324,12 +349,13 @@
     "straight_ev_call": -8.7416,
     "straight_still_folds": true,
     "sf_still_caps": true,
-    "node_ev_bn_at_beta_star": -5.1107,
+    "node_ev_bn_at_beta_star": -1.8781,
     "node_ev_bn_call_it_down": -5.3239,
-    "node_ev_bn_no_air_flush_plus": -5.3688,
-    "node_ev_bn_no_air_call_rest": -4.9952,
-    "delta_vs_call_it_down": 0.2131,
-    "delta_vs_no_air_flush_plus": 0.2581,
+    "node_ev_bn_no_air_flush_plus": -2.0853,
+    "node_ev_bn_no_air_call_rest": -1.7117,
+    "delta_vs_call_it_down": 3.4457,
+    "delta_vs_no_air_flush_plus": 0.2072,
+    "leftover_two_pair_trips": "fold",
     "boat_plus_only_beta_star": 0.0195,
     "boat_plus_only_alpha_star": 0.1528,
     "hypothesis_beta_in_unit_interval": true,

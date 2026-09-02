@@ -2,8 +2,9 @@
 
 **Status:** Ring 1 implemented (`src/fivecarddraw/validation/bluff_indifference.py`,
 CLI `analyze-postdraw-bluff`). Fixture
-`tests/fixtures/validation/postdraw_bluff_summary.json`. Do **not** start
-Ring 2 until a later ticket; this branch stops at the pinned indifference.
+`tests/fixtures/validation/postdraw_bluff_summary.json`. Polar leftover for
+two pair/trips is **fold**. Do **not** start Ring 2 until a later ticket;
+this branch stops at the pinned indifference.
 
 **Product question:** On the raise node, if the caller folds a straight or
 flush to a BN **flush+** 3-bet, BN is incentivized to bluff 3-bet some two
@@ -167,12 +168,14 @@ or pre-draw trees.
    sample’s flush equity vs flush+ is a bit lower).
 4. Bluff delta vs honest no-air flush+ 3-bet is **positive** for BN on the
    node (small), and vs call-it-down still positive. **Confirmed** vs the
-   same caller as Ring 1 (fold non-SF, cap SF): Δ = **+0.26** vs no-air
-   flush+ 3-bet, **+0.21** vs call-it-down. Vs the cap-module *calling*
-   responder (cap SF / call rest, no air, EV_bn −4.995) β* is **−0.12** —
-   that line already gets paid by calling flushes, so adding air while
-   making flushes indifferent is not a raise on *that* EV. The polar
-   question is the folding-catcher world.
+   same caller as Ring 1 (fold non-SF, cap SF) **with leftover fold**:
+   Δ = **+0.21** vs no-air flush+ 3-bet / else-fold two pair,
+   **+3.45** vs call-it-down (almost all of that is folding trash instead
+   of calling it). Vs the cap-module *calling* responder (cap SF / call
+   rest, no air, leftover fold, EV_bn −1.71) β* is **−0.17** — that line
+   already gets paid by calling flushes, so adding air while making
+   flushes indifferent is not a raise on *that* EV. The polar question is
+   the folding-catcher world.
 5. Boat+-only value 3-bets need **more** air to make flushes indifferent
    (flushes are drawing dead to boats). **Confirmed** (α* = 0.153 vs 0.102).
 
@@ -185,31 +188,37 @@ the raise node (same generator/seed as the cap fixture). Extra per-class
 deals fill fine flush cells and are **labeled**; they do not enter β*.
 
 Root-find: flush EV_call = EV_fold on the 3-bet subtree (fold is −8).
+Leftover two pair/trips **fold** the raise (−4), not call (−8). β* did
+not move (it is set on the 3-bet subtree).
 
 | Quantity | Value |
 | --- | ---: |
 | β* = P(3-bet \| two pair or trips) | **0.0155** |
 | α* = air share of 3-bets | **0.1016** |
+| Leftover two pair / trips | **fold** |
 | BN value 3-bets (flush+) | 851 |
 | BN two pair / trips (bluff candidates) | 6,205 |
 | Caller flush (catcher) | 1,530 |
 | Flush EV_fold / EV_call / EV_cap at β* | −8.00 / −8.00 / −11.28 |
 | Straight EV_fold / EV_call | −8.00 / −8.74 (**fold**) |
 | SF/boat+ vs 3-bet | **cap** |
-| Node EV_bn at β* | **−5.11** |
-| vs call-it-down (−5.32) | **+0.21** |
-| vs no-air flush+ 3-bet, fold non-SF (−5.37) | **+0.26** |
-| vs no-air flush+ / cap-SF / call rest (−5.00) | −0.12 (different caller) |
+| Node EV_bn at β* | **−1.88** |
+| vs call-it-down (−5.32) | **+3.45** |
+| vs no-air flush+ 3-bet, else-fold, fold non-SF (−2.09) | **+0.21** |
+| vs no-air flush+ / else-fold / cap-SF / call rest (−1.71) | −0.17 (different caller) |
 | Boat+-only value: β* / α* | 0.0195 / **0.153** |
 
 Family-level flush indifference is a **blend**: labeled extra cells show
 ace-high flushes still prefer call (Δ ≈ +1.58) while jack-and-under prefer
 fold (Δ ≈ −3.5 to −3.7). Ring 1 does not split flush ranks.
 
-BN best-response *vs this held caller* (fold catchers, cap SF) wants to
-3-bet two pair/trips and even straights (steals print); boats are slightly
-happier calling because only SF continues. Ring 1 does **not** follow that
-BR — value stays flush+, straights stay call. That tension is Ring 2.
+BN best-response *vs this held caller* (fold catchers, cap SF) still
+wants to 3-bet two pair/trips (3-bet EV +12.3 vs fold −4 vs call −8) and
+even straights (steals print); boats are slightly happier calling because
+only SF continues. Fold beats call by **$4** on two pair/trips — that is
+why leftover is fold. Ring 1 does **not** follow the always-3-bet BR —
+value stays flush+, straights stay call, air is only the β* mix. That
+tension is Ring 2.
 
 **Do not substitute these for the §3.4 class × d cells or the §3.5 cap
 value table.** Those remain no-air / bet+1.
@@ -252,6 +261,7 @@ CLI: `analyze-postdraw-bluff`. Library:
 1. Cap street is on the branch (`play_raise_node`, `analyze-postdraw-cap`)
 2. Ring 1 library + CLI + fixture pinned (β* = 0.0155, α* = 0.1016)
 3. Raise-node generator reused; class × d grid not re-run
-4. Flushes indifferent; straights fold; SF caps; bluff delta vs no-air
-   fold-non-SF = +0.26, vs call-it-down = +0.21
+4. Flushes indifferent; straights fold; SF caps; leftover two pair/trips
+   **fold**; bluff-only delta vs no-air else-fold = +0.21, vs call-it-down
+   = +3.45 (mostly folding trash)
 5. This doc + Ch.3 §3.6 updated. **Stop.** Ring 2 is a follow-up ticket.

@@ -281,11 +281,13 @@ def test_fixture_ring1_patterns():
     assert f["hypothesis_bluff_delta_vs_no_air_positive"] is True
     assert f["hypothesis_bluff_delta_vs_call_it_down_positive"] is True
     assert f["hypothesis_boat_plus_value_needs_more_air"] is True
+    assert f["leftover_two_pair_trips"] == "fold"
     assert f["beta_star"] == 0.0155
     assert f["alpha_star"] == 0.1016
-    assert f["delta_vs_call_it_down"] == 0.2131
-    assert f["delta_vs_no_air_flush_plus"] == 0.2581
+    assert f["delta_vs_call_it_down"] == 3.4457
+    assert f["delta_vs_no_air_flush_plus"] == 0.2072
     assert f["node_ev_bn_call_it_down"] == -5.3239
+    assert f["node_ev_bn_at_beta_star"] == -1.8781
     assert f["boat_plus_only_alpha_star"] == 0.1528
     sketch = f["polar_sketch_alpha"]
     assert abs(sketch - (4 / 30 - 0.05) / 0.95) < 5e-5

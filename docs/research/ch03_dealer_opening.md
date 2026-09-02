@@ -83,18 +83,19 @@ On the same raise node as §3.5, BN 3-bets flush+ always, calls straights, and 3
 
 CLI: `analyze-postdraw-bluff`. Detail: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md). Fixture: `tests/fixtures/validation/postdraw_bluff_summary.json`.
 
-Seed 20260902, combo-weighted locked draws, 7,559 node deals:
+Seed 20260902, combo-weighted locked draws, 7,559 node deals. Two pair/trips leftover is **fold** (drawing dead to a straight+ raiser). β* lives on the 3-bet subtree and did not move when leftover changed from call to fold.
 
 | Quantity | Value |
 | --- | ---: |
 | β* = P(3-bet \| two pair or trips) | **0.0155** |
 | α* = air share of 3-bets | **0.102** (solver; not the ~9% polar sketch) |
+| Leftover two pair / trips | **fold** |
 | Flush EV_call − EV_fold | **0.00** (indifferent) |
 | Straight vs 3-bet | still **fold** |
 | SF vs 3-bet | still **cap** |
-| Node EV_bn at β* | −5.11 |
-| Δ vs call-it-down | **+0.21** |
-| Δ vs no-air flush+ 3-bet (fold non-SF) | **+0.26** |
+| Node EV_bn at β* | −1.88 |
+| Δ vs call-it-down | **+3.45** (mostly folding trash vs calling it) |
+| Δ vs no-air flush+ 3-bet / else-fold (fold non-SF) | **+0.21** |
 
 Boat+-only value needs more air (α* = 0.15). Family-level flush indifference blends ace-high (prefer call) with lower flushes (prefer fold). §3.4 / §3.5 tables do **not** already include these bluff 3-bets.
 
