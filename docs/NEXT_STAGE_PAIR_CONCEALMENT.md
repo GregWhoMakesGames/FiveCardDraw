@@ -1,13 +1,15 @@
 # Next stage: pair concealment vs Exploit-d3 (after Step 0 beliefs)
 
-**Status:** Step 0 **done** (belief tables checked in). Steps 1–4 not started.
+**Status:** Step 0 **done** (belief tables checked in). Stage C check mixes
+**done**. Steps 1–4 not started — this is the next code ticket.
 
 **Read first:**
 
 1. This doc (plan + Step 0 results)
 2. [NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md) — prior A→B→C
-   (note: Stage C “check two pair” conflated pat d=0 with d=3 improvements; do not
-   repeat that mistake)
+   (C now keys check mixes by public `d`; always-check two pair won because two
+   pair also appears on `d=3` from pair improvements — do not average pat `d=0`
+   into that mass)
 3. [POSTDRAW_M2_FACE_PAIR_GRID.md](POSTDRAW_M2_FACE_PAIR_GRID.md)
 
 Parent: [NEXT_STAGE_DEALER_OPENING_EQUITY.md](NEXT_STAGE_DEALER_OPENING_EQUITY.md).

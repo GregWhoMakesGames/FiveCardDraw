@@ -261,4 +261,4 @@ fixture exists — [NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md).
 1. `play_deal` default `max_raises=1`; cap path uses `StreetState` / `max_raises=3`
 2. `analyze-postdraw-cap` conditions on BN-bet ∩ caller-straight+
 3. Fixture + Ch.3 §3.5 updated; class × d table not rewritten
-4. Next code milestone remains Stage C ([NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md))
+4. Next code milestone is pair concealment after C ([NEXT_STAGE_PAIR_CONCEALMENT.md](NEXT_STAGE_PAIR_CONCEALMENT.md)); do not fold this cap street into the M2 Stage C grid
