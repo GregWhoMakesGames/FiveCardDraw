@@ -1,0 +1,347 @@
+{
+  "meta": {
+    "seed": 20260902,
+    "n_range": 40000,
+    "n_per_class_extra": 4000,
+    "n_node_weighted": 7559,
+    "n_node_extra": 14740,
+    "predraw_pot": 6.0,
+    "big_bet": 4.0,
+    "pot_after_3bet": 26.0,
+    "to_call_3bet": 4.0,
+    "pot_odds_call_3bet": 0.1333,
+    "cap_pot": 38.0,
+    "max_raises_default_m2": 1,
+    "max_raises_this_module": 3,
+    "matchup": "BN (seat 8) opener vs one 2:1 drawing caller",
+    "predraw": "open + call only (no raise)",
+    "honest_m2_policy": "lead=never|stab=AA|raise=never",
+    "locked_bn_draw": {
+      "name": "tp1_tr2_q1",
+      "pair_d": 3,
+      "two_pair_d": 1,
+      "trips_d": 2,
+      "quads_d": 1
+    },
+    "node": "BN two_pair+ (bets) \u2229 caller straight+ (raises)",
+    "ring": 1,
+    "value_3bet": "flush+",
+    "bluff_3bet": "two_pair_or_trips mix \u03b2",
+    "bn_straights": "always call (not mixed)",
+    "catcher": "caller flush (call vs fold)",
+    "sf": "always cap",
+    "doc": "docs/NEXT_STAGE_POSTDRAW_BLUFF.md",
+    "regenerate": "analyze-postdraw-bluff --n-range 40000 --n-per-class 4000 --write-fixture",
+    "notes": [
+      "\u03b2* is root-found on the combo-weighted raise-node sample. Extra per-class deals fill thin flush cells and are labeled; they do not enter the root-find.",
+      "M2 / non-bluff EV tables stay bet+1. The cap value table is the no-air baseline; it does not already include bluff 3-bets.",
+      "Ring 2 (bucketed Nash / CFR) is out of scope."
+    ]
+  },
+  "family_counts_weighted": {
+    "bn": {
+      "two_pair_or_trips": 6205.0,
+      "straight": 503.0,
+      "boat_plus": 672.0,
+      "flush": 179.0
+    },
+    "caller": {
+      "straight": 5506.0,
+      "boat_plus": 523.0,
+      "flush": 1530.0
+    }
+  },
+  "primary": {
+    "value_range": "flush+",
+    "beta_star": 0.0155,
+    "alpha_star": 0.1016,
+    "bracketed": true,
+    "n_value": 851.0,
+    "n_bluff": 6205.0,
+    "n_3bet_mass": 947.189,
+    "indifference": {
+      "beta": 0.0155,
+      "alpha": 0.1016,
+      "bracketed": true,
+      "n_value": 851.0,
+      "n_bluff": 6205.0,
+      "n_catcher": 1530.0,
+      "n_catcher_vs_value": 194.0,
+      "n_catcher_vs_bluff": 1181.0,
+      "flush_ev_fold": -8.0,
+      "flush_ev_call": -8.0,
+      "flush_ev_cap": -11.2783,
+      "flush_call_minus_fold": -0.0,
+      "flush_n_weight": 212.3077,
+      "f_at_0": -2.4536,
+      "f_at_1": 21.9855,
+      "f_at_beta": -0.0
+    },
+    "caller_flush": {
+      "bucket": "flush",
+      "n_weight": 212.3077,
+      "ev_fold": -8.0,
+      "ev_call": -8.0,
+      "ev_cap": -11.2783,
+      "call_minus_fold": -0.0,
+      "pure_action": "fold",
+      "still_folds": true,
+      "still_caps": false,
+      "indifferent_call_fold": true
+    },
+    "caller_straight": {
+      "bucket": "straight",
+      "n_weight": 658.5256,
+      "ev_fold": -8.0,
+      "ev_call": -8.7416,
+      "ev_cap": -12.3071,
+      "call_minus_fold": -0.7416,
+      "pure_action": "fold",
+      "still_folds": true,
+      "still_caps": false,
+      "indifferent_call_fold": false
+    },
+    "caller_boat_plus": {
+      "bucket": "boat_plus",
+      "n_weight": 76.3558,
+      "ev_fold": -8.0,
+      "ev_call": 18.0,
+      "ev_cap": 21.667,
+      "call_minus_fold": 26.0,
+      "pure_action": "cap",
+      "still_folds": false,
+      "still_caps": true,
+      "indifferent_call_fold": false
+    },
+    "node_ev": {
+      "beta_star_flush_folds": {
+        "ev_bn": -5.1107,
+        "ev_caller": 11.1107,
+        "n": 7559.0,
+        "p_3bet": 0.1253,
+        "p_cap": 0.0101,
+        "p_fold_3bet": 0.1152
+      },
+      "beta_star_flush_calls": {
+        "ev_bn": -5.1107,
+        "ev_caller": 11.1107,
+        "n": 7559.0,
+        "p_3bet": 0.1253,
+        "p_cap": 0.0101,
+        "p_fold_3bet": 0.0871
+      },
+      "call_it_down": {
+        "ev_bn": -5.3239,
+        "ev_caller": 11.3239,
+        "n": 7559.0,
+        "p_3bet": 0.0,
+        "p_cap": 0.0,
+        "p_fold_3bet": 0.0
+      },
+      "no_air_flush_plus_fold_non_sf": {
+        "ev_bn": -5.3688,
+        "ev_caller": 11.3688,
+        "n": 7559.0,
+        "p_3bet": 0.1126,
+        "p_cap": 0.0093,
+        "p_fold_3bet": 0.1033
+      },
+      "no_air_flush_plus_call_rest": {
+        "ev_bn": -4.9952,
+        "ev_caller": 10.9952,
+        "n": 7559.0,
+        "p_3bet": 0.1126,
+        "p_cap": 0.0093,
+        "p_fold_3bet": 0.0
+      }
+    },
+    "delta_ev_bn_vs_call_it_down": 0.2131,
+    "delta_ev_bn_vs_no_air_fold_non_sf": 0.2581,
+    "delta_ev_bn_vs_no_air_call_rest": -0.1155,
+    "caller_best_response": [
+      {
+        "side": "caller",
+        "bucket": "boat_plus",
+        "n_weight": 76.3558,
+        "ev_fold": -8.0,
+        "ev_call": 18.0,
+        "ev_cap": 21.667,
+        "recommend": "cap",
+        "near_best": [
+          "cap"
+        ]
+      },
+      {
+        "side": "caller",
+        "bucket": "flush",
+        "n_weight": 212.3077,
+        "ev_fold": -8.0,
+        "ev_call": -8.0,
+        "ev_cap": -11.2783,
+        "recommend": "indifferent",
+        "near_best": [
+          "fold",
+          "call"
+        ]
+      },
+      {
+        "side": "caller",
+        "bucket": "straight",
+        "n_weight": 658.5256,
+        "ev_fold": -8.0,
+        "ev_call": -8.7416,
+        "ev_cap": -12.3071,
+        "recommend": "fold",
+        "near_best": [
+          "fold"
+        ]
+      }
+    ],
+    "bn_best_response_vs_fold_catchers": [
+      {
+        "side": "bn",
+        "bucket": "boat_plus",
+        "n": 672.0,
+        "ev_bn_call": 12.494,
+        "ev_bn_3bet": 11.9464,
+        "delta_3bet_vs_call": -0.5476,
+        "recommend": "call"
+      },
+      {
+        "side": "bn",
+        "bucket": "flush",
+        "n": 179.0,
+        "ev_bn_call": 9.8212,
+        "ev_bn_3bet": 9.9777,
+        "delta_3bet_vs_call": 0.1564,
+        "recommend": "three_bet"
+      },
+      {
+        "side": "bn",
+        "bucket": "straight",
+        "n": 503.0,
+        "ev_bn_call": -1.505,
+        "ev_bn_3bet": 11.4354,
+        "delta_3bet_vs_call": 12.9404,
+        "recommend": "three_bet"
+      },
+      {
+        "side": "bn",
+        "bucket": "two_pair_or_trips",
+        "n": 6205.0,
+        "ev_bn_call": -8.0,
+        "ev_bn_3bet": 12.282,
+        "delta_3bet_vs_call": 20.282,
+        "recommend": "three_bet"
+      }
+    ]
+  },
+  "sensitivity_boat_plus_only": {
+    "value_range": "boat+",
+    "beta_star": 0.0195,
+    "alpha_star": 0.1528,
+    "bracketed": true,
+    "n_value": 672.0,
+    "n_bluff": 6205.0,
+    "n_3bet_mass": 793.2467,
+    "caller_flush": {
+      "bucket": "flush",
+      "n_weight": 173.0769,
+      "ev_fold": -8.0,
+      "ev_call": -8.0,
+      "ev_cap": -11.4667,
+      "call_minus_fold": 0.0,
+      "pure_action": "call",
+      "still_folds": false,
+      "still_caps": false,
+      "indifferent_call_fold": true
+    },
+    "delta_ev_bn_vs_call_it_down": 0.2766,
+    "delta_ev_bn_vs_no_air_fold_non_sf": 0.3253
+  },
+  "caller_flush_fine_labeled": [
+    {
+      "bucket": "flush_A",
+      "n": 2380.0,
+      "n_weight": 745.5707,
+      "ev_fold": -8.0,
+      "ev_call": -6.4242,
+      "ev_cap": -9.0585,
+      "call_minus_fold": 1.5758,
+      "source": "extra_plus_weighted"
+    },
+    {
+      "bucket": "flush_low",
+      "n": 1233.0,
+      "n_weight": 664.5263,
+      "ev_fold": -8.0,
+      "ev_call": -11.7054,
+      "ev_cap": -15.6661,
+      "call_minus_fold": -3.7054,
+      "source": "extra_plus_weighted"
+    },
+    {
+      "bucket": "flush_K",
+      "n": 679.0,
+      "n_weight": 378.4414,
+      "ev_fold": -8.0,
+      "ev_call": -11.4894,
+      "ev_cap": -15.3896,
+      "call_minus_fold": -3.4894,
+      "source": "extra_plus_weighted"
+    },
+    {
+      "bucket": "flush_Q",
+      "n": 641.0,
+      "n_weight": 354.3639,
+      "ev_fold": -8.0,
+      "ev_call": -11.7152,
+      "ev_cap": -15.6772,
+      "call_minus_fold": -3.7152,
+      "source": "extra_plus_weighted"
+    },
+    {
+      "bucket": "flush_J",
+      "n": 562.0,
+      "n_weight": 298.1779,
+      "ev_fold": -8.0,
+      "ev_call": -11.6803,
+      "ev_cap": -15.6376,
+      "call_minus_fold": -3.6803,
+      "source": "extra_plus_weighted"
+    }
+  ],
+  "findings": {
+    "beta_star": 0.0155,
+    "alpha_star": 0.1016,
+    "flush_ev_fold": -8.0,
+    "flush_ev_call": -8.0,
+    "flush_ev_cap": -11.2783,
+    "flush_call_minus_fold": -0.0,
+    "flush_indifferent": true,
+    "straight_ev_fold": -8.0,
+    "straight_ev_call": -8.7416,
+    "straight_still_folds": true,
+    "sf_still_caps": true,
+    "node_ev_bn_at_beta_star": -5.1107,
+    "node_ev_bn_call_it_down": -5.3239,
+    "node_ev_bn_no_air_flush_plus": -5.3688,
+    "node_ev_bn_no_air_call_rest": -4.9952,
+    "delta_vs_call_it_down": 0.2131,
+    "delta_vs_no_air_flush_plus": 0.2581,
+    "boat_plus_only_beta_star": 0.0195,
+    "boat_plus_only_alpha_star": 0.1528,
+    "hypothesis_beta_in_unit_interval": true,
+    "hypothesis_flush_indifferent": true,
+    "hypothesis_straights_still_fold": true,
+    "hypothesis_sf_still_caps": true,
+    "hypothesis_bluff_delta_vs_no_air_positive": true,
+    "hypothesis_bluff_delta_vs_call_it_down_positive": true,
+    "hypothesis_boat_plus_value_needs_more_air": true,
+    "nonbluff_grid_excludes_bluff_3bet": true,
+    "cap_table_excludes_bluff_3bet": true,
+    "pot_odds_call_3bet": 0.1333,
+    "polar_sketch_alpha": 0.0877,
+    "alpha_not_pinned_to_sketch": true
+  }
+}

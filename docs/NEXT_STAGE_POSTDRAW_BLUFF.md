@@ -1,8 +1,9 @@
 # Next stage: post-draw bluff 3-bet (Ring 1 indifference)
 
-**Status:** Not started. Do **Ring 1 first**. Do not start Ring 2 (bucketed
-Nash) until Ring 1 has a checked-in fixture and the indifference number is
-pinned.
+**Status:** Ring 1 implemented (`src/fivecarddraw/validation/bluff_indifference.py`,
+CLI `analyze-postdraw-bluff`). Fixture
+`tests/fixtures/validation/postdraw_bluff_summary.json`. Do **not** start
+Ring 2 until a later ticket; this branch stops at the pinned indifference.
 
 **Product question:** On the raise node, if the caller folds a straight or
 flush to a BN **flush+** 3-bet, BN is incentivized to bluff 3-bet some two
@@ -152,30 +153,81 @@ or pre-draw trees.
 ## Hypotheses to confirm or refute (Ring 1)
 
 1. There exists β* ∈ (0, 1) making **flush** call EV equal fold EV
-   (tolerance ~0.05 chips).
-2. At that β*, **straights still fold** (call EV < fold EV).
+   (tolerance ~0.05 chips). **Confirmed** (β* = 0.0155; Δ = 0.00 chips).
+2. At that β*, **straights still fold** (call EV < fold EV). **Confirmed**
+   (call −8.74 vs fold −8.00). SF still caps.
 3. α* is on the order of pot odds vs residual flush equity: with ~5% flush
    equity vs a pure flush+ value range, polar math suggests
    α ≈ (0.133 − 0.05) / (1 − 0.05) ≈ **9%** of 3-bets are air. **Compute
-   it; do not pin 9% until the root-find says so.**
+   it; do not pin 9% until the root-find says so.** **Computed: α* = 0.1016
+   (~10.2%),** not the 9% sketch (sketch used a round 5% residual; the
+   sample’s flush equity vs flush+ is a bit lower).
 4. Bluff delta vs honest no-air flush+ 3-bet is **positive** for BN on the
-   node (small), and vs call-it-down still positive.
+   node (small), and vs call-it-down still positive. **Confirmed** vs the
+   same caller as Ring 1 (fold non-SF, cap SF): Δ = **+0.26** vs no-air
+   flush+ 3-bet, **+0.21** vs call-it-down. Vs the cap-module *calling*
+   responder (cap SF / call rest, no air, EV_bn −4.995) β* is **−0.12** —
+   that line already gets paid by calling flushes, so adding air while
+   making flushes indifferent is not a raise on *that* EV. The polar
+   question is the folding-catcher world.
 5. Boat+-only value 3-bets need **more** air to make flushes indifferent
-   (flushes are drawing dead to boats).
+   (flushes are drawing dead to boats). **Confirmed** (α* = 0.153 vs 0.102).
+
+---
+
+## Findings (seed 20260902, Ring 1)
+
+Combo-weighted locked BN draws (`tp1_tr2_q1`), 40,000 deals, **7,559** on
+the raise node (same generator/seed as the cap fixture). Extra per-class
+deals fill fine flush cells and are **labeled**; they do not enter β*.
+
+Root-find: flush EV_call = EV_fold on the 3-bet subtree (fold is −8).
+
+| Quantity | Value |
+| --- | ---: |
+| β* = P(3-bet \| two pair or trips) | **0.0155** |
+| α* = air share of 3-bets | **0.1016** |
+| BN value 3-bets (flush+) | 851 |
+| BN two pair / trips (bluff candidates) | 6,205 |
+| Caller flush (catcher) | 1,530 |
+| Flush EV_fold / EV_call / EV_cap at β* | −8.00 / −8.00 / −11.28 |
+| Straight EV_fold / EV_call | −8.00 / −8.74 (**fold**) |
+| SF/boat+ vs 3-bet | **cap** |
+| Node EV_bn at β* | **−5.11** |
+| vs call-it-down (−5.32) | **+0.21** |
+| vs no-air flush+ 3-bet, fold non-SF (−5.37) | **+0.26** |
+| vs no-air flush+ / cap-SF / call rest (−5.00) | −0.12 (different caller) |
+| Boat+-only value: β* / α* | 0.0195 / **0.153** |
+
+Family-level flush indifference is a **blend**: labeled extra cells show
+ace-high flushes still prefer call (Δ ≈ +1.58) while jack-and-under prefer
+fold (Δ ≈ −3.5 to −3.7). Ring 1 does not split flush ranks.
+
+BN best-response *vs this held caller* (fold catchers, cap SF) wants to
+3-bet two pair/trips and even straights (steals print); boats are slightly
+happier calling because only SF continues. Ring 1 does **not** follow that
+BR — value stays flush+, straights stay call. That tension is Ring 2.
+
+**Do not substitute these for the §3.4 class × d cells or the §3.5 cap
+value table.** Those remain no-air / bet+1.
+
+CLI: `analyze-postdraw-bluff`. Library:
+`src/fivecarddraw/validation/bluff_indifference.py`
+(`strategy_ev`, `indifference_root`, `best_response`, `pot_odds_to_call`).
 
 ---
 
 ## Deliverables
 
-1. Indifference helpers + Ring 1 CLI (e.g. `analyze-postdraw-bluff`)
-2. `outputs/validation/` tables + checked-in summary fixture
+1. Indifference helpers + Ring 1 CLI (`analyze-postdraw-bluff`) — **done**
+2. `outputs/validation/` tables + checked-in summary fixture — **done**
 3. Pytest: pot odds 4/30; steal EV when caller folds; β* exists and flushes
-   are indifferent; straights fold-or-not as the numbers say; cap path still
-   `max_raises=1` by default for M2 / non-bluff
+   are indifferent; straights fold; cap path still `max_raises=1` by default
+   for M2 / non-bluff — **done**
 4. Short findings in this doc + [research/ch03_dealer_opening.md](research/ch03_dealer_opening.md)
-   (new §3.6, or a paragraph under §3.5 — do not rewrite §3.4 / §3.5 tables)
+   §3.6 — **done** (do not rewrite §3.4 / §3.5 tables)
 5. Do **not** claim the non-bluff class × d table or the cap value table
-   already includes bluff 3-bets
+   already includes bluff 3-bets — **stated**
 
 ---
 
@@ -192,12 +244,11 @@ or pre-draw trees.
 
 ---
 
-## Handoff checklist
+## Handoff checklist (Ring 1 — done)
 
-1. Cap street is on the branch you start from (`play_raise_node`,
-   `analyze-postdraw-cap`). `pip install -e ".[dev]" && pytest -q`
-2. Implement **only Ring 1** + the library table above
-3. Reuse the raise-node generator; do not re-grid class × d
-4. Pin β*, α*, flush indifference, straight fold/call, bluff delta vs no-air
-   flush+ 3-bet
-5. Update this doc + Ch.3; then stop. Ring 2 is a follow-up ticket.
+1. Cap street is on the branch (`play_raise_node`, `analyze-postdraw-cap`)
+2. Ring 1 library + CLI + fixture pinned (β* = 0.0155, α* = 0.1016)
+3. Raise-node generator reused; class × d grid not re-run
+4. Flushes indifferent; straights fold; SF caps; bluff delta vs no-air
+   fold-non-SF = +0.26, vs call-it-down = +0.21
+5. This doc + Ch.3 §3.6 updated. **Stop.** Ring 2 is a follow-up ticket.
