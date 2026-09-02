@@ -8,22 +8,24 @@ from pathlib import Path
 
 from fivecarddraw.hand_rank import HandCategory, HandValue
 from fivecarddraw.rules import pot_odds_to_call as rules_pot_odds
+from fivecarddraw.validation import bluff_indifference as bluff_mod
 from fivecarddraw.validation.bluff_indifference import (
+    AIR_SHARE_OF_THREE_BETS,
+    BEST_RESPONSE,
     BLUFF_TWO_PAIR_TRIPS,
-    BnPolarMix,
+    BN_POLAR_MIX,
     CALL_3BET,
     CATCHER_FLUSH,
+    COMPUTE_STRATEGY_EV,
+    FOLD_RAISE_EV_BN,
+    INDIFFERENCE_ROOT,
     POT_AFTER_3BET,
     POT_ODDS_CALL_3BET,
+    POT_ODDS_TO_CALL,
+    PRECOMPUTE_RAISE_NODE_PAYOFFS,
     RING1_CALLER_FOLD_CATCHERS,
     VALUE_BOAT_PLUS,
     VALUE_FLUSH_PLUS,
-    air_share_of_three_bets,
-    best_response,
-    indifference_root,
-    pot_odds_to_call,
-    precompute_raise_node_payoffs,
-    strategy_ev,
 )
 from fivecarddraw.validation.postdraw_betting_m2 import (
     CAP_POT,
@@ -82,9 +84,37 @@ def test_pot_odds_to_call_4_over_30():
     """After BN 3-bet: pot $26, $4 to call. Break-even 4/30."""
     assert POT_AFTER_3BET == 26.0
     assert CALL_3BET == 4.0
-    assert pot_odds_to_call(26, 4) == 4 / 30
+    assert POT_ODDS_TO_CALL(26, 4) == 4 / 30
     assert POT_ODDS_CALL_3BET == 4 / 30
-    assert pot_odds_to_call is rules_pot_odds
+    assert POT_ODDS_TO_CALL is rules_pot_odds
+    assert bluff_mod.__all__ == [
+        "AIR_SHARE_OF_THREE_BETS",
+        "BEST_RESPONSE",
+        "BIG",
+        "BISECT_ROOT",
+        "BLUFF_TWO_PAIR_TRIPS",
+        "BN_POLAR_MIX",
+        "CALL_3BET",
+        "CALLER_EVS",
+        "CALLER_MIX",
+        "CATCHER_EVS",
+        "CATCHER_FLUSH",
+        "COMPUTE_STRATEGY_EV",
+        "FOLD_RAISE_EV_BN",
+        "INDIFFERENCE_RESULT",
+        "INDIFFERENCE_ROOT",
+        "NODE_PAYOFF",
+        "POT_AFTER_3BET",
+        "POT_ODDS_CALL_3BET",
+        "POT_ODDS_TO_CALL",
+        "PRECOMPUTE_RAISE_NODE_PAYOFFS",
+        "RING1_CALLER_CALL_FLUSH",
+        "RING1_CALLER_FOLD_CATCHERS",
+        "STRATEGY_EV",
+        "VALUE_BOAT_PLUS",
+        "VALUE_FLUSH_PLUS",
+    ]
+    assert all(name.isupper() for name in bluff_mod.__all__)
     st = street_after_bet_and_raise(max_raises=3).after_raise()
     assert st.pot == POT_AFTER_3BET
     assert st.amount_to_call == CALL_3BET
@@ -104,6 +134,44 @@ def test_steal_ev_when_caller_folds():
     assert ev == 14.0
     assert caller_ev_from_bn(ev) == -8.0
     assert abs(ev + caller_ev_from_bn(ev) - PREDRAW_POT) < 1e-9
+
+
+def test_fold_raise_is_minus_four_not_call():
+    """Two pair vs a straight+ raise: fold −4, call −8 (drawing dead)."""
+    deal = _deal(
+        o_final=_hv(HandCategory.TWO_PAIR, 14, 9, 2),
+        d_final=_hv(HandCategory.STRAIGHT, 7),
+    )
+    ev_fold, flags = play_raise_node(deal, bn_vs_raise="fold")
+    ev_call, _ = play_raise_node(deal, bn_vs_raise="call")
+    assert flags["opener_fold_to_raise"]
+    assert ev_fold == FOLD_RAISE_EV_BN == -4.0
+    assert ev_call == -8.0
+    pay = PRECOMPUTE_RAISE_NODE_PAYOFFS([deal])
+    assert pay[0].ev_bn_fold_raise == -4.0
+    mix_fold = BN_POLAR_MIX(beta=0.0)  # leftover fold for two pair/trips
+    mix_call = BN_POLAR_MIX(
+        beta=0.0, value_buckets=frozenset(), bluff_buckets=frozenset()
+    )
+    assert mix_fold.leftover_vs_raise("two_pair_or_trips") == "fold"
+    assert mix_call.leftover_vs_raise("two_pair_or_trips") == "call"
+    ev0 = COMPUTE_STRATEGY_EV([deal], mix_fold, RING1_CALLER_FOLD_CATCHERS, payoffs=pay)
+    ev_cid = COMPUTE_STRATEGY_EV(
+        [deal], mix_call, RING1_CALLER_FOLD_CATCHERS, payoffs=pay
+    )
+    assert abs(ev0.ev_bn - (-4.0)) < 1e-9
+    assert abs(ev_cid.ev_bn - (-8.0)) < 1e-9
+    mix_half = BN_POLAR_MIX(beta=0.5)
+    evh = COMPUTE_STRATEGY_EV(
+        [deal], mix_half, RING1_CALLER_FOLD_CATCHERS, payoffs=pay
+    )
+    # (1−β)·(−4) + β·(+14) = 5
+    assert abs(evh.ev_bn - 5.0) < 1e-9
+    br = BEST_RESPONSE([deal], RING1_CALLER_FOLD_CATCHERS, payoffs=pay)
+    by = {r["bucket"]: r for r in br["rows"]}
+    assert by["two_pair_or_trips"]["ev_bn_fold_raise"] == -4.0
+    assert by["two_pair_or_trips"]["ev_bn_call"] == -8.0
+    assert by["two_pair_or_trips"]["recommend"] == "three_bet"
 
 
 def test_play_deal_default_stays_max_raises_1():
@@ -139,8 +207,8 @@ def test_synthetic_polar_indifference_alpha_is_pot_odds():
     assert family_bucket(air.opener_final) == "two_pair_or_trips"
     assert family_bucket(air.drawer_final) == CATCHER_FLUSH
     deals = [value] + [air] * 9
-    pay = precompute_raise_node_payoffs(deals)
-    result = indifference_root(
+    pay = PRECOMPUTE_RAISE_NODE_PAYOFFS(deals)
+    result = INDIFFERENCE_ROOT(
         deals,
         value_buckets=VALUE_BOAT_PLUS,
         bluff_buckets=BLUFF_TWO_PAIR_TRIPS,
@@ -153,9 +221,9 @@ def test_synthetic_polar_indifference_alpha_is_pot_odds():
     assert abs(result.catcher.call_minus_fold) < 1e-6
     assert abs(result.catcher.ev_fold - (-8.0)) < 1e-9
     assert abs(result.beta - 4 / 234) < 1e-6
-    alpha, n_v, n_b, n_3 = air_share_of_three_bets(
+    alpha, n_v, n_b, n_3 = AIR_SHARE_OF_THREE_BETS(
         pay,
-        BnPolarMix(
+        BN_POLAR_MIX(
             beta=result.beta,
             value_buckets=VALUE_BOAT_PLUS,
             bluff_buckets=BLUFF_TWO_PAIR_TRIPS,
@@ -178,16 +246,16 @@ def test_strategy_ev_convex_combo_and_best_response():
         d_final=_hv(HandCategory.STRAIGHT, 7),
     )
     deals = [flush_bn, trips]
-    pay = precompute_raise_node_payoffs(deals)
-    mix0 = BnPolarMix(beta=0.0, value_buckets=VALUE_FLUSH_PLUS)
-    mix1 = BnPolarMix(beta=1.0, value_buckets=VALUE_FLUSH_PLUS)
-    mixh = BnPolarMix(beta=0.5, value_buckets=VALUE_FLUSH_PLUS)
-    ev0 = strategy_ev(deals, mix0, RING1_CALLER_FOLD_CATCHERS, payoffs=pay)
-    ev1 = strategy_ev(deals, mix1, RING1_CALLER_FOLD_CATCHERS, payoffs=pay)
-    evh = strategy_ev(deals, mixh, RING1_CALLER_FOLD_CATCHERS, payoffs=pay)
+    pay = PRECOMPUTE_RAISE_NODE_PAYOFFS(deals)
+    mix0 = BN_POLAR_MIX(beta=0.0, value_buckets=VALUE_FLUSH_PLUS)
+    mix1 = BN_POLAR_MIX(beta=1.0, value_buckets=VALUE_FLUSH_PLUS)
+    mixh = BN_POLAR_MIX(beta=0.5, value_buckets=VALUE_FLUSH_PLUS)
+    ev0 = COMPUTE_STRATEGY_EV(deals, mix0, RING1_CALLER_FOLD_CATCHERS, payoffs=pay)
+    ev1 = COMPUTE_STRATEGY_EV(deals, mix1, RING1_CALLER_FOLD_CATCHERS, payoffs=pay)
+    evh = COMPUTE_STRATEGY_EV(deals, mixh, RING1_CALLER_FOLD_CATCHERS, payoffs=pay)
     assert abs(evh.ev_bn - 0.5 * (ev0.ev_bn + ev1.ev_bn)) < 1e-9
     # No air: straight is drawing dead to a flush+ 3-bet.
-    br = best_response(deals, mix0, payoffs=pay)
+    br = BEST_RESPONSE(deals, mix0, payoffs=pay)
     by = {r["bucket"]: r for r in br["rows"]}
     assert by["straight"]["recommend"] == "fold"
 
@@ -229,6 +297,7 @@ def test_fixture_ring1_patterns():
     assert meta["n_node_weighted"] == 7559
     assert meta["value_3bet"] == "flush+"
     assert meta["bn_straights"] == "always call (not mixed)"
+    assert meta["bn_leftover_two_pair_trips"] == "fold"
     f = data["findings"]
     assert f["nonbluff_grid_excludes_bluff_3bet"] is True
     assert f["cap_table_excludes_bluff_3bet"] is True
@@ -241,11 +310,13 @@ def test_fixture_ring1_patterns():
     assert f["hypothesis_bluff_delta_vs_no_air_positive"] is True
     assert f["hypothesis_bluff_delta_vs_call_it_down_positive"] is True
     assert f["hypothesis_boat_plus_value_needs_more_air"] is True
+    assert f["leftover_two_pair_trips"] == "fold"
     assert f["beta_star"] == 0.0155
     assert f["alpha_star"] == 0.1016
-    assert f["delta_vs_call_it_down"] == 0.2131
-    assert f["delta_vs_no_air_flush_plus"] == 0.2581
+    assert f["delta_vs_call_it_down"] == 3.4457
+    assert f["delta_vs_no_air_flush_plus"] == 0.2072
     assert f["node_ev_bn_call_it_down"] == -5.3239
+    assert f["node_ev_bn_at_beta_star"] == -1.8781
     assert f["boat_plus_only_alpha_star"] == 0.1528
     sketch = f["polar_sketch_alpha"]
     assert abs(sketch - (4 / 30 - 0.05) / 0.95) < 5e-5

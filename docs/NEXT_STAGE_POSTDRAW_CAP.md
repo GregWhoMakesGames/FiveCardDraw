@@ -240,7 +240,7 @@ delta on this rare-but-expensive node only.
 ## Next: bluff 3-bet Ring 2 (not this ticket)
 
 Ring 1 is **pinned** — [NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md)
-(β* = 0.0155, α* = 0.102). Bucketed Nash / CFR on this node is a later ticket.
+(β* = 0.0155, α* = 0.102, leftover **fold**). Bucketed Nash / CFR on this node is a later ticket.
 Do not start Ring 2 in the same PR as Ring 1.
 
 ---
