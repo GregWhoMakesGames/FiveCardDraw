@@ -15,7 +15,7 @@
 | Two pair | **d=1** | Dominant +EV lever in the 12-cell grid |
 | Quads | **d=1** | EV-neutral vs stand; pollutes public d=1 |
 | Other straight+ | Stand | Cannot join d=3 to “protect” pairs |
-| Trips | **d=2** (primary) or **d=1** (unified) | Live fork for Stage C |
+| Trips | **d=2** (primary) or **d=1** (unified) | Live fork for Stage C. `d=1` keep is highest-rank kicker (v1 pin); lowest / non-face kicker is a later EV question |
 
 Non-bluff **post-draw EV** (honest betting, not just P(win)) is more subtle than Stage A’s improvement tables: **standing** is the chip-max non-bluff line for pairs (drawing three raises P(win) but the extra two pair+ auto-bets pay off ~34% straight+). Stages A/B still **lock pairs at d=3** so they do not pollute public d=0. Among drawing options, pair **d=3 ≥ d=2** for AA and JJ — that chip delta is the number concealment mixes must beat. Two pair **d=1** and trips **d=2** remain the EV maxima. CLI: `analyze-postdraw-nonbluff-ev`. Detail: [../NEXT_STAGE_NONBLUFF_EV.md](../NEXT_STAGE_NONBLUFF_EV.md) and [Ch.3 §3.4](ch03_dealer_opening.md).
 

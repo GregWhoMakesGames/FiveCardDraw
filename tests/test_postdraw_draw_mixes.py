@@ -145,7 +145,9 @@ def test_two_pair_and_trips_and_quads_keeps():
     assert d2.n_draw == 2 and len(d2.keep) == 3
     d1 = opener_draw_plan_for_action(trips, "trips", 1)
     assert d1.n_draw == 1 and len(d1.keep) == 4
-    assert "8h" in {str(c) for c in d1.keep}
+    # v1 pin: highest-rank kicker. Keeping the rag (2d) instead is an unverified
+    # later EV question — see docs/NEXT_STAGE_OPENER_DRAW_MIXES.md.
+    assert {str(c) for c in d1.keep} == {"9s", "9d", "9c", "8h"}
 
     quads = parse_hand("As Ad Ac Ah 9c")
     q1 = opener_draw_plan_for_action(quads, "four_of_a_kind", 1)

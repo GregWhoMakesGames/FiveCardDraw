@@ -224,7 +224,7 @@ for opener_hand in class:
 | Two pair | `d=1` | Keep both pairs; discard kicker |
 | Two pair | `d=0` | Stand |
 | Trips | `d=2` | Keep trips; discard two kickers |
-| Trips | `d=1` | Keep trips + one kicker (pin which) |
+| Trips | `d=1` | Keep trips + **highest-rank** kicker (bug=ace). **v1 pin only** — see later note |
 | Trips | `d=0` | Stand |
 | Four of a kind | `d=1` | Keep quads; discard kicker (**baseline: prefer this**) |
 | Four of a kind | `d=0` | Stand |
@@ -330,6 +330,15 @@ mixes change the bet-into range enough that matched thresholds break.
 - Full CFR equilibrium on the whole tree (optional later if grids stall)
 - UTG open re-solve
 - Pair concealment EV (`pair_d≠3`) — after C; see PAIR_CONCEALMENT doc
+
+### Later (low priority — do not start during C)
+
+- **Trips `d=1` kicker rank.** v1 keeps the highest-rank kicker (bug counts as ace).
+  Unverified alternative: keep a **non-face / lower** kicker, on the idea that a
+  face is more likely already in the 2:1 caller’s hand, so fewer pairing cards
+  remain for a boat. Measure combo-weighted boat+ / EV of highest vs lowest vs
+  non-face kicker after Stage C. Do not change the keep pin until that table
+  exists.
 
 ---
 
