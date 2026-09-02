@@ -490,10 +490,13 @@ def test_fixture_summary_patterns():
     assert "recommendations" in data and len(data["recommendations"]) >= 5
     quads_rec = next(r for r in data["recommendations"] if r["class"] == "four_of_a_kind")
     assert "d=1" in quads_rec["draw_action"]
+    assert "always bet" in quads_rec["postdraw_bet_check"]
     trips_rec = next(r for r in data["recommendations"] if r["class"] == "trips")
     assert "d=2" in trips_rec["draw_action"] and "d=1" in trips_rec["draw_action"]
+    assert "always bet" in trips_rec["postdraw_bet_check"]
     tp_rec = next(r for r in data["recommendations"] if r["class"] == "two_pair")
     assert "d=1" in tp_rec["draw_action"]
+    assert "always check" in tp_rec["postdraw_bet_check"]
     pair_rec = next(r for r in data["recommendations"] if r["class"].startswith("pair"))
     assert "d=3" in pair_rec["draw_action"]
     other_rec = next(r for r in data["recommendations"] if r["class"] == "other straight+")
@@ -515,8 +518,10 @@ def test_fixture_summary_patterns():
     assert c_meta["draw"]["trips_d"] == 2
     assert c_meta["draw_policy"] == "tp1_tr2_q1"
     aa_c = next(s for s in data["stage_c"]["summaries"] if "stab=AA|" in s["stab"])
-    assert "best_check_mix" in aa_c
+    assert aa_c["best_check_mix"] == "chk_tp=1.00|tr=0.00|bp=0.00"
+    assert aa_c["best_delta_vs_baseline"] > 0.3
     assert aa_c["baseline_stab_delta"] is not None
+    assert findings["best_check_mix_vs_aa_stab"] == "chk_tp=1.00|tr=0.00|bp=0.00"
     key_rows = data["stage_c"]["key_rows"]
     assert key_rows
     for row in key_rows:

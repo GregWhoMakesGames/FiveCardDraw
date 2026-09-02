@@ -1316,7 +1316,7 @@ def build_recommendations(
         {
             "class": "four_of_a_kind",
             "draw_action": quads_draw,
-            "postdraw_bet_check": "bet (value); optional thin check mix into d=1 protection",
+            "postdraw_bet_check": "always bet (C: boat+ checks lost EV)",
             "notes": (
                 f"d1 win={q['d1_p_win']:.4f} stand win={q['stand_p_win']:.4f}; "
                 "drawer cannot make quads"
@@ -1331,13 +1331,13 @@ def build_recommendations(
         {
             "class": "trips",
             "draw_action": trips_draw,
-            "postdraw_bet_check": "mostly bet; check mix per stage C",
+            "postdraw_bet_check": "always bet (C: checking trips lost EV)",
             "notes": trips_note,
         },
         {
             "class": "two_pair",
             "draw_action": tp_draw,
-            "postdraw_bet_check": "bet most; check ~30–100% as protection vs face-pair stabs",
+            "postdraw_bet_check": "always check (C: best mix vs AA and AA+KK stabs)",
             "notes": tp_note,
         },
         {
@@ -1354,9 +1354,8 @@ def build_recommendations(
             ),
             "postdraw_bet_check": check_note,
             "notes": (
-                "Hypothesis confirmed under fixed narrow drawer stabs: mixing "
-                "two pair into checks raises opener EV and deepens stab losses. "
-                "Boat+ check mixes alone do not help. Pat straight+ cannot join d=3. "
+                "Best mix on both forks is always check two pair (all public d). "
+                "Checking trips or boat+ loses EV. Pat straight+ cannot join d=3. "
                 "Unified trips+TP+quads d=1 keeps the draw-one line coherent for "
                 "later pair-d=1 concealment."
             ),
