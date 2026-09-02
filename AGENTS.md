@@ -46,8 +46,9 @@ Stage C check mixes are done under post-B draws
 **Narrative next queue** (research paper): (1) Ch.2 strong-draw call/raise/mix,
 (2) Ch.5 CO bluff after BN open (return-to-actor; weaker than strong draws),
 (3) post-draw bluff 3-bet **Ring 1** on the cap node
-([docs/NEXT_STAGE_POSTDRAW_BLUFF.md](docs/NEXT_STAGE_POSTDRAW_BLUFF.md); do not
-start Ring 2 first) — see [docs/research/INDEX.md](docs/research/INDEX.md)
+([docs/NEXT_STAGE_POSTDRAW_BLUFF.md](docs/NEXT_STAGE_POSTDRAW_BLUFF.md);
+**after Stage C**: trips-only air, split by public \(d\); do not start
+Ring 2 first) — see [docs/research/INDEX.md](docs/research/INDEX.md)
 “Immediate research queue.”
 
 **Read first for concealment code:** [docs/NEXT_STAGE_PAIR_CONCEALMENT.md](docs/NEXT_STAGE_PAIR_CONCEALMENT.md)

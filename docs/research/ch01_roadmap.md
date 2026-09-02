@@ -103,7 +103,7 @@ Do **not** expand that plan until late-position non-sandbagging work is done (St
 
 1. **Ch.2 §2.9** — Strong draws: always call, always raise, or mix (BN-open laboratory first).
 2. **Ch.5 §5.2** — After BN opens (CO had passed with no legal opener; others fold): call/raise with less than a strong draw as a bluff? (depends on §2.9).
-3. Pair concealment (Ch.4 leftover) after the `d=3` vs `d=2` EV confirm; remaining Ch.3 bluff delta.
+3. Pair concealment (Ch.4 leftover) after the `d=3` vs `d=2` EV confirm; Ch.3 bluff 3-bet Ring 1 **after Stage C** (trips-only air, split by public \(d\)).
 4. CO open/pass chart; then HJ sandbagging.
 
 ## 1.8 Later (not scheduled in this draft)

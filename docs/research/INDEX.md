@@ -123,7 +123,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 1 | Strong draws: call vs raise vs mix (combo-weighted EV) | [Ch.2 §2.9](ch02_drawing_callers.md) | CO represent-bluffs |
 | 2 | CO bluff after BN open (return-to-actor: CO passed with no legal opener; others fold) — call/raise with underpair / high card? | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for value-range shape |
 | 3 | Pair post-draw EV `d=3` vs `d=2`, then concealment (Ch.4 leftover) | [Ch.4](ch04_draw_mixes.md) / [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md) | Stage C done; do not redo check mixes |
-| 3b | Post-draw **bluff 3-bet Ring 1** (indifference on the cap node) | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) | Needs cap street; **Ring 1 before Ring 2** |
+| 3b | Post-draw **bluff 3-bet Ring 1** after Stage C: trips-only air, **split by public \(d\)**; `d=0` caller flushes are not auto-fold | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) | Cap fixture is pre-C (two pair still bets). **Ring 1 before Ring 2** |
 | 4 | CO open/pass; HJ sandbagging | Ch.5 | After #2 template exists |
 
 ### Later (low priority)
@@ -151,6 +151,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
+| 2026-09-02 | Stage C implies cap/3-bet node is stale: trips-only air; split by public \(d\); `d=0` flushes not auto-fold |
 | 2026-09-02 | Stage C re-run: always check two pair under `tp1_tr2_q1` / `tp1_tr1_q1` |
 | 2026-09-02 | Later queue: trips `d=1` kicker rank (highest vs non-face) after Stage C |
 | 2026-09-01 | Non-bluff EV by BN class × d vs 2:1 caller (Ch.3 §3.4); bluff delta next |

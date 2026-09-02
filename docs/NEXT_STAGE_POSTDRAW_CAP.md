@@ -237,12 +237,42 @@ delta on this rare-but-expensive node only.
 
 ---
 
+## Stale after Stage C (always check two pair)
+
+This fixture and the node definition **pre-date** Stage C. They assume BN
+**always bets two pair+** (`p_bn_bets = 1` for two pair / two_pair_aces_up;
+node = two pair+ ∩ caller straight+; P(node) = 0.189).
+
+After C, unimproved two pair **checks**. They never face the raise, so they
+never 3-bet as a bluff. Approximate combo-weighted drop (this fixture’s
+7,559 node deals × Stage A finals): ~3,985 unimproved two pair leave; the
+node shrinks to ~3,570 deals (~0.09 of locked-range deals). Remaining air
+on a BN-bet line is **trips**, not two pair ∪ trips.
+
+The pooled caller BR “fold all flushes vs a flush+ 3-bet” (~5% equity) mixes
+**pat flushes** (`d=0`) with **boats from draws** (`d=1,2,3`). The caller
+sees \(d\):
+
+- `d=0` (line 2): BN stood with straight / flush / rare starting boat+. A
+  3-bet is usually not a boat. Flushes should **not** auto-fold.
+- `d=2` / `d=3` (line 1): BN drew with trips or a pair; a 3-bet is boat+ or
+  a trips bluff. Fold-non-SF is the plausible polar story.
+- `d=1`: two pair that *boated* plus quads; unimproved two pair checked. A
+  3-bet is nuts.
+
+**Do not treat § Findings above, or Ch.3 §3.5, as the post-C node.** Re-run
+the raise filter under Stage C betting before quoting node mass, joint EV,
+or caller BR. Bluff work: [NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md).
+
+---
+
 ## Next: bluff 3-bet (Ring 1)
 
-Honest flush+ 3-bet vs a folding caller is **not** equilibrium. First
-bluff-library ticket: mix two pair/trips as air until **flushes** are
-indifferent to calling the 3-bet. Do **not** start bucketed Nash until that
-fixture exists — [NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md).
+Honest flush+ 3-bet vs a folding caller is **not** equilibrium, and the
+fold-all-flush BR is **not** valid on `d=0`. First bluff-library ticket:
+mix **trips** as air on the trips-draw lines until **flushes** are
+indifferent; report `d=0` separately. Do **not** start bucketed Nash until
+that fixture exists — [NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md).
 
 ---
 

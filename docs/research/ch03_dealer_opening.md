@@ -40,7 +40,7 @@ CLI: `analyze-postdraw-nonbluff-ev`. Detail: [../NEXT_STAGE_NONBLUFF_EV.md](../N
 | BN class | Chip-max d | EV_bn | Honest post-draw |
 | --- | ---: | ---: | --- |
 | Pair JJ–AA | **stand (d=0)** | JJ +3.56 / AA +2.68 | Check the pair; bet if it improves to two pair+ |
-| Two pair | **d=1** | +2.10 | Always value-bet |
+| Two pair | **d=1** | +2.10 | Honest cell: value-bet. **Stage C then always checks** (Ch.4) — cap/3-bet must use that street, not this row |
 | Trips | **d=2** (d=1 unified-line fork) | +2.33 | Always value-bet |
 | Quads | stand ≈ **d=1** (prefer d=1 for signal) | ~+8.4 | Always value-bet |
 | Straight | Stand | +3.80 | Always value-bet (loses some case-2 pots) |
@@ -73,7 +73,14 @@ CLI: `analyze-postdraw-cap`. Detail: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STA
 
 Call-it-down **understates** BN EV on this node for flush+ (node EV_bn −5.32 → about −5.00 if BN 3-bets flush+ and the caller still calls). It does not rewrite §3.4.
 
-That value line is **not** Nash: vs a flush+ 3-bet, the caller’s best response is already fold non-SF, which then invites bluff 3-bets with two pair/trips. First bluff-library slice (make flushes indifferent to calling the 3-bet; do not start a node Nash until that number is pinned): [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md).
+That value line is **not** Nash, and the node is **stale vs Stage C**. The fixture assumes two pair always bets. After C, two pair checks, so they never reach caller-raise → BN 3-bet. Air on that line is **unimproved trips** only.
+
+The pooled “fold all flushes vs flush+” BR (~5% equity) also ignores public \(d\). Two lines:
+
+1. **Trips draw** (`d=2`, or `d=3` from pairs): 3-bet is boat+ or a trips bluff. Fold-non-SF can be right; α / β are per-\(d\).
+2. **Pat straight+** (`d=0`): BN stood; a 3-bet is usually a straight or flush, rarely better than a flush. Caller should **not** fold all flushes.
+
+First bluff-library slice (trips-only air, split by \(d\); do not start a node Nash until those numbers are pinned): [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md). Cap staleness: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md).
 
 ---
 
