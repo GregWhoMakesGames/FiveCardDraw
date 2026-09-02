@@ -109,6 +109,6 @@ Boat+-only value needs more air (α* = 0.15). Family-level flush indifference bl
 | `src/fivecarddraw/validation/postdraw_betting_m2.py` | M2 face-pair grid + cap street helper |
 | `src/fivecarddraw/validation/postdraw_nonbluff_ev.py` | Non-bluff class × d EV |
 | `src/fivecarddraw/validation/postdraw_cap.py` | Post-draw 3-bet / cap on the raise node |
-| `src/fivecarddraw/validation/bluff_indifference.py` | Reusable indifference helpers (`strategy_ev`, `indifference_root`) |
+| `src/fivecarddraw/validation/bluff_indifference.py` | Reusable indifference helpers (`COMPUTE_STRATEGY_EV`, `INDIFFERENCE_ROOT`) |
 | `src/fivecarddraw/validation/postdraw_bluff.py` | Ring 1 polar 3-bet mix on the raise node |
 | Matching fixtures + `tests/test_showdown_matrix.py`, `tests/test_postdraw_m2.py`, `tests/test_postdraw_nonbluff_ev.py`, `tests/test_postdraw_cap.py`, `tests/test_postdraw_bluff.py` | CI |

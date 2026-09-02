@@ -87,7 +87,7 @@ calls). No 5th bet.
 
 ### Chip pins
 
-After BN 3-bet: pot $26, $4 to call. `pot_odds_to_call(26, 4) == 4/30`.
+After BN 3-bet: pot $26, $4 to call. `POT_ODDS_TO_CALL(26, 4) == 4/30`.
 Caller fold EV_bn / EV_caller from `play_raise_node(..., caller_vs_3bet="fold")`
 must match the cap unit tests (BN +14 / caller −8 when the steal works).
 
@@ -128,12 +128,12 @@ Put helpers where later bluff tickets can import them (new module e.g.
 | Helper | Contract |
 | --- | --- |
 | Node sample | Raise-node deals (reuse cap generator / `on_raise_node`) |
-| `strategy_ev(deals, bn_mix, caller_mix)` | Mean EV_bn, EV_caller via `play_raise_node` |
-| `indifference_root(deals, value_buckets, bluff_buckets, catcher_bucket)` | β (or α) s.t. catcher \(EV_{\text{call}}-EV_{\text{fold}}=0\) |
-| `best_response(deals, opponent_mix)` | Argmax action per own family bucket |
-| Pot-odds pin | `pot_odds_to_call(26, 4) == 4/30` |
+| `COMPUTE_STRATEGY_EV(deals, bn_mix, caller_mix)` | Mean EV_bn, EV_caller via `play_raise_node` |
+| `INDIFFERENCE_ROOT(deals, value_buckets, bluff_buckets, catcher_bucket)` | β (or α) s.t. catcher \(EV_{\text{call}}-EV_{\text{fold}}=0\) |
+| `BEST_RESPONSE(deals, opponent_mix)` | Argmax action per own family bucket |
+| Pot-odds pin | `POT_ODDS_TO_CALL(26, 4) == 4/30` |
 
-`best_response` can wait until the end of Ring 1 (useful as a check: at β*,
+`BEST_RESPONSE` can wait until the end of Ring 1 (useful as a check: at β*,
 flush BR is mix/indifferent; straight BR is fold). Do not implement CFR in
 Ring 1.
 
@@ -147,7 +147,7 @@ Ring 1.
 | `on_raise_node`, `family_bucket`, `fine_bucket` | Same node and labels as cap |
 | Locked range + 2:1 keep-4 | Same 18,396; `LOCKED_BN_DRAW` |
 | Cap fixture numbers | Honest no-air baseline for the delta |
-| `pot_odds_to_call` | Break-even equity |
+| `POT_ODDS_TO_CALL` | Break-even equity |
 
 Do **not** re-run the class × d grid, Stage C, pair concealment, M2 knobs,
 or pre-draw trees.
@@ -225,7 +225,7 @@ value table.** Those remain no-air / bet+1.
 
 CLI: `analyze-postdraw-bluff`. Library:
 `src/fivecarddraw/validation/bluff_indifference.py`
-(`strategy_ev`, `indifference_root`, `best_response`, `pot_odds_to_call`).
+(`COMPUTE_STRATEGY_EV`, `INDIFFERENCE_ROOT`, `BEST_RESPONSE`, `POT_ODDS_TO_CALL`).
 
 ---
 

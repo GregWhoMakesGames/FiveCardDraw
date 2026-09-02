@@ -19,24 +19,24 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from fivecarddraw.validation.bluff_indifference import (
+    AIR_SHARE_OF_THREE_BETS,
+    BEST_RESPONSE,
     BLUFF_TWO_PAIR_TRIPS,
-    BnPolarMix,
+    BN_POLAR_MIX,
     CALL_3BET,
+    CALLER_MIX,
+    CATCHER_EVS,
     CATCHER_FLUSH,
-    CallerMix,
+    COMPUTE_STRATEGY_EV,
+    INDIFFERENCE_ROOT,
     POT_AFTER_3BET,
     POT_ODDS_CALL_3BET,
+    PRECOMPUTE_RAISE_NODE_PAYOFFS,
     RING1_CALLER_CALL_FLUSH,
     RING1_CALLER_FOLD_CATCHERS,
     VALUE_BOAT_PLUS,
     VALUE_FLUSH_PLUS,
-    air_share_of_three_bets,
-    best_response,
-    catcher_evs,
     family_counts,
-    indifference_root,
-    precompute_raise_node_payoffs,
-    strategy_ev,
 )
 from fivecarddraw.validation.postdraw_betting_m2 import BIG, CAP_POT, PREDRAW_POT
 from fivecarddraw.validation.postdraw_cap import (
@@ -62,7 +62,7 @@ DEFAULT_N_RANGE = 40_000
 DEFAULT_N_PER_CLASS = 4_000
 FLUSH_EV_TOL = 0.05
 
-CALL_IT_DOWN_MIX = BnPolarMix(
+CALL_IT_DOWN_MIX = BN_POLAR_MIX(
     beta=0.0, value_buckets=frozenset(), bluff_buckets=frozenset()
 )
 
@@ -111,9 +111,9 @@ def _strategy_as_dict(ev) -> dict[str, Any]:
 
 
 def _caller_report(
-    payoffs, mix: BnPolarMix, bucket: str
+    payoffs, mix: BN_POLAR_MIX, bucket: str
 ) -> dict[str, Any]:
-    evs = catcher_evs(payoffs, mix, bucket)
+    evs = CATCHER_EVS(payoffs, mix, bucket)
     scored = (
         ("fold", evs.ev_fold),
         ("call", evs.ev_call),
@@ -136,7 +136,7 @@ def _caller_report(
 
 
 def _fine_catcher_rows(
-    payoffs, mix: BnPolarMix, *, family: str
+    payoffs, mix: BN_POLAR_MIX, *, family: str
 ) -> list[dict[str, Any]]:
     by_fine: dict[str, list] = defaultdict(list)
     for p in payoffs:
@@ -145,7 +145,7 @@ def _fine_catcher_rows(
         by_fine[p.caller_fine].append(p)
     rows = []
     for name, group in sorted(by_fine.items(), key=lambda kv: -len(kv[1])):
-        evs = catcher_evs(group, mix, name, caller_key="fine")
+        evs = CATCHER_EVS(group, mix, name, caller_key="fine")
         rows.append(
             {
                 "bucket": name,
@@ -167,44 +167,44 @@ def evaluate_ring1(
     value_buckets: frozenset[str] = VALUE_FLUSH_PLUS,
     label: str = "flush+",
 ) -> dict[str, Any]:
-    root = indifference_root(
+    root = INDIFFERENCE_ROOT(
         None,
         value_buckets=value_buckets,
         bluff_buckets=BLUFF_TWO_PAIR_TRIPS,
         catcher_bucket=CATCHER_FLUSH,
         payoffs=payoffs,
     )
-    mix = BnPolarMix(
+    mix = BN_POLAR_MIX(
         beta=root.beta,
         value_buckets=frozenset(value_buckets),
         bluff_buckets=BLUFF_TWO_PAIR_TRIPS,
     )
-    no_air = BnPolarMix(
+    no_air = BN_POLAR_MIX(
         beta=0.0,
         value_buckets=frozenset(value_buckets),
         bluff_buckets=BLUFF_TWO_PAIR_TRIPS,
     )
     # Joint node EV: at β* flushes are indifferent, so fold vs call matches.
-    ev_star_fold = strategy_ev(None, mix, RING1_CALLER_FOLD_CATCHERS, payoffs=payoffs)
-    ev_star_call = strategy_ev(None, mix, RING1_CALLER_CALL_FLUSH, payoffs=payoffs)
-    ev_call_down = strategy_ev(
+    ev_star_fold = COMPUTE_STRATEGY_EV(None, mix, RING1_CALLER_FOLD_CATCHERS, payoffs=payoffs)
+    ev_star_call = COMPUTE_STRATEGY_EV(None, mix, RING1_CALLER_CALL_FLUSH, payoffs=payoffs)
+    ev_call_down = COMPUTE_STRATEGY_EV(
         None, CALL_IT_DOWN_MIX, RING1_CALLER_FOLD_CATCHERS, payoffs=payoffs
     )
-    ev_no_air_fold = strategy_ev(
+    ev_no_air_fold = COMPUTE_STRATEGY_EV(
         None, no_air, RING1_CALLER_FOLD_CATCHERS, payoffs=payoffs
     )
     # Cap-module "honest" hold: cap SF, call rest (no air).
-    call_rest = CallerMix(
+    call_rest = CALLER_MIX(
         {"straight": "call", "flush": "call", "boat_plus": "cap"}
     )
-    ev_no_air_call_rest = strategy_ev(None, no_air, call_rest, payoffs=payoffs)
+    ev_no_air_call_rest = COMPUTE_STRATEGY_EV(None, no_air, call_rest, payoffs=payoffs)
 
-    alpha, n_value, n_bluff, n_3bet = air_share_of_three_bets(payoffs, mix)
+    alpha, n_value, n_bluff, n_3bet = AIR_SHARE_OF_THREE_BETS(payoffs, mix)
     flush = _caller_report(payoffs, mix, "flush")
     straight = _caller_report(payoffs, mix, "straight")
     boat = _caller_report(payoffs, mix, "boat_plus")
-    caller_br = best_response(None, mix, payoffs=payoffs)
-    bn_br = best_response(None, RING1_CALLER_FOLD_CATCHERS, payoffs=payoffs)
+    caller_br = BEST_RESPONSE(None, mix, payoffs=payoffs)
+    bn_br = BEST_RESPONSE(None, RING1_CALLER_FOLD_CATCHERS, payoffs=payoffs)
 
     return {
         "value_range": label,
@@ -337,8 +337,8 @@ def run_analysis(
 
     if progress:
         print(f"Precomputing raise-node payoffs ({len(node_weighted)} weighted)…")
-    pay_w = precompute_raise_node_payoffs(node_weighted)
-    pay_extra = precompute_raise_node_payoffs(node_extra) if node_extra else []
+    pay_w = PRECOMPUTE_RAISE_NODE_PAYOFFS(node_weighted)
+    pay_extra = PRECOMPUTE_RAISE_NODE_PAYOFFS(node_extra) if node_extra else []
     pay_labeled = pay_w + pay_extra
 
     if progress:
@@ -347,7 +347,7 @@ def run_analysis(
     boat_only = evaluate_ring1(
         pay_w, value_buckets=VALUE_BOAT_PLUS, label="boat+"
     )
-    mix_star = BnPolarMix(
+    mix_star = BN_POLAR_MIX(
         beta=primary["beta_star"],
         value_buckets=VALUE_FLUSH_PLUS,
         bluff_buckets=BLUFF_TWO_PAIR_TRIPS,
