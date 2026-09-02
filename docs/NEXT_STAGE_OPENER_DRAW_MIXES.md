@@ -1,14 +1,15 @@
 # Next stage: opener draw-count mixes + protected checking ranges
 
-**Status:** Stages **A** and **B** done (full 12-cell draw grid). Stage **C** must
-be **re-run** under the post-B draw defaults below — the checked-in C fixture used
-`two_pair_d=0` (stand) and is **not** the policy we carry forward.
+**Status:** Stages **A**, **B**, and **C** done under the post-B draw defaults
+(two pair `d=1`, pairs `d=3`; trips `d=2` primary / `d=1` unified). Next code
+milestone: pair post-draw EV `d=3` vs `d=2` before concealment mixes
+([NEXT_STAGE_PAIR_CONCEALMENT.md](NEXT_STAGE_PAIR_CONCEALMENT.md)).
 
 Code `src/fivecarddraw/validation/postdraw_draw_mixes.py`, CLI
 `analyze-postdraw-draw-mixes`, summary fixture
 `tests/fixtures/validation/postdraw_draw_mixes_summary.json`, tests
-`tests/test_postdraw_draw_mixes.py`. Regen A/B/C with
-`analyze-postdraw-draw-mixes --n-deals 20000 --write-fixture` after C is updated.
+`tests/test_postdraw_draw_mixes.py`. Regen C only with
+`analyze-postdraw-draw-mixes --stage C --n-deals 20000 --write-fixture`.
 
 **Read first (in order):**
 
@@ -16,11 +17,11 @@ Code `src/fivecarddraw/validation/postdraw_draw_mixes.py`, CLI
    opener-first post-draw betting when the opener **draws three**
 2. [NEXT_STAGE_SHOWDOWN_MATRIX.md](NEXT_STAGE_SHOWDOWN_MATRIX.md) — showdown equity
    vs the 2:1 drawing caller
-3. This doc — A/B findings, narrowed draw fork, then **Step C** (next work)
+3. This doc — A/B findings, narrowed draw fork, then **Step C** (done)
 
 Parent ladder: [NEXT_STAGE_DEALER_OPENING_EQUITY.md](NEXT_STAGE_DEALER_OPENING_EQUITY.md).
 
-Related (do not start until C is done under the new draws):
+Related (C is done under the new draws; pair concealment is next):
 [NEXT_STAGE_PAIR_CONCEALMENT.md](NEXT_STAGE_PAIR_CONCEALMENT.md).
 
 ---
@@ -32,7 +33,7 @@ Related (do not start until C is done under the new draws):
 | `showdown_matrix` | HU showdown vs 2:1 callers after pinned non-breaking draws |
 | `postdraw_betting_m2` | With pairs always `d=3`, two pair stand, trips `d=2`, straight+ stand: **default check JJ–AA**; lead AA only as a thin reply to narrow drawer stabs; drawer face-pair stab/raise should stay **narrow** |
 | `postdraw_draw_mixes` A+B | Mechanical tables + full 12-cell draw EV grid (this doc) |
-| `postdraw_draw_mixes` C (old) | Check-mix numbers exist but used **two pair stand** — treat as qualitative only until re-run |
+| `postdraw_draw_mixes` C | Under `tp1_tr2_q1` / `tp1_tr1_q1`: check **all two pair** (all public `d`) is the best grid mix vs drawer AA stab |
 
 ### Locked game facts that still apply
 
@@ -141,25 +142,42 @@ Keep pairs on **d=3 for range construction** (cannot pollute public d=0).
 See [NEXT_STAGE_NONBLUFF_EV.md](NEXT_STAGE_NONBLUFF_EV.md).
 Pair `d=1` remains worse on improvement (zero boat+). Concealment mixes still wait until after C.
 
-### C — Checking-range protection (stale fixture note)
+### C — Checking-range protection (re-run under post-B draws)
 
-The checked-in C run used draw = quads `d=1`, pairs `d=3`, **two pair stand**,
-trips `d=2`. Against narrow drawer AA face-stabs:
+n = 20,000 deals; seed 20260809. Both forks use two pair `d=1`, pairs `d=3`,
+quads `d=1`. Street is still M2 (bet + at most one raise). Check mixes apply
+per public `d` when `by_d` is set.
 
-- Baseline (always bet two pair+): drawer AA face-stab Δ already **−0.42**
-- Check 30% / 100% of two pair raised opener EV and deepened stab losses
+**C-primary** (`tp1_tr2_q1`, trips `d=2`) vs drawer AA face-stab, never raise:
 
-**Do not trust those magnitudes under `two_pair_d=1`.** Re-run per Step C below.
-Pat straight+ still cannot join `d=3`.
+| Policy | Opener EV | Drawer stab Δ |
+| --- | ---: | ---: |
+| Baseline (always bet two pair+) | 2.781 | −0.419 |
+| Check 30% of two pair (all `d`) | 2.893 | −1.092 |
+| Check 100% of two pair (all `d`) | **3.147** | **−2.003** |
+
+Best grid mix is **always check two pair** (`chk_tp=1`, trips/boat+ always bet).
+Under that mix, public `d=1` EV goes 2.193 → 3.332 (stab Δ −4.0) and `d=3`
+goes 2.877 → 3.070 (stab Δ −1.143) because pair improvements also make two
+pair. The search included `d=1`-only overrides; the global mix won on that
+`d=3` mass. Checking trips or boat+ on any `d` loses EV.
+
+**C-unified** (`tp1_tr1_q1`, trips `d=1`): same best mix; baseline EV 2.766,
+best EV 3.133, stab Δ −2.003. Forks agree on the check policy.
+
+Vs **AA+KK** face-stab (still never raise): baseline drawer Δ is **+0.70**
+(profitable for the drawer). Checking all two pair flips it to **−1.38**.
+
+Pat straight+ still cannot join `d=3`. One-pair still checks (M2).
 
 ### Recommendation table (post-B)
 
 | Class | Draw action | Post-draw bet/check | Notes |
 | --- | --- | --- | --- |
-| Four of a kind | **d=1** | Bet value (C may thin-check) | EV-neutral vs stand; pollutes d=1 |
+| Four of a kind | **d=1** | Always bet (C) | Thin-check of boat+ lost EV |
 | Other straight+ | Stand only | Always bet | Cannot join d=3 |
-| Trips | **d=2** (primary) or **d=1** (unified) | C: bet/check mixes | Fork for C; d=2 leaves concealment lane |
-| Two pair | **d=1** | C: bet/check mixes | Locked from B |
+| Trips | **d=2** (primary) or **d=1** (unified) | Always bet (C) | Checking trips lost EV on both forks |
+| Two pair | **d=1** | **Always check** | Best mix on both forks; all public `d` |
 | Pair JJ–AA | **d=3** for C | Check (M2); thin AA lead | Pair off-d=3 is concealment work *after* C |
 
 ---
@@ -254,11 +272,11 @@ Always stratify results by public \(d\):
 Full 12-cell grid; narrowed to trips `d=2` vs `d=1` with two pair `d=1`, quads
 `d=1`. See **B decision** above.
 
-### C — Checking-range protection grid (NEXT — re-run)
+### C — Checking-range protection grid — DONE
 
-**For the next agent.** Do not re-do A/B. Do not start pair-concealment mixes
-(`pair_d≠3`) here — that is [NEXT_STAGE_PAIR_CONCEALMENT.md](NEXT_STAGE_PAIR_CONCEALMENT.md)
-after C.
+Re-run under post-B draws is checked in. Do not re-do A/B/C. Pair-concealment
+mixes (`pair_d≠3`) are [NEXT_STAGE_PAIR_CONCEALMENT.md](NEXT_STAGE_PAIR_CONCEALMENT.md)
+(verify pair post-draw EV `d=3` vs `d=2` first).
 
 #### Draw policies to hold fixed (two C runs)
 
@@ -312,11 +330,11 @@ mixes change the bet-into range enough that matched thresholds break.
 ## Deliverables
 
 1. Code under `src/fivecarddraw/validation/` (`postdraw_draw_mixes.py`) + CLI —
-   A/B done; C needs draw-policy update
-2. Fixture summary JSON under `tests/fixtures/validation/` — refresh after C
+   A/B/C done (`C_PRIMARY` / `C_UNIFIED`, per-`d` `CheckMix`)
+2. Fixture summary JSON under `tests/fixtures/validation/` — C refreshed
 3. `pytest` pins (tolerance OK for MC)
 4. Short markdown in `outputs/validation/` (gitignored) + this doc’s Findings C
-5. Clear recommendation table — update after C re-run
+5. Recommendation table — always check two pair; always bet trips / boat+
 
 ---
 
@@ -329,9 +347,9 @@ mixes change the bet-into range enough that matched thresholds break.
   protection
 - Full CFR equilibrium on the whole tree (optional later if grids stall)
 - UTG open re-solve
-- Pair concealment EV (`pair_d≠3`) — after C; see PAIR_CONCEALMENT doc
+- Pair concealment EV (`pair_d≠3`) — next after C; see PAIR_CONCEALMENT doc
 
-### Later (low priority — do not start during C)
+### Later (low priority — do not start during concealment)
 
 - **Trips `d=1` kicker rank.** v1 keeps the highest-rank kicker (bug counts as ace).
   Unverified alternative: keep a **non-face / lower** kicker, on the idea that a

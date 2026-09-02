@@ -40,7 +40,7 @@ CLI: `analyze-postdraw-nonbluff-ev`. Detail: [../NEXT_STAGE_NONBLUFF_EV.md](../N
 | BN class | Chip-max d | EV_bn | Honest post-draw |
 | --- | ---: | ---: | --- |
 | Pair JJ–AA | **stand (d=0)** | JJ +3.56 / AA +2.68 | Check the pair; bet if it improves to two pair+ |
-| Two pair | **d=1** | +2.10 | Always value-bet |
+| Two pair | **d=1** | +2.10 | Honest cell: value-bet. **Stage C then always checks** (Ch.4) — cap/3-bet must use that street, not this row |
 | Trips | **d=2** (d=1 unified-line fork) | +2.33 | Always value-bet |
 | Quads | stand ≈ **d=1** (prefer d=1 for signal) | ~+8.4 | Always value-bet |
 | Straight | Stand | +3.80 | Always value-bet (loses some case-2 pots) |
@@ -50,30 +50,41 @@ CLI: `analyze-postdraw-nonbluff-ev`. Detail: [../NEXT_STAGE_NONBLUFF_EV.md](../N
 
 Caller keep-4 **d=1** beats standing with the dealt five (ΔEV_caller about +$2–4 vs representative BN classes). EV is reported for **both** seats (`EV_bn + EV_caller = $6` sunk pot). Case 1–8c mass is attached to the same deals as a link to §3.2, not as a substitute for EV.
 
-**Bluff delta comes next.** This table is the honest cell. Later work can add miss stabs, BN check-mixes (Stage C), and pair `d≠3` concealment, and report ΔEV against these numbers — not a new baseline. CO return-to-actor bluffs after a BN open live in [Ch.5 §5.2](ch05_later_seats.md). The §3.4 grid is **bet+1** (call the raise); 3-bet / cap is §3.5 and is **not** already in those cells.
+**Bluff delta comes next.** This table is the honest cell. Stage C check-mixes of two pair are done (Ch.4); later work can add miss stabs and pair `d≠3` concealment, and report ΔEV against these numbers — not a new baseline. CO return-to-actor bluffs after a BN open live in [Ch.5 §5.2](ch05_later_seats.md). The §3.4 grid is **bet+1** (call the raise); 3-bet / cap is §3.5 and is **not** already in those cells.
 
 ---
 
 ## 3.5 Post-draw cap (bet + 3 raises)
 
-On the raise node — BN has value-bet two pair+ and the 2:1 caller has raised with a made straight+ — full cap is four $4 increments each (pot **$38** vs today’s **$22** call-it-down). Combo-weighted P(node) ≈ **0.19** under locked draws.
+On the raise node — BN has **bet** and the 2:1 caller has raised with a made straight+ — full cap is four $4 increments each (pot **$38** vs today’s **$22** call-it-down). After Stage C, BN checks two pair, so the node is **trips+ bets ∩ caller straight+** (not two pair+). Tree: [../POSTDRAW_STRATEGY_TREE.md](../POSTDRAW_STRATEGY_TREE.md).
 
 CLI: `analyze-postdraw-cap`. Detail: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md). Fixture: `tests/fixtures/validation/postdraw_cap_summary.json`.
 
-**BN vs the raise** (unilateral Δ vs a caller who caps SF and calls otherwise):
+Stage C re-filter (seed 20260902, 40k locked-range deals): P(node) = **0.0903** (3,612 deals). Pre-C, with two pair always betting, was 0.189 / 7,559. Unimproved two pair on the node: **0**.
+
+**BN vs the raise** (unilateral Δ vs a caller who caps SF and calls otherwise; extra-weighted):
 
 | BN final | Action | Δ 3-bet vs call |
 | --- | --- | ---: |
-| Two pair / trips | Call (no bluff 3-bet) | −4.28 |
+| Two pair | Not on this node (Stage C check) | — |
+| Trips | Call (no bluff 3-bet) | −4.27 |
 | Straight | **Call** (broadway A is a thin 3-bet) | −1.81 |
 | Flush (any high) | **3-bet** | +2.17 |
 | Boat / quads / SF / five aces | **3-bet** | +3.47 |
 
-**Caller vs a 3-bet:** fold a non-SF into BN boat+ (and, unilaterally, into BN flush+); cap SF. Do not cap a straight or flush into boats.
+**Two 3-bet lines** (caller sees public \(d\); do not quote a pooled fold-all-flush BR):
 
-Call-it-down **understates** BN EV on this node for flush+ (node EV_bn −5.32 → about −5.00 if BN 3-bets flush+ and the caller still calls). It does not rewrite §3.4.
+| Line | \(d\) | n | Air | Flush vs no-air flush+ |
+| --- | --- | ---: | --- | --- |
+| 1 — trips draw | 2 ∪ 3 | 2,569 | Unimproved trips (2,258) | **fold** |
+| 2 — pat straight+ | 0 | 750 | None | **call** (EV −7.45 vs fold −8.00) |
+| *(not a bluff line)* | 1 | 293 | None (boats/quads) | **fold** |
 
-That value line is **not** Nash: vs a flush+ 3-bet, the caller’s best response is already fold non-SF, which then invites bluff 3-bets with two pair/trips. First bluff-library slice (make flushes indifferent to calling the 3-bet; do not start a node Nash until that number is pinned): [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md).
+Call-it-down EV_bn on the Stage C node is **−2.40** (was −5.32 when two pair sat on the node and lost). Honest flush+ 3-bet / cap-SF is **−1.71**. It does not rewrite §3.4.
+
+That value line is **not** Nash. Line 1 still needs trips-air β so flushes are indifferent. Line 2 has no trips air; flush call ≥ fold is pinned, mix/Nash is open.
+
+First bluff-library slice: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md). Detail + fixture: [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md).
 
 ---
 

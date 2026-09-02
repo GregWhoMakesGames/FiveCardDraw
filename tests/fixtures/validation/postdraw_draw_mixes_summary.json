@@ -1131,68 +1131,73 @@
       "stage": "C",
       "n_deals": 20000,
       "seed": 20260809,
-      "draw_policy": "quads_d1",
+      "draw_policy": "tp1_tr2_q1",
       "draw": {
         "pair_d": 3,
-        "two_pair_d": 0,
+        "two_pair_d": 1,
         "trips_d": 2,
         "quads_d": 1
       },
       "opener_lead": "never (one pair)",
-      "doc": "docs/NEXT_STAGE_OPENER_DRAW_MIXES.md"
+      "doc": "docs/NEXT_STAGE_OPENER_DRAW_MIXES.md",
+      "fork": "primary",
+      "forks": [
+        "tp1_tr2_q1",
+        "tp1_tr1_q1"
+      ]
     },
     "summaries": [
       {
         "stab": "lead=never|stab=AA|raise=never",
-        "baseline_ev": 2.6409,
-        "baseline_stab_delta": -0.4187,
-        "baseline_stab_rate": 0.1694,
-        "best_ev": 3.0323,
+        "baseline_ev": 2.7806,
+        "baseline_stab_delta": -0.41873,
+        "baseline_stab_rate": 0.16945,
+        "best_ev": 3.1474,
         "best_check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
-        "best_stab_delta": -2.051,
-        "best_delta_vs_baseline": 0.3914,
-        "unprofitable_stab_count": 12,
+        "best_stab_delta": -2.00307,
+        "best_delta_vs_baseline": 0.3668,
+        "unprofitable_stab_count": 18,
         "best_unprofitable": {
           "check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
-          "ev": 3.0323,
-          "stab_delta": -2.051,
-          "delta_vs_baseline": 0.3914
+          "ev": 3.1474,
+          "stab_delta": -2.00307,
+          "delta_vs_baseline": 0.3668
         },
         "near_indifferent_count": 0
       },
       {
         "stab": "lead=never|stab=AA+KK|raise=never",
-        "baseline_ev": 2.4779,
-        "baseline_stab_delta": 0.7034,
-        "baseline_stab_rate": 0.1704,
-        "best_ev": 2.8721,
+        "baseline_ev": 2.6176,
+        "baseline_stab_delta": 0.70341,
+        "baseline_stab_rate": 0.17035,
+        "best_ev": 2.9872,
         "best_check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
-        "best_stab_delta": -1.4363,
-        "best_delta_vs_baseline": 0.3942,
-        "unprofitable_stab_count": 8,
+        "best_stab_delta": -1.37628,
+        "best_delta_vs_baseline": 0.3696,
+        "unprofitable_stab_count": 11,
         "best_unprofitable": {
           "check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
-          "ev": 2.8721,
-          "stab_delta": -1.4363,
-          "delta_vs_baseline": 0.3942
+          "ev": 2.9872,
+          "stab_delta": -1.37628,
+          "delta_vs_baseline": 0.3696
         },
-        "near_indifferent_count": 1
+        "near_indifferent_count": 3
       },
       {
         "stab": "lead=never|stab=AA|raise=AA",
-        "baseline_ev": 2.7369,
-        "baseline_stab_delta": -0.4187,
-        "baseline_stab_rate": 0.1694,
-        "best_ev": 3.0675,
+        "baseline_ev": 2.8766,
+        "baseline_stab_delta": -0.41873,
+        "baseline_stab_rate": 0.16945,
+        "best_ev": 3.1858,
         "best_check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
-        "best_stab_delta": -2.051,
-        "best_delta_vs_baseline": 0.3306,
-        "unprofitable_stab_count": 12,
+        "best_stab_delta": -2.00307,
+        "best_delta_vs_baseline": 0.3092,
+        "unprofitable_stab_count": 18,
         "best_unprofitable": {
           "check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
-          "ev": 3.0675,
-          "stab_delta": -2.051,
-          "delta_vs_baseline": 0.3306
+          "ev": 3.1858,
+          "stab_delta": -2.00307,
+          "delta_vs_baseline": 0.3092
         },
         "near_indifferent_count": 0
       }
@@ -1201,64 +1206,456 @@
       {
         "stab": "lead=never|stab=AA|raise=never",
         "check_mix": "chk_tp=0.00|tr=0.00|bp=0.00",
-        "ev": 2.6409,
-        "stab_rate": 0.1694,
+        "ev": 2.7806,
+        "stab_rate": 0.16945,
         "strong_check_rate": 0.0,
         "face_stab_nodes": 363.0,
-        "drawer_face_stab_delta": -0.4187
+        "drawer_face_stab_delta": -0.41873,
+        "by_d": {
+          "d0": {
+            "ev": 5.1109,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d1": {
+            "ev": 2.19292,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d2": {
+            "ev": 2.22043,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d3": {
+            "ev": 2.8767,
+            "stab_delta": -0.41873,
+            "strong_check_rate": 0.0
+          }
+        }
       },
       {
         "stab": "lead=never|stab=AA|raise=never",
         "check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
-        "ev": 3.0323,
-        "stab_rate": 0.2908,
-        "strong_check_rate": 0.3121,
-        "face_stab_nodes": 667.0,
-        "drawer_face_stab_delta": -2.051
+        "ev": 3.1474,
+        "stab_rate": 0.2833,
+        "strong_check_rate": 0.293,
+        "face_stab_nodes": 651.0,
+        "drawer_face_stab_delta": -2.00307,
+        "by_d": {
+          "d0": {
+            "ev": 5.1109,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d1": {
+            "ev": 3.33178,
+            "stab_delta": -4.0,
+            "strong_check_rate": 0.90657
+          },
+          "d2": {
+            "ev": 2.22043,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d3": {
+            "ev": 3.06969,
+            "stab_delta": -1.14286,
+            "strong_check_rate": 0.15523
+          }
+        }
       },
       {
         "stab": "lead=never|stab=AA+KK|raise=never",
         "check_mix": "chk_tp=0.00|tr=0.00|bp=0.00",
-        "ev": 2.4779,
-        "stab_rate": 0.1704,
+        "ev": 2.6176,
+        "stab_rate": 0.17035,
         "strong_check_rate": 0.0,
         "face_stab_nodes": 381.0,
-        "drawer_face_stab_delta": 0.7034
+        "drawer_face_stab_delta": 0.70341,
+        "by_d": {
+          "d0": {
+            "ev": 5.1109,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d1": {
+            "ev": 2.19292,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d2": {
+            "ev": 2.22043,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d3": {
+            "ev": 2.61968,
+            "stab_delta": 0.70341,
+            "strong_check_rate": 0.0
+          }
+        }
       },
       {
         "stab": "lead=never|stab=AA+KK|raise=never",
         "check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
-        "ev": 2.8721,
-        "stab_rate": 0.2924,
-        "strong_check_rate": 0.3121,
-        "face_stab_nodes": 699.0,
-        "drawer_face_stab_delta": -1.4363
+        "ev": 2.9872,
+        "stab_rate": 0.2849,
+        "strong_check_rate": 0.293,
+        "face_stab_nodes": 683.0,
+        "drawer_face_stab_delta": -1.37628,
+        "by_d": {
+          "d0": {
+            "ev": 5.1109,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d1": {
+            "ev": 3.34017,
+            "stab_delta": -4.0,
+            "strong_check_rate": 0.90657
+          },
+          "d2": {
+            "ev": 2.22043,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d3": {
+            "ev": 2.81425,
+            "stab_delta": -0.25105,
+            "strong_check_rate": 0.15523
+          }
+        }
       },
       {
         "stab": "lead=never|stab=AA|raise=AA",
         "check_mix": "chk_tp=0.00|tr=0.00|bp=0.00",
-        "ev": 2.7369,
-        "stab_rate": 0.1694,
+        "ev": 2.8766,
+        "stab_rate": 0.16945,
         "strong_check_rate": 0.0,
         "face_stab_nodes": 363.0,
-        "drawer_face_stab_delta": -0.4187
+        "drawer_face_stab_delta": -0.41873,
+        "by_d": {
+          "d0": {
+            "ev": 5.2459,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d1": {
+            "ev": 2.39143,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d2": {
+            "ev": 2.36336,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d3": {
+            "ev": 2.92747,
+            "stab_delta": -0.41873,
+            "strong_check_rate": 0.0
+          }
+        }
       },
       {
         "stab": "lead=never|stab=AA|raise=AA",
         "check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
-        "ev": 3.0675,
-        "stab_rate": 0.2908,
-        "strong_check_rate": 0.3121,
-        "face_stab_nodes": 667.0,
-        "drawer_face_stab_delta": -2.051
+        "ev": 3.1858,
+        "stab_rate": 0.2833,
+        "strong_check_rate": 0.293,
+        "face_stab_nodes": 651.0,
+        "drawer_face_stab_delta": -2.00307,
+        "by_d": {
+          "d0": {
+            "ev": 5.2459,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d1": {
+            "ev": 3.34762,
+            "stab_delta": -4.0,
+            "strong_check_rate": 0.90657
+          },
+          "d2": {
+            "ev": 2.36336,
+            "stab_delta": 0.0,
+            "strong_check_rate": 0.0
+          },
+          "d3": {
+            "ev": 3.09145,
+            "stab_delta": -1.14286,
+            "strong_check_rate": 0.15523
+          }
+        }
       }
-    ]
+    ],
+    "unified": {
+      "meta": {
+        "stage": "C",
+        "n_deals": 20000,
+        "seed": 20260809,
+        "draw_policy": "tp1_tr1_q1",
+        "draw": {
+          "pair_d": 3,
+          "two_pair_d": 1,
+          "trips_d": 1,
+          "quads_d": 1
+        },
+        "opener_lead": "never (one pair)",
+        "doc": "docs/NEXT_STAGE_OPENER_DRAW_MIXES.md"
+      },
+      "summaries": [
+        {
+          "stab": "lead=never|stab=AA|raise=never",
+          "baseline_ev": 2.7663,
+          "baseline_stab_delta": -0.41873,
+          "baseline_stab_rate": 0.16945,
+          "best_ev": 3.1331,
+          "best_check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
+          "best_stab_delta": -2.00307,
+          "best_delta_vs_baseline": 0.3668,
+          "unprofitable_stab_count": 18,
+          "best_unprofitable": {
+            "check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
+            "ev": 3.1331,
+            "stab_delta": -2.00307,
+            "delta_vs_baseline": 0.3668
+          },
+          "near_indifferent_count": 0
+        },
+        {
+          "stab": "lead=never|stab=AA+KK|raise=never",
+          "baseline_ev": 2.6033,
+          "baseline_stab_delta": 0.70341,
+          "baseline_stab_rate": 0.17035,
+          "best_ev": 2.9729,
+          "best_check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
+          "best_stab_delta": -1.37628,
+          "best_delta_vs_baseline": 0.3696,
+          "unprofitable_stab_count": 10,
+          "best_unprofitable": {
+            "check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
+            "ev": 2.9729,
+            "stab_delta": -1.37628,
+            "delta_vs_baseline": 0.3696
+          },
+          "near_indifferent_count": 1
+        },
+        {
+          "stab": "lead=never|stab=AA|raise=AA",
+          "baseline_ev": 2.8623,
+          "baseline_stab_delta": -0.41873,
+          "baseline_stab_rate": 0.16945,
+          "best_ev": 3.1715,
+          "best_check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
+          "best_stab_delta": -2.00307,
+          "best_delta_vs_baseline": 0.3092,
+          "unprofitable_stab_count": 18,
+          "best_unprofitable": {
+            "check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
+            "ev": 3.1715,
+            "stab_delta": -2.00307,
+            "delta_vs_baseline": 0.3092
+          },
+          "near_indifferent_count": 0
+        }
+      ],
+      "key_rows": [
+        {
+          "stab": "lead=never|stab=AA|raise=never",
+          "check_mix": "chk_tp=0.00|tr=0.00|bp=0.00",
+          "ev": 2.7663,
+          "stab_rate": 0.16945,
+          "strong_check_rate": 0.0,
+          "face_stab_nodes": 363.0,
+          "drawer_face_stab_delta": -0.41873,
+          "by_d": {
+            "d0": {
+              "ev": 5.1109,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d1": {
+              "ev": 2.15608,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d2": {
+              "ev": 0.0,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d3": {
+              "ev": 2.8767,
+              "stab_delta": -0.41873,
+              "strong_check_rate": 0.0
+            }
+          }
+        },
+        {
+          "stab": "lead=never|stab=AA|raise=never",
+          "check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
+          "ev": 3.1331,
+          "stab_rate": 0.2833,
+          "strong_check_rate": 0.293,
+          "face_stab_nodes": 651.0,
+          "drawer_face_stab_delta": -2.00307,
+          "by_d": {
+            "d0": {
+              "ev": 5.1109,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d1": {
+              "ev": 2.93454,
+              "stab_delta": -4.0,
+              "strong_check_rate": 0.61968
+            },
+            "d2": {
+              "ev": 0.0,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d3": {
+              "ev": 3.06969,
+              "stab_delta": -1.14286,
+              "strong_check_rate": 0.15523
+            }
+          }
+        },
+        {
+          "stab": "lead=never|stab=AA+KK|raise=never",
+          "check_mix": "chk_tp=0.00|tr=0.00|bp=0.00",
+          "ev": 2.6033,
+          "stab_rate": 0.17035,
+          "strong_check_rate": 0.0,
+          "face_stab_nodes": 381.0,
+          "drawer_face_stab_delta": 0.70341,
+          "by_d": {
+            "d0": {
+              "ev": 5.1109,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d1": {
+              "ev": 2.15608,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d2": {
+              "ev": 0.0,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d3": {
+              "ev": 2.61968,
+              "stab_delta": 0.70341,
+              "strong_check_rate": 0.0
+            }
+          }
+        },
+        {
+          "stab": "lead=never|stab=AA+KK|raise=never",
+          "check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
+          "ev": 2.9729,
+          "stab_rate": 0.2849,
+          "strong_check_rate": 0.293,
+          "face_stab_nodes": 683.0,
+          "drawer_face_stab_delta": -1.37628,
+          "by_d": {
+            "d0": {
+              "ev": 5.1109,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d1": {
+              "ev": 2.94028,
+              "stab_delta": -4.0,
+              "strong_check_rate": 0.61968
+            },
+            "d2": {
+              "ev": 0.0,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d3": {
+              "ev": 2.81425,
+              "stab_delta": -0.25105,
+              "strong_check_rate": 0.15523
+            }
+          }
+        },
+        {
+          "stab": "lead=never|stab=AA|raise=AA",
+          "check_mix": "chk_tp=0.00|tr=0.00|bp=0.00",
+          "ev": 2.8623,
+          "stab_rate": 0.16945,
+          "strong_check_rate": 0.0,
+          "face_stab_nodes": 363.0,
+          "drawer_face_stab_delta": -0.41873,
+          "by_d": {
+            "d0": {
+              "ev": 5.2459,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d1": {
+              "ev": 2.337,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d2": {
+              "ev": 0.0,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d3": {
+              "ev": 2.92747,
+              "stab_delta": -0.41873,
+              "strong_check_rate": 0.0
+            }
+          }
+        },
+        {
+          "stab": "lead=never|stab=AA|raise=AA",
+          "check_mix": "chk_tp=1.00|tr=0.00|bp=0.00",
+          "ev": 3.1715,
+          "stab_rate": 0.2833,
+          "strong_check_rate": 0.293,
+          "face_stab_nodes": 651.0,
+          "drawer_face_stab_delta": -2.00307,
+          "by_d": {
+            "d0": {
+              "ev": 5.2459,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d1": {
+              "ev": 2.9906,
+              "stab_delta": -4.0,
+              "strong_check_rate": 0.61968
+            },
+            "d2": {
+              "ev": 0.0,
+              "stab_delta": 0.0,
+              "strong_check_rate": 0.0
+            },
+            "d3": {
+              "ev": 3.09145,
+              "stab_delta": -1.14286,
+              "strong_check_rate": 0.15523
+            }
+          }
+        }
+      ]
+    }
   },
   "recommendations": [
     {
       "class": "four_of_a_kind",
       "draw_action": "d=1 (discard kicker)",
-      "postdraw_bet_check": "bet (value); optional thin check mix into d=1 protection",
+      "postdraw_bet_check": "always bet (C: boat+ checks lost EV)",
       "notes": "d1 win=0.9762 stand win=0.9777; drawer cannot make quads"
     },
     {
@@ -1270,13 +1667,13 @@
     {
       "class": "trips",
       "draw_action": "d=2 (keep trips); d=1 joins unified public d=1 with TP/quads",
-      "postdraw_bet_check": "mostly bet; check mix per stage C",
+      "postdraw_bet_check": "always bet (C: checking trips lost EV)",
       "notes": "boat+ d2=0.101 d1=0.086 stand=0.000; win d2=0.697 stand=0.643; unified tp+trips+quads d=1 \u0394EV=+0.125 vs tp+quads d=1 / trips d=2 \u0394EV=+0.140"
     },
     {
       "class": "two_pair",
       "draw_action": "d=1 (keep both pairs)",
-      "postdraw_bet_check": "bet most; check ~30\u2013100% as protection vs face-pair stabs",
+      "postdraw_bet_check": "always check (C: best mix vs AA and AA+KK stabs)",
       "notes": "boat+ 0.000\u21920.086; win 0.667\u21920.681"
     },
     {
@@ -1288,8 +1685,8 @@
     {
       "class": "checking-range protection",
       "draw_action": "quads\u2192d=1; two pair\u2192d=1; trips d=2 (EV) or d=1 (unified d=1); pairs stay d=3 (d=1 pollution optional later)",
-      "postdraw_bet_check": "vs lead=never|stab=AA|raise=never: baseline stab\u0394=-0.419 (already \u22640); best chk_tp=1.00|tr=0.00|bp=0.00 EV\u0394=+0.391; smallest helpful: check 30% of two pair (EV\u0394=+0.120, stab\u0394=-1.120); max-punish mix chk_tp=1.00|tr=0.00|bp=0.00 stab\u0394=-2.051 EV\u0394=+0.391",
-      "notes": "Hypothesis confirmed under fixed narrow drawer stabs: mixing two pair into checks raises opener EV and deepens stab losses. Boat+ check mixes alone do not help. Pat straight+ cannot join d=3. Unified trips+TP+quads d=1 keeps the draw-one line coherent for later pair-d=1 concealment."
+      "postdraw_bet_check": "vs lead=never|stab=AA|raise=never: baseline stab\u0394=-0.419 (already \u22640); best chk_tp=1.00|tr=0.00|bp=0.00 EV\u0394=+0.367; smallest helpful: check 30% of two pair (EV\u0394=+0.112, stab\u0394=-1.092); max-punish mix chk_tp=1.00|tr=0.00|bp=0.00 stab\u0394=-2.003 EV\u0394=+0.367; C-unified (tp1_tr1_q1) best chk_tp=1.00|tr=0.00|bp=0.00 EV\u0394=+0.367 stab\u0394=-2.003",
+      "notes": "Best mix on both forks is always check two pair (all public d). Checking trips or boat+ loses EV. Pat straight+ cannot join d=3. Unified trips+TP+quads d=1 keeps the draw-one line coherent for later pair-d=1 concealment."
     }
   ],
   "findings": {
@@ -1311,7 +1708,12 @@
     "check_mix_helps_opener_vs_aa_stab": true,
     "check_mix_can_make_aa_stab_unprofitable": true,
     "best_check_mix_vs_aa_stab": "chk_tp=1.00|tr=0.00|bp=0.00",
-    "baseline_aa_stab_delta": -0.4187,
-    "best_aa_stab_delta": -2.051
+    "baseline_aa_stab_delta": -0.41873,
+    "best_aa_stab_delta": -2.00307,
+    "c_primary_draw_policy": "tp1_tr2_q1",
+    "c_unified_draw_policy": "tp1_tr1_q1",
+    "c_unified_best_check_mix_vs_aa_stab": "chk_tp=1.00|tr=0.00|bp=0.00",
+    "c_unified_best_delta_vs_baseline": 0.3668,
+    "c_unified_baseline_aa_stab_delta": -0.41873
   }
 }

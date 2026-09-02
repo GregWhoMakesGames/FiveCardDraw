@@ -5,15 +5,16 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 
+# Seats 1–8 in research prose (docs/research/INDEX.md). Index 0 = UTG.
 SEAT_NAMES = (
     "UTG",  # left of dealer (first to act pre-draw)
     "UTG+1",
     "UTG+2",
-    "Lojack",
-    "Hijack",
-    "Cutoff",
-    "Button",
-    "Dealer",  # last to act pre-draw; dealer button
+    "UTG+3",
+    "LJ",
+    "HJ",
+    "CO",
+    "BN",  # last to act pre-draw; dealer button
 )
 
 

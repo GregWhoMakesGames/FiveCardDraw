@@ -95,7 +95,7 @@ Seat **6 (HJ)** is where multiway pressure and **sandbagging** start to matter i
 - Should any open-legal hands **check** hoping to play a bigger pot later?
 - How do CO/BN continue ranges change once HJ opens are credible?
 
-Do **not** expand that plan until late-position non-sandbagging work and Stage C check protection are done. Detail TBD in [Ch.5](ch05_later_seats.md).
+Do **not** expand that plan until late-position non-sandbagging work is done (Stage C check protection is done). Detail TBD in [Ch.5](ch05_later_seats.md).
 
 ---
 
@@ -103,7 +103,7 @@ Do **not** expand that plan until late-position non-sandbagging work and Stage C
 
 1. **Ch.2 §2.9** — Strong draws: always call, always raise, or mix (BN-open laboratory first).
 2. **Ch.5 §5.2** — After BN opens (CO had passed with no legal opener; others fold): call/raise with less than a strong draw as a bluff? (depends on §2.9).
-3. Continue Ch.3–4 BN post-draw / Stage C as scheduled in those chapters.
+3. Pair concealment (Ch.4 leftover) after the `d=3` vs `d=2` EV confirm; Ch.3 bluff 3-bet Ring 1 **after Stage C** (trips-only air, split by public \(d\)).
 4. CO open/pass chart; then HJ sandbagging.
 
 ## 1.8 Later (not scheduled in this draft)

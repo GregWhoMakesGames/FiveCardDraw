@@ -5,8 +5,9 @@ two pair+, caller raises straight+, BN calls. This module extends that node
 with BN 3-bet / caller cap / BN call-cap under `max_raises=3`.
 
 Does **not** re-run the class × d EV grid. Condition on the raise node
-(BN two pair+ ∩ caller straight+). Bluff 3-bets with two pair / trips are
-out of scope.
+**after Stage C**: BN bets trips+ (two pair checks) ∩ caller straight+.
+Split reports by public d. Bluff 3-bets with trips are Ring 1
+(`postdraw_bluff`); this module is the value line + node mass.
 
 Doc: `docs/NEXT_STAGE_POSTDRAW_CAP.md`.
 """
@@ -25,7 +26,9 @@ from fivecarddraw.validation.postdraw_betting_m2 import (
     BIG,
     CAP_POT,
     PREDRAW_POT,
+    STAGE_C_POLICY,
     CapPolicy,
+    bn_bets_stage_c,
     play_raise_node,
 )
 from fivecarddraw.validation.postdraw_nonbluff_ev import (
@@ -82,13 +85,26 @@ CALLER_CAP_GRID = (
     ("fold_straight_cap_sf", HandCategory.STRAIGHT_FLUSH, HandCategory.FLUSH),
 )
 
-# Extra deals: classes that always bet (two pair+) so the node is cheap to hit.
+# Extra deals: classes that can still *bet* after Stage C (trips+ / pat straight+).
+# Two pair is extra-sampled only so we can confirm they drop off the node.
 EXTRA_BN_CLASSES = TWO_PAIR_CLASSES + TRIPS_CLASSES + STRAIGHT_PLUS_CLASSES
 
 
-def on_raise_node(deal: NonbluffDeal) -> bool:
-    """BN value-bets (two pair+) and caller raises (straight+)."""
-    return bool(deal.opener_two_pair_plus and deal.drawer_straight_plus)
+def on_raise_node(deal: NonbluffDeal, *, stage_c: bool = True) -> bool:
+    """BN first-acts with a bet and caller raises (straight+).
+
+    Default is the Stage C street: two pair checks, so they never sit here.
+    Pass ``stage_c=False`` for the pre-C honest node (two pair+ bets).
+    """
+    if not deal.drawer_straight_plus:
+        return False
+    if stage_c:
+        return bn_bets_stage_c(deal)  # type: ignore[arg-type]
+    return bool(deal.opener_two_pair_plus)
+
+
+def on_raise_node_pre_c(deal: NonbluffDeal) -> bool:
+    return on_raise_node(deal, stage_c=False)
 
 
 def fine_bucket(v: HandValue) -> str:
@@ -122,8 +138,10 @@ def family_bucket(v: HandValue) -> str:
     cat = v.category
     if cat < HandCategory.TWO_PAIR:
         return "pair_or_worse"
-    if cat < HandCategory.STRAIGHT:
-        return "two_pair_or_trips"
+    if cat == HandCategory.TWO_PAIR:
+        return "two_pair"
+    if cat == HandCategory.THREE_OF_A_KIND:
+        return "trips"
     if cat == HandCategory.STRAIGHT:
         return "straight"
     if cat == HandCategory.FLUSH:
@@ -331,7 +349,7 @@ def node_mass_by_class(
     for deal in deals:
         cls = deal.opener_class
         n_all[cls] += 1.0
-        if deal.opener_two_pair_plus:
+        if bn_bets_stage_c(deal):  # type: ignore[arg-type]
             n_bn_bet[cls] += 1.0
         if deal.drawer_straight_plus:
             n_caller_sp[cls] += 1.0
@@ -403,8 +421,10 @@ def _family_from_fine(bucket: str) -> str:
         return "flush"
     if bucket in {"full_house", "four_of_a_kind", "straight_flush", "five_aces"}:
         return "boat_plus"
-    if bucket in {"two_pair", "three_of_a_kind"}:
-        return "two_pair_or_trips"
+    if bucket == "two_pair":
+        return "two_pair"
+    if bucket in {"three_of_a_kind", "trips"}:
+        return "trips"
     return "pair_or_worse"
 
 
@@ -448,7 +468,8 @@ def _derive_findings(
         "bn_straight_recommend": rec("straight"),
         "bn_flush_recommend": rec("flush"),
         "bn_boat_plus_recommend": rec("boat_plus"),
-        "bn_two_pair_or_trips_recommend": rec("two_pair_or_trips"),
+        "bn_trips_recommend": rec("trips"),
+        "bn_two_pair_recommend": rec("two_pair"),
         "bn_straight_delta": None
         if "straight" not in by_fam
         else by_fam["straight"]["delta_3bet_vs_call"],
@@ -458,13 +479,14 @@ def _derive_findings(
         "bn_boat_plus_delta": None
         if "boat_plus" not in by_fam
         else by_fam["boat_plus"]["delta_3bet_vs_call"],
-        "bn_two_pair_or_trips_delta": None
-        if "two_pair_or_trips" not in by_fam
-        else by_fam["two_pair_or_trips"]["delta_3bet_vs_call"],
+        "bn_trips_delta": None
+        if "trips" not in by_fam
+        else by_fam["trips"]["delta_3bet_vs_call"],
         "hypothesis_straight_calls": rec("straight") == "call",
         "hypothesis_flush_3bets": rec("flush") == "three_bet",
         "hypothesis_boat_3bets": rec("boat_plus") == "three_bet",
-        "hypothesis_two_pair_trips_call": rec("two_pair_or_trips") == "call",
+        "hypothesis_trips_call": rec("trips") == "call",
+        "stage_c_betting": True,
         "best_joint_on_node": {
             "bn_3bet": best_grid["bn_3bet"],
             "caller_vs_3bet": best_grid["caller_vs_3bet"],
@@ -497,11 +519,17 @@ def build_recommendations(findings: dict[str, Any]) -> list[dict[str, str]]:
     return [
         {
             "side": "BN",
-            "final": "two pair / trips",
-            "vs_raise": "call (no 3-bet; bluff 3-bet out of scope)",
+            "final": "two pair",
+            "vs_raise": "not on this node (Stage C check)",
+            "notes": "Never bets, so never faces a raise or 3-bets as a bluff.",
+        },
+        {
+            "side": "BN",
+            "final": "trips",
+            "vs_raise": "call (no 3-bet; bluff 3-bet is Ring 1)",
             "notes": (
-                f"Δ 3-bet vs call={findings['bn_two_pair_or_trips_delta']} "
-                "behind a raising straight+ range."
+                f"Δ 3-bet vs call={findings.get('bn_trips_delta')} "
+                "behind a raising straight+ range. Air on d=2 / d=3 only."
             ),
         },
         {
@@ -536,9 +564,26 @@ def build_recommendations(findings: dict[str, Any]) -> list[dict[str, str]]:
         },
         {
             "side": "caller",
-            "final": "flush vs BN flush+ 3-bet",
-            "vs_3bet": (findings["caller_vs_bn_flush_plus"].get("flush") or "call"),
-            "notes": "Ahead of BN straights (if those 3-bet) / some flushes; behind boats.",
+            "final": "flush vs BN flush+ 3-bet (Line 1, d=2/3)",
+            "vs_3bet": "fold (no-air value 3-bet is boat+)",
+            "notes": (
+                "Trips-draw line. Flush is drawing dead to boats. "
+                "Ring 1 mixes trips air until flushes are indifferent."
+            ),
+        },
+        {
+            "side": "caller",
+            "final": "flush vs BN flush+ 3-bet (Line 2, d=0)",
+            "vs_3bet": (
+                "call"
+                if findings.get("line2_flush_prefers_call_vs_flush_plus")
+                or findings.get("d0_flush_prefers_call_vs_flush_plus")
+                else (findings["caller_vs_bn_flush_plus"].get("flush") or "call")
+            ),
+            "notes": (
+                "Pat line. BN stood; a 3-bet is usually a flush, rarely a boat. "
+                "Do not fold all flushes. Mix/Nash still OPEN."
+            ),
         },
         {
             "side": "caller",
@@ -557,6 +602,180 @@ def build_recommendations(findings: dict[str, Any]) -> list[dict[str, str]]:
             "notes": "Value vs BN flushes and boats; loses only to quads / five aces / better SF.",
         },
     ]
+
+
+def _line_name(d: int) -> str:
+    if d == 0:
+        return "pat_straight_plus"
+    if d == 1:
+        return "draw1_boats_quads"
+    if d == 2:
+        return "trips_draw"
+    if d == 3:
+        return "pair_draw"
+    return f"d{d}"
+
+
+# First-class 3-bet information sets after Stage C (public d is observed).
+THREE_BET_LINE_SPECS: tuple[dict[str, Any], ...] = (
+    {
+        "id": "line1_trips_draw",
+        "label": "Line 1 — trips draw",
+        "ds": (2, 3),
+        "role": "bluff_and_value",
+        "air": "unimproved_trips",
+        "notes": (
+            "BN drew two (trips) or three (pair that made trips). "
+            "Value 3-bet is boat+. Air is unimproved trips. "
+            "Caller flush vs a no-air flush+ 3-bet folds (those 3-bets are boats)."
+        ),
+    },
+    {
+        "id": "line2_pat_straight_plus",
+        "label": "Line 2 — pat straight+",
+        "ds": (0,),
+        "role": "value_only",
+        "air": "none",
+        "notes": (
+            "BN stood. No trips or two pair on this public line. "
+            "Value 3-bet is flush + rare starting boat+. No trips air. "
+            "Caller flush vs flush+ prefers call."
+        ),
+    },
+    {
+        "id": "d1_boats_quads",
+        "label": "d=1 boats/quads (not a bluff line)",
+        "ds": (1,),
+        "role": "nuts_value",
+        "air": "none",
+        "notes": (
+            "Two pair that boated plus quads. Unimproved two pair checked. "
+            "A 3-bet is almost always nuts. Caller fold-non-SF."
+        ),
+    },
+)
+
+
+def three_bet_lines_from_by_d(by_d: dict[str, Any]) -> dict[str, Any]:
+    """Aggregate public-d slices into the two 3-bet lines (+ d=1 nuts)."""
+    out: dict[str, Any] = {}
+    for spec in THREE_BET_LINE_SPECS:
+        slices = [by_d[f"d{d}"] for d in spec["ds"] if f"d{d}" in by_d]
+        n = sum(int(s.get("n") or 0) for s in slices)
+        trips = sum(float(s.get("trips_air_n") or 0) for s in slices)
+        two_pair = sum(float(s.get("two_pair_n") or 0) for s in slices)
+        bn_fam: dict[str, float] = {}
+        for s in slices:
+            for k, v in (s.get("bn_family_n") or {}).items():
+                bn_fam[k] = bn_fam.get(k, 0.0) + float(v)
+
+        flush_recs: list[str] = []
+        boat_recs: list[str] = []
+        call_w = fold_w = 0.0
+        flush_n = 0.0
+        for s in slices:
+            fl = (s.get("caller_vs_bn_flush_plus") or {}).get("flush")
+            bt = (s.get("caller_vs_bn_boat_plus") or {}).get("flush")
+            if fl:
+                flush_recs.append(str(fl["recommend"]))
+                nn = float(fl.get("n") or 0)
+                call_w += float(fl["ev_caller_call"]) * nn
+                fold_w += float(fl["ev_caller_fold"]) * nn
+                flush_n += nn
+            if bt:
+                boat_recs.append(str(bt["recommend"]))
+
+        agreed_flush = (
+            flush_recs[0]
+            if flush_recs and all(r == flush_recs[0] for r in flush_recs)
+            else ("mixed" if flush_recs else None)
+        )
+        agreed_boat = (
+            boat_recs[0]
+            if boat_recs and all(r == boat_recs[0] for r in boat_recs)
+            else ("mixed" if boat_recs else None)
+        )
+        flush_call = (call_w / flush_n) if flush_n else None
+        flush_fold = (fold_w / flush_n) if flush_n else None
+        prefers_call = (
+            flush_call is not None
+            and flush_fold is not None
+            and flush_call >= flush_fold
+        )
+        out[spec["id"]] = {
+            "label": spec["label"],
+            "ds": list(spec["ds"]),
+            "role": spec["role"],
+            "air": spec["air"],
+            "notes": spec["notes"],
+            "n": n,
+            "trips_air_n": trips,
+            "two_pair_n": two_pair,
+            "has_trips_air": trips > 0,
+            "bn_family_n": {k: bn_fam[k] for k in sorted(bn_fam)},
+            "flush_vs_flush_plus": agreed_flush,
+            "flush_vs_boat_plus": agreed_boat,
+            "flush_ev_call_vs_flush_plus": (
+                None if flush_call is None else round(flush_call, 4)
+            ),
+            "flush_ev_fold_vs_flush_plus": (
+                None if flush_fold is None else round(flush_fold, 4)
+            ),
+            "flush_prefers_call_vs_flush_plus": prefers_call,
+        }
+    return out
+
+
+def node_slice_report(
+    deals: Sequence[NonbluffDeal],
+    *,
+    n_node_all: int,
+) -> dict[str, Any]:
+    """Mass + caller BR on one public-d slice of the Stage C raise node."""
+    by_bn = defaultdict(float)
+    for deal in deals:
+        by_bn[family_bucket(deal.opener_final)] += 1.0
+    caller_flush = {
+        r["bucket"]: r
+        for r in caller_unilateral_rows(
+            deals, bn=HOLD_BN_FLUSH_PLUS, key_fn=family_bucket
+        )
+    }
+    caller_boat = {
+        r["bucket"]: r
+        for r in caller_unilateral_rows(
+            deals, bn=HOLD_BN_BOAT_PLUS, key_fn=family_bucket
+        )
+    }
+
+    def slim_caller(table: dict[str, dict[str, Any]]) -> dict[str, Any]:
+        out = {}
+        for name in ("straight", "flush", "boat_plus"):
+            row = table.get(name)
+            if not row:
+                continue
+            out[name] = {
+                "n": row["n"],
+                "recommend": row["recommend"],
+                "ev_caller_fold": row["ev_caller_fold"],
+                "ev_caller_call": row["ev_caller_call"],
+                "ev_caller_cap": row["ev_caller_cap"],
+            }
+        return out
+
+    n = len(deals)
+    trips_n = by_bn.get("trips", 0.0)
+    two_pair_n = by_bn.get("two_pair", 0.0)
+    return {
+        "n": n,
+        "p_of_node": round(n / n_node_all, 5) if n_node_all else 0.0,
+        "bn_family_n": {k: by_bn[k] for k in sorted(by_bn)},
+        "trips_air_n": trips_n,
+        "two_pair_n": two_pair_n,
+        "has_trips_air": trips_n > 0,
+        "caller_vs_bn_flush_plus": slim_caller(caller_flush),
+        "caller_vs_bn_boat_plus": slim_caller(caller_boat),
+    }
 
 
 def run_analysis(
@@ -585,8 +804,12 @@ def run_analysis(
     )
     mass = node_mass_by_class(weighted)
     node_weighted = [d for d in weighted if on_raise_node(d)]
+    node_pre_c = [d for d in weighted if on_raise_node_pre_c(d)]
     if progress:
-        print(f"  raise-node deals: {len(node_weighted)} / {len(weighted)}")
+        print(
+            f"  raise-node deals (Stage C): {len(node_weighted)} / {len(weighted)}  "
+            f"(pre-C two pair+ bets: {len(node_pre_c)})"
+        )
 
     extra: list[NonbluffDeal] = []
     use_extra = list(extra_classes) if extra_classes else []
@@ -619,20 +842,31 @@ def run_analysis(
         node_for_buckets, caller=HOLD_CALLER, key_fn=fine_bucket
     )
     _apply_sparse_recommend(bn_fine, bn_family)
-    # Two pair / trips: never recommend 3-bet (bluff, out of scope).
+    # Trips (and any leftover two pair): never recommend 3-bet here (Ring 1).
     for row in bn_family + bn_fine:
-        fam = row["bucket"] if row["bucket"] in {
-            "two_pair_or_trips",
+        fam = (
+            row["bucket"]
+            if row["bucket"] in {"two_pair", "trips", "three_of_a_kind"}
+            else _family_from_fine(row["bucket"])
+        )
+        if fam in {"two_pair", "trips"} or row["bucket"] in {
             "two_pair",
-            "three_of_a_kind",
-        } else _family_from_fine(row["bucket"])
-        if fam == "two_pair_or_trips" or row["bucket"] in {
-            "two_pair_or_trips",
-            "two_pair",
+            "trips",
             "three_of_a_kind",
         }:
             row["recommend"] = "call"
             row["bluff_3bet_out_of_scope"] = True
+
+    by_d: dict[str, Any] = {}
+    n_node = len(node_weighted)
+    for d in (0, 1, 2, 3):
+        slice_deals = [x for x in node_weighted if x.d == d]
+        if progress:
+            print(f"  public d={d} node deals: {len(slice_deals)}")
+        rec = node_slice_report(slice_deals, n_node_all=n_node)
+        rec["d"] = d
+        rec["line"] = _line_name(d)
+        by_d[f"d{d}"] = rec
 
     caller_family_flush = caller_unilateral_rows(
         node_for_buckets, bn=HOLD_BN_FLUSH_PLUS, key_fn=family_bucket
@@ -659,6 +893,29 @@ def run_analysis(
         n_range=len(weighted),
         n_node_weighted=len(node_weighted),
     )
+    findings["p_raise_node_pre_c"] = round(len(node_pre_c) / max(len(weighted), 1), 5)
+    findings["n_node_pre_c"] = len(node_pre_c)
+    findings["two_pair_on_node_n"] = sum(
+        1 for x in node_weighted if family_bucket(x.opener_final) == "two_pair"
+    )
+    findings["by_d"] = by_d
+    lines = three_bet_lines_from_by_d(by_d)
+    findings["three_bet_lines"] = lines
+    line1 = lines.get("line1_trips_draw", {})
+    line2 = lines.get("line2_pat_straight_plus", {})
+    findings["line1_has_trips_air"] = bool(line1.get("has_trips_air"))
+    findings["line2_has_trips_air"] = bool(line2.get("has_trips_air"))
+    findings["line1_flush_prefers_call_vs_flush_plus"] = bool(
+        line1.get("flush_prefers_call_vs_flush_plus")
+    )
+    findings["line2_flush_prefers_call_vs_flush_plus"] = bool(
+        line2.get("flush_prefers_call_vs_flush_plus")
+    )
+    flush_d0 = by_d.get("d0", {}).get("caller_vs_bn_flush_plus", {}).get("flush")
+    if flush_d0:
+        findings["d0_flush_prefers_call_vs_flush_plus"] = (
+            flush_d0["ev_caller_call"] >= flush_d0["ev_caller_fold"]
+        )
     recs = build_recommendations(findings)
 
     # Sanity: call-it-down on the node via play_deal max_raises=1 matches
@@ -678,6 +935,8 @@ def run_analysis(
             "matchup": "BN (seat 8) opener vs one 2:1 drawing caller",
             "predraw": "open + call only (no raise)",
             "honest_m2_policy": HONEST_POLICY.key,
+            "stage_c_policy": STAGE_C_POLICY.key,
+            "betting": "Stage C: check two pair; bet trips+",
             "locked_bn_draw": {
                 "name": LOCKED_BN_DRAW.name,
                 "pair_d": LOCKED_BN_DRAW.pair_d,
@@ -686,8 +945,8 @@ def run_analysis(
                 "quads_d": LOCKED_BN_DRAW.quads_d,
             },
             "hold_caller_vs_3bet": HOLD_CALLER.key,
-            "node": "BN two_pair+ (bets) ∩ caller straight+ (raises)",
-            "bluff_3bet_two_pair_trips": "out of scope",
+            "node": "BN trips+ (Stage C bet) ∩ caller straight+ (raises)",
+            "bluff_3bet_trips": "Ring 1 (postdraw_bluff); out of scope here",
             "doc": "docs/NEXT_STAGE_POSTDRAW_CAP.md",
             "regenerate": (
                 "analyze-postdraw-cap --n-range 40000 --n-per-class 4000 --write-fixture"
@@ -697,9 +956,12 @@ def run_analysis(
                 "does not rewrite those cells.",
                 "Unilateral BN Δ holds caller at cap SF / call rest.",
                 "Unilateral caller Δ is reported vs BN flush+ 3-bet and vs BN boat+ 3-bet.",
+                "Reports are split by public d and grouped as Line 1 (d=2∪d=3) "
+                "and Line 2 (d=0). d=1 is nuts-only (not a bluff line).",
             ],
         },
         "node_mass_by_class": mass,
+        "node_by_d": by_d,
         "policy_grid": grid,
         "bn_family": bn_family,
         "bn_fine": bn_fine,
@@ -748,6 +1010,7 @@ def build_summary_payload(payload: dict[str, Any]) -> dict[str, Any]:
         {
             "meta": payload["meta"],
             "node_mass_by_class": payload["node_mass_by_class"],
+            "node_by_d": payload.get("node_by_d", {}),
             "policy_grid": payload["policy_grid"],
             "bn_family": slim_delta(payload["bn_family"]),
             "bn_fine": slim_delta(payload["bn_fine"]),
@@ -782,15 +1045,17 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
         f"Pot into draw `${meta['predraw_pot']}`, big bet `${meta['big_bet']}`, "
         f"full cap pot `${meta['cap_pot']}`.",
         "",
-        "The non-bluff class × d table is **bet+1** (call the raise). These "
-        "numbers are the 3-bet / cap extension of that node, not a replacement.",
+        "Street is **Stage C**: BN checks two pair, bets trips+. The non-bluff "
+        "class × d table remains the honest always-bet-two-pair cell (bet+1). "
+        "These numbers are the 3-bet / cap extension of the *post-C* raise node.",
         "",
         "Doc: `docs/NEXT_STAGE_POSTDRAW_CAP.md`.",
         "",
         "## Node mass (locked BN draws, combo-weighted)",
         "",
-        f"P(raise node) = **{f['p_raise_node_locked_range']:.4f}** "
-        f"({meta['n_node_weighted']} / {meta['n_range']}).",
+        f"P(raise node, Stage C) = **{f['p_raise_node_locked_range']:.4f}** "
+        f"({meta['n_node_weighted']} / {meta['n_range']}). "
+        f"Pre-C (two pair bets) was **{f.get('p_raise_node_pre_c', '?')}**.",
         "",
         "| BN class | P(class) | P(BN bets) | P(caller straight+) | P(node) | P(class given node) |",
         "| --- | ---: | ---: | ---: | ---: | ---: |",
@@ -801,6 +1066,51 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
             f"{r['p_caller_straight_plus']:.3f} | {r['p_raise_node']:.3f} | "
             f"{r['p_class_given_node']:.3f} |"
         )
+    by_d = summary.get("node_by_d") or f.get("by_d") or {}
+    if by_d:
+        lines += [
+            "",
+            "## Raise node by public d (Stage C)",
+            "",
+            "| d | Line | n | trips air | two pair | flush vs flush+ | flush vs boat+ |",
+            "| ---: | --- | ---: | ---: | ---: | --- | --- |",
+        ]
+        for key in ("d0", "d1", "d2", "d3"):
+            sl = by_d.get(key)
+            if not sl:
+                continue
+            fl = sl.get("caller_vs_bn_flush_plus", {}).get("flush", {})
+            bt = sl.get("caller_vs_bn_boat_plus", {}).get("flush", {})
+            lines.append(
+                f"| {sl.get('d')} | {sl.get('line')} | {sl.get('n')} | "
+                f"{sl.get('trips_air_n', 0):.0f} | {sl.get('two_pair_n', 0):.0f} | "
+                f"{fl.get('recommend', '—')} | {bt.get('recommend', '—')} |"
+            )
+    three_lines = f.get("three_bet_lines") or {}
+    if three_lines:
+        lines += [
+            "",
+            "## Two 3-bet lines (Stage C information sets)",
+            "",
+            "| Line | d | n | trips air | flush vs flush+ | flush vs boat+ | Role |",
+            "| --- | --- | ---: | ---: | --- | --- | --- |",
+        ]
+        for key in (
+            "line1_trips_draw",
+            "line2_pat_straight_plus",
+            "d1_boats_quads",
+        ):
+            ln = three_lines.get(key)
+            if not ln:
+                continue
+            ds = ",".join(str(d) for d in ln.get("ds", []))
+            lines.append(
+                f"| {ln.get('label')} | {ds} | {ln.get('n')} | "
+                f"{ln.get('trips_air_n', 0):.0f} | "
+                f"{ln.get('flush_vs_flush_plus') or '—'} | "
+                f"{ln.get('flush_vs_boat_plus') or '—'} | "
+                f"{ln.get('role')} |"
+            )
     lines += [
         "",
         "## BN 3-bet vs call (unilateral; caller caps SF, calls rest)",
@@ -889,8 +1199,11 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
         f"(Δ={f['bn_straight_delta']})",
         f"- BN flush 3-bets: **{f['hypothesis_flush_3bets']}** (Δ={f['bn_flush_delta']})",
         f"- BN boat+ 3-bets: **{f['hypothesis_boat_3bets']}** (Δ={f['bn_boat_plus_delta']})",
-        f"- Two pair/trips call only: **{f['hypothesis_two_pair_trips_call']}**",
+        f"- BN trips call only (bluff 3-bet is Ring 1): **{f.get('hypothesis_trips_call')}**",
         f"- Caller should not cap non-SF into boat+: **{f['caller_should_not_cap_non_sf_vs_boat']}**",
+        f"- Line 1 (d=2∪d=3) has trips air: **{f.get('line1_has_trips_air')}**",
+        f"- Line 2 (d=0) flush prefers call vs flush+: "
+        f"**{f.get('line2_flush_prefers_call_vs_flush_plus')}**",
         "",
         "Call-it-down **does not** include this cap EV. Flush+ 3-bets move node "
         f"EV_bn from {f['call_it_down_ev_bn']} (call-it-down) toward "

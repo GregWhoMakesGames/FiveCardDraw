@@ -113,7 +113,7 @@ automatically mean d=3 best **EV**.
 **Do not put pairs on public d=0 in the range.** Pat straight+ must stand; mixing
 pairs into d=0 pollutes that line. Stages A/B still **lock pairs at d=3** for
 construction. Among drawing options, **d=3 ≥ d=2** for AA and JJ (the
-concealment bar). Pair `d≠3` mixes remain after Stage C.
+concealment bar). Pair `d≠3` mixes remain after the dedicated concealment ticket.
 
 **Two pair / trips / quads** match A/B: two pair **d=1** (+0.48 vs stand); trips
 **d=2** primary vs **d=1** unified fork; quads d=1 ≈ stand.
@@ -140,12 +140,16 @@ Do **not** redo this grid. Measure ΔEV vs the honest cell for:
 
 1. **Post-draw cap / BN 3-bet vs call** when both have straight+ — **done**
    ([NEXT_STAGE_POSTDRAW_CAP.md](NEXT_STAGE_POSTDRAW_CAP.md)); §3.4 cells stay bet+1
-2. **Post-draw bluff 3-bet Ring 1** (flush indifference on that node) —
+2. **Post-draw bluff 3-bet Ring 1** (flush indifference, **after Stage C**:
+   trips-only air, split by public \(d\)) —
    [NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md). Ring 2 Nash waits.
+   The cap fixture still assumes two pair bets.
 3. Caller miss / wide face-pair stabs (deception)
 4. BN Stage C check-mixes of two pair+ (protection) under `tp1_tr2_q1` /
-   `tp1_tr1_q1` — [NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md)
+   `tp1_tr1_q1` — **done** ([NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md));
+   always check two pair
 5. Pair `d≠3` concealment — [NEXT_STAGE_PAIR_CONCEALMENT.md](NEXT_STAGE_PAIR_CONCEALMENT.md)
+   (verify pair EV `d=3` vs `d=2` first)
 6. CO return-to-actor bluffs after BN open — Ch.5 §5.2
 
 ---

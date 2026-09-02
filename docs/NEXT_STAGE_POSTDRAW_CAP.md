@@ -1,15 +1,17 @@
 # Next stage: post-draw cap (bet + 3 raises) when both make straight+
 
-**Status:** Implemented in this PR (`src/fivecarddraw/validation/postdraw_cap.py`,
-CLI `analyze-postdraw-cap`). The non-bluff EV grid, M2, and draw-mixes streets
-remain **bet + one raise only** (`max_raises=1` default). They do **not**
-include BN 3-bet / caller cap EV. Findings are in the section at the bottom
-and in [research/ch03_dealer_opening.md](research/ch03_dealer_opening.md) §3.5.
+**Status:** Raise node re-filtered under **Stage C** (BN checks two pair;
+bets trips+). Two 3-bet lines are first-class (`d=2∪d=3` vs `d=0`).
+Code `src/fivecarddraw/validation/postdraw_cap.py`, CLI `analyze-postdraw-cap`.
+M2 / non-bluff class × d tables stay the honest always-bet-two-pair
+**bet+1** cells — they are not rewritten.
+Strategy tree: [POSTDRAW_STRATEGY_TREE.md](POSTDRAW_STRATEGY_TREE.md).
+Findings in this doc and [research/ch03_dealer_opening.md](research/ch03_dealer_opening.md) §3.5.
 
-**Product question:** After BN value-bets two pair+ and the 2:1 caller raises
-with a made straight+, should BN **reraise (3-bet, then maybe call a cap)** or
-**just call**? Fine-split by final category and, inside category, by rank
-(7-high straight vs queen-high flush, etc.).
+**Product question:** After BN value-bets **trips+** (Stage C: two pair
+checks) and the 2:1 caller raises with a made straight+, should BN
+**reraise (3-bet, then maybe call a cap)** or **just call**? Fine-split by
+final category, public \(d\) (Line 1 vs Line 2), and rank.
 
 Parent: [POSTDRAW_M2_FACE_PAIR_GRID.md](POSTDRAW_M2_FACE_PAIR_GRID.md)
 (`play_deal` is already on `main`). Honest class × d EV baseline:
@@ -197,52 +199,97 @@ caller’s best response separately.
 
 ---
 
-## Findings (seed 20260902)
+## Findings (seed 20260902, Stage C street)
 
 Combo-weighted locked BN draws (`tp1_tr2_q1`) vs all 2:1, caller keep-4 d=1:
-**40,000** deals, **7,559** on the raise node (P = 0.189). Extra per-class deals
-fill fine buckets. Unilateral BN Δ holds caller at **cap SF / call rest**.
+**40,000** deals, **3,612** on the Stage C raise node (P = **0.0903**).
+Pre-C (two pair always bets) was 7,559 / 0.189. Unimproved two pair on the
+node: **0**. Extra per-class deals fill fine buckets. Unilateral BN Δ holds
+caller at **cap SF / call rest**.
 
 Full cap pot is **$38** (four $4 bets each + $6). Call-it-down on this node is
 a **$22** showdown.
 
-### BN vs the raise
+### Two 3-bet lines (public \(d\) is observed)
+
+| Line | Public \(d\) | n | BN on node | 3-bet value | 3-bet air | Flush vs no-air flush+ |
+| --- | --- | ---: | --- | --- | --- | --- |
+| **1 — trips draw** | 2 ∪ 3 | 2,569 | trips 2,258 / boat+ 273 / rare S,F | Boat+ | Unimproved **trips** | **fold** |
+| **2 — pat straight+** | 0 | 750 | S 470 / F 174 / boat+ 106 | Flush + rare starting boat+ | **None** | **call** (EV −7.45 vs fold −8.00, n=66) |
+| *(not a bluff line)* | 1 | 293 | boat+ 293 | Nuts (boats/quads) | None | **fold** |
+
+Line 1 is 71% of the post-C node; line 2 is 21%; `d=1` is 8%. Two pair that
+*boated* still appear in class mass (`p_bn_bets` ≈ 0.08–0.10) but as
+`boat_plus`, not as two-pair air.
+
+### BN vs the raise (extra-weighted; value line)
 
 | BN final | n | P(win) | EV call | EV 3-bet | Δ | Action |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| two pair / trips | 12,280 | 0.00 | −8.00 | −12.28 | −4.28 | **call** (no bluff 3-bet) |
+| trips | 5,852 | 0.00 | −8.00 | −12.27 | −4.27 | **call** (no bluff 3-bet) |
+| two pair | 0 | — | — | — | — | **not on node** (Stage C check) |
 | straight | 1,907 | 0.30 | −1.08 | −2.89 | −1.81 | **call** |
 | flush | 1,567 | 0.82 | +10.08 | +12.25 | +2.17 | **3-bet** |
 | boat+ | 6,545 | 0.94 | +12.71 | +16.18 | +3.47 | **3-bet** |
 
-Fine split: every flush high 3-bets. Straights: wheel–J **call**; broadway A
-**thin 3-bet** (Δ = +0.35); Q-high ≈ 0. Boats / quads / SF / five aces all 3-bet.
+Fine split unchanged in direction: every flush high 3-bets. Straights:
+wheel–J **call**; broadway A **thin 3-bet** (Δ = +0.35); Q-high ≈ 0.
+Boats / quads / SF / five aces all 3-bet. These Δs are vs a *calling*
+responder and do not rewrite the class × d table.
 
-### Caller vs a 3-bet
+### Caller vs a 3-bet, by line
 
-Vs BN **flush+** 3-bet: straight fold (drawing dead to the range), flush fold
-(EV call −10.5 vs fold −8), SF/boat_plus **cap**. Vs BN **boat+** 3-bet:
-straight and flush **fold**; SF **cap**. Do not cap a non-SF into boats.
+**Do not quote the pooled “fold all flushes vs flush+” row.** That table
+still exists in the fixture (extra-weighted, mixes boats from draws into
+pat flushes) and still says fold. The caller sees \(d\):
 
-### Joint node EV (combo-weighted)
+| Caller | Line 1 (`d=2,3`) vs flush+ | Line 2 (`d=0`) vs flush+ | Any line vs boat+ |
+| --- | --- | --- | --- |
+| straight | fold | fold | fold |
+| flush | **fold** (drawing dead to boats) | **call** | fold |
+| SF / boat+ | cap | cap | cap |
 
-Call-it-down EV_bn = **−5.32** (this node is caller-heavy: two pair/trips lose
-to the raising straight+). Best BN line vs a calling/capping caller is
-**3-bet flush+** (EV_bn −4.96 to −4.90 depending on whether flushes cap).
-3-betting all straight+ is worse than flush+ because thin straights pay off
-flushes.
+On `d=0`, ace-high flush vs a pat flush+ 3-bet also prefers call in the
+fine table. Mixing cap vs call with flushes is still OPEN.
+
+### Joint node EV (combo-weighted, Stage C node)
+
+Call-it-down EV_bn = **−2.40** (was −5.32 when unimproved two pair sat on
+the node and lost every time). Best measured joint vs a calling/capping
+caller is **3-bet flush+** (EV_bn −1.52 to −1.71 depending on whether
+flushes cap). 3-betting all straight+ is still worse than flush+ because
+thin straights pay off flushes.
 
 **Do not substitute these for the non-bluff class × d cells.** Cap EV is a
 delta on this rare-but-expensive node only.
 
 ---
 
+## Stage C re-filter (done)
+
+The old fixture assumed BN **always bets two pair+** (`p_bn_bets = 1`;
+P(node) = 0.189). That street is retired for cap/3-bet work. The checked-in
+fixture is the Stage C filter:
+
+- Node = BN trips+ (auto-bet) ∩ caller straight+.
+- Unimproved two pair **check**; they never 3-bet.
+- Reports split by public \(d\) and grouped as Line 1 / Line 2.
+- `d0_flush_prefers_call_vs_flush_plus` is **true**.
+
+M2 / non-bluff fixtures stay the honest always-bet-two-pair cells. Forward
+street for cap and Ring 1 is Stage C. Bluff work:
+[NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md).
+
+---
+
 ## Next: bluff 3-bet (Ring 1)
 
-Honest flush+ 3-bet vs a folding caller is **not** equilibrium. First
-bluff-library ticket: mix two pair/trips as air until **flushes** are
-indifferent to calling the 3-bet. Do **not** start bucketed Nash until that
-fixture exists — [NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md).
+Honest flush+ 3-bet vs a folding caller is **not** equilibrium on Line 1,
+and Line 2 has **no trips air**. First bluff-library ticket: mix **trips**
+as air on Line 1 until **flushes** are indifferent; on Line 2 report flush
+call ≥ fold vs a no-air flush+ 3-bet (already measured) and do not invent
+β. Do **not** start bucketed Nash until that fixture exists —
+[NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md).
 
 ---
 
@@ -259,6 +306,6 @@ fixture exists — [NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md).
 ## Handoff checklist (this ticket — done)
 
 1. `play_deal` default `max_raises=1`; cap path uses `StreetState` / `max_raises=3`
-2. `analyze-postdraw-cap` conditions on BN-bet ∩ caller-straight+
-3. Fixture + Ch.3 §3.5 updated; class × d table not rewritten
-4. Next code milestone remains Stage C ([NEXT_STAGE_OPENER_DRAW_MIXES.md](NEXT_STAGE_OPENER_DRAW_MIXES.md))
+2. `analyze-postdraw-cap` conditions on Stage C BN-bet (trips+) ∩ caller-straight+
+3. Fixture + Ch.3 §3.5 updated under Stage C; two lines modeled; class × d table not rewritten
+4. Next **cap** ticket is Ring 1 ([NEXT_STAGE_POSTDRAW_BLUFF.md](NEXT_STAGE_POSTDRAW_BLUFF.md)). Pair concealment stays a separate Ch.4 ticket. Do not fold the cap street into the M2 Stage C grid.

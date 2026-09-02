@@ -9,7 +9,7 @@ This folder is the **human-readable research paper**, split into chapters so par
 | Stakes (v1) | $0.25 ante ($2 pot), $2 / $4 limit |
 | Codebase | [`fivecarddraw`](../../README.md) |
 | Audience | Researchers and poker-curious readers (basic poker OK) |
-| Status | Living document. Ch.1–2 filled; Ch.3 non-bluff EV + cap; Ch.4 stub pending Stage C; Ch.5 planned |
+| Status | Living document. Ch.1–2 filled; Ch.3 non-bluff EV + cap; Ch.4 Stage C (always check two pair); Ch.5 planned |
 
 **Technical handoffs** (implementation detail, denser than chapters):
 
@@ -30,7 +30,7 @@ This project builds a **reproducible, bottom-up** analysis of fixed-limit five-c
 
 **Why the problem is hard.** Eight players, a 53-card deck (52 + bug), pre-draw and post-draw streets, and a public “cards drawn” signal create a decision space far larger than heads-up hold’em. Early-position opens face seven players behind; late-position steals look easy until drawing callers with huge outs enter the pot. We **slice** the game into validation ladders with exact or Monte Carlo ground truth, then expand seat by seat — and we track **what fraction of deals** each slice covers (see [Solve-progress ledger](#solve-progress-ledger)).
 
-**What we have done so far.** Base engine + pre-draw pipeline (charts not trusted); drawing-call inventory (18,396 2:1 combos); dealer opener showdown / post-draw betting / draw-count grids; **non-bluff EV by class × d**; post-draw **cap / 3-bet vs call** on the raise node; Stage C check-mix next; public-draw belief tables.
+**What we have done so far.** Base engine + pre-draw pipeline (charts not trusted); drawing-call inventory (18,396 2:1 combos); dealer opener showdown / post-draw betting / draw-count grids; **non-bluff EV by class × d**; **Stage C check mixes** (always check two pair); post-draw **cap / 3-bet** on the Stage C raise node, split into **two 3-bet lines** by public \(d\); public-draw belief tables.
 
 **Central claim (working).** Late position is the right laboratory. Seat naming and the progressive deal-share breakdown live in this index so every chapter uses the same language.
 
@@ -62,7 +62,7 @@ Use **seats 1–8** in all research prose. Code may still use 0-based indices in
 | 1 | [ch01_roadmap.md](ch01_roadmap.md) | Order of operations + deal-share framing | Roadmap / coordination |
 | 2 | [ch02_drawing_callers.md](ch02_drawing_callers.md) | Non-opening draws; **next: call/raise/mix** (§2.9) | Drawing-call validation |
 | 3 | [ch03_dealer_opening.md](ch03_dealer_opening.md) | BN opening + post-draw equity (incl. cap) | Dealer / showdown / M2 |
-| 4 | [ch04_draw_mixes.md](ch04_draw_mixes.md) | Opener draw mixes + check protection (stub) | Draw mixes / Stage C |
+| 4 | [ch04_draw_mixes.md](ch04_draw_mixes.md) | Opener draw mixes + check protection (C done) | Draw mixes / concealment next |
 | 5 | [ch05_later_seats.md](ch05_later_seats.md) | CO open climb; **CO bluff after BN open** (§5.2); HJ | Later seats |
 | A | [appendix_a_rules.md](appendix_a_rules.md) | Game rules | Shared (rare edits) |
 | B | [appendix_b_code.md](appendix_b_code.md) | Code map / CLIs | Shared (rare edits) |
@@ -102,7 +102,7 @@ After seats 1–7 lack openers and BN has an open-legal hand, BN’s open faces 
 | Slice | Formula (planning) | ≈ % of *all* deals | Status | Home chapter |
 | --- | --- | ---: | --- | --- |
 | BN can open (steal), **nobody** has 2:1 call odds | \(q_{\mathrm{neither}}^{7} \cdot p_{\mathrm{open}}\) | **~3.6%** | **Solved** for open-legal made hands: EV(open) ≈ +$2 ante pot | Ch.3 § folded-to-BN sanity |
-| BN can open (steal), **≥1** seat has a good calling hand (2:1 outs) | \(\bigl[(1-p_{\mathrm{open}})^{7} - q_{\mathrm{neither}}^{7}\bigr] \cdot p_{\mathrm{open}}\) | **~0.20%** | **In progress** — inventory + showdown + M2 + **non-bluff EV by class × d** done (Ch.2–4); Stage C check-mix + bluff delta next | Ch.2 + Ch.3–4 |
+| BN can open (steal), **≥1** seat has a good calling hand (2:1 outs) | \(\bigl[(1-p_{\mathrm{open}})^{7} - q_{\mathrm{neither}}^{7}\bigr] \cdot p_{\mathrm{open}}\) | **~0.20%** | **In progress** — inventory + showdown + M2 + non-bluff EV + **Stage C** (always check two pair) done; bluff delta / pair concealment next | Ch.2 + Ch.3–4 |
 
 Unconditional \(P(\ge 1\) of 7 seats is a 2:1 caller\() \approx 4.4\%\). The steal-into-drawer band is much smaller because it also requires seats 1–7 all non-open-legal **and** BN open-legal — still the strategically important laboratory for thin opens.
 
@@ -122,8 +122,8 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | ---: | --- | --- | --- |
 | 1 | Strong draws: call vs raise vs mix (combo-weighted EV) | [Ch.2 §2.9](ch02_drawing_callers.md) | CO represent-bluffs |
 | 2 | CO bluff after BN open (return-to-actor: CO passed with no legal opener; others fold) — call/raise with underpair / high card? | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for value-range shape |
-| 3 | BN Stage C check mixes / remaining Ch.3–4 | Ch.3–4 | Parallel OK with #1 if different files |
-| 3b | Post-draw **bluff 3-bet Ring 1** (indifference on the cap node) | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) | Needs cap street; **Ring 1 before Ring 2** |
+| 3 | Pair post-draw EV `d=3` vs `d=2`, then concealment (Ch.4 leftover) | [Ch.4](ch04_draw_mixes.md) / [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md) | Stage C done; do not redo check mixes |
+| 3b | Post-draw **bluff 3-bet Ring 1**: trips-only β on Line 1 (`d=2`/`d=3`); Line 2 (`d=0`) flush call is pinned, mix open | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) / [../POSTDRAW_STRATEGY_TREE.md](../POSTDRAW_STRATEGY_TREE.md) | Cap node + two lines measured. **Ring 1 before Ring 2** |
 | 4 | CO open/pass; HJ sandbagging | Ch.5 | After #2 template exists |
 
 ### Later (low priority)
@@ -151,6 +151,8 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
+| 2026-09-02 | Cap raise node re-filtered under Stage C: P(node)=0.0903; Line 1 flush folds / Line 2 flush calls vs no-air flush+ |
+| 2026-09-02 | Stage C re-run: always check two pair under `tp1_tr2_q1` / `tp1_tr1_q1` |
 | 2026-09-02 | Later queue: trips `d=1` kicker rank (highest vs non-face) after Stage C |
 | 2026-09-01 | Non-bluff EV by BN class × d vs 2:1 caller (Ch.3 §3.4); bluff delta next |
 | 2026-09-01 | Initial monolithic `RESEARCH_PAPER.md` |

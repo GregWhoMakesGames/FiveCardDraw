@@ -13,7 +13,7 @@ from fivecarddraw.predraw.opening import opening_summary, solve_opening
 from fivecarddraw.predraw.raise_tree import compare_raise_caps, solve_raise_tree
 from fivecarddraw.predraw.response import solve_responses
 from fivecarddraw.report import print_table, strategy_df_from_records, write_csv
-from fivecarddraw.rules import DEFAULT_CONFIG, GameConfig
+from fivecarddraw.rules import DEFAULT_CONFIG, GameConfig, SEAT_NAMES
 
 
 def run_predraw_solve(
@@ -156,9 +156,7 @@ def _opening_readable_chart(open_df):
     if out.empty:
         return out
     # Pivot-friendly sort
-    seat_order = {n: i for i, n in enumerate(
-        ["UTG", "UTG+1", "UTG+2", "Lojack", "Hijack", "Cutoff", "Button", "Dealer"]
-    )}
+    seat_order = {n: i for i, n in enumerate(SEAT_NAMES)}
     out["seat_index"] = out["seat"].map(seat_order)
     out = out.sort_values(["seat_index", "hand_class"]).drop(columns=["seat_index"])
     return out.reset_index(drop=True)

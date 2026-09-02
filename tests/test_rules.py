@@ -57,16 +57,6 @@ def test_v1_is_eight_handed():
         GameConfig(num_players=6)
 
 
-# INDEX.md seats 1–8: UTG, UTG+1, UTG+2, UTG+3, LJ, HJ, CO, BN.
-# Code currently labels 0–7 as UTG, UTG+1, UTG+2, Lojack, Hijack, Cutoff, Button, Dealer.
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "SEAT_NAMES uses 6-max labels (Lojack…Button+Dealer) instead of the "
-        "research index UTG…UTG+3, LJ, HJ, CO, BN. Last-to-act index 7 is "
-        "BN in the paper; code calls it Dealer and also has a separate Button."
-    ),
-)
 def test_seat_names_match_research_index():
     assert SEAT_NAMES == (
         "UTG",
@@ -78,3 +68,5 @@ def test_seat_names_match_research_index():
         "CO",
         "BN",
     )
+    assert DEFAULT_CONFIG.seat_name(0) == "UTG"
+    assert DEFAULT_CONFIG.seat_name(7) == "BN"
