@@ -123,7 +123,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 1 | Strong draws: call vs raise vs mix (combo-weighted EV) | [Ch.2 §2.9](ch02_drawing_callers.md) | CO represent-bluffs |
 | 2 | CO bluff after BN open (return-to-actor: CO passed with no legal opener; others fold) — call/raise with underpair / high card? | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for value-range shape |
 | 3 | Pair post-draw EV `d=3` vs `d=2`, then concealment (Ch.4 leftover) | [Ch.4](ch04_draw_mixes.md) / [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md) | Stage C done; do not redo check mixes |
-| 3b | Post-draw **bluff 3-bet Ring 1**: trips-only β on Line 1 (`d=2`/`d=3`); Line 2 (`d=0`) flush call is pinned, mix open | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) / [../POSTDRAW_STRATEGY_TREE.md](../POSTDRAW_STRATEGY_TREE.md) | Cap node + two lines measured. **Ring 1 before Ring 2** |
+| 3b | Post-draw **bluff 3-bet Ring 1**: trips-only β on Line 1 (`d=2`/`d=3`); Line 2 (`d=0`) flush call is pinned, mix open | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) / [../POSTDRAW_STRATEGY_TREE.md](../POSTDRAW_STRATEGY_TREE.md) | Library + pre-C leftover-fold pin landed (§3.6). **Stage C Ring 1 still open.** Ring 1 before Ring 2 |
 | 4 | CO open/pass; HJ sandbagging | Ch.5 | After #2 template exists |
 
 ### Later (low priority)
@@ -151,6 +151,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
+| 2026-09-07 | Land pre-C bluff library + leftover-fold pin (Ch.3 §3.6; β* = 0.0155, node EV −1.88). Stage C Ring 1 still open |
 | 2026-09-02 | Cap raise node re-filtered under Stage C: P(node)=0.0903; Line 1 flush folds / Line 2 flush calls vs no-air flush+ |
 | 2026-09-02 | Stage C re-run: always check two pair under `tp1_tr2_q1` / `tp1_tr1_q1` |
 | 2026-09-02 | Later queue: trips `d=1` kicker rank (highest vs non-face) after Stage C |

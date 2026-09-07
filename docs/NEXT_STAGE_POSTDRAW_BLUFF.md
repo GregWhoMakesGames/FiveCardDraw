@@ -1,11 +1,22 @@
 # Next stage: post-draw bluff 3-bet (Ring 1 indifference)
 
-**Status:** Not started. Do **Ring 1 first**. The cap raise node is now
-the **Stage C** street (check two pair; bet trips+), split into two 3-bet
-lines — read [After Stage C](#after-stage-c-two-pair-never-reaches-this-line)
-and [POSTDRAW_STRATEGY_TREE.md](POSTDRAW_STRATEGY_TREE.md) before coding.
-Do not start Ring 2 (bucketed Nash) until Ring 1 has a checked-in fixture
-and the per-`d` indifference numbers are pinned.
+**Status:** Stage C Ring 1 (trips-only β, per-`d`) is **not started**.
+The reusable library and a **pre-Stage-C** pin are on the branch — do not
+treat those numbers as the current node.
+
+- Library: `src/fivecarddraw/validation/bluff_indifference.py`, CLI
+  `analyze-postdraw-bluff`. Import `INDIFFERENCE_ROOT` /
+  `COMPUTE_STRATEGY_EV` / `BN_POLAR_MIX`; do not fork a third street.
+- Pre-C laboratory (two pair still bets): leftover is **fold**,
+  β\* = 0.0155, α\* = 0.1016, node EV_bn = **−1.88**. Fixture
+  `tests/fixtures/validation/postdraw_bluff_summary.json`. Ch.3 §3.6.
+- Current street: two pair **checks**, so they never 3-bet. Ring 1 here is
+  trips air on Line 1. Read
+  [After Stage C](#after-stage-c-two-pair-never-reaches-this-line) and
+  [POSTDRAW_STRATEGY_TREE.md](POSTDRAW_STRATEGY_TREE.md) before coding.
+
+Do not start Ring 2 (bucketed Nash) until Stage C Ring 1 has a checked-in
+fixture and the per-`d` indifference numbers are pinned.
 
 **Product question:** On the raise node, if the caller folds a straight or
 flush to a BN **value** 3-bet, BN is incentivized to bluff 3-bet some **trips**
