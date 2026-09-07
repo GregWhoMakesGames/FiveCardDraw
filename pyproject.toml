@@ -31,6 +31,7 @@ analyze-postdraw-draw-mixes = "fivecarddraw.validation.postdraw_draw_mixes:main"
 analyze-opener-draw-beliefs = "fivecarddraw.validation.opener_draw_beliefs:main"
 analyze-postdraw-nonbluff-ev = "fivecarddraw.validation.postdraw_nonbluff_ev:main"
 analyze-postdraw-cap = "fivecarddraw.validation.postdraw_cap:main"
+analyze-postdraw-bluff = "fivecarddraw.validation.postdraw_bluff:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

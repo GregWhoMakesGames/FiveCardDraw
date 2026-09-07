@@ -88,6 +88,32 @@ First bluff-library slice: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTD
 
 ---
 
+## 3.6 Pre-Stage-C bluff 3-bet laboratory (not the current node)
+
+On the **pre-C** raise node (two pair still bets), BN 3-bets flush+ always, calls straights, and 3-bets two pair/trips with frequency **β**, **else folds**. Caller SF caps; flushes are the call-vs-fold indifference target.
+
+This is **not** Stage C Ring 1 (`evaluate button_open_no_sandbagging Ring 1` on the current street). After Stage C, two pair never sit on the node; the live ticket is trips-only β on Line 1 (evaluate the BN trips-draw to post-draw action). Keep these numbers as the pre-C pin and for the shared helpers. Aliases: [button_open_no_sandbagging.md](button_open_no_sandbagging.md).
+
+CLI: `analyze-postdraw-bluff` (uses `on_raise_node_pre_c`). Detail: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md). Fixture: `tests/fixtures/validation/postdraw_bluff_summary.json`.
+
+Seed 20260902, combo-weighted locked draws, 7,559 **pre-C** node deals:
+
+| Quantity | Value |
+| --- | ---: |
+| β* = P(3-bet \| two pair or trips) | **0.0155** |
+| α* = air share of 3-bets | **0.102** |
+| Leftover two pair / trips | **fold** |
+| Flush EV_call − EV_fold | **0.00** (indifferent) |
+| Straight vs 3-bet | still **fold** |
+| SF vs 3-bet | still **cap** |
+| Node EV_bn at β* | **−1.88** |
+| Δ vs call-it-down (−5.32) | **+3.45** (mostly folding trash) |
+| Δ vs no-air flush+ / else-fold | **+0.21** |
+
+β* did not move when leftover changed from call to fold (it lives on the 3-bet subtree). §3.4 / §3.5 tables do **not** already include these bluff 3-bets.
+
+---
+
 ## Code ownership (for parallel agents)
 
 | Path | Role |
@@ -96,4 +122,6 @@ First bluff-library slice: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTD
 | `src/fivecarddraw/validation/postdraw_betting_m2.py` | M2 face-pair grid + cap street helper |
 | `src/fivecarddraw/validation/postdraw_nonbluff_ev.py` | Non-bluff class × d EV |
 | `src/fivecarddraw/validation/postdraw_cap.py` | Post-draw 3-bet / cap on the raise node |
-| Matching fixtures + `tests/test_showdown_matrix.py`, `tests/test_postdraw_m2.py`, `tests/test_postdraw_nonbluff_ev.py`, `tests/test_postdraw_cap.py` | CI |
+| `src/fivecarddraw/validation/bluff_indifference.py` | Reusable indifference helpers (`COMPUTE_STRATEGY_EV`, `INDIFFERENCE_ROOT`) |
+| `src/fivecarddraw/validation/postdraw_bluff.py` | Pre-C polar 3-bet mix (else-fold leftover) |
+| Matching fixtures + `tests/test_showdown_matrix.py`, `tests/test_postdraw_m2.py`, `tests/test_postdraw_nonbluff_ev.py`, `tests/test_postdraw_cap.py`, `tests/test_postdraw_bluff.py` | CI |
