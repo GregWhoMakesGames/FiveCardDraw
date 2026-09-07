@@ -49,7 +49,7 @@ Say `evaluate button_open_no_sandbagging Ring 2` when the frame might be wrong. 
 | --- | --- | --- |
 | **button_open_no_sandbagging** | [button_open_no_sandbagging.md](button_open_no_sandbagging.md) | BN opened; no sandbagging. Vs-draw Nash **tabled**. |
 | **button_open_sandbag_v1** | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) | BN open vs 100% two-pair+ (and HJ/CO aces) sandbag + always raise. |
-| **cutoff_open_no_sandbagging** | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) | Seats 1–6 unable; CO open/pass with BN behind. |
+| **cutoff_open_no_sandbagging** | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) | Seats 1–6 unable; CO open/pass with BN behind. **v1 signed:** open all legal (JJ +$1.44); no sandbag. |
 
 Mint a new frame file when the laboratory changes. Add a row here. Do not reuse Ring / Stage / Line aliases from one frame in another without a new table.
 
@@ -113,7 +113,7 @@ Seats 1–6 unable partitions into three disjoint cases:
 | --- | --- | ---: | --- | --- |
 | **No legal opens** | \((1-p)^8\) — all eight seats lack openers | **13.1%** | **Solved** (no open betting; typically redeal / dead hand under house rules) | Ch.1 |
 | **Only BN can open** | \((1-p)^7 \cdot p\) — seats 1–7 unable, BN open-legal | **3.8%** | Split further below | Ch.3 |
-| **CO can open** (BN may or may not) | \((1-p)^6 \cdot p\) — seats 1–6 unable, CO open-legal | **4.9%** | Planned with CO solve | Ch.5 |
+| **CO can open** (BN may or may not) | \((1-p)^6 \cdot p\) — seats 1–6 unable, CO open-legal | **4.9%** | **Signed (v1):** open all legal (JJ **+$1.44** vs pass); no CO sandbag | Ch.5 |
 
 These three sum to the ~22% folded-to-last-two mass.
 
@@ -133,7 +133,7 @@ Unconditional \(P(\ge 1\) of 7 seats is a 2:1 caller\() \approx 4.4\%\). Split o
 1. **No legal opens (~13.1%)** — solved.
 2. **Steal with no drawing caller (~3.6%)** — solved for “always open made jacks+.”
 3. **Steal into a 2:1 drawer (~0.21%)** — the active BN laboratory (Ch.2–4). Absolute deal share is small; **strategic importance is large** (this is what makes thin opens lose).
-4. **CO live after early six fold (~4.9%)** — next seat after BN template.
+4. **CO live after early six fold (~4.9%)** — **signed (v1, 0% sandbag in 1–6):** open every legal class; do not sandbag two pair+ / CO aces ([cutoff_open_no_sandbagging](cutoff_open_no_sandbagging.md)).
 5. **Early six can open (~78%)** — remaining mountain.
 
 Update the **Status** column in this ledger when a chapter’s owner claims a slice solved — prefer editing **only this table** in `INDEX.md`, not copying percentages into chapter bodies.
@@ -147,7 +147,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 3 | Pair post-draw EV `d=3` vs `d=2`, then concealment (Ch.4 leftover) | [Ch.4](ch04_draw_mixes.md) / [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md) | Stage C done; do not redo check mixes |
 | 3b | BN-vs-2:1 post-draw Nash (Ring 1 / Ring 2) | [button_open_no_sandbagging](button_open_no_sandbagging.md) | **Tabled.** Steal-weighted open EV is already ± a dime |
 | A | `evaluate button_open_sandbag_v1`: 100% sandbag + always raise; BN folds JJ? | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) / [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) | Parallel with B; do not edit Ch.5 |
-| B | `evaluate cutoff_open_no_sandbagging`: CO JJ open / CO sandbag with BN behind | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) / [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) | Parallel with A; do not edit sandbag MC |
+| B | `evaluate cutoff_open_no_sandbagging`: CO JJ open / CO sandbag with BN behind | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) / [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) | **Signed (v1).** Parallel with A; do not edit sandbag MC |
 
 ### Later (low priority)
 
@@ -174,6 +174,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
+| 2026-09-07 | CO open/pass (0% sandbag in 1–6): open all legal, JJ **+$1.44** vs pass; do not sandbag AA / two pair ([cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md)) |
 | 2026-09-07 | Sandbag-set v1 aces: **HJ+CO**, not LJ+CO (plan-only correction; method unchanged) |
 | 2026-09-07 | Parallel next: BN 100% sandbag JJ probe + CO open/pass. BN-vs-2:1 Nash tabled. Ticket [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) |
 | 2026-09-07 | Average BN open ≈ +$1.94: steal +$2 on ~95%, §3.4 called street +$0.80 vs pass on ~5% (leak ~6¢ vs always-steal) |
