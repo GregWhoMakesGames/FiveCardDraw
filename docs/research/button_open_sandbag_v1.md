@@ -207,4 +207,11 @@ If BN stops opening JJ–KK, AA is no longer behind BN’s whole opening range, 
 HJ sandbagging AA (the v1 aces pin, originally HJ+CO) is inconsistent. **Revisit
 that pin later.** This PR does not retune sandbag frequencies.
 
+Follow-up (does not change this 1–6-only pin): [hijack_slowplay.md](hijack_slowplay.md)
+takes CO never-sandbag as given and asks whether HJ should still 100% slowplay.
+Short answer: no. Mass-weighted \(r_{\mathrm{HJ}}^*\approx 0.655\) drops
+\(r_{\mathrm{tot}}\) to **0.917** and MC \(p_{\mathrm{raise}}\) to **0.463**,
+under the 0.492 fold-to-raise line — support for the temporary BN
+open-everything hypothesis, not a Nash claim.
+
 

@@ -23,7 +23,7 @@ This folder is the **human-readable research paper**, split into chapters so par
 - [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md)
 - [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md)
 
-**How we name work.** [INDEX](#research-frames) holds the **frame**. Each frame has its own alias table so “Ring 2” does not float free of *which laboratory*. BN-vs-2:1 Nash is **tabled**; next frames: [button_open_sandbag_v1.md](button_open_sandbag_v1.md), [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md).
+**How we name work.** [INDEX](#research-frames) holds the **frame**. Each frame has its own alias table so “Ring 2” does not float free of *which laboratory*. BN-vs-2:1 Nash is **tabled**; next frames: [button_open_sandbag_v1.md](button_open_sandbag_v1.md), [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md), [hijack_slowplay.md](hijack_slowplay.md).
 
 ---
 
@@ -50,6 +50,7 @@ Say `evaluate button_open_no_sandbagging Ring 2` when the frame might be wrong. 
 | **button_open_no_sandbagging** | [button_open_no_sandbagging.md](button_open_no_sandbagging.md) | BN opened; no sandbagging. Vs-draw Nash **tabled**. |
 | **button_open_sandbag_v1** | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) | BN open vs 100% two-pair+ (HJ/CO aces) sandbag; 1–6-only follow-up: CO never sandbags. |
 | **cutoff_open_no_sandbagging** | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) | Seats 1–6 unable; CO open/pass with BN behind. |
+| **hijack_slowplay** | [hijack_slowplay.md](hijack_slowplay.md) | CO never sandbags; HJ open vs slowplay; \(r_{\mathrm{tot}}\) vs BN. |
 
 Mint a new frame file when the laboratory changes. Add a row here. Do not reuse Ring / Stage / Line aliases from one frame in another without a new table.
 
@@ -84,6 +85,7 @@ Use **seats 1–8** in all research prose. Code may still use 0-based indices in
 | — | [button_open_no_sandbagging.md](button_open_no_sandbagging.md) | Frame aliases (Ring / Line / Stage C); Nash tabled | Frozen vs-draw |
 | — | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) | 100% sandbag raise vs BN JJ | Parallel A |
 | — | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) | CO open/pass / sandbag with BN behind | Parallel B |
+| — | [hijack_slowplay.md](hijack_slowplay.md) | HJ slowplay mix vs 100%; \(r_{\mathrm{tot}}\) vs BN 98% line | After B |
 | 4 | [ch04_draw_mixes.md](ch04_draw_mixes.md) | Opener draw mixes + check protection (C done) | Draw mixes / concealment next |
 | 5 | [ch05_later_seats.md](ch05_later_seats.md) | CO open climb; **CO bluff after BN open** (§5.2); HJ | Agent B / later |
 | A | [appendix_a_rules.md](appendix_a_rules.md) | Game rules | Shared (rare edits) |
@@ -148,6 +150,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 3b | BN-vs-2:1 post-draw Nash (Ring 1 / Ring 2) | [button_open_no_sandbagging](button_open_no_sandbagging.md) | **Tabled.** Steal-weighted open EV is already ± a dime |
 | A | **Done.** Opening JJ is −EV (EV ≈ −$0.32, \(p_{\mathrm{raise}}\) ≈ 0.573) | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) / [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) | Parallel with B; do not edit Ch.5 |
 | B | `evaluate cutoff_open_no_sandbagging`: CO JJ open / CO sandbag with BN behind | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) / [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) | Parallel with A; do not edit sandbag MC |
+| H | **Done.** HJ AA/two pair slowplay, aces-up+ open; \(r_{\mathrm{HJ}}^*\approx 0.655\), \(r_{\mathrm{tot}}\approx 0.917\) (drop 8.3%); MC \(p_{\mathrm{raise}}=0.463<0.492\) supports BN open-everything | [hijack_slowplay.md](hijack_slowplay.md) | Do not start Ring 2 / Stage C / pair concealment |
 
 ### Later (low priority)
 
@@ -174,6 +177,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
+| 2026-09-07 | `hijack_slowplay`: CO never-slowplay confirmed (AA/two pair open−pass +$1.39–$1.42). HJ 100% slowplay is not optimal (AA/two pair slowplay; aces-up+ open). \(r_{\mathrm{tot}}=0.917\) (drop 8.3%); MC \(p_{\mathrm{raise}}=0.463<0.492\) supports BN open-everything. |
 | 2026-09-07 | 1–6-only sandbag (CO never sandbags): JJ still −EV (−$0.016, \(p_{\mathrm{raise}}=0.496\)); QQ/KK also −EV; lowest +EV BN open is AA (+$0.18 even folding the raise). Q3 flag: revisit HJ aces-sandbag if BN stops opening JJ–KK. |
 | 2026-09-07 | `button_open_sandbag_v1`: opening JJ is −EV (−$0.32) vs 100% two-pair+ / HJ-CO aces sandbag + always raise; \(p_{\mathrm{raise}}=0.573\) (n=40k, seed 20260907). No-raise leaf reused §3.4 pair_J d=3 + 6.9% 2:1 call |
 | 2026-09-07 | Sandbag-set v1 aces: **HJ+CO**, not LJ+CO (plan-only correction; method unchanged) |

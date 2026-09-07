@@ -9,6 +9,12 @@ hand if CO opens.
 
 **How to point at this work:** `evaluate cutoff_open_no_sandbagging`
 
+Findings (this branch is a stub): the CO tree was solved on
+`cursor/cutoff-open-no-sandbagging-6cf1`. Product answers are quoted in
+[hijack_slowplay.md](hijack_slowplay.md): **open every legal including JJ**
+(EV(open) ≈ +$1.44 vs pass 0); **do not sandbag** two pair+ or aces
+(open − best pass ≈ +$1.39–$1.42). Do not re-run that tree here.
+
 ## Product questions (unanswered here)
 
 1. Should CO open every legal class, or is JJ (or higher) −EV with BN behind?
