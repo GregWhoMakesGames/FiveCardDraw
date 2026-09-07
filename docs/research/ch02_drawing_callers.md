@@ -45,7 +45,7 @@ From fixture `tests/fixtures/validation/draw_call_odds.json` (exact enumeration)
 
 **Cascade (two drawing callers among seven seats behind an open):** adjusted rate ≈ **0.0308%** (`cascade_to_2` in `cascade_odds.json`). Combined “lone 16+ improves or cascade improves” beating AA+/two pair/trips (approx.) ≈ **1.54%**. Cascade is ~1% of that mass — optional in the first showdown matrix.
 
-Unconditional \(P(\ge 1\) of 7 seats holds a 2:1 combo\() \approx 4.4\%\). See the [ledger](INDEX.md#solve-progress-ledger) for how that sits inside the BN-steal band.
+Unconditional \(P(\ge 1\) of 7 seats holds a 2:1 combo\() \approx 4.4\%\). If BN already holds the bug that drops to **0.300%**; if BN does not, **4.82%** ([button frame](button_open_no_sandbagging.md)). See the [ledger](INDEX.md#solve-progress-ledger) for how that sits inside the BN-steal band.
 
 ---
 
