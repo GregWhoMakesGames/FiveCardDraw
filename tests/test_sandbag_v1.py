@@ -183,3 +183,193 @@ def test_fixture_pins_product_answer():
         )
     )
     assert nb["findings"]["pair_J_ev_by_d"]["3"] == PAIR_J_D3_EV_BN
+
+
+def test_seats_1_6_only_co_never_sandbags():
+    from fivecarddraw.validation.sandbag_v1 import (
+        SANDBAG_WORLD_SEATS_1_6_ONLY,
+        aces_sandbag_seats,
+        sandbag_seats,
+    )
+
+    aa = classify_opener(parse_hand("As Ad 9c 8h 2d"))
+    jj = classify_opener(parse_hand("Js Jd 9c 8h 2d"))
+    tp = classify_opener(parse_hand("Ks Kd 9c 9h 2d"))
+    world = SANDBAG_WORLD_SEATS_1_6_ONLY
+
+    assert aces_sandbag_seats(world) == frozenset({SEAT_HJ})
+    assert sandbag_seats(world) == tuple(range(1, 7))
+    assert SEAT_CO not in sandbag_seats(world)
+
+    # HJ still buries aces; CO opens them; LJ still opens them.
+    assert is_sandbag_set(aa, SEAT_HJ, world)
+    assert not is_voluntary_opener(aa, SEAT_HJ, world)
+    assert not is_sandbag_set(aa, SEAT_CO, world)
+    assert is_voluntary_opener(aa, SEAT_CO, world)
+    assert is_voluntary_opener(aa, SEAT_LJ, world)
+
+    # Two pair+: sandbag 1–6; CO opens (so CO monsters never sit folded-to-BN).
+    for seat in range(1, 7):
+        assert is_sandbag_set(tp, seat, world)
+        assert not is_voluntary_opener(tp, seat, world)
+    assert not is_sandbag_set(tp, SEAT_CO, world)
+    assert is_voluntary_opener(tp, SEAT_CO, world)
+
+    # JJ is voluntary everywhere in 1–7 (not in the sandbag-set).
+    for seat in range(1, 8):
+        assert is_voluntary_opener(jj, seat, world)
+        assert not is_sandbag_set(jj, seat, world)
+
+    # 7-seat default is unchanged: CO still sandbags two pair+ and aces.
+    assert is_sandbag_set(tp, SEAT_CO)
+    assert is_sandbag_set(aa, SEAT_CO)
+    assert not is_voluntary_opener(tp, SEAT_CO)
+
+
+def test_seats_1_6_inventory_and_independent_p_raise_lower():
+    from fivecarddraw.validation.sandbag_v1 import (
+        SANDBAG_WORLD_SEATS_1_6_ONLY,
+        independent_p_raise_unconditional,
+        sandbag_set_combo_count,
+        voluntary_combo_count,
+    )
+
+    world = SANDBAG_WORLD_SEATS_1_6_ONLY
+    sm = load_showdown_matrix()["opener_combo_counts"]
+    two_pair_plus = sandbag_set_combo_count(SEAT_LJ, world)
+    assert sandbag_set_combo_count(SEAT_CO, world) == 0
+    assert voluntary_combo_count(SEAT_CO, world) == sum(sm.values())
+    assert sandbag_set_combo_count(SEAT_HJ, world) == two_pair_plus + sm["pair_A"]
+
+    seven = independent_p_raise_unconditional()
+    six = independent_p_raise_unconditional(world)
+    # One fewer sandbag seat (CO) ⇒ raise rate drops (~0.557 → ~0.482).
+    assert 0.47 < six["p_raise"] < 0.50
+    assert six["p_raise"] < seven["p_raise"] - 0.05
+    assert six["p_neither_given_passed_seat_7"] == 1.0
+    assert six["p_neither_given_passed_seat_6"] < six["p_neither_given_passed_seat_1"]
+    assert six["p_neither_given_passed_seat_6"] == seven["p_neither_given_passed_seat_6"]
+    # Closed form: drop CO from the 7-seat product.
+    expected = 1.0 - seven["p_no_raise"] / seven["p_neither_given_passed_seat_7"]
+    assert abs(six["p_raise"] - expected) < 1e-15
+
+
+def test_locked_leaves_match_section_34_and_69pct_call():
+    from fivecarddraw.validation.sandbag_v1 import (
+        LOCKED_DRAW_EV_BN,
+        locked_leaf_ev,
+    )
+
+    nb = json.loads(
+        (Path(__file__).resolve().parent / "fixtures" / "validation" / "postdraw_nonbluff_ev_summary.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert nb["findings"]["pair_J_ev_by_d"]["3"] == LOCKED_DRAW_EV_BN["pair_J"]
+    assert nb["findings"]["two_pair_ev_by_d"]["1"] == LOCKED_DRAW_EV_BN["two_pair"]
+    assert nb["findings"]["trips_ev_by_d"]["2"] == LOCKED_DRAW_EV_BN["trips"]
+    grid = { (r["opener_class"], r["bn_d"]): r["ev_bn"] for r in nb["bn_grid"] if r["caller_class"] == "all_2to1" }
+    assert grid[("pair_Q", 3)] == LOCKED_DRAW_EV_BN["pair_Q"]
+    assert grid[("pair_K", 3)] == LOCKED_DRAW_EV_BN["pair_K"]
+    assert grid[("pair_A", 3)] == LOCKED_DRAW_EV_BN["pair_A"]
+
+    jj = locked_leaf_ev("pair_J")
+    assert abs(jj - 1.9362095) < 1e-9
+    assert abs(jj - ev_jj_no_sandbag_open()) < 1e-12
+
+
+def test_small_deal_mc_seats_1_6_lower_than_seven_seat():
+    from fivecarddraw.validation.sandbag_v1 import (
+        SANDBAG_WORLD_SEATS_1_6_ONLY,
+        deal_mc_p_raise_given_passed,
+    )
+
+    seven = deal_mc_p_raise_given_passed_bn_pair_j(n=400, seed=20260907)
+    six = deal_mc_p_raise_given_passed(
+        n=400, seed=20260907, bn_class="pair_J", world=SANDBAG_WORLD_SEATS_1_6_ONLY
+    )
+    assert six.n_conditioned == 400
+    assert six.world == SANDBAG_WORLD_SEATS_1_6_ONLY
+    assert 0.30 < six.p_raise < 0.62
+    # Same seed, one fewer sandbag seat ⇒ raise rate should drop.
+    assert six.p_raise < seven.p_raise
+    assert six.sandbag_seats_hist["0"] == six.n_conditioned - six.n_raise
+
+
+FIXTURE_1_6 = (
+    Path(__file__).resolve().parent
+    / "fixtures"
+    / "validation"
+    / "sandbag_v1_seats_1_6_only.json"
+)
+
+
+def test_seats_1_6_fixture_pins_q1_and_q2():
+    from fivecarddraw.validation.sandbag_v1 import (
+        FOLD_JJ_TO_RAISE_EV,
+        PASS_EV,
+        load_seats_1_6_only,
+        locked_leaf_ev,
+        mix_findings_for_class,
+    )
+
+    assert FIXTURE_1_6.exists(), (
+        "run python -m fivecarddraw.validation.sandbag_v1 "
+        "--world seats_1_6_only --walk --write-fixture"
+    )
+    data = json.loads(FIXTURE_1_6.read_text(encoding="utf-8"))
+    live = load_seats_1_6_only()
+    assert data == live
+    meta = data["meta"]
+    assert meta["world"] == "seats_1_6_only"
+    assert meta["sandbag_set"]["aces_sandbag_seats"] == [6]
+    assert meta["sandbag_set"]["seat_7_co"] == "never_sandbags_opens_all_legal"
+    assert meta["no_raise_leaf"]["ev_open_jj_p_call_mc"] == locked_leaf_ev("pair_J")
+    assert meta["mc"]["n"] == 40_000
+    assert meta["mc"]["seed"] == 20260907
+
+    q1 = data["q1"]
+    mc = data["deal_mc_pair_j"]
+    assert mc["n"] == 40_000
+    assert mc["seed"] == 20260907
+    assert mc["n_conditioned"] == 40_000
+    assert mc["bn_class"] == "pair_J"
+    assert abs(q1["p_raise"] - mc["p_raise"]) < 1e-15
+    assert abs(q1["ev_no_raise_leaf"] - locked_leaf_ev("pair_J")) < 1e-12
+    # Lower than Agent A's 0.573; still just above JJ break-even ⇒ −EV.
+    assert q1["p_raise"] < q1["agent_a_seven_seat_p_raise"] - 0.05
+    assert 0.48 < q1["p_raise"] < 0.52
+    assert q1["opening_is_negative_ev"] is True
+    assert q1["ev_open"] < PASS_EV
+    recon = (1.0 - q1["p_raise"]) * q1["ev_no_raise_leaf"] + q1["p_raise"] * FOLD_JJ_TO_RAISE_EV
+    assert abs(q1["ev_open"] - recon) < 1e-12
+    assert abs(q1["p_raise"] - 0.495925) < 1e-12
+    assert abs(q1["ev_open"] - (-0.015855196287499984)) < 1e-12
+
+    q2 = data["q2"]
+    assert q2["n"] == 40_000
+    assert q2["seed"] == 20260907
+    by_cls = {row["bn_class"]: row for row in q2["rows"]}
+    assert set(by_cls) == {"pair_J", "pair_Q", "pair_K", "pair_A"}
+    for cls in ("pair_J", "pair_Q", "pair_K"):
+        row = by_cls[cls]
+        assert row["raise_policy"] == "fold"
+        assert row["opening_is_negative_ev"] is True
+        assert abs(row["ev_no_raise_leaf"] - locked_leaf_ev(cls)) < 1e-12
+        assert abs(row["ev_open"] - mix_findings_for_class(row["p_raise"], cls)["ev_open"]) < 1e-12
+        assert row["deal_mc"]["n"] == 40_000
+        assert row["deal_mc"]["seed"] == 20260907
+    aa = by_cls["pair_A"]
+    assert aa["raise_policy"] == "fold_bound"
+    assert aa["opening_is_positive_ev"] is True
+    assert aa["p_raise"] < by_cls["pair_J"]["p_raise"] - 0.03
+    assert abs(aa["p_raise"] - 0.44135) < 1e-12
+    assert abs(aa["ev_open"] - 0.18090423794999988) < 1e-12
+    assert q2["lowest_plus_ev_class"] == "pair_A"
+    assert q2["none_of_jj_kk_plus_ev"] is True
+    assert q2["q3_aces_sandbag_pin_should_be_revisited"] is True
+    # 7-seat pin must still live in the original fixture.
+    seven = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    assert seven["findings"]["opening_jj_is_negative_ev"] is True
+    assert abs(seven["findings"]["p_raise"] - 0.573025) < 1e-12
+
