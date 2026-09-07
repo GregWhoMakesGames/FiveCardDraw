@@ -1,5 +1,8 @@
 # Next stage: post-draw bluff 3-bet (Ring 1 indifference)
 
+Frame: [research/button_open_no_sandbagging.md](research/button_open_no_sandbagging.md)
+(`evaluate button_open_no_sandbagging Ring 1`).
+
 **Status:** Stage C Ring 1 (trips-only β, per-`d`) is **not started**.
 The reusable library and a **pre-Stage-C** pin are on the branch — do not
 treat those numbers as the current node.

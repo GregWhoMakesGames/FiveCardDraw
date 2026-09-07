@@ -5,7 +5,7 @@ frequency β; otherwise those hands **fold** the raise. Caller SF caps; flushes
 are the call-vs-fold indifference target. Root-find β so flush EV_call =
 EV_fold. Report α = air share of 3-bets.
 
-Reuses `play_raise_node` / `on_raise_node_pre_c` / `FAMILY_BUCKET` / the cap
+Reuses `play_raise_node` / `on_raise_node_pre_c` / `MERGE_TWO_PAIR_TRIPS` / the cap
 deal generator. This CLI is the **pre-Stage-C** laboratory (two pair still
 bets). Stage C Ring 1 (trips-only, per-`d`) should import the helpers, not
 re-run this fixture as the current node. Ring 2 (Nash/CFR) is out of scope.

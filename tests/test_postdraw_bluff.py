@@ -17,9 +17,9 @@ from fivecarddraw.validation.bluff_indifference import (
     CALL_3BET,
     CATCHER_FLUSH,
     COMPUTE_STRATEGY_EV,
-    FAMILY_BUCKET,
     FOLD_RAISE_EV_BN,
     INDIFFERENCE_ROOT,
+    MERGE_TWO_PAIR_TRIPS,
     POT_AFTER_3BET,
     POT_ODDS_CALL_3BET,
     POT_ODDS_TO_CALL,
@@ -101,10 +101,10 @@ def test_pot_odds_to_call_4_over_30():
         "CATCHER_EVS",
         "CATCHER_FLUSH",
         "COMPUTE_STRATEGY_EV",
-        "FAMILY_BUCKET",
         "FOLD_RAISE_EV_BN",
         "INDIFFERENCE_RESULT",
         "INDIFFERENCE_ROOT",
+        "MERGE_TWO_PAIR_TRIPS",
         "NODE_PAYOFF",
         "POT_AFTER_3BET",
         "POT_ODDS_CALL_3BET",
@@ -207,8 +207,8 @@ def test_synthetic_polar_indifference_alpha_is_pot_odds():
     )
     assert family_bucket(value.opener_final) == "boat_plus"
     assert family_bucket(air.opener_final) == "two_pair"
-    assert FAMILY_BUCKET(air.opener_final) == "two_pair_or_trips"
-    assert FAMILY_BUCKET(air.drawer_final) == CATCHER_FLUSH
+    assert MERGE_TWO_PAIR_TRIPS(air.opener_final) == "two_pair_or_trips"
+    assert MERGE_TWO_PAIR_TRIPS(air.drawer_final) == CATCHER_FLUSH
     deals = [value] + [air] * 9
     pay = PRECOMPUTE_RAISE_NODE_PAYOFFS(deals)
     result = INDIFFERENCE_ROOT(

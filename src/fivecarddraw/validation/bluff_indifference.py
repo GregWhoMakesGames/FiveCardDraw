@@ -21,11 +21,12 @@ from fivecarddraw.validation.postdraw_cap import family_bucket, fine_bucket
 from fivecarddraw.validation.postdraw_nonbluff_ev import caller_ev_from_bn
 
 
-def FAMILY_BUCKET(v: Any) -> str:
-    """Cap `family_bucket`, merging two pair and trips for the pre-C lab.
+def MERGE_TWO_PAIR_TRIPS(v: Any) -> str:
+    """Cap `family_bucket`, merging two pair and trips into one air label.
 
-    After Stage C, cap splits those families. This polar mix still treats
-    them as one air bucket (`two_pair_or_trips`).
+    After check-two-pair (Stage C), cap splits those families. This polar
+    mix still treats them as one bucket (`two_pair_or_trips`). Pair+trips
+    for a d=2 draw is a different collapse — do not reuse this helper.
     """
     fam = family_bucket(v)
     if fam in {"two_pair", "trips"}:
@@ -46,10 +47,10 @@ __all__ = [
     "CATCHER_EVS",
     "CATCHER_FLUSH",
     "COMPUTE_STRATEGY_EV",
-    "FAMILY_BUCKET",
     "FOLD_RAISE_EV_BN",
     "INDIFFERENCE_RESULT",
     "INDIFFERENCE_ROOT",
+    "MERGE_TWO_PAIR_TRIPS",
     "NODE_PAYOFF",
     "POT_AFTER_3BET",
     "POT_ODDS_CALL_3BET",
@@ -218,8 +219,8 @@ def PRECOMPUTE_RAISE_NODE_PAYOFFS(deals: Sequence[Any]) -> list[NODE_PAYOFF]:
         )
         out.append(
             NODE_PAYOFF(
-                bn_family=FAMILY_BUCKET(deal.opener_final),
-                caller_family=FAMILY_BUCKET(deal.drawer_final),
+                bn_family=MERGE_TWO_PAIR_TRIPS(deal.opener_final),
+                caller_family=MERGE_TWO_PAIR_TRIPS(deal.drawer_final),
                 bn_fine=fine_bucket(deal.opener_final),
                 caller_fine=fine_bucket(deal.drawer_final),
                 ev_bn_call=ev_call,

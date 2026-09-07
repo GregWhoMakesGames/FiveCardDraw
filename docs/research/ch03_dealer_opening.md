@@ -92,7 +92,7 @@ First bluff-library slice: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTD
 
 On the **pre-C** raise node (two pair still bets), BN 3-bets flush+ always, calls straights, and 3-bets two pair/trips with frequency **β**, **else folds**. Caller SF caps; flushes are the call-vs-fold indifference target.
 
-This is **not** Stage C Ring 1. After Stage C, two pair never sit on the node; the live ticket is trips-only β on Line 1. Keep these numbers as the pre-C pin and for the shared helpers.
+This is **not** Stage C Ring 1 (`evaluate button_open_no_sandbagging Ring 1` on the current street). After Stage C, two pair never sit on the node; the live ticket is trips-only β on Line 1 (evaluate the BN trips-draw to post-draw action). Keep these numbers as the pre-C pin and for the shared helpers. Aliases: [button_open_no_sandbagging.md](button_open_no_sandbagging.md).
 
 CLI: `analyze-postdraw-bluff` (uses `on_raise_node_pre_c`). Detail: [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md). Fixture: `tests/fixtures/validation/postdraw_bluff_summary.json`.
 

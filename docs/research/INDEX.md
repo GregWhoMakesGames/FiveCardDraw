@@ -22,6 +22,8 @@ This folder is the **human-readable research paper**, split into chapters so par
 - [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md)
 - [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md)
 
+**How we name work.** [INDEX](#research-frames) holds the **frame**. Each frame has its own alias table so “Ring 2” does not float free of *which laboratory*. Current frame: [button_open_no_sandbagging.md](button_open_no_sandbagging.md).
+
 ---
 
 ## Executive summary
@@ -33,6 +35,20 @@ This project builds a **reproducible, bottom-up** analysis of fixed-limit five-c
 **What we have done so far.** Base engine + pre-draw pipeline (charts not trusted); drawing-call inventory (18,396 2:1 combos); dealer opener showdown / post-draw betting / draw-count grids; **non-bluff EV by class × d**; **Stage C check mixes** (always check two pair); post-draw **cap / 3-bet** on the Stage C raise node, split into **two 3-bet lines** by public \(d\); public-draw belief tables.
 
 **Central claim (working).** Late position is the right laboratory. Seat naming and the progressive deal-share breakdown live in this index so every chapter uses the same language.
+
+---
+
+## Research frames
+
+A **frame** is the laboratory (who opened, sandbagging on/off, whose EV we want). **Aliases** (Ring 1, Line 2, Stage C) live *inside* a frame so they stay short in chat.
+
+Say `evaluate button_open_no_sandbagging Ring 2` when the frame might be wrong. `evaluate Ring 2` is enough when recent work is already in that file.
+
+| Frame (slug) | File | Laboratory |
+| --- | --- | --- |
+| **button_open_no_sandbagging** | [button_open_no_sandbagging.md](button_open_no_sandbagging.md) | BN opened; no sandbagging. Current post-draw / button-EV work. |
+
+Mint a new frame file when the laboratory changes. Add a row here. Do not reuse Ring / Stage / Line aliases from one frame in another without a new table.
 
 ---
 
@@ -62,6 +78,7 @@ Use **seats 1–8** in all research prose. Code may still use 0-based indices in
 | 1 | [ch01_roadmap.md](ch01_roadmap.md) | Order of operations + deal-share framing | Roadmap / coordination |
 | 2 | [ch02_drawing_callers.md](ch02_drawing_callers.md) | Non-opening draws; **next: call/raise/mix** (§2.9) | Drawing-call validation |
 | 3 | [ch03_dealer_opening.md](ch03_dealer_opening.md) | BN opening + post-draw equity (incl. cap) | Dealer / showdown / M2 |
+| — | [button_open_no_sandbagging.md](button_open_no_sandbagging.md) | Frame aliases (Ring / Line / Stage C) for current BN lab | This frame |
 | 4 | [ch04_draw_mixes.md](ch04_draw_mixes.md) | Opener draw mixes + check protection (C done) | Draw mixes / concealment next |
 | 5 | [ch05_later_seats.md](ch05_later_seats.md) | CO open climb; **CO bluff after BN open** (§5.2); HJ | Later seats |
 | A | [appendix_a_rules.md](appendix_a_rules.md) | Game rules | Shared (rare edits) |
@@ -123,7 +140,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 1 | Strong draws: call vs raise vs mix (combo-weighted EV) | [Ch.2 §2.9](ch02_drawing_callers.md) | CO represent-bluffs |
 | 2 | CO bluff after BN open (return-to-actor: CO passed with no legal opener; others fold) — call/raise with underpair / high card? | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for value-range shape |
 | 3 | Pair post-draw EV `d=3` vs `d=2`, then concealment (Ch.4 leftover) | [Ch.4](ch04_draw_mixes.md) / [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md) | Stage C done; do not redo check mixes |
-| 3b | Post-draw **bluff 3-bet Ring 1**: trips-only β on Line 1 (`d=2`/`d=3`); Line 2 (`d=0`) flush call is pinned, mix open | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) / [../POSTDRAW_STRATEGY_TREE.md](../POSTDRAW_STRATEGY_TREE.md) | Library + pre-C leftover-fold pin landed (§3.6). **Stage C Ring 1 still open.** Ring 1 before Ring 2 |
+| 3b | Frame [button_open_no_sandbagging](button_open_no_sandbagging.md): **Ring 1** (flush-indifference β) on **Line 1** (BN trips-draw). Line 2 stand-pat flush call is pinned, mix open | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) / [../POSTDRAW_STRATEGY_TREE.md](../POSTDRAW_STRATEGY_TREE.md) | Library + pre-C leftover-fold pin landed (§3.6). **Stage C Ring 1 still open.** Ring 1 before Ring 2. Qualify as `evaluate button_open_no_sandbagging Ring 1` if the frame is ambiguous |
 | 4 | CO open/pass; HJ sandbagging | Ch.5 | After #2 template exists |
 
 ### Later (low priority)
@@ -151,6 +168,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
+| 2026-09-07 | Frames in INDEX; Ring / Line / Stage aliases in [button_open_no_sandbagging.md](button_open_no_sandbagging.md). Pre-C merge helper is `MERGE_TWO_PAIR_TRIPS` |
 | 2026-09-07 | Land pre-C bluff library + leftover-fold pin (Ch.3 §3.6; β* = 0.0155, node EV −1.88). Stage C Ring 1 still open |
 | 2026-09-02 | Cap raise node re-filtered under Stage C: P(node)=0.0903; Line 1 flush folds / Line 2 flush calls vs no-air flush+ |
 | 2026-09-02 | Stage C re-run: always check two pair under `tp1_tr2_q1` / `tp1_tr1_q1` |
