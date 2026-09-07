@@ -33,6 +33,7 @@ analyze-postdraw-nonbluff-ev = "fivecarddraw.validation.postdraw_nonbluff_ev:mai
 analyze-postdraw-cap = "fivecarddraw.validation.postdraw_cap:main"
 analyze-postdraw-bluff = "fivecarddraw.validation.postdraw_bluff:main"
 analyze-cutoff-open = "fivecarddraw.validation.cutoff_open:main"
+analyze-cutoff-open-sandbag = "fivecarddraw.validation.cutoff_open_sandbag:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

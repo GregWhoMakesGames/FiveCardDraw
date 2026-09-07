@@ -1,11 +1,14 @@
 """Sandbag-set v1: seat predicates and folded-to-BN raise probability.
 
-Frame: ``button_open_sandbag_v1``. Two laboratories share this module:
+Frame: ``button_open_sandbag_v1``. Three laboratories share this module:
 
 - ``seats_1_7`` (Agent A pin): seats 1–7 pass the v1 sandbag-set 100%
   and always raise a BN open. Opening JJ is −EV.
 - ``seats_1_6_only`` (Q1/Q2): seats 1–6 sandbag that set; **CO never
   sandbags** (opens every legal hand). Folded-to-BN ⇒ CO has no open-legal.
+- ``co_vs_seats_1_6``: same 1–6 sandbag-set as ``seats_1_6_only``; the
+  actor is **CO** after 1–6 passed (BN unrestricted). Deal-MC lives in
+  ``cutoff_open_sandbag.py``.
 
 BN folds JJ/QQ/KK to a sandbag raise (−$2). The no-raise leaf is the
 0% sandbag steal + 2:1 mix (locked-draw §3.4). This module does **not**
@@ -43,15 +46,19 @@ SEAT_BN = 8
 SEATS_BEFORE_BN = tuple(range(1, 8))  # 1–7
 SANDBAG_WORLD_SEATS_1_7 = "seats_1_7"
 SANDBAG_WORLD_SEATS_1_6_ONLY = "seats_1_6_only"
-# 7-seat pin: HJ+CO aces. 1–6-only: CO opens all legal, so CO is never a
-# folded-to-BN sandbag raiser; HJ still buries aces.
+# Same sandbag seats as 1–6-only; hero is CO and BN is not filtered.
+SANDBAG_WORLD_CO_VS_SEATS_1_6 = "co_vs_seats_1_6"
+# 7-seat pin: HJ+CO aces. 1–6-only / CO-vs-1–6: CO opens all legal, so CO
+# is never a sandbag raiser; HJ still buries aces.
 ACES_SANDBAG_SEATS_BY_WORLD = {
     SANDBAG_WORLD_SEATS_1_7: frozenset({SEAT_HJ, SEAT_CO}),
     SANDBAG_WORLD_SEATS_1_6_ONLY: frozenset({SEAT_HJ}),
+    SANDBAG_WORLD_CO_VS_SEATS_1_6: frozenset({SEAT_HJ}),
 }
 SANDBAG_SEATS_BY_WORLD = {
     SANDBAG_WORLD_SEATS_1_7: tuple(range(1, 8)),
     SANDBAG_WORLD_SEATS_1_6_ONLY: tuple(range(1, 7)),
+    SANDBAG_WORLD_CO_VS_SEATS_1_6: tuple(range(1, 7)),
 }
 ACES_SANDBAG_SEATS = ACES_SANDBAG_SEATS_BY_WORLD[SANDBAG_WORLD_SEATS_1_7]  # HJ+CO, not LJ
 DEFAULT_WORLD = SANDBAG_WORLD_SEATS_1_7
@@ -126,7 +133,7 @@ def is_sandbag_set(
     """True if ``seat`` 100% passes this opener class in ``world``.
 
     7-seat: 1–7 two pair+; HJ and CO also pair of aces. LJ still opens aces.
-    1–6-only: same for 1–6; **CO does not sandbag** (opens every legal hand).
+    1–6-only / co_vs_seats_1_6: same for 1–6; **CO does not sandbag**.
     Non-openers and BN are never sandbag-set.
     """
     if cls is None or seat not in sandbag_seats(world):
