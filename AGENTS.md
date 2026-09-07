@@ -38,20 +38,24 @@ detail.
 
 ### Next stage (implementation agents)
 
-Default code milestone is pair post-draw EV `d=3` vs `d=2` (then concealment)
-in [docs/NEXT_STAGE_PAIR_CONCEALMENT.md](docs/NEXT_STAGE_PAIR_CONCEALMENT.md).
-Stage C check mixes are done under post-B draws
-([docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md)).
+BN-vs-2:1 post-draw Nash (Ring 1 / Ring 2) is **tabled**. Next work is two
+**parallel** frames — see [docs/NEXT_STAGE_SANDBAG_AND_CO.md](docs/NEXT_STAGE_SANDBAG_AND_CO.md):
 
-**Narrative next queue** (research paper): (1) Ch.2 strong-draw call/raise/mix,
-(2) Ch.5 CO bluff after BN open (return-to-actor; weaker than strong draws),
-(3) post-draw bluff 3-bet **Ring 1** on the cap node
-([docs/NEXT_STAGE_POSTDRAW_BLUFF.md](docs/NEXT_STAGE_POSTDRAW_BLUFF.md);
-**after Stage C**: trips-only air, split by public \(d\); do not start
-Ring 2 first) — see [docs/research/INDEX.md](docs/research/INDEX.md)
-“Immediate research queue.”
+- Agent A: `evaluate button_open_sandbag_v1`
+- Agent B: `evaluate cutoff_open_no_sandbagging`
 
-**Read first for concealment code:** [docs/NEXT_STAGE_PAIR_CONCEALMENT.md](docs/NEXT_STAGE_PAIR_CONCEALMENT.md)
+Do not start both in one PR. Pair concealment and Ch.2 §2.9 are not the default
+until these two are signed.
+
+**Read first:** [docs/NEXT_STAGE_SANDBAG_AND_CO.md](docs/NEXT_STAGE_SANDBAG_AND_CO.md)
+
+**Handoff checklist for new agents**
+
+1. `git fetch origin main && git checkout main && git pull origin main`
+2. Create `cursor/<short-name>-f76a` (or the suffix required by the run)
+3. `pip install -e ".[dev]" && pytest -q`
+4. Read [docs/NEXT_STAGE_SANDBAG_AND_CO.md](docs/NEXT_STAGE_SANDBAG_AND_CO.md); take **A or B**, not both
+5. Do not resume Ring 1 / pair-concealment EV / UTG re-solve
 
 Stages **A**, **B**, and **C** are done (12-cell draw grid + check mixes).
 Locked post-B / C draws:
@@ -59,20 +63,9 @@ Locked post-B / C draws:
 - Two pair `d=1`, quads `d=1`, pairs `d=3`
 - Fork still live: trips `d=2` (`tp1_tr2_q1`) vs trips `d=1` (`tp1_tr1_q1`)
 - C result: **always check two pair** (all public `d`); always bet trips / boat+
-- Next: verify pair post-draw EV `d=3` vs `d=2` before `pair_d≠3` mixes
-  (see [NEXT_STAGE_PAIR_CONCEALMENT.md](docs/NEXT_STAGE_PAIR_CONCEALMENT.md))
-- Do **not** redo Stage C or fold the cap/3-bet street into the M2 check grid
 
 Already done: [docs/POSTDRAW_M2_FACE_PAIR_GRID.md](docs/POSTDRAW_M2_FACE_PAIR_GRID.md),
 [docs/NEXT_STAGE_SHOWDOWN_MATRIX.md](docs/NEXT_STAGE_SHOWDOWN_MATRIX.md),
 Stage 0 beliefs in [docs/NEXT_STAGE_PAIR_CONCEALMENT.md](docs/NEXT_STAGE_PAIR_CONCEALMENT.md).
 
 Parent context: [docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md](docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md).
-
-### Handoff checklist for new agents
-
-1. `git fetch origin main && git checkout main && git pull origin main`
-2. Create `cursor/<short-name>-f76a` (or the suffix required by the run)
-3. `pip install -e ".[dev]" && pytest -q`
-4. Read `docs/NEXT_STAGE_PAIR_CONCEALMENT.md`; verify pair EV `d=3` vs `d=2` first
-5. Do not redo Stage C, start `pair_d≠3` mixes before that EV table, or UTG re-solve
