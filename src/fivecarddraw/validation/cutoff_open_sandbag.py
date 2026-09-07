@@ -401,7 +401,7 @@ def build_co_vs_seats_1_6_payload(
                 n_hands_per_bn=n_hands_per_co,
                 seed=seed,
             )
-            rem = {**rem, "co_class": rem.pop("bn_class", cls)}
+            rem["co_class"] = rem.pop("bn_class", cls)
             cached_rem[cls] = rem
         if cls not in cached_mc:
             cached_mc[cls] = deal_mc_p_raise_given_passed_co(

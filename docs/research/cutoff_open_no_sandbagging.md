@@ -106,3 +106,11 @@ Do not sandbag on CO in this frame.
 | --- | --- | --- |
 | **CO JJ open** | Evaluate CO opening jacks with BN behind | Steal vs BN-legal HU vs 2:1; **+$1.44 vs pass** |
 | **CO sandbag** | Evaluate CO passing two pair+ / aces | Give up steal when BN is weak; **not +EV** vs opening |
+
+## Related frame
+
+The never-slowplay / open-every-legal pin is **this 0% laboratory**. When seats
+1–6 sandbag the v1 set and always raise a CO open, opening JJ/QQ/KK is −EV on
+the fold-to-raise bound — [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md).
+That frame does not rebuild this leaf and does not retune CO’s own two pair+ /
+aces slowplay question.

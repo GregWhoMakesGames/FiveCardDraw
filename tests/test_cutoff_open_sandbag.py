@@ -201,6 +201,14 @@ def test_fixture_pins_jj_qq_kk():
     jj = by["pair_J"]
     qq = by["pair_Q"]
     kk = by["pair_K"]
+    assert abs(jj["p_raise"] - 0.493775) < 1e-12
+    assert abs(qq["p_raise"] - 0.492775) < 1e-12
+    assert abs(kk["p_raise"] - 0.5012) < 1e-12
+    assert abs(jj["ev_open_100pct"] - (-0.26110700050000013)) < 1e-12
+    assert abs(qq["ev_open_100pct"] - (-0.19884909724999988)) < 1e-12
+    assert abs(kk["ev_open_100pct"] - (-0.16561311999999995)) < 1e-12
+    assert "bn_class" not in jj["independent_blocked"]
+    assert jj["independent_blocked"]["co_class"] == "pair_J"
     # Product: 0% +EV (already pinned). 100% is −EV for the face pairs.
     assert jj["opening_is_negative_ev"] is True
     assert qq["opening_is_negative_ev"] is True
@@ -209,7 +217,10 @@ def test_fixture_pins_jj_qq_kk():
     assert a["q1_jj_plus_ev_at_100pct"] is False
     assert a["q2_jj_plus_ev_at_0pct"] is True
     assert a["binding_class"] == "pair_J"
-    assert 0.7 < a["q3_jj_r_calibrated"] < 1.0
+    assert abs(a["q3_jj_r_calibrated"] - 0.787161321269366) < 1e-12
+    assert 0.84 < a["q3_jj_r_linear"] < 0.85
     assert a["binding_r_calibrated"] == jj["r_calibrated"]
     # Binding = lowest r that still keeps the class +EV (JJ flips first).
     assert jj["r_calibrated"] <= qq["r_calibrated"] <= kk["r_calibrated"]
+    assert jj["deal_mc"]["n_tried"] == 2_801_845
+    assert jj["deal_mc"]["n_raise"] == 19_751

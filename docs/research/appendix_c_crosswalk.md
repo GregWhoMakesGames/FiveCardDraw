@@ -9,4 +9,6 @@
 | [Ch.4 Draw mixes](ch04_draw_mixes.md) | [../NEXT_STAGE_OPENER_DRAW_MIXES.md](../NEXT_STAGE_OPENER_DRAW_MIXES.md), [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md) |
 | [Ch.5 Later seats](ch05_later_seats.md) | [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) (CO open); §5.2 return-to-actor still in-chapter |
 | [button_open_sandbag_v1](button_open_sandbag_v1.md) | Same ticket, Agent A |
+| [cutoff_open_no_sandbagging](cutoff_open_no_sandbagging.md) | Same ticket, Agent B (0% sandbag) |
+| [cutoff_open_sandbag_v1](cutoff_open_sandbag_v1.md) | CO analog of BN 1–6-only sandbag-rate mix |
 | [Ch.2 §2.9](ch02_drawing_callers.md) | Draw call/raise/mix — CO representation; BN lab is call-only |
