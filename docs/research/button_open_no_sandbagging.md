@@ -54,9 +54,24 @@ The weakest pinned non-bluff cells (locked draws, vs the full 2:1 mix) are still
 
 **Pre-draw line is locked: those 2:1 hands call, they do not raise.** No-sandbagging means BN’s range is 100% jacks+. A raise then has no fold equity worth pricing, and the 16-out majority (15,552 / 18,396) has 16/48 ≈ 33% into a $10 pot after BN continues (needs 40%). That is why every BN-vs-2:1 grid in this frame is open + call only. [Ch.2 §2.9](ch02_drawing_callers.md) stays on the queue for CO representation (and the thin 19/22-out tail), not as a way to un-open a BN hand.
 
+### Average EV of a BN open (steal vs the 5%)
+
+The open/pass node is mostly a steal. Folded-to-BN, P(any 2:1) is ~**5–7%** (≈4.8% if BN has no bug and we do not condition on seats 1–7 passing; ≈0.3% if BN holds the bug). Pass = 0; steal = **+$2**.
+
+We **do** have a vs-draw number for every opener class: §3.4 non-bluff EV, combo-weighted over the 642,881 open-legal hands, locked draws (pairs \(d=3\), two pair \(d=1\), trips \(d=2\), quads \(d=1\)). That weighted EV_bn is **+$2.80** of the $6 post-draw pot — still **+$0.80 vs pass** when called, **−$1.20 vs a steal**. The 5% is worse than stealing; it is not a losing call vs folding. Two pair is the closest to break-even when called (net **+$0.10**).
+
+| Piece | Value |
+| --- | ---: |
+| Steal (≈95%) | +$2.00 |
+| Called, locked §3.4 (≈5%) | +$0.80 vs pass |
+| **Mixture EV(open)** | **≈ +$1.93 to +$1.95** |
+| Leak vs always-steal | **≈ $0.06** |
+
+A $1 error on the unsolved vs-draw street (Ring 1, Stage C two-pair *check* vs the value-bet cell, concealment) moves this average by only **$0.05** at \(p=5\%\). Even a disaster cell EV_bn = $0 (net −$2 when called) would only drop the average open to **+$1.80**. Finishing the vs-draw route matters for the 5% laboratory; it will not rewrite the steal-weighted open EV.
+
 ### Still open in this frame (todo)
 
 | Item | Why it is still open |
 | --- | --- |
-| **Ring 1** (Line 1 trips-air β) | Needed for post-draw EV vs 2:1, not for the steal-vs-call open/pass sign |
+| **Ring 1** (Line 1 trips-air β) | Polishes the 5% vs-draw street; ~5¢ per $1 of EV_bn on the average open |
 | EV vs FFS-only vs bug-draw-only | Blocker-split of §3.4; not required to sign open/pass at these \(p\) |

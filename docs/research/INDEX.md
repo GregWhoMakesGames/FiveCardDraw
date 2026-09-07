@@ -168,6 +168,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
+| 2026-09-07 | Average BN open ≈ +$1.94: steal +$2 on ~95%, §3.4 called street +$0.80 vs pass on ~5% (leak ~6¢ vs always-steal) |
 | 2026-09-07 | BN no-sandbag lab: 2:1 hands call, do not raise (16/48 fails 4/10 if BN continues). Open/pass leftover is not §2.9 |
 | 2026-09-07 | BN joker split: P(any of 1–7 is 2:1) = 0.300% / 4.82% (has bug / not). No legal BN pass in this frame |
 | 2026-09-07 | Frames in INDEX; Ring / Line / Stage aliases in [button_open_no_sandbagging.md](button_open_no_sandbagging.md). Pre-C merge helper is `MERGE_TWO_PAIR_TRIPS` |
