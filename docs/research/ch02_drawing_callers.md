@@ -180,17 +180,21 @@ Use this when asking whether a thin opener (JJ–KK) loses to a drawer who “on
 
 ## 2.8 Raises, not only calls (status quo)
 
-**Calls** are pinned by pot odds + outs as above. **Raises** with drawing hands are a separate EV question (semi-bluff / deny equity / build pot). Current validation focuses on **open + call only** into a $6 pot for post-draw grids. Do **not** treat the 18,396 set as an automatic raise range until §2.9 is done.
+**Calls** are pinned by pot odds + outs as above.
+
+**BN no-sandbag laboratory (locked).** Seats 1–7 unable, BN opened: BN’s range is 100% jacks+. A drawing raise then has no junk to fold out. If BN always continues, the drawer puts $4 into a $10 pot (needs **40%**). The 16-out majority of the 2:1 set is 16/48 ≈ **33%** — a clear call, a clear losing raise. That is why every BN-vs-2:1 grid in [the button frame](button_open_no_sandbagging.md) is **open + call only** into a $6 pot. Do not re-open that street by mixing pre-draw raises.
+
+**What §2.9 is still for.** Combo-weighted raise/call/mix remains planned for (1) the 19-out / 22-out tail vs a BN who might fold thin jacks, and (2) **CO representation** after a BN open ([Ch.5](ch05_later_seats.md)), where the value mix is the disguise for weaker bluffs. Do **not** treat the 18,396 set as an automatic raise range.
 
 ---
 
 ## 2.9 Next step — Call, raise, or mix with strong draws (planned)
 
-**Priority:** do this **before** CO bluff-representation work in [Ch.5](ch05_later_seats.md). The value of *looking like* a strong draw depends on how often real strong draws **raise** vs **call**.
+**Priority:** do this **before** CO bluff-representation work in [Ch.5](ch05_later_seats.md). The BN no-sandbag street itself is already call-only (§2.8). The value of *looking like* a strong draw on **other** lines depends on how often real strong draws **raise** vs **call**.
 
 ### Product question
 
-Given a hand from the 2:1 inventory (bug SF / bug straight / four-flush-straight, outs ≥ 16), facing an open (BN laboratory first: seats 1–7 unable / BN open-legal), should that hand:
+Given a hand from the 2:1 inventory (bug SF / bug straight / four-flush-straight, outs ≥ 16), facing an open **outside** the locked BN call-only street (or the 19/22-out tail on that street), should that hand:
 
 | Policy | Meaning |
 | --- | --- |
@@ -202,7 +206,7 @@ Answer with **combo-weighted EV** (and small grids), not intuition alone. Strati
 
 ### Why it matters for later chapters
 
-1. **BN opener defense** (Ch.3–4) — raise frequency changes pot size, BN’s continue range, and post-draw stack-off shape.
+1. **Other opener lines** (CO, and BN who folds thin jacks to a raise) — raise frequency changes pot size and the disguise for Ch.5 bluffs. The folded-to-BN no-sandbag street stays call-only.
 2. **CO bluffs with weaker hands** (Ch.5) — after BN opens on the return-to-actor line, real draws call/raise; whether underpairs / high cards should ever do the same as a bluff depends on that value mix.
 
 ### Suggested investigation shape

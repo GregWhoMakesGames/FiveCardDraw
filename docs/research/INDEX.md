@@ -137,7 +137,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Order | Work | Chapter | Blocks |
 | ---: | --- | --- | --- |
-| 1 | Strong draws: call vs raise vs mix (combo-weighted EV). Leftover sensitivity for “every legal BN hand opens.” | [Ch.2 §2.9](ch02_drawing_callers.md) | CO represent-bluffs; BN open/pass sign if draws raise |
+| 1 | Strong draws: call vs raise vs mix (combo-weighted EV). BN no-sandbag lab is already **call-only**; this is for CO representation and the 19/22-out tail | [Ch.2 §2.9](ch02_drawing_callers.md) | CO represent-bluffs |
 | 2 | CO bluff after BN open (return-to-actor: CO passed with no legal opener; others fold) — call/raise with underpair / high card? | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for value-range shape |
 | 3 | Pair post-draw EV `d=3` vs `d=2`, then concealment (Ch.4 leftover) | [Ch.4](ch04_draw_mixes.md) / [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md) | Stage C done; do not redo check mixes |
 | 3b | Frame [button_open_no_sandbagging](button_open_no_sandbagging.md): **Ring 1** (flush-indifference β) on **Line 1** (BN trips-draw). Line 2 stand-pat flush call is pinned, mix open | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) / [../POSTDRAW_STRATEGY_TREE.md](../POSTDRAW_STRATEGY_TREE.md) | Library + pre-C leftover-fold pin landed (§3.6). **Stage C Ring 1 still open.** Ring 1 before Ring 2. Qualify as `evaluate button_open_no_sandbagging Ring 1` if the frame is ambiguous |
@@ -168,7 +168,8 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
-| 2026-09-07 | BN joker split: P(any of 1–7 is 2:1) = 0.300% / 4.82% (has bug / not). No legal BN pass in this frame pending §2.9 |
+| 2026-09-07 | BN no-sandbag lab: 2:1 hands call, do not raise (16/48 fails 4/10 if BN continues). Open/pass leftover is not §2.9 |
+| 2026-09-07 | BN joker split: P(any of 1–7 is 2:1) = 0.300% / 4.82% (has bug / not). No legal BN pass in this frame |
 | 2026-09-07 | Frames in INDEX; Ring / Line / Stage aliases in [button_open_no_sandbagging.md](button_open_no_sandbagging.md). Pre-C merge helper is `MERGE_TWO_PAIR_TRIPS` |
 | 2026-09-07 | Land pre-C bluff library + leftover-fold pin (Ch.3 §3.6; β* = 0.0155, node EV −1.88). Stage C Ring 1 still open |
 | 2026-09-02 | Cap raise node re-filtered under Stage C: P(node)=0.0903; Line 1 flush folds / Line 2 flush calls vs no-air flush+ |

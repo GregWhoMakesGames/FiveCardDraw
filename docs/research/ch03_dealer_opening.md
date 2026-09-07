@@ -11,7 +11,7 @@
 
 When seats 1–7 cannot open and BN holds an open-legal made hand with **no** 2:1 drawing caller behind: EV(open) ≈ +$2 ante pot; pass = 0. Non-open-legal hands cannot open.
 
-Joker split and the mix with a 2:1 caller: [button_open_no_sandbagging.md](button_open_no_sandbagging.md) (P(any of 1–7 is 2:1) ≈ **0.30%** if BN holds the bug, **4.82%** if not). Under no sandbagging and current non-bluff EV, **every legal BN hand still opens**; the leftover sensitivity is strong-draw raise/mix ([Ch.2 §2.9](ch02_drawing_callers.md)).
+Joker split and the mix with a 2:1 caller: [button_open_no_sandbagging.md](button_open_no_sandbagging.md) (P(any of 1–7 is 2:1) ≈ **0.30%** if BN holds the bug, **4.82%** if not). Under no sandbagging and current non-bluff EV, **every legal BN hand still opens**. Those 2:1 hands **call** (they do not raise into a 100% jacks+ opener).
 
 This closes the “naked steal” band in the [ledger](INDEX.md#solve-progress-ledger).
 

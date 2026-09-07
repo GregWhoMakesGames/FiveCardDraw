@@ -52,12 +52,11 @@ The weakest pinned non-bluff cells (locked draws, vs the full 2:1 mix) are still
 
 **Q3: no. There are no legal BN hands that should pass** in this frame, assuming first callers are the 2:1 set, no sandbagging, and the §3.4 / Stage C street we already have.
 
-The remaining way this could flip is **pre-draw raises by those 2:1 hands** ([Ch.2 §2.9](ch02_drawing_callers.md)) — not yet modeled. Weaker first-callers (3:1 / trash) would raise \(p\) but *improve* EV_bn vs the range; they are not the scary case.
+**Pre-draw line is locked: those 2:1 hands call, they do not raise.** No-sandbagging means BN’s range is 100% jacks+. A raise then has no fold equity worth pricing, and the 16-out majority (15,552 / 18,396) has 16/48 ≈ 33% into a $10 pot after BN continues (needs 40%). That is why every BN-vs-2:1 grid in this frame is open + call only. [Ch.2 §2.9](ch02_drawing_callers.md) stays on the queue for CO representation (and the thin 19/22-out tail), not as a way to un-open a BN hand.
 
 ### Still open in this frame (todo)
 
 | Item | Why it is still open |
 | --- | --- |
-| **Ch.2 §2.9** call vs raise vs mix | Only leftover that might make a thin legal BN hand a pass |
 | **Ring 1** (Line 1 trips-air β) | Needed for post-draw EV vs 2:1, not for the steal-vs-call open/pass sign |
 | EV vs FFS-only vs bug-draw-only | Blocker-split of §3.4; not required to sign open/pass at these \(p\) |
