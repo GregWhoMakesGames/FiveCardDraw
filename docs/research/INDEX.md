@@ -146,7 +146,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 2 | CO bluff after BN open (return-to-actor: CO passed with no legal opener; others fold) — call/raise with underpair / high card? | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for value-range shape |
 | 3 | Pair post-draw EV `d=3` vs `d=2`, then concealment (Ch.4 leftover) | [Ch.4](ch04_draw_mixes.md) / [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md) | Stage C done; do not redo check mixes |
 | 3b | BN-vs-2:1 post-draw Nash (Ring 1 / Ring 2) | [button_open_no_sandbagging](button_open_no_sandbagging.md) | **Tabled.** Steal-weighted open EV is already ± a dime |
-| A | `evaluate button_open_sandbag_v1`: 100% sandbag + always raise; BN folds JJ? | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) / [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) | Parallel with B; do not edit Ch.5 |
+| A | **Done.** Opening JJ is −EV (EV ≈ −$0.32, \(p_{\mathrm{raise}}\) ≈ 0.573) | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) / [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) | Parallel with B; do not edit Ch.5 |
 | B | `evaluate cutoff_open_no_sandbagging`: CO JJ open / CO sandbag with BN behind | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) / [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) | Parallel with A; do not edit sandbag MC |
 
 ### Later (low priority)
@@ -174,6 +174,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
+| 2026-09-07 | `button_open_sandbag_v1`: opening JJ is −EV (−$0.32) vs 100% two-pair+ / HJ-CO aces sandbag + always raise; \(p_{\mathrm{raise}}=0.573\) (n=40k, seed 20260907). No-raise leaf reused §3.4 pair_J d=3 + 6.9% 2:1 call |
 | 2026-09-07 | Sandbag-set v1 aces: **HJ+CO**, not LJ+CO (plan-only correction; method unchanged) |
 | 2026-09-07 | Parallel next: BN 100% sandbag JJ probe + CO open/pass. BN-vs-2:1 Nash tabled. Ticket [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) |
 | 2026-09-07 | Average BN open ≈ +$1.94: steal +$2 on ~95%, §3.4 called street +$0.80 vs pass on ~5% (leak ~6¢ vs always-steal) |
