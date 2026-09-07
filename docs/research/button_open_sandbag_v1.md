@@ -14,9 +14,10 @@ sandbag-set and **always raise** if BN opens. Contrast:
 | Seats | Pass instead of opening |
 | --- | --- |
 | 1–7 | Two pair or better |
-| 5 (LJ) and 7 (CO) **also** | Pair of aces |
+| 6 (HJ) and 7 (CO) **also** | Pair of aces |
 
-HJ (seat 6) still opens aces. Voluntary open = jacks-or-better minus that set.
+LJ (seat 5) still opens aces. (v1 pin was corrected from LJ+CO to HJ+CO; the
+deal-MC plan is unchanged.) Voluntary open = jacks-or-better minus that set.
 
 ## Product question (unanswered here)
 

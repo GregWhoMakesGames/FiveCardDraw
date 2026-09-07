@@ -17,16 +17,17 @@ their own row** if it is missing; do not rewrite the other frame’s row.
 
 ## Shared pin (both agents copy; do not restyle)
 
-Seats: 1 UTG … 5 **LJ**, 6 HJ, 7 **CO**, 8 BN.
+Seats: 1 UTG … 5 LJ, 6 **HJ**, 7 **CO**, 8 BN.
 
 **Sandbag-set v1** (100% pass these; refine later with data):
 
 | Seats | Sandbag (do not open) |
 | --- | --- |
 | 1–7 | Two pair or better |
-| 5 (LJ) and 7 (CO) **also** | Pair of aces |
+| 6 (HJ) and 7 (CO) **also** | Pair of aces |
 
-HJ (seat 6) does **not** add aces in v1. Reuse `classify_opener` in
+LJ (seat 5) does **not** add aces in v1 — that seat still opens AA. (Draft slip
+was LJ+CO; the pin is HJ+CO. Same method.) Reuse `classify_opener` in
 `showdown_matrix.py` (`two_pair` / `two_pair_aces_up` / trips+ vs `pair_A`).
 
 **Voluntary opener v1** = open-legal minus that seat’s sandbag-set.
@@ -123,7 +124,7 @@ draw sampling when BN is the caller.
 | BN not legal | Dead hand / no steal → **0** (this is the cost of sandbagging) |
 | BN legal, opens | Return-to-actor: CO may call/raise. For JJ that is “pass then face an open”; for two pair+ that is true sandbag. v1: if CO would have folded JJ to a BN open, passing JJ is 0 vs BN-legal and 0 vs BN-weak — strictly worse than opening unless the open-vs-BN-legal leaf is worse than 0. |
 
-Sign **open vs pass** for JJ first. Sandbag (two pair+ / LJ-CO aces) is a second
+Sign **open vs pass** for JJ first. Sandbag (two pair+ / HJ-CO aces) is a second
 table: open (risk BN legal) vs pass (give up steal, play vs BN open later).
 Do not wait for Agent A’s 100% early-seat sandbag world; this frame is 0%
 sandbag in seats 1–6.
