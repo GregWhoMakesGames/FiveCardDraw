@@ -120,3 +120,91 @@ event is rarer than \(p^{7}\). Histogram of sandbag-set seats given passed:
 | **No-raise leaf** | Reuse 0% sandbag JJ open | No sandbag-set in 1–7 ⇒ same steal + 2:1 mix as the no-sandbag frame |
 
 Ring / Line / Stage C aliases stay in `button_open_no_sandbagging` (tabled Nash).
+
+## 1–6-only world (CO never sandbags)
+
+Follow-up laboratory: seats **1–6** sandbag the v1 set 100% and always raise a
+BN open; **CO never sandbags** (opens every legal hand). Folded-to-BN therefore
+means 1–6 have no voluntary opener **and CO has no open-legal** — CO monsters
+already opened, so they never sit in this node. Same accounting: pass = 0;
+fold to a raise after opening = **−$2**; no-raise leaf reuses the 0% sandbag
+steal + 6.9% 2:1 mix (`EV_leaf = 2 + 0.069*(EV_bn−4)`). Do not rebuild Nash.
+
+Code world: `seats_1_6_only` in `sandbag_v1.py`. Fixture:
+`tests/fixtures/validation/sandbag_v1_seats_1_6_only.json`. CLI:
+`python -m fivecarddraw.validation.sandbag_v1 --world seats_1_6_only --write-fixture`
+(add `--walk` for Q2).
+
+Sandbag-set in this world:
+
+| Seats | 100% pass, then always raise BN |
+| --- | --- |
+| 1–6 | Two pair or better |
+| 6 (HJ) **also** | Pair of aces |
+| 7 (CO) | **Does not sandbag** — opens all legal |
+| 5 (LJ) | Two pair+ only (still opens AA) |
+
+The 7-seat JJ −EV pin above is unchanged.
+
+### Q1 — is opening JJ +EV?
+
+**No. Opening JJ is still −EV**, but the mix is close. Removing CO from the
+sandbag set drops \(p_{\mathrm{raise}}\) from Agent A’s **0.573** to **0.496**.
+
+| Piece | Value |
+| --- | ---: |
+| Independent-seat planning (no BN cards) | 0.4822 |
+| Independent, BN pair_J blocked (2,000 × 50, seed `20260907`) | 0.4842 |
+| \(p_{\mathrm{raise}}\) (8-way deal MC) | **0.495925** (SE 0.00250) |
+| No-raise leaf (reused 0% sandbag JJ open) | **+$1.936** |
+| Break-even \(p_{\mathrm{raise}}\) vs that leaf | 0.4919 |
+| \((1-p)\times\) no-raise leaf | +$0.976 |
+| \(p\times(-2)\) fold JJ to the raise | −$0.992 |
+| **EV(open JJ)** | **−$0.016** |
+| EV(pass) | 0 |
+
+Pin: \(n=40{,}000\) conditioned deals, seed **20260907**. BN pair_J deals before
+the voluntary / CO-legal filter: 113,922. Full shuffles: 3,641,686.
+\(n_{\mathrm{raise}}=19{,}837\). Histogram of sandbag-set seats given passed:
+0 → 20,163; 1 → 14,783; 2 → 4,247; 3+ → 807.
+
+The joint is again a bit *higher* than the independent product (junk in one
+seat leaves the rest richer in two pair+). Versus Agent A, one fewer sandbag
+seat **and** CO’s monsters already filtered out both cut \(p_{\mathrm{raise}}\).
+The leftover rate still sits **~0.004** (~1.6 SE) above break-even. Sign is
+−EV, not a blowout. 6.0% call instead of 6.9% still −EV (−$0.012).
+
+### Q2 — lowest +EV BN open (same lab)
+
+BN **folds JJ, QQ, and KK** to a sandbag raise (−$2). Per-class \(p_{\mathrm{raise}}\)
+uses that class’s blockers; no-raise leaves use §3.4 locked draws + the same
+6.9% 2:1 mix. Same \(n=40{,}000\), seed **20260907**.
+
+| BN class | Locked d | EV_bn | Leaf | \(p_{\mathrm{raise}}\) (SE) | Raise policy | EV(open) |
+| --- | ---: | ---: | ---: | ---: | --- | ---: |
+| pair_J | 3 | +3.0755 | +$1.936 | 0.4959 (0.00250) | fold | **−$0.016** |
+| pair_Q | 3 | +2.9615 | +$1.928 | 0.4987 (0.00250) | fold | **−$0.031** |
+| pair_K | 3 | +3.0935 | +$1.937 | 0.5003 (0.00250) | fold | **−$0.032** |
+| pair_A | 3 | +2.607 | +$1.904 | 0.4414 (0.00248) | **fold bound** | **+$0.181** |
+
+JJ / QQ / KK raise rates sit within ~2 SE of each other; none clears 0.
+**Lowest +EV class is pair_A (AA).**
+
+AA does **not** assume fold as the real line. The number above is a cheap
+bound: *even folding AA to the sandbag raise* is already +EV vs pass, because
+BN’s aces block HJ’s buried AA (and aces-up two pair), so \(p_{\mathrm{raise}}\)
+drops ~0.05 below the JJ–KK band and below AA’s 0.488 break-even. A
+call-the-raise vs two-pair+ street is not needed to sign the floor; no
+raise-tree Nash. (The reused 6.9% 2:1 \(p_{\mathrm{call}}\) is conservative for
+AA: this node has the bug in BN 38.6% of the time, which would cut drawers
+and push the no-raise leaf toward +$2.)
+
+Walk stops at AA. Two pair / trips were not required to sign the floor.
+
+### Q3 (flag only — do not iterate the sandbag set here)
+
+If BN stops opening JJ–KK, AA is no longer behind BN’s whole opening range, so
+HJ sandbagging AA (the v1 aces pin, originally HJ+CO) is inconsistent. **Revisit
+that pin later.** This PR does not retune sandbag frequencies.
+
+
