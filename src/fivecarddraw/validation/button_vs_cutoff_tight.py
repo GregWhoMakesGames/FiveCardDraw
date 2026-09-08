@@ -35,7 +35,6 @@ import json
 import math
 import os
 import random
-import zlib
 from collections import Counter
 from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass, field
