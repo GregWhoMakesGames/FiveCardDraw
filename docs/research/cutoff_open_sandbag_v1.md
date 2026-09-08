@@ -52,51 +52,96 @@ Hijack slowplay mixes are **tabled** (not ready to pin an ideal \(r_{\mathrm{HJ}
 Q3 (flag only): if CO stops opening JJ–KK, HJ’s v1 aces-sandbag pin is the
 same inconsistency the BN 1–6-only walk flagged. Do not iterate the set here.
 
-## Singleton blockers (KK + joker, ace kicker)
+## Singleton blockers (JJ/QQ/KK + joker, ace kicker)
 
-The bug is an **ace** (or a straight/flush fill), not a duplicate king.
-**KK with a joker** = two physical kings + bug as ace kicker, still
-`pair_K`. One king + bug is ace-high (not an opener). A physical ace
-kicker is the same rank-blocker without removing the bug from the deck.
+The bug is an **ace** (or a straight/flush fill), **not** a duplicate of
+the pair rank. **pair_X + joker** = two physical cards of that rank + bug
+as ace kicker, still `pair_X`. One face card + bug is ace-high (not an
+opener). A physical ace kicker is the same ace-rank blocker without
+removing the bug from the deck. Matched kickers: two of the pair rank +
+`9s 7h`, fifth card \(4c\) / `Bu` / `As`.
 
-Exact remaining \(C(48,5)=1{,}712{,}304\) with matched kickers
-(`Kh Kd 9s 7h` + \(4c\) / `Bu` / `As`):
+Exact remaining \(C(48,5)=1{,}712{,}304\):
 
-| Remaining bucket | Two kings | KK + joker | KK + ace |
-| --- | ---: | ---: | ---: |
-| two pair+ | 144,753 | **133,259** | 141,667 |
-| pair_A | 98,266 | **64,548** | 63,009 |
-| aces-up | 22,730 | **14,688** | 14,688 |
-| straight | 12,961 | **6,950** | 14,038 |
-| HJ set (two pair+ and AA) | 243,019 | **197,807** | 204,676 |
+| Remaining | JJ | JJ+joker | JJ+ace | QQ | QQ+joker | QQ+ace | KK | KK+joker | KK+ace |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| two pair+ | 143,533 | 132,590 | 140,111 | 144,057 | 132,877 | 140,779 | 144,753 | **133,259** | 141,667 |
+| pair_A | 98,266 | **64,548** | 63,009 | 98,266 | **64,548** | 63,009 | 98,266 | **64,548** | 63,009 |
+| aces-up | 22,730 | **14,688** | 14,688 | 22,730 | **14,688** | 14,688 | 22,730 | **14,688** | 14,688 |
+| straight | 11,741 | 6,281 | 12,482 | 12,265 | 6,568 | 13,150 | 12,961 | **6,950** | 14,038 |
+| HJ set | 241,799 | 197,138 | 203,120 | 242,323 | 197,425 | 203,788 | 243,019 | **197,807** | 204,676 |
 
-The joker cuts 2:1 almost to zero (almost all 18,396 2:1 combos hold the
-bug) **and** cuts monsters / AA / aces-up. A singleton ace matches the
-AA / aces-up cut but leaves 2:1 and most straights in the deck.
+AA / aces-up cuts are **rank-independent** on these kickers (joker-as-ace
+and a singleton ace remove the same aces). Two pair+ and straights still
+move with the pair rank. The joker also cuts 2:1 almost to zero (almost
+all 18,396 2:1 combos hold the bug). A singleton ace matches the AA /
+aces-up cut but leaves 2:1 and most straights in the deck.
 
-Fold-to-raise mix at **100%** 1–6 sandbag (n=10,000, seed `20260907`):
+Fold-to-raise mix at **100%** 1–6 sandbag (n=10,000 flavor MC, n_leaf=8,000
+behind-probs, seed `20260907`). Class-average rows are the locked 40k pins
+(not re-run). \(L_{\mathrm{rew}}\) reweights steal / 2:1 / BN mix; street
+EVs stay that class’s 0% cells. \(\mathrm{SE}(\mathrm{EV})\approx\mathrm{SE}(p)\times(L+2)\).
 
-| Flavor | \(p_{\mathrm{raise}}\) (SE) | Leaf \(L\) | EV(100%) |
-| --- | ---: | ---: | ---: |
-| pair_K class average | 0.5012 (0.00250) | +$1.678 | **−$0.166** |
-| KK + joker, average \(L\) | **0.4523** (0.00498) | +$1.678 | **+$0.014** |
-| KK + joker, steal/2:1 reweight | 0.4523 (0.00498) | **+$1.737** | **+$0.047** |
-| KK + ace kicker, average \(L\) | 0.4718 (0.00499) | +$1.678 | **−$0.057** |
-| KK + ace kicker, reweight | 0.4718 (0.00499) | +$1.691 | **−$0.050** |
+| Flavor | \(p_{\mathrm{raise}}\) (SE) | \(L\) avg | \(L_{\mathrm{rew}}\) | EV(100%) rew | vs 0 | \(p^*_{\mathrm{rew}}\) | \(r^*_{\mathrm{rew}}\) |
+| --- | ---: | ---: | ---: | ---: | --- | ---: | ---: |
+| pair_J class avg | 0.4938 (0.00250) | +$1.435 | — | **−$0.261** | −EV | 0.418 | 0.787 |
+| JJ + joker | **0.4534** (0.00498) | +$1.435 | +$1.521 | **−$0.075** | −EV (~4 SE) | 0.432 | 0.931 |
+| JJ + ace | 0.4665 (0.00499) | +$1.435 | +$1.460 | **−$0.154** | −EV | 0.422 | 0.864 |
+| pair_Q class avg | 0.4928 (0.00250) | +$1.551 | — | **−$0.199** | −EV | 0.437 | 0.840 |
+| QQ + joker | **0.4455** (0.00497) | +$1.551 | +$1.614 | **+$0.004** | **+EV inside 1 SE** (\(\mathrm{SE}\approx\$0.018\)) | 0.447 | 1.003 |
+| QQ + ace | 0.4701 (0.00499) | +$1.551 | +$1.560 | **−$0.114** | −EV | 0.438 | 0.902 |
+| pair_K class avg | 0.5012 (0.00250) | +$1.678 | — | **−$0.166** | −EV | 0.456 | 0.872 |
+| KK + joker | **0.4523** (0.00498) | +$1.678 | +$1.737 | **+$0.047** | **+EV** | 0.465 | 1.042 |
+| KK + ace | 0.4718 (0.00499) | +$1.678 | +$1.691 | **−$0.050** | −EV | 0.458 | 0.958 |
 
-**Yes: opening KK with the joker is +EV at 100% slowplay in front**, on
-the reweighted 0% leaf (steal ≈ 80%, \(p_{\mathrm{vs\ 2:1}}\approx 0.24\%\)
-vs the class-average 4.3% / 74.5% steal). The conservative class-average
-leaf is only **+$0.014**, inside ~1 SE of zero (\(\mathrm{SE}(p)\times(L+2)\approx \$0.018\))
-— do not treat that bound as a blowout. \(r^*>1\): even 100% sandbag stays
-+EV once the bug is in the hand.
+KK+joker conservative (average \(L\)) is still **+$0.014**, inside ~1 SE
+of zero — same pin as before. QQ+joker reweighted is a coin-flip through
+zero; do not treat it as a blowout. JJ+joker stays **−EV** even after the
+steal/2:1 reweight (\(p_{\mathrm{raise}}=0.453\) still above \(p^*\approx 0.432\)).
 
-A **physical ace kicker without the joker does not flip** the 100% mix
-(still −EV). It blocks AA / aces-up like the bug-as-ace, but it does not
-remove 2:1 or as many two-pair+ combos, so \(p_{\mathrm{raise}}=0.472\)
-stays above KK’s \(p^*\approx 0.456\).
+**User expectation vs pins.** “Joker in hand → any of JJ/QQ/KK is +EV at
+100%” **does not hold**: only **KK+joker** is clearly +EV; **QQ+joker** is
++EV inside 1 SE; **JJ+joker** is −$0.075. “Ace kicker → all three approach
+break-even” is **directionally true vs the class average** (each ace-kicker
+EV is closer to 0 than the 40k row) but **none** is inside 1 SE of zero.
+KK+ace (−$0.05) is the closest; JJ+ace (−$0.15) is still a clear fold vs
+pass. Ace kickers never flip the 100% mix: they block AA / aces-up like
+the bug-as-ace, but they do not remove 2:1, so \(p_{\mathrm{raise}}\) stays
+above each class’s \(p^*\).
 
 CLI: `python -m fivecarddraw.validation.cutoff_open_sandbag --write-blockers`.
+
+### Why CO ranks KK > QQ > JJ while BN 1–6-only looked reversed
+
+Decompose \(\Delta\mathrm{EV}=(1-p)L+p(-2)\) into a leaf piece (hold \(p\))
+and a \(p_{\mathrm{raise}}\) piece (hold \(L\)). No new HU grid.
+
+**CO** 0% leaves already strictly increase JJ < QQ < KK
+(`cutoff_open_summary.json`): +$1.435 / +$1.551 / +$1.678. Steal rates are
+similar (~75%); 2:1 is a small slice (~4%). The gap is **BN still to act**
+(\(P(\mathrm{BN\ legal})\approx 21\%\)). Higher pair wins more of the HU vs
+BN’s jacks+ range:
+
+| CO class | P(steal) | P(vs 2:1) | P(BN legal) | vs_bn_legal P(win) | EV_street vs BN | \(L\) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| pair_J | 0.755 | 0.035 | 0.210 | **0.203** | **+$1.48** | +$1.435 |
+| pair_Q | 0.755 | 0.040 | 0.205 | **0.281** | **+$1.99** | +$1.551 |
+| pair_K | 0.745 | 0.043 | 0.212 | **0.372** | **+$2.68** | +$1.678 |
+
+At 100% sandbag the same order survives. KK vs JJ: leaf piece
+\(+\$0.123\) (hold JJ’s \(p\)) vs \(p_{\mathrm{raise}}\) piece **−$0.027**
+(KK’s slightly *higher* raise rate). Leaf dominates; \(p_{\mathrm{raise}}\)
+actually favors JJ. Fixture: `blockers.ranking_co_vs_bn`.
+
+**Button** 1–6-only leaves were almost identical (~+$1.93) because
+folded-to-BN is steal-dominated (reused 6.9% 2:1 mix, not a 21% BN-behind
+street). Pins (`sandbag_v1_seats_1_6_only.json` Q2): JJ leaf +$1.936
+(\(\mathrm{EV}_{bn}=+3.0755\)), QQ **+$1.928** (\(\mathrm{EV}_{bn}=+2.9615\),
+the weaker locked cell), KK +$1.937. Raise rates 0.4959 / 0.4987 / 0.5003
+sit within \(z<1.3\) of each other (QQ−JJ \(z\approx 0.78\), KK−JJ
+\(z\approx 1.24\)). That ranking was **MC noise + QQ’s weaker \(\mathrm{EV}_{bn}\)**
+— not a published JJ > QQ > KK theorem. See
+[button_open_sandbag_v1.md](button_open_sandbag_v1.md) 1–6-only Q2.
 
 ## Sandbag-set v1 in this world
 
