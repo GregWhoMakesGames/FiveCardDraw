@@ -116,10 +116,6 @@ FOCUS_ROWS: tuple[tuple[str, str], ...] = (
 )
 
 
-def _ids_of_cards(cards) -> tuple[int, ...]:
-    return tuple(sorted(c.card_id for c in cards))
-
-
 def _cls_of_ids(ids: Sequence[int]) -> str | None:
     return classify_opener(tuple(card_from_id(i) for i in ids))
 
