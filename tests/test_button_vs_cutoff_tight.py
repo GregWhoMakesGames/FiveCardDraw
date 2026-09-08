@@ -170,7 +170,8 @@ def test_fixture_product_answers():
     assert meta["locked_draws"]["pair_d"] == 3
     assert meta["locked_draws"]["two_pair_d"] == 1
     assert "not all-legal" in meta["matchup"]
-    assert "AA+" in meta["co_range"]["include"]
+    assert "pair_A" in meta["co_range"]["include"]
+    assert "pair_Q with joker" in meta["co_range"]["include"]
     assert "pair_J" in meta["co_range"]["exclude"]
 
     answers = data["answers"]
@@ -182,6 +183,7 @@ def test_fixture_product_answers():
     assert answers["qq_action"] == "fold"
     assert answers["kk_action"] == "fold"
     assert answers["aa_action"] == "fold"
+    assert answers["two_pair_action"] == "call"
     # Value: trips / aces-up raise vs this AA+ range (p_win > 0.5, raise-cd +EV).
     assert answers["trips_action"] == "raise"
     assert answers["trips_A_action"] == "raise"
@@ -209,3 +211,12 @@ def test_fixture_product_answers():
     aces_up = by["two_pair_aces_up"]
     assert aces_up["ev_call"] > 0.0
     assert aces_up["recommend"]["action"] == "raise"
+    two_pair = by["two_pair"]
+    assert two_pair["ev_call"] > 0.0
+    assert two_pair["recommend"]["action"] == "call"
+    assert two_pair["p_bn_wins_final"] < 0.5
+    # Joker / ace flavors do not flip low pairs off fold.
+    for key in ("pair_J_joker", "pair_J_ace", "pair_Q_joker", "pair_K_joker"):
+        assert by[key]["recommend"]["action"] == "fold"
+        assert by[key]["ev_call"] < 0.0
+    assert data["answers"]["flavor_action_flips"] == []

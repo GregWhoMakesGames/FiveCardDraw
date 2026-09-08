@@ -187,7 +187,7 @@ Living order is in [AGENTS.md](../../AGENTS.md). Finish CO+BN (1–4) before HJ.
 
 | Date | Change |
 | --- | --- |
-| 2026-09-08 | BN vs **tight** CO open (range 2: AA+ plus QQ/KK+joker): fold/call/raise chart. Not all-legal. ([button_vs_cutoff_tight.md](button_vs_cutoff_tight.md)) |
+| 2026-09-08 | BN vs **tight** CO open (range 2: AA+ plus QQ/KK+joker): **fold JJ–AA**; call two pair (thin); **raise aces-up / trips**. Not all-legal. ([button_vs_cutoff_tight.md](button_vs_cutoff_tight.md)) |
 | 2026-09-08 | Next queue: CO slowplay×blockers chart → BN vs CO (call/raise, multi-raise, draw/post-draw) → HJ. Ch.2 §2.9 / concealment after HJ starts. Exploit leaks are a through-line. |
 | 2026-09-08 | CO JJ/QQ/KK joker and ace kickers at 100% sandbag: **KK+joker +EV** (+$0.047); **QQ+joker +$0.004 inside 1 SE**; **JJ+joker still −EV** (−$0.075). Ace kickers all −EV. CO KK>QQ>JJ is the ~21% BN-behind street; BN 1–6-only “JJ best” was leaf noise + QQ’s weaker EV_bn (\(z<1.3\)). HJ mixes tabled. |
 | 2026-09-08 | CO KK+joker (bug as ace kicker) is **+EV at 100%** 1–6 sandbag (\(p_{\mathrm{raise}}=0.452\), reweighted EV +$0.05). Ace kicker without the bug stays −EV. Binding slowplay rate for JJ/QQ/KK remains **~79%** (JJ). HJ mixes tabled. |
