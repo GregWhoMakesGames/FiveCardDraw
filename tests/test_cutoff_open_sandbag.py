@@ -244,6 +244,35 @@ def test_pair_k_plus_joker_is_two_kings_bug_as_ace_kicker():
     assert n_physical_kings(PAIR_K_ACE_IDS) == 2
 
 
+def test_pair_jq_plus_joker_is_two_of_rank_bug_as_ace_kicker():
+    """Same bug-as-ace rule: JJ/QQ + joker stay pair_J / pair_Q, not trips."""
+    from fivecarddraw.validation.cutoff_open_sandbag import (
+        PAIR_J_ACE_IDS,
+        PAIR_J_BUG_IDS,
+        PAIR_J_NO_BUG_IDS,
+        PAIR_Q_ACE_IDS,
+        PAIR_Q_BUG_IDS,
+        PAIR_Q_NO_BUG_IDS,
+        n_physical_jacks,
+        n_physical_queens,
+    )
+
+    assert classify_opener(parse_hand("Jh Jd 9s 7h 4c")) == "pair_J"
+    assert classify_opener(parse_hand("Jh Jd Bu 9s 7h")) == "pair_J"
+    assert classify_opener(parse_hand("Jh Bu 9s 7h 4c")) is None  # ace-high
+    assert classify_opener(parse_hand("Jh Jd As 7h 4c")) == "pair_J"
+    assert classify_opener(parse_hand("Qh Qd 9s 7h 4c")) == "pair_Q"
+    assert classify_opener(parse_hand("Qh Qd Bu 9s 7h")) == "pair_Q"
+    assert classify_opener(parse_hand("Qh Bu 9s 7h 4c")) is None
+    assert classify_opener(parse_hand("Qh Qd As 7h 4c")) == "pair_Q"
+    assert n_physical_jacks(PAIR_J_BUG_IDS) == 2
+    assert n_physical_jacks(PAIR_J_NO_BUG_IDS) == 2
+    assert n_physical_jacks(PAIR_J_ACE_IDS) == 2
+    assert n_physical_queens(PAIR_Q_BUG_IDS) == 2
+    assert n_physical_queens(PAIR_Q_NO_BUG_IDS) == 2
+    assert n_physical_queens(PAIR_Q_ACE_IDS) == 2
+
+
 def test_sample_forced_blockers_match_class():
     from fivecarddraw.validation.cutoff_open_sandbag import (
         BUG_ID,
@@ -252,12 +281,13 @@ def test_sample_forced_blockers_match_class():
     )
 
     rng = __import__("random").Random(20260907)
-    bug_ids = sample_class_ids_forced("pair_K", rng, require_bug=True)
-    ace_ids = sample_class_ids_forced("pair_K", rng, require_physical_ace=True)
-    assert bug_ids is not None and BUG_ID in bug_ids
-    assert _ids_to_cls_local(bug_ids) == "pair_K"
-    assert ace_ids is not None and has_physical_ace(ace_ids)
-    assert _ids_to_cls_local(ace_ids) == "pair_K"
+    for cls in ("pair_J", "pair_Q", "pair_K"):
+        bug_ids = sample_class_ids_forced(cls, rng, require_bug=True)
+        ace_ids = sample_class_ids_forced(cls, rng, require_physical_ace=True)
+        assert bug_ids is not None and BUG_ID in bug_ids
+        assert _ids_to_cls_local(bug_ids) == cls
+        assert ace_ids is not None and has_physical_ace(ace_ids)
+        assert _ids_to_cls_local(ace_ids) == cls
 
 
 def _ids_to_cls_local(ids):
@@ -316,4 +346,99 @@ def test_fixture_blockers_kk_joker():
     assert ans["pair_k_bug_plus_ev_at_100pct_reweighted"] is True
     assert ans["pair_k_ace_plus_ev_at_100pct_reweighted"] is False
     assert abs(data["answers"]["q3_jj_r_calibrated"] - 0.787161321269366) < 1e-12
+
+
+def test_fixture_blockers_jj_qq_joker():
+    """JJ/QQ joker and ace-kicker pins; 40k class rows untouched."""
+    from fivecarddraw.validation.cutoff_open_sandbag import load_fixture
+
+    data = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    assert data == load_fixture()
+    blockers = data["blockers"]
+    rem = blockers["remaining_exact"]
+    by = {r["co_class"]: r for r in data["by_class"]}
+    assert abs(by["pair_J"]["p_raise"] - 0.493775) < 1e-12
+    assert abs(by["pair_Q"]["p_raise"] - 0.492775) < 1e-12
+    assert abs(by["pair_K"]["p_raise"] - 0.5012) < 1e-12
+
+    assert rem["pair_j_bug"]["co_class"] == "pair_J"
+    assert rem["pair_q_bug"]["co_class"] == "pair_Q"
+    assert rem["pair_j_bug"]["has_bug"] is True
+    assert rem["pair_q_bug"]["has_bug"] is True
+    assert rem["pair_j_bug"]["n_physical_jacks"] == 2
+    assert rem["pair_q_bug"]["n_physical_queens"] == 2
+    assert rem["pair_j_no_bug"]["two_pair_plus"] == 143_533
+    assert rem["pair_j_bug"]["two_pair_plus"] == 132_590
+    assert rem["pair_j_ace"]["two_pair_plus"] == 140_111
+    assert rem["pair_q_no_bug"]["two_pair_plus"] == 144_057
+    assert rem["pair_q_bug"]["two_pair_plus"] == 132_877
+    assert rem["pair_q_ace"]["two_pair_plus"] == 140_779
+    # Ace/AA buckets are rank-independent on these matched kickers.
+    for slug in ("pair_j", "pair_q", "pair_k"):
+        assert rem[f"{slug}_bug"]["pair_A"] == 64_548
+        assert rem[f"{slug}_ace"]["pair_A"] == 63_009
+        assert rem[f"{slug}_bug"]["two_pair_aces_up"] == 14_688
+        assert rem[f"{slug}_ace"]["two_pair_aces_up"] == 14_688
+        assert rem[f"{slug}_bug"]["two_pair_plus"] < rem[f"{slug}_no_bug"]["two_pair_plus"]
+
+    jj_bug = blockers["pair_j_bug"]["reweighted_leaf_mix"]
+    qq_bug = blockers["pair_q_bug"]["reweighted_leaf_mix"]
+    jj_ace = blockers["pair_j_ace_kicker"]["reweighted_leaf_mix"]
+    qq_ace = blockers["pair_q_ace_kicker"]["reweighted_leaf_mix"]
+    assert jj_bug["deal_mc"]["n"] == 10_000
+    assert jj_bug["deal_mc"]["seed"] == 20260907
+    assert abs(jj_bug["p_raise"] - 0.4534) < 1e-12
+    assert abs(qq_bug["p_raise"] - 0.4455) < 1e-12
+    assert abs(jj_ace["p_raise"] - 0.4665) < 1e-12
+    assert abs(qq_ace["p_raise"] - 0.4701) < 1e-12
+    assert abs(jj_bug["ev_open_100pct"] - (-0.07538956055000023)) < 1e-12
+    assert abs(qq_bug["ev_open_100pct"] - 0.0036922653750000034) < 1e-12
+    assert abs(jj_ace["ev_open_100pct"] - (-0.1538689309375002)) < 1e-12
+    assert abs(qq_ace["ev_open_100pct"] - (-0.11380949091249992)) < 1e-12
+    # Joker does **not** make every face pair +EV at 100%.
+    assert jj_bug["opening_is_negative_ev"] is True
+    assert jj_bug["ev_within_1se_of_zero"] is False
+    assert qq_bug["opening_is_positive_ev"] is True
+    assert qq_bug["ev_within_1se_of_zero"] is True
+    assert jj_ace["opening_is_negative_ev"] is True
+    assert qq_ace["opening_is_negative_ev"] is True
+    ans = blockers["answers"]
+    assert ans["joker_in_hand_plus_ev_all_three_reweighted"] is False
+    assert ans["pair_j_bug_plus_ev_at_100pct_reweighted"] is False
+    assert ans["pair_q_bug_plus_ev_at_100pct_reweighted"] is True
+    assert ans["pair_k_bug_plus_ev_at_100pct_reweighted"] is True
+    assert ans["ace_kicker_plus_ev_any_three_reweighted"] is False
+
+
+def test_co_vs_bn_ranking_from_pins():
+    """CO KK>QQ>JJ is the BN-behind street; BN 1–6-only was leaf noise + QQ EV_bn."""
+    from fivecarddraw.validation.cutoff_open_sandbag import ranking_co_vs_bn_from_pins
+
+    data = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    rank = data["blockers"]["ranking_co_vs_bn"]
+    live = ranking_co_vs_bn_from_pins(
+        co_p_raise={r["co_class"]: r["p_raise"] for r in data["by_class"]}
+    )
+    assert rank["co_0pct"] == live["co_0pct"]
+    co = rank["co_0pct"]
+    assert co["pair_J"]["leaf"] < co["pair_Q"]["leaf"] < co["pair_K"]["leaf"]
+    assert co["pair_J"]["p_co_wins_final_bn"] == 0.203
+    assert co["pair_Q"]["p_co_wins_final_bn"] == 0.28075
+    assert co["pair_K"]["p_co_wins_final_bn"] == 0.37225
+    assert co["pair_J"]["ev_co_street_bn"] == 1.477
+    assert co["pair_Q"]["ev_co_street_bn"] == 1.9875
+    assert co["pair_K"]["ev_co_street_bn"] == 2.6765
+    for cls in ("pair_J", "pair_Q", "pair_K"):
+        assert 0.74 < co[cls]["p_steal"] < 0.76
+        assert 0.03 < co[cls]["p_vs_2to1"] < 0.05
+        assert 0.20 < co[cls]["p_vs_bn_legal"] < 0.22
+    d = rank["co_delta_kk_minus_jj"]
+    assert d["leaf_piece_hold_p_at_b"] > abs(d["p_raise_piece_hold_L_at_a"])
+    bn = rank["bn_1_6_only"]
+    for cls in ("pair_J", "pair_Q", "pair_K"):
+        assert 1.92 < bn[cls]["leaf"] < 1.94
+    assert bn["pair_Q"]["ev_bn_locked"] < bn["pair_J"]["ev_bn_locked"]
+    assert abs(rank["bn_p_raise_z_qq_minus_jj"]) < 1.3
+    assert abs(rank["bn_p_raise_z_kk_minus_jj"]) < 1.3
+    assert "cutoff_open_summary.json" in rank["sources"][0]
 
