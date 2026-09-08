@@ -214,8 +214,25 @@ def recommend_action(
     ev_raise: float,
     se_call: float = 0.0,
     se_raise: float = 0.0,
+    p_bn_win: float = 0.0,
 ) -> dict[str, Any]:
-    """Argmax of fold=0 / call / raise-checkdown. Flag thin gaps (< 1 SE)."""
+    """Fold / call / raise vs fold=0.
+
+    Call EV is an honest $6 street; raise EV is a $10 checkdown bound (no
+    extra post-draw extraction). Those are not the same pot, so a favorite
+    with +EV raise-cd is marked **raise** for value even when the $6 honest
+    call number is higher. A dog does not raise just because checkdown lost
+    less than paying off two pair+ on the call line.
+    """
+    call_plus = ev_call > FOLD_EV
+    raise_plus = ev_raise > FOLD_EV
+    value_raise = raise_plus and p_bn_win > 0.5
+    if value_raise:
+        action = "raise"
+    elif call_plus:
+        action = "call"
+    else:
+        action = "fold"
     scored = (
         ("fold", FOLD_EV, 0.0),
         ("call", ev_call, se_call),
@@ -231,15 +248,18 @@ def recommend_action(
     vs_fold_se = best_se if best_name != "fold" else 0.0
     vs_fold_thin = best_name != "fold" and vs_fold_se > 0.0 and abs(best_ev) < vs_fold_se
     return {
-        "action": best_name,
-        "ev_best": round(best_ev, 5),
+        "action": action,
+        "ev_best_numeric": round(best_ev, 5),
+        "numeric_argmax": best_name,
         "runner_up": second_name,
         "gap_vs_runner_up": round(gap, 5),
         "thin_vs_runner_up": thin,
         "thin_vs_fold": vs_fold_thin,
-        "call_plus_ev_vs_fold": ev_call > FOLD_EV,
-        "raise_plus_ev_vs_fold": ev_raise > FOLD_EV,
+        "call_plus_ev_vs_fold": call_plus,
+        "raise_plus_ev_vs_fold": raise_plus,
+        "value_raise": value_raise,
         "raise_beats_call": ev_raise > ev_call,
+        "p_bn_win": round(p_bn_win, 5),
     }
 
 
@@ -317,7 +337,11 @@ class CellAccum:
         se_call = _se_mean(self.ev_call, self.ev_call2, self.n)
         se_raise = _se_mean(self.ev_raise, self.ev_raise2, self.n)
         rec = recommend_action(
-            ev_call=ev_call, ev_raise=ev_raise, se_call=se_call, se_raise=se_raise
+            ev_call=ev_call,
+            ev_raise=ev_raise,
+            se_call=se_call,
+            se_raise=se_raise,
+            p_bn_win=p_win,
         )
         mix = {k: round(self.co_buckets.get(k, 0.0) / n, 5) for k in TIGHT_CO_BUCKETS}
         return {
@@ -501,7 +525,9 @@ def derive_answers(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "low_pairs_fold": fold_pairs,
         "value_raise_classes": value_raise,
         "flavor_action_flips": flavor_flips,
-        "jj_dominated_raise": bool(jj) and jj["ev_raise_checkdown"] < jj["ev_call"],
+        "jj_dominated_raise": bool(jj)
+        and jj["p_bn_wins_final"] < 0.5
+        and jj["recommend"]["action"] == "fold",
         "note": (
             "Fold=0; call=honest $6 street − $2; raise=checkdown $10 − $4 "
             "(CO always continues). Tight CO = AA+ plus QQ/KK with the joker. "

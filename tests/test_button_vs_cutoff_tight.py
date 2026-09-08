@@ -97,19 +97,23 @@ def test_accounting_pins():
 
 
 def test_recommend_fold_call_raise():
-    fold = recommend_action(ev_call=-0.40, ev_raise=-1.10)
+    fold = recommend_action(ev_call=-0.40, ev_raise=-1.10, p_bn_win=0.20)
     assert fold["action"] == "fold"
     assert fold["call_plus_ev_vs_fold"] is False
-    call = recommend_action(ev_call=0.30, ev_raise=0.10)
+    assert fold["value_raise"] is False
+    # Call +EV as a dog → call, not a value raise.
+    call = recommend_action(ev_call=0.30, ev_raise=0.10, p_bn_win=0.40)
     assert call["action"] == "call"
-    assert call["raise_beats_call"] is False
-    raise_ = recommend_action(ev_call=0.20, ev_raise=0.80)
+    assert call["value_raise"] is False
+    # Favorite with +EV raise-cd → raise for value (even if $6 call number is higher).
+    raise_ = recommend_action(ev_call=4.0, ev_raise=3.0, p_bn_win=0.70)
     assert raise_["action"] == "raise"
-    assert raise_["raise_beats_call"] is True
-    # JJ-style: raise is dominated by call, both lose to fold.
-    dominated = recommend_action(ev_call=-0.15, ev_raise=-0.90)
+    assert raise_["value_raise"] is True
+    # JJ-style: both −EV vs fold; checkdown may lose *less* than stacking a call.
+    dominated = recommend_action(ev_call=-3.2, ev_raise=-2.5, p_bn_win=0.15)
     assert dominated["action"] == "fold"
-    assert dominated["raise_beats_call"] is False
+    assert dominated["value_raise"] is False
+    assert dominated["raise_beats_call"] is True
 
 
 def test_tight_co_sampler_never_emits_excluded():
@@ -173,26 +177,35 @@ def test_fixture_product_answers():
     # Tight CO is much stronger than all-legal: low pairs fold.
     assert answers["jj_action"] == "fold"
     assert answers["jj_ev_call"] < 0.0
-    assert answers["jj_ev_raise_checkdown"] < answers["jj_ev_call"]
     assert answers["jj_dominated_raise"] is True
     assert "pair_J" in answers["low_pairs_fold"]
     assert answers["qq_action"] == "fold"
     assert answers["kk_action"] == "fold"
-    # Value: trips / aces-up raise (or at least continue) vs this AA+ range.
-    assert answers["trips_action"] in {"call", "raise"}
-    assert answers["trips_A_action"] in {"call", "raise"}
-    assert answers["aces_up_action"] in {"call", "raise"}
+    assert answers["aa_action"] == "fold"
+    # Value: trips / aces-up raise vs this AA+ range (p_win > 0.5, raise-cd +EV).
+    assert answers["trips_action"] == "raise"
+    assert answers["trips_A_action"] == "raise"
+    assert answers["aces_up_action"] == "raise"
+    assert "trips" in answers["value_raise_classes"]
+    assert "trips_A" in answers["value_raise_classes"]
+    assert "two_pair_aces_up" in answers["value_raise_classes"]
     by = {r["key"]: r for r in data["by_row"]}
-    for key in ("pair_J", "pair_Q", "pair_K"):
+    for key in ("pair_J", "pair_Q", "pair_K", "pair_A"):
         row = by[key]
         assert row["recommend"]["action"] == "fold"
         assert row["ev_call"] < 0.0
         assert row["n"] == 4000.0
         assert row["se_call"] > 0.0
-    # Street pieces exist.
+        assert row["p_bn_wins_final"] < 0.5
+    # Street pieces exist. JJ is a dog and does not value-raise.
     jj = by["pair_J"]
-    assert 0.0 <= jj["p_bn_wins_final"] < 0.45
-    # Trips is a value hand vs a range that still has AA and joker-pairs.
+    assert 0.0 <= jj["p_bn_wins_final"] < 0.35
+    assert jj["recommend"]["value_raise"] is False
     trips = by["trips"]
     assert trips["ev_call"] > 0.0
-    assert trips["recommend"]["action"] in {"call", "raise"}
+    assert trips["ev_raise_checkdown"] > 0.0
+    assert trips["p_bn_wins_final"] > 0.5
+    assert trips["recommend"]["action"] == "raise"
+    aces_up = by["two_pair_aces_up"]
+    assert aces_up["ev_call"] > 0.0
+    assert aces_up["recommend"]["action"] == "raise"
