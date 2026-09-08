@@ -103,16 +103,22 @@ Do **not** expand that plan until late-position non-sandbagging work is done (St
 
 Living order: [AGENTS.md](../../AGENTS.md).
 
-1. **CO open chart** — slowplay % × blockers (joker / ace) for JJ/QQ/KK; CO does not sandbag.
-2. **BN vs CO open** — call vs raise.
-3. **Multi-raise** before the draw (CO opens, BN raises).
-4. **Draw and post-draw**, BN vs CO. After 1–4, CO+BN is mostly worked out.
-5. **HJ** — which hands open; which hands / frequencies slowplay.
-6. **After HJ is started:** Ch.2 §2.9 strong-draw mix; Ch.5 §5.2 CO bluff after BN open; pair concealment / Ring 1.
+**Signed (do not restart):** CO open chart; BN vs all-legal CO; BN vs tight CO.
 
-**Done (do not restart):** BN sandbag + CO 0%/100% labs — BN \(r^*\approx 98\%\), CO JJ binds \(r^*\approx 79\%\).
+**Up next (parallel, after this lands on `main`):** BN fold/call/raise lookup at sandbag thresholds \(\{79, 84, 86, 87, 90, 93, 96\}\)% — [NEXT_STAGE_BN_VS_CO_GRID.md](../NEXT_STAGE_BN_VS_CO_GRID.md).
 
-Exploit leaks are a **through-line** (too little slowplay → HJ may open any legal; too much → late seats fold lowest pairs).
+Then, still CO vs BN:
+
+1. Multi-raise before the draw (CO opens, BN raises).
+2. Draw and post-draw, BN vs CO.
+
+**After CO vs BN:** HJ opens and ideal sandbag rates with reverse-blockers (Super System “count”).
+
+**Toward the end:** 3:1 drawing hands after CO open + BN call; 3:1/4:1 inventory split on whether the joker is already out (CO or BN). Inventory only — no multiway tree yet.
+
+**After HJ is started:** Ch.2 §2.9; Ch.5 §5.2; pair concealment / Ring 1.
+
+Exploit leaks are a **through-line**.
 
 ## 1.8 Later (not scheduled in this draft)
 

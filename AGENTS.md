@@ -38,63 +38,89 @@ detail.
 
 ### Next stage (implementation agents)
 
-BN sandbag and CO open labs are **signed**. Do not restart
-[docs/NEXT_STAGE_SANDBAG_AND_CO.md](docs/NEXT_STAGE_SANDBAG_AND_CO.md) (method
-archive). CO **does not sandbag** (0% lab). Use the 0%/100% pins below as
-inputs to the next grid; do not re-run those two endpoints as the product.
+BN sandbag, CO 0%/100% pins, the **CO open chart**, and two **polar** BN-vs-CO
+labs are **signed**. Do not restart them. Do not start new analysis in the
+PR that lands this rollup — queue only.
 
-Pins (fold-to-raise bound; 2:1 callers still **call**):
+**CO never sandbags** as the opener. The joker is an ace kicker, not trips.
+
+Pins (fold-to-raise / polar BN):
 
 - **BN, 0% sandbag:** no legal pass; steal-weighted average open ≈ +$1.93–$1.94
 - **BN, 100% seats 1–7:** JJ EV(open) ≈ **−$0.32**, \(p_{\mathrm{raise}}\) ≈ 0.573
-- **BN, 100% seats 1–6 only** (CO never sandbags): JJ ≈ **−$0.016**,
-  \(p_{\mathrm{raise}}\) ≈ 0.496. Uniform slowplay rate making all legal BN
-  opens +EV ≈ **98%**. Lowest +EV BN open is **AA** (~+$0.18 even folding)
-- **CO, 0% sandbag in 1–6:** open every legal class; JJ ≈ **+$1.44**. “Never
-  slowplay” is **this lab only** (CO as opener still never sandbags)
-- **CO vs 100% 1–6 sandbag:** JJ/QQ/KK are −EV if they fold the raise. **JJ
-  binds** at Bayes \(r^*\approx 79\%\) (QQ ~84%, KK ~87%). At 100%, KK+joker
-  is +EV; QQ+joker ~0 (inside 1 SE); JJ+joker still −EV. Ace kickers all −EV
+- **BN, 100% seats 1–6 only** (CO never sandbags): JJ ≈ **−$0.016**; uniform
+  \(r^*\approx 98\%\). Lowest +EV BN open is **AA** (~+$0.18 even folding)
+- **CO open chart** (1–6 slowplay \(r\)): bare JJ +EV below ~79%; ace then
+  joker buy higher bands. At 93%+ pass JJ even with the joker; at 96%+ KK
+  needs the joker. QQ+joker at 100% is +EV inside 1 SE; KK+joker stays +EV.
+  Frame: [docs/research/cutoff_open_sandbag_v1.md](docs/research/cutoff_open_sandbag_v1.md)
+- **BN vs all-legal CO** (\(r=0\%\)): fold JJ–KK; value-raise AA / two pair /
+  trips+; 2:1 call. No air. Frame:
+  [docs/research/button_vs_cutoff_all_legal.md](docs/research/button_vs_cutoff_all_legal.md)
+- **BN vs tight CO** (\(r\approx 100\%\); AA+ plus QQ/KK+joker): fold
+  JJ–**AA**; call two pair (thin); raise aces-up / trips. Frame:
+  [docs/research/button_vs_cutoff_tight.md](docs/research/button_vs_cutoff_tight.md)
 
-**Narrative next queue** (CO+BN first, then HJ; finish one before starting the
-next). Goal after 1–4: CO+BN mostly worked out.
+The interesting inflection is **AA**: raise vs a wide cutoff, fold vs a tight
+one. That is what the next grid is for.
 
-1. **Done. CO open chart** — JJ 79/86/93, QQ 84/90, KK 87/96 (ace / joker thresholds); CO does not sandbag. [cutoff_open_sandbag_v1.md](docs/research/cutoff_open_sandbag_v1.md).
-2. **BN vs a CO open.** Which hands BN calls; which hands BN raises.
-3. **Multi-raise before the draw.** Effect of a raise war when CO opens and BN
-   raises (caps, fold/continue for each).
-4. **Draw and post-draw, BN vs CO.** Continue the HU laboratory after the
-   pre-draw line is known.
-5. **HJ strategy** (only after 1–4). Which hands HJ opens; which hands, and at
-   what frequency, HJ slowplays.
+**Up next (parallel, after this lands on `main`).** Ticket:
+[docs/NEXT_STAGE_BN_VS_CO_GRID.md](docs/NEXT_STAGE_BN_VS_CO_GRID.md)
 
-**After HJ is started** (not before): deceptive play, strong-draw call/raise
-mix (Ch.2 §2.9), CO bluff after BN open (Ch.5 §5.2), and strong-pair draw /
-post-draw optimization (pair `d=3` vs `d=2`, concealment, Ring 1). Those are
-**low priority** until CO+BN then HJ are underway.
+BN {fold, call, raise} by class at every CO-chart threshold
+\(r \in \{79, 84, 86, 87, 90, 93, 96\}\)\). Map \(r\) → CO opening range
+(from the chart) → BN action table. A human will not pin \(r\) to 1%; the
+lookup is so later seats can read “someone slowplayed, so CO’s range is X,
+so BN does Y” without resimulating last two. Polar endpoints 0% and ~100%
+are already signed — fill the interior. One threshold per PR is OK.
 
-**Exploit leaks (through-line, every lab).** Keep a baseline, then say what
-moves it and how to respond. Examples: if the table is not slowplaying
-enough, HJ may open any legal hand; if the table always slowplays, late seats
-fold their lowest pairs. Eventual guidance shape: baseline GTO-ish line;
-what influences it; how to exploit {too-wide caller, too much slowplay, …}.
+**Then (still CO vs BN, sequential — not parallel with the grid until the
+lookup exists):**
 
-**Read first:** this queue, then [docs/research/INDEX.md](docs/research/INDEX.md)
-and the CO sandbag frame
-[docs/research/cutoff_open_sandbag_v1.md](docs/research/cutoff_open_sandbag_v1.md).
+1. **Multi-raise before the draw** when CO opens and BN raises.
+2. **Draw and post-draw, BN vs CO.** After the grid + these two, CO+BN is
+   mostly worked out.
+
+**After CO vs BN is finished:**
+
+3. **HJ strategy**, including **ideal sandbag rates with reverse-blockers**
+   (Super System “count,” to be refined). Which hands HJ opens; which hands
+   and frequencies HJ slowplays. Do not start this before CO vs BN.
+
+**Toward the end (multiway start; do not expand until much later):**
+
+4. **3:1 drawing hands** — calling in seats 1–6 after a CO open **and** a BN
+   call is a better price than the 2:1 (BN-open) lab. Inventory only at
+   first; no multiway post-draw tree.
+5. **3:1 and 4:1 draw inventory + joker split.** Which hands those are;
+   odds a player holds one given the joker already dealt (to CO or BN)
+   vs still in the deck. That rates how often the CO-open + BN-call node
+   picks up a drawing call from 1–6.
+
+**Low priority until HJ is started:** deceptive play, Ch.2 §2.9 strong-draw
+mix, Ch.5 §5.2 CO bluff after BN open, pair `d=3` vs `d=2` / concealment,
+Ring 1 Nash.
+
+**Exploit leaks (through-line, every lab).** Baseline, what moves it, how to
+respond. Examples: table not slowplaying enough → HJ may open any legal;
+table always slowplaying → late seats fold lowest pairs. Eventual shape:
+baseline line; what influences it; how to exploit {too-wide caller, too
+much slowplay, …}.
+
+**Read first:** this queue, then [docs/research/INDEX.md](docs/research/INDEX.md).
 
 **Handoff checklist for new agents**
 
 1. `git fetch origin main && git checkout main && git pull origin main`
 2. Create `cursor/<short-name>-f76a` (or the suffix required by the run)
 3. `pip install -e ".[dev]" && pytest -q`
-4. Item 1 (CO open chart) is **done** in
-   [docs/research/cutoff_open_sandbag_v1.md](docs/research/cutoff_open_sandbag_v1.md).
-   Take **item 2** (BN vs a CO open) unless a later item is assigned. One
-   item per PR.
-5. Do not start HJ before CO+BN items 1–4. Do not start Ch.2 §2.9,
-   concealment, or Ring 1 Nash until HJ has started. Do not restart the
-   signed 0%/100% sandbag endpoints. No UTG re-solve.
+4. After this rollup is on `main`, take the **threshold grid** (one \(r\) or
+   the whole table). Ticket:
+   [docs/NEXT_STAGE_BN_VS_CO_GRID.md](docs/NEXT_STAGE_BN_VS_CO_GRID.md)
+5. Do not start HJ, reverse-blockers, 3:1/4:1 inventories, multi-raise,
+   concealment, or Ring 1 until the queue says so. Do not restart signed
+   0%/100% sandbag endpoints, the CO open chart, or the two polar BN labs.
+   No UTG re-solve.
 
 Stages **A**, **B**, and **C** (draw grid + check mixes) are done.
 Locked post-B / C draws:
