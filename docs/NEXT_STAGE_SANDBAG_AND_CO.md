@@ -1,17 +1,19 @@
 # Next stage: BN sandbag probe + CO open/pass (parallel)
 
-**Status:** Plan only. Do **not** compute the product answers in this ticket.
+**Status: signed — do not restart.** Product answers live in the frame files.
+This ticket is the **method archive**, not the queue. Next work:
+[research/INDEX.md](research/INDEX.md) “Immediate research queue.”
+
 Parent: [research/INDEX.md](research/INDEX.md). Frames:
 [research/button_open_sandbag_v1.md](research/button_open_sandbag_v1.md),
-[research/cutoff_open_no_sandbagging.md](research/cutoff_open_no_sandbagging.md).
+[research/cutoff_open_no_sandbagging.md](research/cutoff_open_no_sandbagging.md),
+[research/cutoff_open_sandbag_v1.md](research/cutoff_open_sandbag_v1.md).
 
-**Tabled.** Further Nash on the BN-vs-2:1 post-draw street (Ring 1 / Ring 2,
-concealment) is frozen. Steal-weighted BN open EV is already known to nickels;
-that work does not block these two questions.
+**Pins (fold-to-raise bound).** BN 1–6-only: JJ −EV; uniform \(r^*\approx 98\%\).
+CO vs 1–6: JJ binds \(r^*\approx 79\%\). At 100% CO, KK+joker +EV; QQ+joker ~0;
+JJ+joker still −EV. HJ mixes **tabled**. BN-vs-2:1 Nash stays **tabled**.
 
-Two agents may run **in parallel** after the shared pin below. They must not
-edit the same chapter file. `INDEX.md` frames table: each agent adds **only
-their own row** if it is missing; do not rewrite the other frame’s row.
+The sections below are the original parallel-agent brief (kept for method).
 
 ---
 

@@ -147,10 +147,9 @@ sit within \(z<1.3\) of each other (QQ−JJ \(z\approx 0.78\), KK−JJ
 
 | Seats | 100% pass, then always raise CO |
 | --- | --- |
-| 1–5 | Two pair or better |
+| 1–5 | Two pair or better (LJ still opens AA) |
 | 6 (HJ) | Two pair+ **and** pair_A |
 | 7 (CO) | **Does not sandbag** — this is the opener |
-| 5 (LJ) | Two pair+ only (still opens AA) |
 | 8 (BN) | **Not in \(p_{\mathrm{raise}}\)** — BN’s calls/opens vs a CO open already sit in \(L\) |
 
 Voluntary open = jacks-or-better minus that seat’s sandbag-set. Given 1–6

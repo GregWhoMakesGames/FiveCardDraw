@@ -38,26 +38,42 @@ detail.
 
 ### Next stage (implementation agents)
 
-BN-vs-2:1 post-draw Nash (Ring 1 / Ring 2) is **tabled**. Next work is two
-**parallel** frames — see [docs/NEXT_STAGE_SANDBAG_AND_CO.md](docs/NEXT_STAGE_SANDBAG_AND_CO.md):
+BN sandbag and CO open labs are **signed**. Do not restart
+[docs/NEXT_STAGE_SANDBAG_AND_CO.md](docs/NEXT_STAGE_SANDBAG_AND_CO.md) (that
+ticket is the method, not the queue). BN-vs-2:1 post-draw Nash (Ring 1 / Ring 2)
+stays **tabled**. HJ slowplay mixes are **tabled**.
 
-- Agent A: `evaluate button_open_sandbag_v1`
-- Agent B: `evaluate cutoff_open_no_sandbagging`
+Pins (fold-to-raise bound; 2:1 callers still **call**):
 
-Do not start both in one PR. Pair concealment and Ch.2 §2.9 are not the default
-until these two are signed.
+- **BN, 0% sandbag:** no legal pass; steal-weighted average open ≈ +$1.93–$1.94
+- **BN, 100% seats 1–7:** JJ EV(open) ≈ **−$0.32**, \(p_{\mathrm{raise}}\) ≈ 0.573
+- **BN, 100% seats 1–6 only** (CO never sandbags): JJ ≈ **−$0.016**,
+  \(p_{\mathrm{raise}}\) ≈ 0.496. Uniform slowplay rate making all legal BN
+  opens +EV ≈ **98%**. Lowest +EV BN open is **AA** (~+$0.18 even folding)
+- **CO, 0% sandbag in 1–6:** open every legal class; JJ ≈ **+$1.44**. “Never
+  slowplay” is **this lab only**
+- **CO vs 100% 1–6 sandbag:** JJ/QQ/KK are −EV if they fold the raise. **JJ
+  binds** at Bayes \(r^*\approx 79\%\) (QQ ~84%, KK ~87%). At 100%, KK+joker
+  is +EV; QQ+joker ~0 (inside 1 SE); JJ+joker still −EV. Ace kickers all −EV
 
-**Read first:** [docs/NEXT_STAGE_SANDBAG_AND_CO.md](docs/NEXT_STAGE_SANDBAG_AND_CO.md)
+**Narrative next queue** (from [docs/research/INDEX.md](docs/research/INDEX.md)):
+
+1. Ch.2 strong-draw call/raise/mix (§2.9) — CO representation + 19/22-out tail
+2. Ch.5 CO bluff after BN open (return-to-actor; no legal CO opener)
+3. Pair post-draw EV `d=3` vs `d=2`, then concealment (Ch.4 leftover)
+
+**Read first:** [docs/research/INDEX.md](docs/research/INDEX.md) “Immediate
+research queue,” then the chapter for the slice you take.
 
 **Handoff checklist for new agents**
 
 1. `git fetch origin main && git checkout main && git pull origin main`
 2. Create `cursor/<short-name>-f76a` (or the suffix required by the run)
 3. `pip install -e ".[dev]" && pytest -q`
-4. Read [docs/NEXT_STAGE_SANDBAG_AND_CO.md](docs/NEXT_STAGE_SANDBAG_AND_CO.md); take **A or B**, not both
-5. Do not resume Ring 1 / pair-concealment EV / UTG re-solve
+4. Take **one** INDEX queue item (Ch.2 §2.9, Ch.5 §5.2, or pair concealment)
+5. Do not resume sandbag-rate search, HJ mixes, Ring 1 Nash, or UTG re-solve
 
-Stages **A**, **B**, and **C** are done (12-cell draw grid + check mixes).
+Stages **A**, **B**, and **C** (draw grid + check mixes) are done.
 Locked post-B / C draws:
 
 - Two pair `d=1`, quads `d=1`, pairs `d=3`
