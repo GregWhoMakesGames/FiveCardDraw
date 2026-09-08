@@ -51,6 +51,7 @@ Say `evaluate button_open_no_sandbagging Ring 2` when the frame might be wrong. 
 | **button_open_sandbag_v1** | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) | BN open vs 100% two-pair+ (HJ/CO aces) sandbag; 1–6-only follow-up: CO never sandbags. |
 | **cutoff_open_no_sandbagging** | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) | Seats 1–6 unable; CO open/pass with BN behind. **v1 signed (0% sandbag):** open all legal (JJ +$1.44); no sandbag. |
 | **cutoff_open_sandbag_v1** | [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md) | CO vs 1–6 sandbag rate. JJ binds at \(r^*\approx 79\%\) (BN analog of 98%). At 100%, KK+joker +EV; QQ+joker ~0 (1 SE); JJ+joker still −EV. |
+| **button_vs_cutoff_all_legal** | [button_vs_cutoff_all_legal.md](button_vs_cutoff_all_legal.md) | Seats 1–6 unable; CO opens 100% legal (no sandbag). BN fold/call/raise vs that open. **No air.** Fold JJ–KK; value-raise AA / two pair / trips+; 2:1 call. |
 
 Mint a new frame file when the laboratory changes. Add a row here. Do not reuse Ring / Stage / Line aliases from one frame in another without a new table.
 
