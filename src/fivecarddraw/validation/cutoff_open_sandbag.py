@@ -125,6 +125,16 @@ def _ids_to_cls(ids: Sequence[int]) -> str | None:
     return classify_opener(tuple(card_from_id(i) for i in ids))
 
 
+_TWO_TO_ONE_IDS: set[frozenset[int]] | None = None
+
+
+def _two_to_one_id_cache() -> set[frozenset[int]]:
+    global _TWO_TO_ONE_IDS
+    if _TWO_TO_ONE_IDS is None:
+        _TWO_TO_ONE_IDS = two_to_one_id_set(load_call_2to1_hands())
+    return _TWO_TO_ONE_IDS
+
+
 def load_co_zero_sandbag_leaf(co_class: str, *, fixture: dict[str, Any] | None = None) -> float:
     """0% sandbag CO open EV for ``co_class`` (cutoff_open fixture). Do not rebuild."""
     data = fixture if fixture is not None else load_cutoff_open()
@@ -614,8 +624,7 @@ def estimate_behind_probs_flavor(
     """
     from fivecarddraw.validation.cutoff_open import BehindAccum
 
-    callers = load_call_2to1_hands()
-    two_to_one = two_to_one_id_set(callers)
+    two_to_one = _two_to_one_id_cache()
     rng = random.Random(seed)
     acc = BehindAccum()
     tries = 0
