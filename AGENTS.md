@@ -38,41 +38,75 @@ detail.
 
 ### Next stage (implementation agents)
 
-Default code milestone is pair post-draw EV `d=3` vs `d=2` (then concealment)
-in [docs/NEXT_STAGE_PAIR_CONCEALMENT.md](docs/NEXT_STAGE_PAIR_CONCEALMENT.md).
-Stage C check mixes are done under post-B draws
-([docs/NEXT_STAGE_OPENER_DRAW_MIXES.md](docs/NEXT_STAGE_OPENER_DRAW_MIXES.md)).
+BN sandbag and CO open labs are **signed**. Do not restart
+[docs/NEXT_STAGE_SANDBAG_AND_CO.md](docs/NEXT_STAGE_SANDBAG_AND_CO.md) (method
+archive). CO **does not sandbag** (0% lab). Use the 0%/100% pins below as
+inputs to the next grid; do not re-run those two endpoints as the product.
 
-**Narrative next queue** (research paper): (1) Ch.2 strong-draw call/raise/mix,
-(2) Ch.5 CO bluff after BN open (return-to-actor; weaker than strong draws),
-(3) post-draw bluff 3-bet **Ring 1** on the cap node
-([docs/NEXT_STAGE_POSTDRAW_BLUFF.md](docs/NEXT_STAGE_POSTDRAW_BLUFF.md);
-**after Stage C**: trips-only air, split by public \(d\); do not start
-Ring 2 first) — see [docs/research/INDEX.md](docs/research/INDEX.md)
-“Immediate research queue.”
+Pins (fold-to-raise bound; 2:1 callers still **call**):
 
-**Read first for concealment code:** [docs/NEXT_STAGE_PAIR_CONCEALMENT.md](docs/NEXT_STAGE_PAIR_CONCEALMENT.md)
+- **BN, 0% sandbag:** no legal pass; steal-weighted average open ≈ +$1.93–$1.94
+- **BN, 100% seats 1–7:** JJ EV(open) ≈ **−$0.32**, \(p_{\mathrm{raise}}\) ≈ 0.573
+- **BN, 100% seats 1–6 only** (CO never sandbags): JJ ≈ **−$0.016**,
+  \(p_{\mathrm{raise}}\) ≈ 0.496. Uniform slowplay rate making all legal BN
+  opens +EV ≈ **98%**. Lowest +EV BN open is **AA** (~+$0.18 even folding)
+- **CO, 0% sandbag in 1–6:** open every legal class; JJ ≈ **+$1.44**. “Never
+  slowplay” is **this lab only** (CO as opener still never sandbags)
+- **CO vs 100% 1–6 sandbag:** JJ/QQ/KK are −EV if they fold the raise. **JJ
+  binds** at Bayes \(r^*\approx 79\%\) (QQ ~84%, KK ~87%). At 100%, KK+joker
+  is +EV; QQ+joker ~0 (inside 1 SE); JJ+joker still −EV. Ace kickers all −EV
 
-Stages **A**, **B**, and **C** are done (12-cell draw grid + check mixes).
+**Narrative next queue** (CO+BN first, then HJ; finish one before starting the
+next). Goal after 1–4: CO+BN mostly worked out.
+
+1. **CO open chart (slowplay % × blockers).** Intersection of table slowplay
+   rate and blocker cards that make JJ/QQ/KK +EV from CO. Deliver a clear
+   opening rule, e.g. “if the table slowplays \(x\%\), do not open QQ unless
+   you have an ace; at \(y\%\), do not open QQ unless you have the joker.”
+   Combine with the signed pin that CO should not sandbag.
+2. **BN vs a CO open.** Which hands BN calls; which hands BN raises.
+3. **Multi-raise before the draw.** Effect of a raise war when CO opens and BN
+   raises (caps, fold/continue for each).
+4. **Draw and post-draw, BN vs CO.** Continue the HU laboratory after the
+   pre-draw line is known.
+5. **HJ strategy** (only after 1–4). Which hands HJ opens; which hands, and at
+   what frequency, HJ slowplays.
+
+**After HJ is started** (not before): deceptive play, strong-draw call/raise
+mix (Ch.2 §2.9), CO bluff after BN open (Ch.5 §5.2), and strong-pair draw /
+post-draw optimization (pair `d=3` vs `d=2`, concealment, Ring 1). Those are
+**low priority** until CO+BN then HJ are underway.
+
+**Exploit leaks (through-line, every lab).** Keep a baseline, then say what
+moves it and how to respond. Examples: if the table is not slowplaying
+enough, HJ may open any legal hand; if the table always slowplays, late seats
+fold their lowest pairs. Eventual guidance shape: baseline GTO-ish line;
+what influences it; how to exploit {too-wide caller, too much slowplay, …}.
+
+**Read first:** this queue, then [docs/research/INDEX.md](docs/research/INDEX.md)
+and the CO sandbag frame
+[docs/research/cutoff_open_sandbag_v1.md](docs/research/cutoff_open_sandbag_v1.md).
+
+**Handoff checklist for new agents**
+
+1. `git fetch origin main && git checkout main && git pull origin main`
+2. Create `cursor/<short-name>-f76a` (or the suffix required by the run)
+3. `pip install -e ".[dev]" && pytest -q`
+4. Take **item 1** (CO slowplay % × blockers chart) unless a later item is
+   explicitly assigned. One item per PR.
+5. Do not start HJ before CO+BN items 1–4. Do not start Ch.2 §2.9,
+   concealment, or Ring 1 Nash until HJ has started. Do not restart the
+   signed 0%/100% sandbag endpoints. No UTG re-solve.
+
+Stages **A**, **B**, and **C** (draw grid + check mixes) are done.
 Locked post-B / C draws:
 
 - Two pair `d=1`, quads `d=1`, pairs `d=3`
 - Fork still live: trips `d=2` (`tp1_tr2_q1`) vs trips `d=1` (`tp1_tr1_q1`)
 - C result: **always check two pair** (all public `d`); always bet trips / boat+
-- Next: verify pair post-draw EV `d=3` vs `d=2` before `pair_d≠3` mixes
-  (see [NEXT_STAGE_PAIR_CONCEALMENT.md](docs/NEXT_STAGE_PAIR_CONCEALMENT.md))
-- Do **not** redo Stage C or fold the cap/3-bet street into the M2 check grid
 
 Already done: [docs/POSTDRAW_M2_FACE_PAIR_GRID.md](docs/POSTDRAW_M2_FACE_PAIR_GRID.md),
 [docs/NEXT_STAGE_SHOWDOWN_MATRIX.md](docs/NEXT_STAGE_SHOWDOWN_MATRIX.md),
 Stage 0 beliefs in [docs/NEXT_STAGE_PAIR_CONCEALMENT.md](docs/NEXT_STAGE_PAIR_CONCEALMENT.md).
 
 Parent context: [docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md](docs/NEXT_STAGE_DEALER_OPENING_EQUITY.md).
-
-### Handoff checklist for new agents
-
-1. `git fetch origin main && git checkout main && git pull origin main`
-2. Create `cursor/<short-name>-f76a` (or the suffix required by the run)
-3. `pip install -e ".[dev]" && pytest -q`
-4. Read `docs/NEXT_STAGE_PAIR_CONCEALMENT.md`; verify pair EV `d=3` vs `d=2` first
-5. Do not redo Stage C, start `pair_d≠3` mixes before that EV table, or UTG re-solve

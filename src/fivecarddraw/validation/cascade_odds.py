@@ -16,6 +16,7 @@ from typing import Any
 
 
 TOTAL_HANDS = comb(53, 5)  # 2_869_685
+HANDS_NO_BUG = comb(52, 5)  # 2_598_960; also a uniform 5-set from the 52 non-bug cards
 UNKNOWN = 48
 SEATS_FACING = 7
 
@@ -40,6 +41,50 @@ ORDERED_DISJOINT_BUG_FFS13 = 47_417_400
 ORDERED_DISJOINT_FFS16_FFS13 = 3_161_976
 
 TOTAL2 = TOTAL_HANDS * comb(48, 5)  # 4_913_773_104_240
+
+
+def p_one_seat_2to1(*, bn_has_bug: bool) -> float:
+    """P(a given seat among 1–7 holds a 2:1 combo | BN does/doesn't have the bug).
+
+    Strong drawing hand = the 18,396 first-call set (bug SF / bug straight / FFS16).
+    One seat's five cards are uniform over ``C(53,5)`` unconditionally. Conditioning
+    only on whether BN holds the bug yields a closed form from the inventory split
+    (17,280 with bug, 1,116 without):
+
+    - BN has the bug: the other seat is a uniform 5-set of the 52 non-bug cards,
+      so only FFS16 remains.
+    - BN has no bug: every bug 2:1 is still possible; an FFS16 seat leaves 48
+      cards including the bug, and BN's five must come from the 47 non-bug cards
+      (factor ``C(47,5)/C(48,5) = 43/48``).
+    """
+    if bn_has_bug:
+        return FFS16_COMBOS / HANDS_NO_BUG
+    ffs_and_bn_no_bug = FFS16_COMBOS * comb(47, 5) / comb(48, 5)
+    return (BUG_2TO1_COMBOS + ffs_and_bn_no_bug) / HANDS_NO_BUG
+
+
+def p_any_of_seats_2to1_independent(p_one: float, seats: int = SEATS_FACING) -> float:
+    """Independent-seat union ``1 - (1-p)^n``. Cascade of two 2:1 hands is ~0.03%."""
+    return 1.0 - (1.0 - p_one) ** seats
+
+
+def bn_bug_conditioned_2to1_rates(seats: int = SEATS_FACING) -> dict[str, float]:
+    """Q1/Q2 planning rates: any of ``seats`` is 2:1, split on BN holding the bug."""
+    p_one_bug = p_one_seat_2to1(bn_has_bug=True)
+    p_one_no_bug = p_one_seat_2to1(bn_has_bug=False)
+    p_one_uncond = CALL_2TO1_COMBOS / TOTAL_HANDS
+    return {
+        "p_one_seat_uncond": p_one_uncond,
+        "p_any_independent_uncond": p_any_of_seats_2to1_independent(p_one_uncond, seats),
+        "p_one_seat_given_bn_has_bug": p_one_bug,
+        "p_any_independent_given_bn_has_bug": p_any_of_seats_2to1_independent(
+            p_one_bug, seats
+        ),
+        "p_one_seat_given_bn_no_bug": p_one_no_bug,
+        "p_any_independent_given_bn_no_bug": p_any_of_seats_2to1_independent(
+            p_one_no_bug, seats
+        ),
+    }
 
 
 def _pair_prob_unordered(ordered_disjoint_ab: int, *, symmetric_both_orientations: bool) -> float:

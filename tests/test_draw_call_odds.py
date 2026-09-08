@@ -5,6 +5,9 @@ from fivecarddraw.hand_rank import can_open_jacks_or_better
 from fivecarddraw.validation.draw_call_odds import (
     FIRST_CALL_MIN_OUTS,
     FIRST_CALL_REQUIRED,
+    RAISE_VS_CONTINUING_OPENER_FINAL_POT,
+    RAISE_VS_CONTINUING_OPENER_INVESTED,
+    RAISE_VS_CONTINUING_OPENER_REQUIRED,
     SECOND_CALL_MIN_OUTS,
     SECOND_CALL_REQUIRED,
     UNKNOWN_AFTER_HERO,
@@ -20,6 +23,12 @@ def test_pot_odds_thresholds():
     assert UNKNOWN_AFTER_HERO == 48
     assert FIRST_CALL_MIN_OUTS == 16
     assert SECOND_CALL_MIN_OUTS == 12  # 12/48 = 1/4, not outs/43
+    assert RAISE_VS_CONTINUING_OPENER_FINAL_POT == 10.0
+    assert RAISE_VS_CONTINUING_OPENER_INVESTED == 4.0
+    assert abs(RAISE_VS_CONTINUING_OPENER_REQUIRED - 0.4) < 1e-12
+    # 16-out 2:1 calls clear 2:1 and fail a raise vs a continuing BN opener.
+    assert FIRST_CALL_MIN_OUTS / UNKNOWN_AFTER_HERO + 1e-15 >= FIRST_CALL_REQUIRED
+    assert FIRST_CALL_MIN_OUTS / UNKNOWN_AFTER_HERO < RAISE_VS_CONTINUING_OPENER_REQUIRED
 
 
 def test_bug_sf_draw_clears_2to1():
