@@ -54,6 +54,15 @@ SECOND_CALL_REQUIRED = pot_odds_to_call(SECOND_CALL_POT, SECOND_CALL_TO_CALL)  #
 FIRST_CALL_MIN_OUTS = 16  # 16/48 = 1/3
 SECOND_CALL_MIN_OUTS = 12  # 12/48 = 1/4
 
+# Raise vs a BN opener who always continues (no-sandbag range is jacks+).
+# Final pot $10 (antes $2 + BN $2 open + drawer $4 + BN $2 call); drawer invested $4.
+# Required 4/10 = 40%. 16/48 ≈ 33% fails → this frame is open + call only.
+RAISE_VS_CONTINUING_OPENER_FINAL_POT = 10.0
+RAISE_VS_CONTINUING_OPENER_INVESTED = 2 * DEFAULT_CONFIG.small_bet
+RAISE_VS_CONTINUING_OPENER_REQUIRED = (
+    RAISE_VS_CONTINUING_OPENER_INVESTED / RAISE_VS_CONTINUING_OPENER_FINAL_POT
+)
+
 
 @dataclass(frozen=True, slots=True)
 class DrawHandResult:
