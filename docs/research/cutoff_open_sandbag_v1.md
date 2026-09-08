@@ -41,8 +41,62 @@ rather pass JJ than open-and-fold. This PR does **not** retune CO’s own
 slowplay of two pair+ / aces — that was a different question in the 0% lab
 (still: do not sandbag those on CO when 1–6 cannot open).
 
+**CO analog of the button’s 98%.** BN’s uniform \(r\lesssim 98\%\) was the
+rate that made **every** legal button open +EV (QQ/KK bound). Here **JJ
+binds**: Bayes \(r^*\approx\mathbf{79\%}\) (linear 85%). QQ 84% / KK 87%.
+If seats 1–6 slowplay below ~79%, opening any of JJ/QQ/KK from CO is +EV
+on this fold-to-raise mix.
+
+Hijack slowplay mixes are **tabled** (not ready to pin an ideal \(r_{\mathrm{HJ}}\)).
+
 Q3 (flag only): if CO stops opening JJ–KK, HJ’s v1 aces-sandbag pin is the
 same inconsistency the BN 1–6-only walk flagged. Do not iterate the set here.
+
+## Singleton blockers (KK + joker, ace kicker)
+
+The bug is an **ace** (or a straight/flush fill), not a duplicate king.
+**KK with a joker** = two physical kings + bug as ace kicker, still
+`pair_K`. One king + bug is ace-high (not an opener). A physical ace
+kicker is the same rank-blocker without removing the bug from the deck.
+
+Exact remaining \(C(48,5)=1{,}712{,}304\) with matched kickers
+(`Kh Kd 9s 7h` + \(4c\) / `Bu` / `As`):
+
+| Remaining bucket | Two kings | KK + joker | KK + ace |
+| --- | ---: | ---: | ---: |
+| two pair+ | 144,753 | **133,259** | 141,667 |
+| pair_A | 98,266 | **64,548** | 63,009 |
+| aces-up | 22,730 | **14,688** | 14,688 |
+| straight | 12,961 | **6,950** | 14,038 |
+| HJ set (two pair+ and AA) | 243,019 | **197,807** | 204,676 |
+
+The joker cuts 2:1 almost to zero (almost all 18,396 2:1 combos hold the
+bug) **and** cuts monsters / AA / aces-up. A singleton ace matches the
+AA / aces-up cut but leaves 2:1 and most straights in the deck.
+
+Fold-to-raise mix at **100%** 1–6 sandbag (n=10,000, seed `20260907`):
+
+| Flavor | \(p_{\mathrm{raise}}\) (SE) | Leaf \(L\) | EV(100%) |
+| --- | ---: | ---: | ---: |
+| pair_K class average | 0.5012 (0.00250) | +$1.678 | **−$0.166** |
+| KK + joker, average \(L\) | **0.4523** (0.00498) | +$1.678 | **+$0.014** |
+| KK + joker, steal/2:1 reweight | 0.4523 (0.00498) | **+$1.737** | **+$0.047** |
+| KK + ace kicker, average \(L\) | 0.4718 (0.00499) | +$1.678 | **−$0.057** |
+| KK + ace kicker, reweight | 0.4718 (0.00499) | +$1.691 | **−$0.050** |
+
+**Yes: opening KK with the joker is +EV at 100% slowplay in front**, on
+the reweighted 0% leaf (steal ≈ 80%, \(p_{\mathrm{vs\ 2:1}}\approx 0.24\%\)
+vs the class-average 4.3% / 74.5% steal). The conservative class-average
+leaf is only **+$0.014**, inside ~1 SE of zero (\(\mathrm{SE}(p)\times(L+2)\approx \$0.018\))
+— do not treat that bound as a blowout. \(r^*>1\): even 100% sandbag stays
++EV once the bug is in the hand.
+
+A **physical ace kicker without the joker does not flip** the 100% mix
+(still −EV). It blocks AA / aces-up like the bug-as-ace, but it does not
+remove 2:1 or as many two-pair+ combos, so \(p_{\mathrm{raise}}=0.472\)
+stays above KK’s \(p^*\approx 0.456\).
+
+CLI: `python -m fivecarddraw.validation.cutoff_open_sandbag --write-blockers`.
 
 ## Sandbag-set v1 in this world
 

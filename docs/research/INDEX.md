@@ -50,7 +50,7 @@ Say `evaluate button_open_no_sandbagging Ring 2` when the frame might be wrong. 
 | **button_open_no_sandbagging** | [button_open_no_sandbagging.md](button_open_no_sandbagging.md) | BN opened; no sandbagging. Vs-draw Nash **tabled**. |
 | **button_open_sandbag_v1** | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) | BN open vs 100% two-pair+ (HJ/CO aces) sandbag; 1–6-only follow-up: CO never sandbags. |
 | **cutoff_open_no_sandbagging** | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) | Seats 1–6 unable; CO open/pass with BN behind. **v1 signed (0% sandbag):** open all legal (JJ +$1.44); no sandbag. |
-| **cutoff_open_sandbag_v1** | [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md) | CO open vs 1–6 sandbag rate; BN unrestricted. JJ/QQ/KK −EV at 100% (fold bound); JJ \(r^*\approx 0.79\). |
+| **cutoff_open_sandbag_v1** | [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md) | CO vs 1–6 sandbag rate. JJ binds at \(r^*\approx 79\%\) (BN analog of 98%). KK+joker is +EV at 100%. |
 
 Mint a new frame file when the laboratory changes. Add a row here. Do not reuse Ring / Stage / Line aliases from one frame in another without a new table.
 
@@ -150,7 +150,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 | 3b | BN-vs-2:1 post-draw Nash (Ring 1 / Ring 2) | [button_open_no_sandbagging](button_open_no_sandbagging.md) | **Tabled.** Steal-weighted open EV is already ± a dime |
 | A | **Done.** Opening JJ is −EV (EV ≈ −$0.32, \(p_{\mathrm{raise}}\) ≈ 0.573) | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) / [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) | Parallel with B; do not edit Ch.5 |
 | B | `evaluate cutoff_open_no_sandbagging`: CO JJ open / CO sandbag with BN behind | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) / [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) | **Signed (v1, 0% sandbag).** Parallel with A |
-| B2 | CO open vs 1–6 sandbag rate (JJ/QQ/KK fold bound) | [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md) | **Done.** 100% ⇒ JJ −$0.26; \(r^*\approx 0.79\). Do not retune 0% never-slowplay except to qualify it |
+| B2 | CO open vs 1–6 sandbag rate (JJ/QQ/KK fold bound) | [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md) | **Done.** 100% ⇒ JJ −$0.26; binding \(r^*\approx 79\%\) (BN’s 98% analog). KK+joker +EV at 100%. HJ mixes tabled |
 
 ### Later (low priority)
 
@@ -177,6 +177,7 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
+| 2026-09-08 | CO KK+joker (bug as ace kicker) is **+EV at 100%** 1–6 sandbag (\(p_{\mathrm{raise}}=0.452\), reweighted EV +$0.05). Ace kicker without the bug stays −EV. Binding slowplay rate for JJ/QQ/KK remains **~79%** (JJ). HJ mixes tabled. |
 | 2026-09-07 | CO vs 1–6 sandbag rate: JJ/QQ/KK **−EV at 100%** (JJ −$0.26, \(p_{\mathrm{raise}}=0.494\)); 0% leaf reused (+$1.44). Bayes \(r^*\approx 0.79\) (JJ binding). Never-slowplay is the 0% lab only. ([cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md)) |
 | 2026-09-07 | 1–6-only sandbag (CO never sandbags): JJ still −EV (−$0.016, \(p_{\mathrm{raise}}=0.496\)); QQ/KK also −EV; lowest +EV BN open is AA (+$0.18 even folding the raise). Q3 flag: revisit HJ aces-sandbag if BN stops opening JJ–KK. |
 | 2026-09-07 | `button_open_sandbag_v1`: opening JJ is −EV (−$0.32) vs 100% two-pair+ / HJ-CO aces sandbag + always raise; \(p_{\mathrm{raise}}=0.573\) (n=40k, seed 20260907). No-raise leaf reused §3.4 pair_J d=3 + 6.9% 2:1 call |

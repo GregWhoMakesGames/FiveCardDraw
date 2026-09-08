@@ -224,3 +224,96 @@ def test_fixture_pins_jj_qq_kk():
     assert jj["r_calibrated"] <= qq["r_calibrated"] <= kk["r_calibrated"]
     assert jj["deal_mc"]["n_tried"] == 2_801_845
     assert jj["deal_mc"]["n_raise"] == 19_751
+
+
+def test_pair_k_plus_joker_is_two_kings_bug_as_ace_kicker():
+    """Bug is an ace, not a third king: KK+joker stays pair_K (ace kicker)."""
+    from fivecarddraw.validation.cutoff_open_sandbag import (
+        PAIR_K_ACE_IDS,
+        PAIR_K_BUG_IDS,
+        PAIR_K_NO_BUG_IDS,
+        n_physical_kings,
+    )
+
+    assert classify_opener(parse_hand("Kh Kd 9s 7h 4c")) == "pair_K"
+    assert classify_opener(parse_hand("Kh Kd Bu 9s 7h")) == "pair_K"
+    assert classify_opener(parse_hand("Kh Bu 9s 7h 4c")) is None  # ace-high
+    assert classify_opener(parse_hand("Kh Kd As 7h 4c")) == "pair_K"
+    assert n_physical_kings(PAIR_K_BUG_IDS) == 2
+    assert n_physical_kings(PAIR_K_NO_BUG_IDS) == 2
+    assert n_physical_kings(PAIR_K_ACE_IDS) == 2
+
+
+def test_sample_forced_blockers_match_class():
+    from fivecarddraw.validation.cutoff_open_sandbag import (
+        BUG_ID,
+        has_physical_ace,
+        sample_class_ids_forced,
+    )
+
+    rng = __import__("random").Random(20260907)
+    bug_ids = sample_class_ids_forced("pair_K", rng, require_bug=True)
+    ace_ids = sample_class_ids_forced("pair_K", rng, require_physical_ace=True)
+    assert bug_ids is not None and BUG_ID in bug_ids
+    assert _ids_to_cls_local(bug_ids) == "pair_K"
+    assert ace_ids is not None and has_physical_ace(ace_ids)
+    assert _ids_to_cls_local(ace_ids) == "pair_K"
+
+
+def _ids_to_cls_local(ids):
+    from fivecarddraw.cards import card_from_id
+
+    return classify_opener(tuple(card_from_id(i) for i in ids))
+
+
+def test_small_flavor_mc_bug_lowers_p_raise_vs_class_average():
+    from fivecarddraw.validation.cutoff_open_sandbag import deal_mc_p_raise_co_flavor
+
+    mc = deal_mc_p_raise_co_flavor(
+        n=400, seed=20260907, co_class="pair_K", require_bug=True
+    )
+    assert mc.n_conditioned == 400
+    assert mc.p_co_has_bug == 1.0
+    # Class-average pair_K is ~0.50; the joker should cut sandbag-set mass.
+    assert 0.15 < mc.p_raise < 0.55
+
+
+def test_fixture_blockers_kk_joker():
+    from fivecarddraw.validation.cutoff_open_sandbag import load_fixture
+
+    data = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    assert data == load_fixture()
+    blockers = data["blockers"]
+    rem = blockers["remaining_exact"]
+    assert rem["pair_k_bug"]["co_class"] == "pair_K"
+    assert rem["pair_k_bug"]["has_bug"] is True
+    assert rem["pair_k_bug"]["n_physical_kings"] == 2
+    assert rem["pair_k_no_bug"]["two_pair_plus"] == 144_753
+    assert rem["pair_k_bug"]["two_pair_plus"] == 133_259
+    assert rem["pair_k_ace"]["two_pair_plus"] == 141_667
+    assert rem["pair_k_bug"]["pair_A"] == 64_548
+    assert rem["pair_k_ace"]["pair_A"] == 63_009
+    assert rem["pair_k_bug"]["two_pair_aces_up"] == 14_688
+    assert rem["pair_k_bug"]["two_pair_plus"] < rem["pair_k_no_bug"]["two_pair_plus"]
+    assert rem["pair_k_bug"]["pair_A"] < rem["pair_k_no_bug"]["pair_A"]
+    assert rem["pair_k_bug"]["two_pair_aces_up"] < rem["pair_k_no_bug"]["two_pair_aces_up"]
+    assert rem["pair_k_ace"]["pair_A"] < rem["pair_k_no_bug"]["pair_A"]
+    assert rem["pair_k_ace"]["two_pair_aces_up"] < rem["pair_k_no_bug"]["two_pair_aces_up"]
+
+    bug = blockers["pair_k_bug"]["reweighted_leaf_mix"]
+    ace = blockers["pair_k_ace_kicker"]["reweighted_leaf_mix"]
+    kk = next(r for r in data["by_class"] if r["co_class"] == "pair_K")
+    assert bug["deal_mc"]["n"] == 10_000
+    assert bug["deal_mc"]["seed"] == 20260907
+    assert bug["p_raise"] < kk["p_raise"]
+    assert abs(bug["p_raise"] - 0.4523) < 1e-12
+    assert bug["opening_is_positive_ev"] is True
+    assert abs(bug["ev_open_100pct"] - 0.046901204362500226) < 1e-12
+    ace_avg = blockers["pair_k_ace_kicker"]["avg_leaf_mix"]
+    assert ace_avg["opening_is_negative_ev"] is True
+    assert abs(ace["p_raise"] - 0.4718) < 1e-12
+    ans = blockers["answers"]
+    assert ans["pair_k_bug_plus_ev_at_100pct_reweighted"] is True
+    assert ans["pair_k_ace_plus_ev_at_100pct_reweighted"] is False
+    assert abs(data["answers"]["q3_jj_r_calibrated"] - 0.787161321269366) < 1e-12
+

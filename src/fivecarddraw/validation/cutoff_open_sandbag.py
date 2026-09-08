@@ -21,12 +21,19 @@ import json
 import math
 import random
 from dataclasses import asdict, dataclass
+from itertools import combinations
 from pathlib import Path
 from typing import Any, Sequence
 
-from fivecarddraw.cards import card_from_id
+from fivecarddraw.cards import BUG_ID, card_from_id, parse_hand
 from fivecarddraw.validation.cascade_odds import TOTAL_HANDS
-from fivecarddraw.validation.cutoff_open import load_summary_fixture as load_cutoff_open
+from fivecarddraw.validation.cutoff_open import (
+    blend_2to1_street,
+    classify_seat_ids,
+    load_summary_fixture as load_cutoff_open,
+    mix_open_ev,
+    two_to_one_id_set,
+)
 from fivecarddraw.validation.sandbag_v1 import (
     DEFAULT_MC_N,
     DEFAULT_MC_SEED,
@@ -41,6 +48,7 @@ from fivecarddraw.validation.sandbag_v1 import (
     SEAT_HJ,
     SEAT_UTG,
     STEAL_EV,
+    TWO_PAIR_PLUS_CLASSES,
     aces_sandbag_seats,
     ev_open_fold_to_raise,
     independent_p_raise_bn_class_blocked,
@@ -52,7 +60,12 @@ from fivecarddraw.validation.sandbag_v1 import (
     sandbag_seats,
     voluntary_combo_count,
 )
-from fivecarddraw.validation.showdown_matrix import classify_opener, load_showdown_matrix
+from fivecarddraw.validation.showdown_matrix import (
+    TRIPS_CLASSES,
+    classify_opener,
+    load_call_2to1_hands,
+    load_showdown_matrix,
+)
 
 WORLD = SANDBAG_WORLD_CO_VS_SEATS_1_6
 FOCUS_CLASSES = FOLD_TO_RAISE_CLASSES  # pair_J, pair_Q, pair_K
@@ -61,6 +74,15 @@ SEATS_1_6 = tuple(range(1, 7))
 P_JUNK_WRITEUP = 0.7760
 P_SANDBAG_EARLY_WRITEUP = 0.0821
 P_SANDBAG_HJ_WRITEUP = 0.1302
+# rank 14 → card_id 48..51
+PHYSICAL_ACE_IDS = frozenset(range(48, 52))
+PHYSICAL_KING_IDS = frozenset(range(44, 48))
+DEFAULT_BLOCKER_MC_N = 10_000
+DEFAULT_BLOCKER_LEAF_N = 8_000
+# Matched kickers: two kings + 9s 7h, swapping the fifth card.
+PAIR_K_NO_BUG_IDS = tuple(sorted(c.card_id for c in parse_hand("Kh Kd 9s 7h 4c")))
+PAIR_K_BUG_IDS = tuple(sorted(c.card_id for c in parse_hand("Kh Kd Bu 9s 7h")))
+PAIR_K_ACE_IDS = tuple(sorted(c.card_id for c in parse_hand("Kh Kd As 7h 4c")))
 
 
 def _ids_to_cls(ids: Sequence[int]) -> str | None:
@@ -340,6 +362,366 @@ def mix_co_open(p_raise: float, leaf: float) -> dict[str, Any]:
     }
 
 
+def has_physical_ace(ids: Sequence[int]) -> bool:
+    return any(i in PHYSICAL_ACE_IDS for i in ids)
+
+
+def n_physical_kings(ids: Sequence[int]) -> int:
+    return sum(1 for i in ids if i in PHYSICAL_KING_IDS)
+
+
+def sample_class_ids_forced(
+    co_class: str,
+    rng: random.Random,
+    *,
+    require_bug: bool = False,
+    require_physical_ace: bool = False,
+) -> tuple[int, ...] | None:
+    """Rejection-sample ``co_class`` with optional singleton blockers forced in."""
+    forced: list[int] = []
+    if require_bug:
+        forced.append(BUG_ID)
+    if require_physical_ace:
+        forced.append(rng.choice(tuple(PHYSICAL_ACE_IDS)))
+    if len(set(forced)) != len(forced):
+        return None
+    blocked = set(forced)
+    pool = [i for i in range(53) if i not in blocked]
+    need = 5 - len(forced)
+    if need < 0 or len(pool) < need:
+        return None
+    for _ in range(8_000):
+        ids = tuple(sorted(forced + rng.sample(pool, need)))
+        if _ids_to_cls(ids) == co_class:
+            return ids
+    return None
+
+
+def remaining_sandbag_buckets(co_ids: Sequence[int]) -> dict[str, int]:
+    """Exact C(48,5) opener-class counts given CO's five cards."""
+    rem = [i for i in range(53) if i not in set(co_ids)]
+    counts: dict[str, int] = {
+        "straight": 0,
+        "flush": 0,
+        "two_pair": 0,
+        "two_pair_aces_up": 0,
+        "trips": 0,
+        "boats_plus": 0,
+        "pair_A": 0,
+        "two_pair_plus": 0,
+        "hj_set": 0,
+        "n_remaining": 0,
+    }
+    boats = frozenset({"full_house", "four_of_a_kind", "straight_flush", "five_aces"})
+    for combo in combinations(rem, 5):
+        cls = _ids_to_cls(combo)
+        counts["n_remaining"] += 1
+        if cls is None:
+            continue
+        if cls == "straight":
+            counts["straight"] += 1
+        elif cls == "flush":
+            counts["flush"] += 1
+        elif cls == "two_pair":
+            counts["two_pair"] += 1
+        elif cls == "two_pair_aces_up":
+            counts["two_pair_aces_up"] += 1
+        elif cls in TRIPS_CLASSES:
+            counts["trips"] += 1
+        elif cls in boats:
+            counts["boats_plus"] += 1
+        elif cls == "pair_A":
+            counts["pair_A"] += 1
+        if cls in TWO_PAIR_PLUS_CLASSES:
+            counts["two_pair_plus"] += 1
+        if cls in TWO_PAIR_PLUS_CLASSES or cls == "pair_A":
+            counts["hj_set"] += 1
+    return counts
+
+
+def labeled_remaining_hand(co_ids: Sequence[int], label: str) -> dict[str, Any]:
+    cls = _ids_to_cls(co_ids)
+    return {
+        "label": label,
+        "co_ids": list(co_ids),
+        "co_class": cls,
+        "has_bug": BUG_ID in set(co_ids),
+        "has_physical_ace": has_physical_ace(co_ids),
+        "n_physical_kings": n_physical_kings(co_ids),
+        **remaining_sandbag_buckets(co_ids),
+    }
+
+
+def deal_mc_p_raise_co_flavor(
+    *,
+    n: int = DEFAULT_BLOCKER_MC_N,
+    seed: int = DEFAULT_MC_SEED,
+    co_class: str = "pair_K",
+    require_bug: bool = False,
+    require_physical_ace: bool = False,
+    world: str = WORLD,
+) -> CoDealMcResult:
+    """Same folded-to-CO raise MC as ``deal_mc_p_raise_given_passed_co``, with
+    singleton blockers forced into CO's five cards.
+
+    Does **not** replace the class-average 40k pins. The bug is an ace (or a
+    straight/flush fill), not a duplicate king: ``pair_K`` plus the joker is
+    two kings + bug as ace kicker.
+    """
+    rng = random.Random(seed)
+    n_tried = 0
+    n_co_class = 0
+    n_cond = 0
+    n_raise = 0
+    n_bug = 0
+    hist: dict[int, int] = {k: 0 for k in range(7)}
+    while n_cond < n:
+        n_tried += 1
+        co_ids = sample_class_ids_forced(
+            co_class,
+            rng,
+            require_bug=require_bug,
+            require_physical_ace=require_physical_ace,
+        )
+        if co_ids is None:
+            continue
+        n_co_class += 1
+        rest = [i for i in range(53) if i not in co_ids]
+        rng.shuffle(rest)
+        n_sandbag = 0
+        rejected = False
+        for seat in SEATS_1_6:
+            start = 5 * (seat - 1)
+            cls = _ids_to_cls(rest[start : start + 5])
+            if is_voluntary_opener(cls, seat, world):
+                rejected = True
+                break
+            if is_sandbag_set(cls, seat, world):
+                n_sandbag += 1
+        if rejected:
+            continue
+        n_cond += 1
+        if BUG_ID in co_ids:
+            n_bug += 1
+        hist[n_sandbag] = hist.get(n_sandbag, 0) + 1
+        if n_sandbag:
+            n_raise += 1
+    p = n_raise / n_cond if n_cond else 0.0
+    se = math.sqrt(p * (1.0 - p) / n_cond) if n_cond else 0.0
+    return CoDealMcResult(
+        n=n,
+        seed=seed,
+        n_co_class=n_co_class,
+        n_conditioned=n_cond,
+        n_raise=n_raise,
+        p_raise=p,
+        p_co_has_bug=n_bug / n_cond if n_cond else 0.0,
+        n_tried=n_tried,
+        sandbag_seats_hist={str(k): hist[k] for k in range(7)},
+        se_p_raise=se,
+        co_class=co_class,
+        world=world,
+    )
+
+
+def estimate_behind_probs_flavor(
+    co_class: str,
+    *,
+    n_deals: int,
+    seed: int,
+    require_bug: bool = False,
+    require_physical_ace: bool = False,
+) -> dict[str, float]:
+    """0% CO-behind mix, same method as ``cutoff_open.estimate_behind_probs``,
+    with singleton blockers forced. Reuses that lab's *unfiltered* 1–6 deal
+    so the leaf stays comparable to L.
+    """
+    from fivecarddraw.validation.cutoff_open import BehindAccum
+
+    callers = load_call_2to1_hands()
+    two_to_one = two_to_one_id_set(callers)
+    rng = random.Random(seed)
+    acc = BehindAccum()
+    tries = 0
+    cap = n_deals * 80
+    while acc.n < n_deals and tries < cap:
+        tries += 1
+        co_ids = sample_class_ids_forced(
+            co_class,
+            rng,
+            require_bug=require_bug,
+            require_physical_ace=require_physical_ace,
+        )
+        if co_ids is None:
+            continue
+        rem = [i for i in range(53) if i not in co_ids]
+        rng.shuffle(rem)
+        kinds: list[str] = []
+        for s in range(7):
+            ids = tuple(sorted(rem[s * 5 : (s + 1) * 5]))
+            kinds.append(classify_seat_ids(ids, two_to_one))
+        seat16 = kinds[:6]
+        acc.add(
+            bn_kind=kinds[6],
+            any_16_2to1=any(k == "two_to_one" for k in seat16),
+            co_bug=BUG_ID in co_ids,
+        )
+    out = acc.as_dict()
+    out["co_class"] = co_class
+    out["seed"] = seed
+    out["tries"] = tries
+    out["require_bug"] = require_bug
+    out["require_physical_ace"] = require_physical_ace
+    return out
+
+
+def zero_leaf_from_behind(
+    probs: dict[str, float],
+    *,
+    pair_k_row: dict[str, Any],
+) -> dict[str, float]:
+    """Reweight the locked pair_K street EVs with a flavor's steal / call mix.
+
+    Does **not** resimulate draw / post-draw. Street EVs stay the class-average
+    pair_K cells (conservative if the bug also wins more often).
+    """
+    ev_2 = blend_2to1_street(
+        probs,
+        ev_caller_first=float(pair_k_row["vs_2to1_caller_first"]["ev_co_street"]),
+        ev_co_first=float(pair_k_row["vs_2to1_co_first"]["ev_co_street"]),
+    )
+    ev_bn = float(pair_k_row["vs_bn_legal"]["ev_co_street"])
+    leaf = mix_open_ev(
+        p_steal=float(probs["p_steal"]),
+        p_vs_2to1=float(probs["p_vs_2to1"]),
+        p_vs_bn=float(probs["p_vs_bn_legal"]),
+        ev_street_2to1=ev_2,
+        ev_street_bn=ev_bn,
+    )
+    return {
+        "leaf": leaf,
+        "ev_street_2to1": ev_2,
+        "ev_street_bn": ev_bn,
+        "p_steal": float(probs["p_steal"]),
+        "p_vs_2to1": float(probs["p_vs_2to1"]),
+        "p_vs_bn_legal": float(probs["p_vs_bn_legal"]),
+        "street_ev_source": "pair_K class-average cutoff_open cells",
+    }
+
+
+def flavor_row(
+    *,
+    label: str,
+    mc: CoDealMcResult,
+    leaf: float,
+    p_ind_1: float,
+    leaf_note: str,
+    extra: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    row = class_row(mc, leaf=leaf, p_ind_1=p_ind_1)
+    row["flavor"] = label
+    row["leaf_note"] = leaf_note
+    if extra:
+        row.update(extra)
+    return row
+
+
+def build_blockers_payload(
+    *,
+    n: int = DEFAULT_BLOCKER_MC_N,
+    seed: int = DEFAULT_MC_SEED,
+    n_leaf: int = DEFAULT_BLOCKER_LEAF_N,
+    cutoff_fixture: dict[str, Any] | None = None,
+    p_ind_1: float | None = None,
+) -> dict[str, Any]:
+    """KK+joker / ace-kicker split on the same fold-to-raise mix."""
+    cutoff = cutoff_fixture if cutoff_fixture is not None else load_cutoff_open()
+    pair_k_row = next(r for r in cutoff["by_class"] if r["co_class"] == "pair_K")
+    avg_leaf = float(pair_k_row["ev_open"])
+    p1 = (
+        float(independent_p_raise_unconditional(WORLD)["p_raise"])
+        if p_ind_1 is None
+        else p_ind_1
+    )
+
+    remaining = {
+        "pair_k_no_bug": labeled_remaining_hand(PAIR_K_NO_BUG_IDS, "pair_K_two_kings"),
+        "pair_k_bug": labeled_remaining_hand(PAIR_K_BUG_IDS, "pair_K_two_kings_plus_bug"),
+        "pair_k_ace": labeled_remaining_hand(PAIR_K_ACE_IDS, "pair_K_ace_kicker"),
+    }
+
+    behind_bug = estimate_behind_probs_flavor(
+        "pair_K", n_deals=n_leaf, seed=seed, require_bug=True
+    )
+    behind_ace = estimate_behind_probs_flavor(
+        "pair_K", n_deals=n_leaf, seed=seed, require_physical_ace=True
+    )
+    leaf_bug = zero_leaf_from_behind(behind_bug, pair_k_row=pair_k_row)
+    leaf_ace = zero_leaf_from_behind(behind_ace, pair_k_row=pair_k_row)
+
+    mc_bug = deal_mc_p_raise_co_flavor(
+        n=n, seed=seed, co_class="pair_K", require_bug=True
+    )
+    mc_ace = deal_mc_p_raise_co_flavor(
+        n=n, seed=seed, co_class="pair_K", require_physical_ace=True
+    )
+
+    bug_avg = flavor_row(
+        label="pair_K_bug_avg_leaf",
+        mc=mc_bug,
+        leaf=avg_leaf,
+        p_ind_1=p1,
+        leaf_note="conservative: class-average pair_K L",
+    )
+    bug_rew = flavor_row(
+        label="pair_K_bug_reweighted_leaf",
+        mc=mc_bug,
+        leaf=leaf_bug["leaf"],
+        p_ind_1=p1,
+        leaf_note="0% steal/2:1/BN mix reweighted; street EVs stay pair_K average",
+        extra={"zero_leaf_reweight": leaf_bug, "behind_probs": behind_bug},
+    )
+    ace_avg = flavor_row(
+        label="pair_K_ace_kicker_avg_leaf",
+        mc=mc_ace,
+        leaf=avg_leaf,
+        p_ind_1=p1,
+        leaf_note="conservative: class-average pair_K L",
+        extra={"behind_probs": behind_ace, "zero_leaf_reweight": leaf_ace},
+    )
+    ace_rew = flavor_row(
+        label="pair_K_ace_kicker_reweighted_leaf",
+        mc=mc_ace,
+        leaf=leaf_ace["leaf"],
+        p_ind_1=p1,
+        leaf_note="0% steal/2:1/BN mix reweighted; street EVs stay pair_K average",
+    )
+
+    return {
+        "note": (
+            "The bug plays as an ace (or completes a straight/flush), not a "
+            "third king. pair_K + joker = two kings + bug as ace kicker. "
+            "Ace kicker is a physical ace in a pair_K (no joker required)."
+        ),
+        "mc": {"n": n, "seed": seed, "n_leaf": n_leaf},
+        "remaining_exact": remaining,
+        "pair_k_bug": {
+            "avg_leaf_mix": bug_avg,
+            "reweighted_leaf_mix": bug_rew,
+        },
+        "pair_k_ace_kicker": {
+            "avg_leaf_mix": ace_avg,
+            "reweighted_leaf_mix": ace_rew,
+        },
+        "answers": {
+            "pair_k_bug_plus_ev_at_100pct_avg_leaf": bug_avg["opening_is_positive_ev"],
+            "pair_k_bug_plus_ev_at_100pct_reweighted": bug_rew["opening_is_positive_ev"],
+            "pair_k_ace_plus_ev_at_100pct_avg_leaf": ace_avg["opening_is_positive_ev"],
+            "pair_k_ace_plus_ev_at_100pct_reweighted": ace_rew["opening_is_positive_ev"],
+        },
+    }
+
+
 def class_row(
     mc: CoDealMcResult,
     *,
@@ -516,6 +898,26 @@ def write_fixture(
     return path
 
 
+def merge_blockers_into_fixture(
+    path: Path | None = None,
+    *,
+    n: int = DEFAULT_BLOCKER_MC_N,
+    seed: int = DEFAULT_MC_SEED,
+    n_leaf: int = DEFAULT_BLOCKER_LEAF_N,
+) -> Path:
+    """Keep the locked 40k JJ/QQ/KK pins; add the singleton-blocker section."""
+    path = path or default_fixture_path()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["blockers"] = build_blockers_payload(
+        n=n,
+        seed=seed,
+        n_leaf=n_leaf,
+        p_ind_1=float(data["independent_p_raise_at_r1"]),
+    )
+    path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
 def load_fixture(path: Path | None = None) -> dict[str, Any]:
     path = path or default_fixture_path()
     return json.loads(path.read_text(encoding="utf-8"))
@@ -556,12 +958,34 @@ def main() -> None:
     p.add_argument("--n-hands-per-co", type=int, default=DEFAULT_REMOVAL_HANDS_PER_BN)
     p.add_argument("--write-fixture", action="store_true")
     p.add_argument(
+        "--write-blockers",
+        action="store_true",
+        help=(
+            "Augment the existing fixture with KK+joker / ace-kicker MCs; "
+            "do not redo 40k class pins"
+        ),
+    )
+    p.add_argument("--blocker-n", type=int, default=DEFAULT_BLOCKER_MC_N)
+    p.add_argument("--blocker-n-leaf", type=int, default=DEFAULT_BLOCKER_LEAF_N)
+    p.add_argument(
         "--classes",
         type=str,
         default=None,
         help="Comma-separated CO classes (default: pair_J,pair_Q,pair_K)",
     )
     args = p.parse_args()
+    if args.write_blockers:
+        path = merge_blockers_into_fixture(
+            args.output,
+            n=args.blocker_n,
+            seed=args.seed,
+            n_leaf=args.blocker_n_leaf,
+        )
+        print(f"Wrote blockers into {path}")
+        data = json.loads(path.read_text(encoding="utf-8"))
+        _print_payload(data)
+        print(f"blockers answers={data.get('blockers', {}).get('answers')}")
+        return
     classes = (
         tuple(c.strip() for c in args.classes.split(",") if c.strip())
         if args.classes

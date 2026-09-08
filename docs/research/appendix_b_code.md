@@ -14,7 +14,7 @@
 | `analyze-postdraw-cap` | `validation/postdraw_cap.py` | Post-draw 3-bet / cap on the raise node | Ch.3 |
 | `analyze-postdraw-bluff` | `validation/postdraw_bluff.py` | Pre-C polar bluff 3-bet (else fold) | Ch.3 |
 | `analyze-cutoff-open` | `validation/cutoff_open.py` | CO open/pass with BN behind (0% sandbag in 1–6) | Ch.5 |
-| `analyze-cutoff-open-sandbag` | `validation/cutoff_open_sandbag.py` | CO open vs 1–6 sandbag rate (fold JJ/QQ/KK) | Ch.5 |
+| `analyze-cutoff-open-sandbag` | `validation/cutoff_open_sandbag.py` | CO vs 1–6 sandbag rate; `--write-blockers` for KK+joker | Ch.5 |
 | `analyze-opener-draw-beliefs` | `validation/opener_draw_beliefs.py` | Public-d belief tables | Ch.4 |
 
 Fixtures live under `tests/fixtures/validation/`. Generated markdown/JSON under `outputs/` is gitignored.
