@@ -39,9 +39,9 @@ detail.
 ### Next stage (implementation agents)
 
 BN sandbag and CO open labs are **signed**. Do not restart
-[docs/NEXT_STAGE_SANDBAG_AND_CO.md](docs/NEXT_STAGE_SANDBAG_AND_CO.md) (that
-ticket is the method, not the queue). BN-vs-2:1 post-draw Nash (Ring 1 / Ring 2)
-stays **tabled**. HJ slowplay mixes are **tabled**.
+[docs/NEXT_STAGE_SANDBAG_AND_CO.md](docs/NEXT_STAGE_SANDBAG_AND_CO.md) (method
+archive). CO **does not sandbag** (0% lab). Use the 0%/100% pins below as
+inputs to the next grid; do not re-run those two endpoints as the product.
 
 Pins (fold-to-raise bound; 2:1 callers still **call**):
 
@@ -51,27 +51,52 @@ Pins (fold-to-raise bound; 2:1 callers still **call**):
   \(p_{\mathrm{raise}}\) ≈ 0.496. Uniform slowplay rate making all legal BN
   opens +EV ≈ **98%**. Lowest +EV BN open is **AA** (~+$0.18 even folding)
 - **CO, 0% sandbag in 1–6:** open every legal class; JJ ≈ **+$1.44**. “Never
-  slowplay” is **this lab only**
+  slowplay” is **this lab only** (CO as opener still never sandbags)
 - **CO vs 100% 1–6 sandbag:** JJ/QQ/KK are −EV if they fold the raise. **JJ
   binds** at Bayes \(r^*\approx 79\%\) (QQ ~84%, KK ~87%). At 100%, KK+joker
   is +EV; QQ+joker ~0 (inside 1 SE); JJ+joker still −EV. Ace kickers all −EV
 
-**Narrative next queue** (from [docs/research/INDEX.md](docs/research/INDEX.md)):
+**Narrative next queue** (CO+BN first, then HJ; finish one before starting the
+next). Goal after 1–4: CO+BN mostly worked out.
 
-1. Ch.2 strong-draw call/raise/mix (§2.9) — CO representation + 19/22-out tail
-2. Ch.5 CO bluff after BN open (return-to-actor; no legal CO opener)
-3. Pair post-draw EV `d=3` vs `d=2`, then concealment (Ch.4 leftover)
+1. **CO open chart (slowplay % × blockers).** Intersection of table slowplay
+   rate and blocker cards that make JJ/QQ/KK +EV from CO. Deliver a clear
+   opening rule, e.g. “if the table slowplays \(x\%\), do not open QQ unless
+   you have an ace; at \(y\%\), do not open QQ unless you have the joker.”
+   Combine with the signed pin that CO should not sandbag.
+2. **BN vs a CO open.** Which hands BN calls; which hands BN raises.
+3. **Multi-raise before the draw.** Effect of a raise war when CO opens and BN
+   raises (caps, fold/continue for each).
+4. **Draw and post-draw, BN vs CO.** Continue the HU laboratory after the
+   pre-draw line is known.
+5. **HJ strategy** (only after 1–4). Which hands HJ opens; which hands, and at
+   what frequency, HJ slowplays.
 
-**Read first:** [docs/research/INDEX.md](docs/research/INDEX.md) “Immediate
-research queue,” then the chapter for the slice you take.
+**After HJ is started** (not before): deceptive play, strong-draw call/raise
+mix (Ch.2 §2.9), CO bluff after BN open (Ch.5 §5.2), and strong-pair draw /
+post-draw optimization (pair `d=3` vs `d=2`, concealment, Ring 1). Those are
+**low priority** until CO+BN then HJ are underway.
+
+**Exploit leaks (through-line, every lab).** Keep a baseline, then say what
+moves it and how to respond. Examples: if the table is not slowplaying
+enough, HJ may open any legal hand; if the table always slowplays, late seats
+fold their lowest pairs. Eventual guidance shape: baseline GTO-ish line;
+what influences it; how to exploit {too-wide caller, too much slowplay, …}.
+
+**Read first:** this queue, then [docs/research/INDEX.md](docs/research/INDEX.md)
+and the CO sandbag frame
+[docs/research/cutoff_open_sandbag_v1.md](docs/research/cutoff_open_sandbag_v1.md).
 
 **Handoff checklist for new agents**
 
 1. `git fetch origin main && git checkout main && git pull origin main`
 2. Create `cursor/<short-name>-f76a` (or the suffix required by the run)
 3. `pip install -e ".[dev]" && pytest -q`
-4. Take **one** INDEX queue item (Ch.2 §2.9, Ch.5 §5.2, or pair concealment)
-5. Do not resume sandbag-rate search, HJ mixes, Ring 1 Nash, or UTG re-solve
+4. Take **item 1** (CO slowplay % × blockers chart) unless a later item is
+   explicitly assigned. One item per PR.
+5. Do not start HJ before CO+BN items 1–4. Do not start Ch.2 §2.9,
+   concealment, or Ring 1 Nash until HJ has started. Do not restart the
+   signed 0%/100% sandbag endpoints. No UTG re-solve.
 
 Stages **A**, **B**, and **C** (draw grid + check mixes) are done.
 Locked post-B / C draws:

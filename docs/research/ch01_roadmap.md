@@ -101,10 +101,18 @@ Do **not** expand that plan until late-position non-sandbagging work is done (St
 
 ## 1.7 Immediate research queue (ordered)
 
-1. **Ch.2 §2.9** — Strong draws: always call, always raise, or mix (BN-open laboratory first).
-2. **Ch.5 §5.2** — After BN opens (CO had passed with no legal opener; others fold): call/raise with less than a strong draw as a bluff? (depends on §2.9).
-3. Pair concealment (Ch.4 leftover) after the `d=3` vs `d=2` EV confirm; Ch.3 bluff 3-bet Ring 1 **after Stage C** (trips-only air, split by public \(d\)).
-4. **Done (do not restart):** BN sandbag + CO open labs — BN \(r^*\approx 98\%\), CO JJ binds \(r^*\approx 79\%\). HJ sandbag mixes are **tabled**.
+Living order: [AGENTS.md](../../AGENTS.md).
+
+1. **CO open chart** — slowplay % × blockers (joker / ace) for JJ/QQ/KK; CO does not sandbag.
+2. **BN vs CO open** — call vs raise.
+3. **Multi-raise** before the draw (CO opens, BN raises).
+4. **Draw and post-draw**, BN vs CO. After 1–4, CO+BN is mostly worked out.
+5. **HJ** — which hands open; which hands / frequencies slowplay.
+6. **After HJ is started:** Ch.2 §2.9 strong-draw mix; Ch.5 §5.2 CO bluff after BN open; pair concealment / Ring 1.
+
+**Done (do not restart):** BN sandbag + CO 0%/100% labs — BN \(r^*\approx 98\%\), CO JJ binds \(r^*\approx 79\%\).
+
+Exploit leaks are a **through-line** (too little slowplay → HJ may open any legal; too much → late seats fold lowest pairs).
 
 ## 1.8 Later (not scheduled in this draft)
 
