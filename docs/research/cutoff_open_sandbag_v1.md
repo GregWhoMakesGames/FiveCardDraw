@@ -13,12 +13,68 @@ open-legal) where opening every legal class was +EV.
 **How to point at this work:** `evaluate cutoff_open_sandbag_v1`
 
 Code: `src/fivecarddraw/validation/cutoff_open_sandbag.py` (world
-`co_vs_seats_1_6` in `sandbag_v1.py`). Fixture:
-`tests/fixtures/validation/cutoff_open_sandbag_v1.json`. CLI:
-`python -m fivecarddraw.validation.cutoff_open_sandbag --write-fixture`
-(or `analyze-cutoff-open-sandbag`).
+`co_vs_seats_1_6` in `sandbag_v1.py`); chart:
+`src/fivecarddraw/validation/cutoff_open_chart.py`. Fixture:
+`tests/fixtures/validation/cutoff_open_sandbag_v1.json` (`open_chart`).
+CLI: `python -m fivecarddraw.validation.cutoff_open_sandbag --write-chart`
+(reuses locked 0%/100% pins; `--write-fixture` / `--write-blockers` are
+the signed endpoints — do not re-run them as the product).
 
-## Product answers
+## Opening chart (play this)
+
+**CO never sandbags.** Open two pair+, boats, and CO aces. The chart below
+is only for **JJ / QQ / KK** vs seats 1–6 slowplay rate \(r\) (v1 set:
+1–5 two pair+; HJ two pair+ **and** aces; they always raise; CO folds
+the raise for −$2). Bug = ace kicker, **not** trips.
+
+Playable integer bands (Bayes \(r^*\) rounded to 1%). Ace = physical ace
+kicker **or** the joker; “joker only” means the bug specifically.
+
+| Slowplay \(r\) | JJ | QQ | KK |
+| --- | --- | --- | --- |
+| \(r < 79\%\) | open | open | open |
+| 79–84% | ace or joker | open | open |
+| 84–86% | ace or joker | ace or joker | open |
+| 86–87% | joker only | ace or joker | open |
+| 87–90% | joker only | ace or joker | ace or joker |
+| 90–93% | joker only | joker only | ace or joker |
+| 93–96% | **pass** | joker only | ace or joker |
+| \(r \ge 96\%\) | **pass** | joker only | joker only |
+
+Voice of the thresholds:
+
+- If players are slowplaying **79%** of the time, don't open **JJ** unless you have an ace.
+- If players are slowplaying **86%**, don't open JJ at all unless you have a joker.
+- If players are slowplaying **93%** or more, pass JJ even with the joker.
+- If players are slowplaying **84%** of the time, don't open **QQ** unless you have an ace.
+- If players are slowplaying **90%**, don't open QQ at all unless you have a joker. At 100%, QQ+joker is +EV inside 1 SE (coin-flip, not a blowout).
+- If players are slowplaying **87%** of the time, don't open **KK** unless you have an ace.
+- If players are slowplaying **96%**, don't open KK at all unless you have a joker. At 100%, KK+joker stays +EV (+$0.047).
+
+Never-slowplay (open every legal, including bare JJ) remains the **0% lab
+only**. At table \(r\) above ~79%, that pin does not survive for JJ.
+
+Exact Bayes \(r^*\) (calibrated independent-seat curve; class average =
+40k pin, ace/joker = 10k + reweighted \(L\); seed `20260907`):
+
+| Flavor | \(L\) | \(p(1)\) | EV(100%) | \(r^*\) | playable |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| JJ class avg | +$1.435 | 0.4938 | −$0.261 | **0.787** | 79% |
+| JJ + ace | +$1.460 | 0.4665 | −$0.154 | 0.864 | 86% |
+| JJ + joker | +$1.521 | 0.4534 | −$0.075 | 0.931 | 93% |
+| QQ class avg | +$1.551 | 0.4928 | −$0.199 | 0.840 | 84% |
+| QQ + ace | +$1.560 | 0.4701 | −$0.114 | 0.902 | 90% |
+| QQ + joker | +$1.614 | 0.4455 | +$0.004 | 1.003 | through 100% |
+| KK class avg | +$1.678 | 0.5012 | −$0.166 | 0.872 | 87% |
+| KK + ace | +$1.691 | 0.4718 | −$0.050 | 0.958 | 96% |
+| KK + joker | +$1.737 | 0.4523 | **+$0.047** | 1.042 | through 100% |
+
+Grid: \(r\) every 5% plus the integer thresholds. Sign change for bare JJ
+sits between 78% (+$0.010) and 79% (−$0.004). Interior seeded MC at
+\(r=0.5\) (n=400) sits between 0 and \(p(1)\); the chart itself is the
+calibrated Bayes curve, not a new 40k run.
+
+## Product answers (0% / 100% endpoints)
 
 | Class | \(L\) (0% leaf) | \(p_{\mathrm{raise}}\) (100%) | EV(100%) | \(p^*\) | \(r\) that flips (Bayes) | linear \(p^*/p(1)\) |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |

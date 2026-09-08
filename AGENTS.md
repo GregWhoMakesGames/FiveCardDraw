@@ -59,11 +59,7 @@ Pins (fold-to-raise bound; 2:1 callers still **call**):
 **Narrative next queue** (CO+BN first, then HJ; finish one before starting the
 next). Goal after 1–4: CO+BN mostly worked out.
 
-1. **CO open chart (slowplay % × blockers).** Intersection of table slowplay
-   rate and blocker cards that make JJ/QQ/KK +EV from CO. Deliver a clear
-   opening rule, e.g. “if the table slowplays \(x\%\), do not open QQ unless
-   you have an ace; at \(y\%\), do not open QQ unless you have the joker.”
-   Combine with the signed pin that CO should not sandbag.
+1. **Done. CO open chart** — JJ 79/86/93, QQ 84/90, KK 87/96 (ace / joker thresholds); CO does not sandbag. [cutoff_open_sandbag_v1.md](docs/research/cutoff_open_sandbag_v1.md).
 2. **BN vs a CO open.** Which hands BN calls; which hands BN raises.
 3. **Multi-raise before the draw.** Effect of a raise war when CO opens and BN
    raises (caps, fold/continue for each).
@@ -92,8 +88,10 @@ and the CO sandbag frame
 1. `git fetch origin main && git checkout main && git pull origin main`
 2. Create `cursor/<short-name>-f76a` (or the suffix required by the run)
 3. `pip install -e ".[dev]" && pytest -q`
-4. Take **item 1** (CO slowplay % × blockers chart) unless a later item is
-   explicitly assigned. One item per PR.
+4. Item 1 (CO open chart) is **done** in
+   [docs/research/cutoff_open_sandbag_v1.md](docs/research/cutoff_open_sandbag_v1.md).
+   Take **item 2** (BN vs a CO open) unless a later item is assigned. One
+   item per PR.
 5. Do not start HJ before CO+BN items 1–4. Do not start Ch.2 §2.9,
    concealment, or Ring 1 Nash until HJ has started. Do not restart the
    signed 0%/100% sandbag endpoints. No UTG re-solve.

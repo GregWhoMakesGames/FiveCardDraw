@@ -1407,5 +1407,2818 @@
       "bn_p_raise_z_qq_minus_jj": 0.7778317413993766,
       "bn_p_raise_z_kk_minus_jj": 1.2374575273757478
     }
+  },
+  "open_chart": {
+    "note": "Cutoff opening requirements for JJ/QQ/KK vs seats 1\u20136 slowplay rate r. Class average = no extra blocker (40k pin). Ace = physical ace kicker, no bug (10k, reweighted L). Joker = bug as ace kicker, still pair_X not trips (10k, reweighted L). CO never sandbags.",
+    "method": "p_cal(r)=kappa*p_ind(r) with kappa=p_MC(1)/p_ind(1) from the locked card-removal MC. EV=(1-p)*L+p*(-2). No live draw / post-draw Nash. No multi-raise. No HJ strategy. No BN vs CO.",
+    "world": "co_vs_seats_1_6",
+    "co_never_sandbags": true,
+    "mc_pins": {
+      "class_avg_n": 40000,
+      "flavor_n": 10000,
+      "n_leaf": 8000,
+      "seed": 20260907
+    },
+    "r_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.78,
+      0.79,
+      0.8,
+      0.83,
+      0.84,
+      0.85,
+      0.86,
+      0.87,
+      0.89,
+      0.9,
+      0.92,
+      0.93,
+      0.95,
+      0.96,
+      1.0
+    ],
+    "p_ind_1": 0.4821918443208467,
+    "by_class": {
+      "pair_J": {
+        "flavors": {
+          "class_avg": {
+            "leaf": 1.43502,
+            "p_mc_1": 0.493775,
+            "se_p_mc_1": 0.0024998062393663634,
+            "se_ev_100pct": 0.008586884428348245,
+            "ev_open_0pct": 1.43502,
+            "ev_open_100pct": -0.26110700050000013,
+            "ev_open_100pct_calibrated": -0.26110700050000035,
+            "r_star": 0.787161321269366,
+            "r_star_linear": 0.8460569282706846,
+            "r_star_above_100pct": false,
+            "r_star_playable_pct": 79,
+            "kappa": 1.0240218821939384,
+            "n": 40000,
+            "seed": 20260907,
+            "grid": [
+              {
+                "r": 0.0,
+                "p_raise": 0.0,
+                "ev_open": 1.43502,
+                "se_ev_open": 0.0,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.05,
+                "p_raise": 0.034968943504661794,
+                "ev_open": 1.3149009796826165,
+                "se_ev_open": 0.000608119642460574,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.1,
+                "p_raise": 0.06854523800154835,
+                "ev_open": 1.1995657365599215,
+                "se_ev_open": 0.0011920207317764567,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.15,
+                "p_raise": 0.10079226496182925,
+                "ev_open": 1.0887965540108173,
+                "se_ev_open": 0.0017528054893396422,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.2,
+                "p_raise": 0.13177015997518665,
+                "ev_open": 0.9823868650820343,
+                "se_ev_open": 0.002291519689761303,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.25,
+                "p_raise": 0.16153599754054965,
+                "ev_open": 0.880140617728261,
+                "se_ev_open": 0.0028091558744339955,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.3,
+                "p_raise": 0.19014396427559452,
+                "ev_open": 0.7818716798340473,
+                "se_ev_open": 0.0033066563636929927,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.35,
+                "p_raise": 0.2176455213376063,
+                "ev_open": 0.6874032812948956,
+                "se_ev_open": 0.003784916081360189,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.4,
+                "p_raise": 0.24408955678948668,
+                "ev_open": 0.5965674906369774,
+                "se_ev_open": 0.004244785204431305,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.45,
+                "p_raise": 0.269522528590533,
+                "ev_open": 0.5092047238409475,
+                "se_ev_open": 0.004687071649725264,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.5,
+                "p_raise": 0.29398859884182255,
+                "ev_open": 0.4251632832063629,
+                "se_ev_open": 0.0051125434084487165,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.55,
+                "p_raise": 0.31752975987013005,
+                "ev_open": 0.3442989242509058,
+                "se_ev_open": 0.005521930738830393,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.6,
+                "p_raise": 0.3401859526920377,
+                "ev_open": 0.26647444878379667,
+                "se_ev_open": 0.005915928226244893,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.65,
+                "p_raise": 0.361995178360921,
+                "ev_open": 0.19155932242666918,
+                "se_ev_open": 0.006295196719567694,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.7,
+                "p_raise": 0.38299360266352683,
+                "ev_open": 0.1194293149787321,
+                "se_ev_open": 0.006660365151877745,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.75,
+                "p_raise": 0.40321565459968883,
+                "ev_open": 0.04996616213697691,
+                "se_ev_open": 0.00701203225304706,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.78,
+                "p_raise": 0.41498993128147676,
+                "ev_open": 0.00952128624950166,
+                "se_ev_open": 0.00721679019561991,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.79,
+                "p_raise": 0.4188563924717708,
+                "ev_open": -0.0037600852683821184,
+                "se_ev_open": 0.00728402902988197,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.8,
+                "p_raise": 0.42269411904808196,
+                "ev_open": -0.01694275281254254,
+                "se_ev_open": 0.007350768161223946,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.83,
+                "p_raise": 0.4340373288369348,
+                "ev_open": -0.05590690530144782,
+                "se_ev_open": 0.00754802973077159,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.84,
+                "p_raise": 0.43776254301019624,
+                "ev_open": -0.0687030904908843,
+                "se_ev_open": 0.007612812240166843,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.85,
+                "p_raise": 0.441460223992609,
+                "ev_open": -0.08140469861909172,
+                "se_ev_open": 0.00767711593972409,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.86,
+                "p_raise": 0.4451306051936156,
+                "ev_open": -0.09401253145217336,
+                "se_ev_open": 0.00774094488849838,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.87,
+                "p_raise": 0.44877391778797626,
+                "ev_open": -0.10652738308005427,
+                "se_ev_open": 0.00780430310668302,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.89,
+                "p_raise": 0.45598025082532645,
+                "ev_open": -0.13128128119001292,
+                "se_ev_open": 0.007929623240233554,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.9,
+                "p_raise": 0.4595437226578555,
+                "ev_open": -0.14352187820418671,
+                "se_ev_open": 0.00799159300538894,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.92,
+                "p_raise": 0.46659238933309005,
+                "ev_open": -0.16773418920695105,
+                "se_ev_open": 0.008114171277100122,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.93,
+                "p_raise": 0.47007802278784855,
+                "ev_open": -0.17970740983671551,
+                "se_ev_open": 0.008174787411241372,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.95,
+                "p_raise": 0.47697297087785184,
+                "ev_open": -0.20339169442483862,
+                "se_ev_open": 0.008294692474049976,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.96,
+                "p_raise": 0.4803827117502987,
+                "ev_open": -0.21510422251651096,
+                "se_ev_open": 0.00835398881510069,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 1.0,
+                "p_raise": 0.49377500000000013,
+                "ev_open": -0.26110700050000035,
+                "se_ev_open": 0.008586884428348247,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              }
+            ],
+            "last_plus_ev_grid_r": 0.78,
+            "first_minus_ev_grid_r": 0.79,
+            "ev_100pct_within_1se_of_zero": false,
+            "opening_is_positive_ev_100pct": false
+          },
+          "ace": {
+            "leaf": 1.4604143749999998,
+            "p_mc_1": 0.4665,
+            "se_p_mc_1": 0.004988764877201571,
+            "se_ev_100pct": 0.017263193694563424,
+            "ev_open_0pct": 1.4604143749999998,
+            "ev_open_100pct": -0.1538689309375002,
+            "ev_open_100pct_calibrated": -0.15386893093750054,
+            "r_star": 0.8643253115749872,
+            "r_star_linear": 0.9046828209326365,
+            "r_star_above_100pct": false,
+            "r_star_playable_pct": 86,
+            "kappa": 0.9674572589610092,
+            "n": 10000,
+            "seed": 20260907,
+            "grid": [
+              {
+                "r": 0.0,
+                "p_raise": 0.0,
+                "ev_open": 1.4604143749999998,
+                "se_ev_open": 0.0,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.05,
+                "p_raise": 0.0330373391624216,
+                "ev_open": 1.3460914916506057,
+                "se_ev_open": 0.0012225723153566344,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.1,
+                "p_raise": 0.06475895605837134,
+                "ev_open": 1.2363215525456184,
+                "se_ev_open": 0.002396455309524943,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.15,
+                "p_raise": 0.0952247311117277,
+                "ev_open": 1.1308973466054677,
+                "se_ev_open": 0.003523864903953859,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.2,
+                "p_raise": 0.12449147815994041,
+                "ev_open": 1.0296222744103434,
+                "se_ev_open": 0.004606903538687168,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.25,
+                "p_raise": 0.1526131190373478,
+                "ev_open": 0.9323097440695752,
+                "se_ev_open": 0.0056475666329543405,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.3,
+                "p_raise": 0.17964084721698112,
+                "ev_open": 0.8387826049531795,
+                "se_ev_open": 0.006647748640862207,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.35,
+                "p_raise": 0.2056232812596696,
+                "ev_open": 0.748872616694371,
+                "se_ev_open": 0.007609248729897899,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.4,
+                "p_raise": 0.23060660876369915,
+                "ev_open": 0.6624199510640943,
+                "se_ev_open": 0.008533776107897418,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.45,
+                "p_raise": 0.2546347214571083,
+                "ev_open": 0.5792727244957014,
+                "se_ev_open": 0.009422955022240656,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.5,
+                "p_raise": 0.2777493420276649,
+                "ev_open": 0.49928655920067677,
+                "se_ev_open": 0.010278329453292871,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.55,
+                "p_raise": 0.2999901432421967,
+                "ev_open": 0.4223241709663933,
+                "se_ev_open": 0.011101367522507755,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.6,
+                "p_raise": 0.32139485986701555,
+                "ev_open": 0.34825498186506865,
+                "se_ev_open": 0.011893465634129385,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.65,
+                "p_raise": 0.34199939386435046,
+                "ev_open": 0.2769547562305148,
+                "se_ev_open": 0.01265595236806767,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.7,
+                "p_raise": 0.3618379133057269,
+                "ev_open": 0.20830525837685876,
+                "se_ev_open": 0.013390092140264548,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.75,
+                "p_raise": 0.3809429454118877,
+                "ev_open": 0.14219393064186325,
+                "se_ev_open": 0.014097088645708293,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.78,
+                "p_raise": 0.3920668380189538,
+                "ev_open": 0.10370065275841556,
+                "se_ev_open": 0.014508736904472073,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.79,
+                "p_raise": 0.39571972474929085,
+                "ev_open": 0.09106015100651055,
+                "se_ev_open": 0.01464391480623008,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.8,
+                "p_raise": 0.39934546409990435,
+                "ev_open": 0.0785135904376445,
+                "se_ev_open": 0.014778088098182148,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.83,
+                "p_raise": 0.41006210096183504,
+                "ev_open": 0.04142958618896464,
+                "se_ev_open": 0.01517466554277338,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.84,
+                "p_raise": 0.4135815428368317,
+                "ev_open": 0.029250858932749257,
+                "se_ev_open": 0.015304905214337847,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.85,
+                "p_raise": 0.41707497239137686,
+                "ev_open": 0.017162145084151148,
+                "se_ev_open": 0.015434182279843582,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.86,
+                "p_raise": 0.42054261014191013,
+                "ev_open": 0.005162681564913396,
+                "se_ev_open": 0.01556250489967217,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.87,
+                "p_raise": 0.42398467449362753,
+                "ev_open": -0.006748287397444708,
+                "se_ev_open": 0.01568988115607699,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.89,
+                "p_raise": 0.4307929462002224,
+                "ev_open": -0.03030772867985143,
+                "se_ev_open": 0.015941826521985163,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.9,
+                "p_raise": 0.4341595800109151,
+                "ev_open": -0.041957676713733294,
+                "se_ev_open": 0.01606641141281615,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.92,
+                "p_raise": 0.4408188944841001,
+                "ev_open": -0.06500166424438825,
+                "se_ev_open": 0.01631284450096964,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.93,
+                "p_raise": 0.44411198953072023,
+                "ev_open": -0.07639713768195378,
+                "se_ev_open": 0.016434708032897632,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.95,
+                "p_raise": 0.4506260764812271,
+                "ev_open": -0.09893857780548776,
+                "se_ev_open": 0.01667576686412985,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.96,
+                "p_raise": 0.4538474710779492,
+                "ev_open": -0.11008593797553223,
+                "se_ev_open": 0.01679497706539423,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 1.0,
+                "p_raise": 0.46650000000000014,
+                "ev_open": -0.15386893093750054,
+                "se_ev_open": 0.017263193694563427,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              }
+            ],
+            "last_plus_ev_grid_r": 0.86,
+            "first_minus_ev_grid_r": 0.87,
+            "ev_100pct_within_1se_of_zero": false,
+            "opening_is_positive_ev_100pct": false
+          },
+          "joker": {
+            "leaf": 1.5210582499999998,
+            "p_mc_1": 0.4534,
+            "se_p_mc_1": 0.004978237037345651,
+            "se_ev_100pct": 0.01752866259080146,
+            "ev_open_0pct": 1.5210582499999998,
+            "ev_open_100pct": -0.07538956055000023,
+            "ev_open_100pct_calibrated": -0.07538956055000057,
+            "r_star": 0.9310925812834512,
+            "r_star_linear": 0.9527766833016437,
+            "r_star_above_100pct": false,
+            "r_star_playable_pct": 93,
+            "kappa": 0.940289648902297,
+            "n": 10000,
+            "seed": 20260907,
+            "grid": [
+              {
+                "r": 0.0,
+                "p_raise": 0.0,
+                "ev_open": 1.5210582499999998,
+                "se_ev_open": 0.0,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.05,
+                "p_raise": 0.032109602521418985,
+                "ev_open": 1.4079984691377365,
+                "se_ev_open": 0.0012413727139891954,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.1,
+                "p_raise": 0.06294043017548888,
+                "ev_open": 1.2994413290720457,
+                "se_ev_open": 0.0024333073750905237,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.15,
+                "p_raise": 0.0925506818565002,
+                "ev_open": 1.1951819081060446,
+                "se_ev_open": 0.0035780539806157963,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.2,
+                "p_raise": 0.12099557598653159,
+                "ev_open": 1.0950257789591211,
+                "se_ev_open": 0.00467774730138419,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.25,
+                "p_raise": 0.14832752019621329,
+                "ev_open": 0.9987884113110814,
+                "se_ev_open": 0.005734413441662356,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.3,
+                "p_raise": 0.17459627037123096,
+                "ev_open": 0.9062946117901467,
+                "se_ev_open": 0.0067499759879789435,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.35,
+                "p_raise": 0.19984907979235625,
+                "ev_open": 0.8173779988422156,
+                "se_ev_open": 0.007726261774950091,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.4,
+                "p_raise": 0.22413083904278927,
+                "ev_open": 0.7318805101089645,
+                "se_ev_open": 0.008665006294164718,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.45,
+                "p_raise": 0.24748420730686582,
+                "ev_open": 0.6496519401174496,
+                "se_ev_open": 0.009567858770255872,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.5,
+                "p_raise": 0.2699497356384636,
+                "ev_open": 0.5705495062448687,
+                "se_ev_open": 0.01043638692651672,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.55,
+                "p_raise": 0.2915659827352883,
+                "ev_open": 0.49443744107055554,
+                "se_ev_open": 0.011272081460790277,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.6,
+                "p_raise": 0.31236962371640914,
+                "ev_open": 0.4211866093639419,
+                "se_ev_open": 0.01207636025086138,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.65,
+                "p_raise": 0.33239555236462276,
+                "ev_open": 0.35067414808323794,
+                "se_ev_open": 0.012850572307195744,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.7,
+                "p_raise": 0.3516769772622006,
+                "ev_open": 0.2827831278758661,
+                "se_ev_open": 0.013596001489594334,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.75,
+                "p_raise": 0.3702455122181134,
+                "ev_open": 0.21740223467893582,
+                "se_ev_open": 0.014313870003153439,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.78,
+                "p_raise": 0.3810570297058814,
+                "ev_open": 0.17933425183361107,
+                "se_ev_open": 0.014731848481621974,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.79,
+                "p_raise": 0.3846073380521511,
+                "ev_open": 0.16683340934093438,
+                "se_ev_open": 0.014869105113944577,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.8,
+                "p_raise": 0.38813126135669157,
+                "ev_open": 0.15442547011711472,
+                "se_ev_open": 0.015005341687833313,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.83,
+                "p_raise": 0.3985469594342894,
+                "ev_open": 0.11775119047147986,
+                "se_ev_open": 0.015408017597074317,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.84,
+                "p_raise": 0.40196757025127433,
+                "ev_open": 0.10570702053429581,
+                "se_ev_open": 0.015540260060385688,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.85,
+                "p_raise": 0.40536289921168334,
+                "ev_open": 0.09375186948678382,
+                "se_ev_open": 0.015671525114933072,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.86,
+                "p_raise": 0.4087331606395328,
+                "ev_open": 0.0818849826815976,
+                "se_ev_open": 0.015801821046586284,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.87,
+                "p_raise": 0.4120785668068826,
+                "ev_open": 0.07010561269644977,
+                "se_ev_open": 0.015931156061885495,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.89,
+                "p_raise": 0.4186956523197874,
+                "ev_open": 0.04680646916028097,
+                "se_ev_open": 0.01618697577800854,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.9,
+                "p_raise": 0.42196774614565685,
+                "ev_open": 0.03528523619992918,
+                "se_ev_open": 0.01631347650284116,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.92,
+                "p_raise": 0.4284400573613955,
+                "ev_open": 0.012495851397184898,
+                "se_ev_open": 0.016563699174837947,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.93,
+                "p_raise": 0.4316406774988822,
+                "ev_open": 0.0012262814569714564,
+                "se_ev_open": 0.016687436692419174,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.95,
+                "p_raise": 0.43797183939247236,
+                "ev_open": -0.021066108360539793,
+                "se_ev_open": 0.01693220246357154,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.96,
+                "p_raise": 0.44110277253320934,
+                "ev_open": -0.03209030632593013,
+                "se_ev_open": 0.017053245848261296,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 1.0,
+                "p_raise": 0.45340000000000014,
+                "ev_open": -0.07538956055000057,
+                "se_ev_open": 0.017528662590801464,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              }
+            ],
+            "last_plus_ev_grid_r": 0.93,
+            "first_minus_ev_grid_r": 0.95,
+            "ev_100pct_within_1se_of_zero": false,
+            "opening_is_positive_ev_100pct": false
+          }
+        },
+        "bands": {
+          "open_always": {
+            "r_lo": 0.0,
+            "r_hi": 0.787161321269366,
+            "r_hi_playable_pct": 79,
+            "inclusive_hi": false
+          },
+          "open_ace_or_joker": {
+            "r_lo": 0.787161321269366,
+            "r_hi": 0.8643253115749872,
+            "r_lo_playable_pct": 79,
+            "r_hi_playable_pct": 86,
+            "inclusive_hi": false
+          },
+          "open_joker_only": {
+            "r_lo": 0.8643253115749872,
+            "r_hi": 0.9310925812834512,
+            "r_lo_playable_pct": 86,
+            "r_hi_playable_pct": 93,
+            "inclusive_hi": false,
+            "through_100pct": false
+          },
+          "pass": {
+            "r_lo": 0.9310925812834512,
+            "r_hi": 1.0,
+            "r_lo_playable_pct": 93,
+            "through_100pct": true,
+            "never_on_unit_interval": false
+          }
+        },
+        "playable_rules": [
+          "If players are slowplaying 79% of the time, don't open JJ unless you have an ace.",
+          "If players are slowplaying 86%, don't open JJ at all unless you have a joker.",
+          "If players are slowplaying 93% or more, pass JJ even with the joker."
+        ],
+        "policy_at_0pct": "open_always",
+        "policy_at_100pct": "pass",
+        "nested_r_star": true
+      },
+      "pair_Q": {
+        "flavors": {
+          "class_avg": {
+            "leaf": 1.55099,
+            "p_mc_1": 0.492775,
+            "se_p_mc_1": 0.0024997389832490512,
+            "se_ev_100pct": 0.008876548132127548,
+            "ev_open_0pct": 1.55099,
+            "ev_open_100pct": -0.19884909724999988,
+            "ev_open_100pct_calibrated": -0.19884909725000055,
+            "r_star": 0.8397322163539229,
+            "r_star_linear": 0.8863614960012576,
+            "r_star_above_100pct": false,
+            "r_star_playable_pct": 84,
+            "kappa": 1.021948018830678,
+            "n": 40000,
+            "seed": 20260907,
+            "grid": [
+              {
+                "r": 0.0,
+                "p_raise": 0.0,
+                "ev_open": 1.55099,
+                "se_ev_open": 0.0,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.05,
+                "p_raise": 0.03489812391374556,
+                "ev_open": 1.4270671109635287,
+                "se_ev_open": 0.0006286335074655044,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.1,
+                "p_raise": 0.06840641923186266,
+                "ev_open": 1.3080794893718481,
+                "se_ev_open": 0.0012322314907576978,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.15,
+                "p_raise": 0.10058813906448363,
+                "ev_open": 1.1938025240634094,
+                "se_ev_open": 0.0018119333528020462,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.2,
+                "p_raise": 0.13150329721385773,
+                "ev_open": 1.0840231066265633,
+                "se_ev_open": 0.00236882014560861,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.25,
+                "p_raise": 0.16120885259084472,
+                "ev_open": 0.9785389765384365,
+                "se_ev_open": 0.0029039178922382184,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.3,
+                "p_raise": 0.18975888207362887,
+                "ev_open": 0.8771581073453647,
+                "se_ev_open": 0.003418200700573856,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.35,
+                "p_raise": 0.21720474259964348,
+                "ev_open": 0.779698131076092,
+                "se_ev_open": 0.003912593683145675,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.4,
+                "p_raise": 0.243595223223005,
+                "ev_open": 0.6859857982873416,
+                "se_ev_open": 0.004387975696200819,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.45,
+                "p_raise": 0.26897668781570533,
+                "ev_open": 0.5958564713333084,
+                "se_ev_open": 0.004845181910235612,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.5,
+                "p_raise": 0.29339320904112015,
+                "ev_open": 0.5091536486270728,
+                "se_ev_open": 0.0052850062233125925,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.55,
+                "p_raise": 0.3168866941825798,
+                "ev_open": 0.42572851782460097,
+                "se_ev_open": 0.0057082035276595855,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.6,
+                "p_raise": 0.33949700336756394,
+                "ev_open": 0.3454395360118141,
+                "se_ev_open": 0.006115491839288215,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.65,
+                "p_raise": 0.36126206068918604,
+                "ev_open": 0.2681520351133072,
+                "se_ev_open": 0.006507554299668497,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.7,
+                "p_raise": 0.3822179586907386,
+                "ev_open": 0.19373785086877415,
+                "se_ev_open": 0.006885041057849689,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.75,
+                "p_raise": 0.40239905664596565,
+                "ev_open": 0.1220749738407425,
+                "se_ev_open": 0.0072485710408211335,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.78,
+                "p_raise": 0.4141494878987995,
+                "ev_open": 0.08034930996624201,
+                "se_ev_open": 0.007460236138663019,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.79,
+                "p_raise": 0.418008118678096,
+                "ev_open": 0.06664735065526795,
+                "se_ev_open": 0.0075297431587767315,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.8,
+                "p_raise": 0.4218380730371497,
+                "ev_open": 0.05304722102581183,
+                "se_ev_open": 0.007598733619356087,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.83,
+                "p_raise": 0.4331583103997176,
+                "ev_open": 0.012849171353706779,
+                "se_ev_open": 0.007802649466986227,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.84,
+                "p_raise": 0.4368759802174056,
+                "ev_open": -0.0003522369922049906,
+                "se_ev_open": 0.007869617302359503,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.85,
+                "p_raise": 0.44056617260484615,
+                "ev_open": -0.013456073258082624,
+                "se_ev_open": 0.007936090176072509,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.86,
+                "p_raise": 0.4442291204987776,
+                "ev_open": -0.026463164599954236,
+                "se_ev_open": 0.0080020722841055,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.87,
+                "p_raise": 0.447865054605782,
+                "ev_open": -0.03937433025458592,
+                "se_ev_open": 0.008067567782266057,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.89,
+                "p_raise": 0.45505679327720167,
+                "ev_open": -0.06491212235941024,
+                "se_ev_open": 0.00819711537390634,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.9,
+                "p_raise": 0.4586130483169961,
+                "ev_open": -0.07754034844317004,
+                "se_ev_open": 0.00826117558197464,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.92,
+                "p_raise": 0.4656474399344103,
+                "ev_open": -0.10251940273269178,
+                "se_ev_open": 0.008387888819805721,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.93,
+                "p_raise": 0.46912601423579986,
+                "ev_open": -0.1148717852911828,
+                "se_ev_open": 0.008450549734457372,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.95,
+                "p_raise": 0.4760069985810004,
+                "ev_open": -0.1393060918911465,
+                "se_ev_open": 0.008574499587304186,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.96,
+                "p_raise": 0.47940983399879183,
+                "ev_open": -0.15138952643136971,
+                "se_ev_open": 0.008635796187926648,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 1.0,
+                "p_raise": 0.49277500000000013,
+                "ev_open": -0.19884909725000055,
+                "se_ev_open": 0.00887654813212755,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              }
+            ],
+            "last_plus_ev_grid_r": 0.83,
+            "first_minus_ev_grid_r": 0.84,
+            "ev_100pct_within_1se_of_zero": false,
+            "opening_is_positive_ev_100pct": false
+          },
+          "ace": {
+            "leaf": 1.5595216250000001,
+            "p_mc_1": 0.4701,
+            "se_p_mc_1": 0.004991051893138359,
+            "se_ev_100pct": 0.01776575714512318,
+            "ev_open_0pct": 1.5595216250000001,
+            "ev_open_100pct": -0.11380949091249992,
+            "ev_open_100pct_calibrated": -0.11380949091250048,
+            "r_star": 0.9018258292624068,
+            "r_star_linear": 0.931986269883927,
+            "r_star_above_100pct": false,
+            "r_star_playable_pct": 90,
+            "kappa": 0.9749231670687468,
+            "n": 10000,
+            "seed": 20260907,
+            "grid": [
+              {
+                "r": 0.0,
+                "p_raise": 0.0,
+                "ev_open": 1.5595216250000001,
+                "se_ev_open": 0.0,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.05,
+                "p_raise": 0.033292289689720034,
+                "ev_open": 1.441016999903677,
+                "se_ev_open": 0.0012581636533347256,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.1,
+                "p_raise": 0.0652587036292398,
+                "ev_open": 1.327231858212255,
+                "se_ev_open": 0.00246622054942064,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.15,
+                "p_raise": 0.0959595843421719,
+                "ev_open": 1.217951409408028,
+                "se_ev_open": 0.0036264511192724757,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.2,
+                "p_raise": 0.1254521841007245,
+                "ev_open": 1.11297186278999,
+                "se_ev_open": 0.004741019008846533,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.25,
+                "p_raise": 0.15379084085628553,
+                "ev_open": 1.0120998012451183,
+                "se_ev_open": 0.005811977727711246,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.3,
+                "p_raise": 0.1810271431440575,
+                "ev_open": 0.9151515942667569,
+                "se_ev_open": 0.006841276881031218,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.35,
+                "p_raise": 0.20721008471633584,
+                "ev_open": 0.8219528475341207,
+                "se_ev_open": 0.00783076801338188,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.4,
+                "p_raise": 0.23238620960303313,
+                "ev_open": 0.7323378865662209,
+                "se_ev_open": 0.008782210090795956,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.45,
+                "p_raise": 0.2565997482464879,
+                "ev_open": 0.6461492721470705,
+                "se_ev_open": 0.00969727464549426,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.5,
+                "p_raise": 0.2798927453101935,
+                "ev_open": 0.563237345387749,
+                "se_ev_open": 0.010577550605961949,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.55,
+                "p_raise": 0.30230517971737764,
+                "ev_open": 0.48345980044648285,
+                "se_ev_open": 0.011424548833379598,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.6,
+                "p_raise": 0.3238750774351211,
+                "ev_open": 0.40668128307113705,
+                "se_ev_open": 0.01223970638389774,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.65,
+                "p_raise": 0.3446386174825962,
+                "ev_open": 0.33277301326059583,
+                "se_ev_open": 0.013024390514841116,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.7,
+                "p_raise": 0.36463023160776464,
+                "ev_open": 0.2616124304634033,
+                "se_ev_open": 0.013779902451634896,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.75,
+                "p_raise": 0.38388269804529135,
+                "ev_open": 0.19308285984444018,
+                "se_ev_open": 0.014507480931051477,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.78,
+                "p_raise": 0.395092434196592,
+                "ev_open": 0.1531815616033413,
+                "se_ev_open": 0.014931113030870484,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.79,
+                "p_raise": 0.3987735104065201,
+                "ev_open": 0.14007869123082928,
+                "se_ev_open": 0.015070226210998697,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.8,
+                "p_raise": 0.4024272297392605,
+                "ev_open": 0.12707319825425922,
+                "se_ev_open": 0.015208305535274183,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.83,
+                "p_raise": 0.41322656733581703,
+                "ev_open": 0.08863272254364063,
+                "se_ev_open": 0.015616428081686909,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.84,
+                "p_raise": 0.41677316889087795,
+                "ev_open": 0.07600851761314265,
+                "se_ev_open": 0.0157504592706206,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.85,
+                "p_raise": 0.42029355738732316,
+                "ev_open": 0.0634776186316447,
+                "se_ev_open": 0.015883499830255426,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.86,
+                "p_raise": 0.4237879550433268,
+                "ev_open": 0.051039234608750594,
+                "se_ev_open": 0.016015558158536745,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.87,
+                "p_raise": 0.42725658194952687,
+                "ev_open": 0.03869258212707449,
+                "se_ev_open": 0.016146642573007266,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.89,
+                "p_raise": 0.43411739337347166,
+                "ev_open": 0.014271375498495997,
+                "se_ev_open": 0.01640592253381622,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.9,
+                "p_raise": 0.43751000763800896,
+                "ev_open": 0.0021952916585920024,
+                "se_ev_open": 0.01653413432090588,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.92,
+                "p_raise": 0.4442207123193472,
+                "ev_open": -0.02169160677362003,
+                "se_ev_open": 0.016787741531374495,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.93,
+                "p_raise": 0.4475392203180955,
+                "ev_open": -0.03350390775790013,
+                "se_ev_open": 0.016913152735777627,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.95,
+                "p_raise": 0.4541035767498925,
+                "ev_open": -0.05686987643108943,
+                "se_ev_open": 0.017161229234780674,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.96,
+                "p_raise": 0.45734983098337384,
+                "ev_open": -0.06842498857541424,
+                "se_ev_open": 0.017283909865164333,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 1.0,
+                "p_raise": 0.47010000000000013,
+                "ev_open": -0.11380949091250048,
+                "se_ev_open": 0.017765757145123184,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              }
+            ],
+            "last_plus_ev_grid_r": 0.9,
+            "first_minus_ev_grid_r": 0.92,
+            "ev_100pct_within_1se_of_zero": false,
+            "opening_is_positive_ev_100pct": false
+          },
+          "joker": {
+            "leaf": 1.61351175,
+            "p_mc_1": 0.4455,
+            "se_p_mc_1": 0.004970208748131209,
+            "se_ev_100pct": 0.017959907711324913,
+            "ev_open_0pct": 1.61351175,
+            "ev_open_100pct": 0.0036922653750000034,
+            "ev_open_100pct_calibrated": 0.0036922653749995593,
+            "r_star": 1.0034367723868627,
+            "r_star_linear": 1.0022935896914307,
+            "r_star_above_100pct": true,
+            "r_star_playable_pct": 100,
+            "kappa": 0.9239061283325393,
+            "n": 10000,
+            "seed": 20260907,
+            "grid": [
+              {
+                "r": 0.0,
+                "p_raise": 0.0,
+                "ev_open": 1.61351175,
+                "se_ev_open": 0.0,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.05,
+                "p_raise": 0.03155012775318076,
+                "ev_open": 1.4995049926498802,
+                "se_ev_open": 0.001271913317009287,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.1,
+                "p_raise": 0.06184376189497198,
+                "ev_open": 1.3900385897283165,
+                "se_ev_open": 0.0024931722921545437,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.15,
+                "p_raise": 0.09093808726746987,
+                "ev_open": 1.2849059031364722,
+                "se_ev_open": 0.003666082277818563,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.2,
+                "p_raise": 0.11888736017203312,
+                "ev_open": 1.1839108770918763,
+                "se_ev_open": 0.004792830565056701,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.25,
+                "p_raise": 0.14574307509354437,
+                "ev_open": 1.0868674356683452,
+                "se_ev_open": 0.005875493104926495,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.3,
+                "p_raise": 0.17155412097570222,
+                "ev_open": 0.9935989180933786,
+                "se_ev_open": 0.006916040808577062,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.35,
+                "p_raise": 0.19636692776244974,
+                "ev_open": 0.9039375492189866,
+                "se_ev_open": 0.007916345454927054,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.4,
+                "p_raise": 0.22022560386758405,
+                "ev_open": 0.8177239427736396,
+                "se_ev_open": 0.008878185232620895,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.45,
+                "p_raise": 0.2431720651857272,
+                "ev_open": 0.7348066351796088,
+                "se_ev_open": 0.009803249940983045,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.5,
+                "p_raise": 0.2652461562129147,
+                "ev_open": 0.6550416478822974,
+                "se_ev_open": 0.010693145872879055,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.55,
+                "p_raise": 0.2864857638036412,
+                "ev_open": 0.5782920762878179,
+                "se_ev_open": 0.011549400400722387,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.6,
+                "p_raise": 0.3069269240530663,
+                "ev_open": 0.5044277035428872,
+                "se_ev_open": 0.012373466285328623,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.65,
+                "p_raise": 0.32660392275791666,
+                "ev_open": 0.43332463751817574,
+                "se_ev_open": 0.013166725725900953,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.7,
+                "p_raise": 0.34554938987717326,
+                "ev_open": 0.3648649694735032,
+                "se_ev_open": 0.013930494168122701,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.75,
+                "p_raise": 0.3637943883836998,
+                "ev_open": 0.2989364529914371,
+                "se_ev_open": 0.014666023886126018,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.78,
+                "p_raise": 0.3744175269827308,
+                "ev_open": 0.2605496168419603,
+                "se_ev_open": 0.015094285589477778,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.79,
+                "p_raise": 0.3779059750821202,
+                "ev_open": 0.2479440686455514,
+                "se_ev_open": 0.01523491904833475,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.8,
+                "p_raise": 0.3813684978703266,
+                "ev_open": 0.23543220186572467,
+                "se_ev_open": 0.015374507352991422,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.83,
+                "p_raise": 0.39160271378027334,
+                "ev_open": 0.19845074242309535,
+                "se_ev_open": 0.015787090008974398,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.84,
+                "p_raise": 0.3949637241882283,
+                "ev_open": 0.186305691822078,
+                "se_ev_open": 0.015922585938814293,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.85,
+                "p_raise": 0.3982998932483567,
+                "ev_open": 0.17425040572331751,
+                "se_ev_open": 0.01605708041340303,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.86,
+                "p_raise": 0.40161143155031287,
+                "ev_open": 0.16228412315862373,
+                "se_ev_open": 0.01619058192246173,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.87,
+                "p_raise": 0.40489854766754785,
+                "ev_open": 0.15040609044538078,
+                "se_ev_open": 0.016323098874430193,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.89,
+                "p_raise": 0.4114003376896014,
+                "ev_open": 0.1269117958046576,
+                "se_ev_open": 0.016585212339647916,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.9,
+                "p_raise": 0.41461541885286746,
+                "ev_open": 0.11529406224399197,
+                "se_ev_open": 0.01671482527113316,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.92,
+                "p_raise": 0.4209749571118255,
+                "ev_open": 0.09231379602067247,
+                "se_ev_open": 0.016971203992160157,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.93,
+                "p_raise": 0.42411980993769743,
+                "ev_open": 0.0809498333823635,
+                "se_ev_open": 0.017097985735186776,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.95,
+                "p_raise": 0.43034065824734546,
+                "ev_open": 0.058470724920482775,
+                "se_ev_open": 0.017348773303149583,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.96,
+                "p_raise": 0.4334170382963051,
+                "ev_open": 0.04735418946610137,
+                "se_ev_open": 0.017472794631464457,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 1.0,
+                "p_raise": 0.4455000000000001,
+                "ev_open": 0.0036922653749995593,
+                "se_ev_open": 0.017959907711324916,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              }
+            ],
+            "last_plus_ev_grid_r": 1.0,
+            "first_minus_ev_grid_r": null,
+            "ev_100pct_within_1se_of_zero": true,
+            "opening_is_positive_ev_100pct": true
+          }
+        },
+        "bands": {
+          "open_always": {
+            "r_lo": 0.0,
+            "r_hi": 0.8397322163539229,
+            "r_hi_playable_pct": 84,
+            "inclusive_hi": false
+          },
+          "open_ace_or_joker": {
+            "r_lo": 0.8397322163539229,
+            "r_hi": 0.9018258292624068,
+            "r_lo_playable_pct": 84,
+            "r_hi_playable_pct": 90,
+            "inclusive_hi": false
+          },
+          "open_joker_only": {
+            "r_lo": 0.9018258292624068,
+            "r_hi": 1.0,
+            "r_lo_playable_pct": 90,
+            "r_hi_playable_pct": 100,
+            "inclusive_hi": true,
+            "through_100pct": true
+          },
+          "pass": {
+            "r_lo": null,
+            "r_hi": null,
+            "r_lo_playable_pct": null,
+            "through_100pct": false,
+            "never_on_unit_interval": true
+          }
+        },
+        "playable_rules": [
+          "If players are slowplaying 84% of the time, don't open QQ unless you have an ace.",
+          "If players are slowplaying 90%, don't open QQ at all unless you have a joker.",
+          "At 100%, QQ+joker is +EV inside 1 SE (EV +0.004; treat as a coin-flip, not a blowout)."
+        ],
+        "policy_at_0pct": "open_always",
+        "policy_at_100pct": "open_joker_only",
+        "nested_r_star": true
+      },
+      "pair_K": {
+        "flavors": {
+          "class_avg": {
+            "leaf": 1.6776,
+            "p_mc_1": 0.5012,
+            "se_p_mc_1": 0.002499992799989632,
+            "se_ev_100pct": 0.009193973521241872,
+            "ev_open_0pct": 1.6776,
+            "ev_open_100pct": -0.16561311999999995,
+            "ev_open_100pct_calibrated": -0.1656131200000004,
+            "r_star": 0.8717513015225222,
+            "r_star_linear": 0.9101497715033626,
+            "r_star_above_100pct": false,
+            "r_star_playable_pct": 87,
+            "kappa": 1.0394203176661474,
+            "n": 40000,
+            "seed": 20260907,
+            "grid": [
+              {
+                "r": 0.0,
+                "p_raise": 0.0,
+                "ev_open": 1.6776,
+                "se_ev_open": 0.0,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.05,
+                "p_raise": 0.035494778967214806,
+                "ev_open": 1.547064400870171,
+                "se_ev_open": 0.0006511134436690061,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.1,
+                "p_raise": 0.06957596736646454,
+                "ev_open": 1.42172742241309,
+                "se_ev_open": 0.0012762960927415474,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.15,
+                "p_raise": 0.10230789974962042,
+                "ev_open": 1.301352467880796,
+                "se_ev_open": 0.001876728095195287,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.2,
+                "p_raise": 0.13375161597805388,
+                "ev_open": 1.185715057079109,
+                "se_ev_open": 0.0024535291614635646,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.25,
+                "p_raise": 0.16396504879210871,
+                "ev_open": 1.074602136562141,
+                "se_ev_open": 0.0030077620051950898,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.3,
+                "p_raise": 0.19300319962518955,
+                "ev_open": 0.9678114330584029,
+                "se_ev_open": 0.0035404355683738065,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.35,
+                "p_raise": 0.22091830346698046,
+                "ev_open": 0.8651508471698326,
+                "se_ev_open": 0.004052508045556853,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.4,
+                "p_raise": 0.24775998352061307,
+                "ev_open": 0.7664378846045935,
+                "se_ev_open": 0.004544889720893534,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.45,
+                "p_raise": 0.27357539634362843,
+                "ev_open": 0.6714991224066721,
+                "se_ev_open": 0.005018445630579749,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.5,
+                "p_raise": 0.2984093681120378,
+                "ev_open": 0.5801697078311698,
+                "se_ev_open": 0.005473998062475248,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.55,
+                "p_raise": 0.3223045226001907,
+                "ev_open": 0.4922928876855386,
+                "se_ev_open": 0.005912328903756296,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.6,
+                "p_raise": 0.3453014014262555,
+                "ev_open": 0.40771956611480287,
+                "se_ev_open": 0.006334181846689353,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.65,
+                "p_raise": 0.36743857707355293,
+                "ev_open": 0.32630788895430174,
+                "se_ev_open": 0.006740264461885547,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.7,
+                "p_raise": 0.3887527591614797,
+                "ev_open": 0.2479228529077423,
+                "se_ev_open": 0.007131250147726184,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.75,
+                "p_raise": 0.40927889440608384,
+                "ev_open": 0.17243593793218592,
+                "se_ev_open": 0.0075077799640316896,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.78,
+                "p_raise": 0.4212302233978556,
+                "ev_open": 0.1284837304320463,
+                "se_ev_open": 0.0077270142064379144,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.79,
+                "p_raise": 0.42515482538980615,
+                "ev_open": 0.11405061414644901,
+                "se_ev_open": 0.0077990067978094355,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.8,
+                "p_raise": 0.42905026067925406,
+                "ev_open": 0.09972476132597519,
+                "se_ev_open": 0.007870464357476027,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.83,
+                "p_raise": 0.4405640407332727,
+                "ev_open": 0.057381683799316296,
+                "se_ev_open": 0.008081672236458568,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.84,
+                "p_raise": 0.4443452717466667,
+                "ev_open": 0.043475828624458535,
+                "se_ev_open": 0.00815103484183535,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.85,
+                "p_raise": 0.44809855554674827,
+                "ev_open": 0.02967275212127851,
+                "se_ev_open": 0.008219884785721335,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.86,
+                "p_raise": 0.45182412905278746,
+                "ev_open": 0.015971582995468858,
+                "se_ev_open": 0.008288226414145047,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.87,
+                "p_raise": 0.4555222269157687,
+                "ev_open": 0.0023714582945689733,
+                "se_ev_open": 0.008356064031525758,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.89,
+                "p_raise": 0.4628369231201531,
+                "ev_open": -0.02452906846667513,
+                "se_ev_open": 0.008490244245450414,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.9,
+                "p_raise": 0.46645397963873664,
+                "ev_open": -0.037831155519417736,
+                "se_ev_open": 0.008556595246760654,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.92,
+                "p_raise": 0.47360863861828717,
+                "ev_open": -0.0641431293826129,
+                "se_ev_open": 0.008687839750374985,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.93,
+                "p_raise": 0.4771466862868102,
+                "ev_open": -0.07715465348837303,
+                "se_ev_open": 0.008752741419531595,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.95,
+                "p_raise": 0.4841453151819743,
+                "ev_open": -0.10289281111322879,
+                "se_ev_open": 0.00888112371950593,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 0.96,
+                "p_raise": 0.4876063290552371,
+                "ev_open": -0.11562103573353988,
+                "se_ev_open": 0.00894461228675938,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 1.0,
+                "p_raise": 0.5012000000000001,
+                "ev_open": -0.1656131200000004,
+                "se_ev_open": 0.009193973521241874,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              }
+            ],
+            "last_plus_ev_grid_r": 0.87,
+            "first_minus_ev_grid_r": 0.89,
+            "ev_100pct_within_1se_of_zero": false,
+            "opening_is_positive_ev_100pct": false
+          },
+          "ace": {
+            "leaf": 1.6913759999999998,
+            "p_mc_1": 0.4718,
+            "se_p_mc_1": 0.004992041265855081,
+            "se_ev_100pct": 0.018427501319787064,
+            "ev_open_0pct": 1.6913759999999998,
+            "ev_open_100pct": -0.050215196800000084,
+            "ev_open_100pct_calibrated": -0.05021519680000053,
+            "r_star": 0.9575158593560786,
+            "r_star_linear": 0.9711670586689541,
+            "r_star_above_100pct": false,
+            "r_star_playable_pct": 96,
+            "kappa": 0.9784487347862896,
+            "n": 10000,
+            "seed": 20260907,
+            "grid": [
+              {
+                "r": 0.0,
+                "p_raise": 0.0,
+                "ev_open": 1.6913759999999998,
+                "se_ev_open": 0.0,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.05,
+                "p_raise": 0.033412682994277625,
+                "ev_open": 1.5680372238993154,
+                "se_ev_open": 0.0013050281050756207,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.1,
+                "p_raise": 0.06549469553770546,
+                "ev_open": 1.4496104527648066,
+                "se_ev_open": 0.0025580830615941487,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.15,
+                "p_raise": 0.09630659836765944,
+                "ev_open": 1.3358721341439825,
+                "se_ev_open": 0.003761530242738972,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.2,
+                "p_raise": 0.12590585079498368,
+                "ev_open": 1.226610164115816,
+                "se_ev_open": 0.004917613886590663,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.25,
+                "p_raise": 0.15434698727078391,
+                "ev_open": 1.1216232355163227,
+                "se_ev_open": 0.00602846399244919,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.3,
+                "p_raise": 0.1816817828873991,
+                "ev_open": 1.020720227012244,
+                "se_ev_open": 0.007096102784948737,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.35,
+                "p_raise": 0.20795940857087267,
+                "ev_open": 0.9237196302272861,
+                "se_ev_open": 0.008122450775544498,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.4,
+                "p_raise": 0.23322657666605195,
+                "ev_open": 0.8304490123327757,
+                "se_ev_open": 0.009109332448756023,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.45,
+                "p_raise": 0.25752767756369493,
+                "ev_open": 0.7407445117056378,
+                "se_ev_open": 0.010058481598530492,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.5,
+                "p_raise": 0.2809049079713875,
+                "ev_open": 0.6544503644322114,
+                "se_ev_open": 0.010971546338231048,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.55,
+                "p_raise": 0.30339839138621305,
+                "ev_open": 0.5714184595983263,
+                "se_ev_open": 0.011850093806042208,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.6,
+                "p_raise": 0.3250462912867265,
+                "ev_open": 0.49150792145516864,
+                "se_ev_open": 0.012695614586006878,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.65,
+                "p_raise": 0.34588491752454564,
+                "ev_open": 0.41458471668791264,
+                "se_ev_open": 0.013509526863454866,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.7,
+                "p_raise": 0.36594882636150466,
+                "ev_open": 0.34052128514097413,
+                "se_ev_open": 0.014293180332240685,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.75,
+                "p_raise": 0.3852709145666208,
+                "ev_open": 0.26919619247072524,
+                "se_ev_open": 0.015047859869970275,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.78,
+                "p_raise": 0.3965211879471434,
+                "ev_open": 0.22766720332042545,
+                "se_ev_open": 0.015487271543491988,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.79,
+                "p_raise": 0.4002155758557672,
+                "ev_open": 0.2140298284598411,
+                "se_ev_open": 0.015631566452483026,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.8,
+                "p_raise": 0.4038825079578453,
+                "ev_open": 0.20049380330460065,
+                "se_ev_open": 0.01577478899625287,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.83,
+                "p_raise": 0.4147208986790863,
+                "ev_open": 0.16048522791758912,
+                "se_ev_open": 0.01619811341193756,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.84,
+                "p_raise": 0.418280325638622,
+                "ev_open": 0.1473460446654059,
+                "se_ev_open": 0.01633713703422355,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.85,
+                "p_raise": 0.42181344474652,
+                "ev_open": 0.13430397358536983,
+                "se_ev_open": 0.016475133127957665,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.86,
+                "p_raise": 0.4253204790245513,
+                "ev_open": 0.12135819142026782,
+                "se_ev_open": 0.016612110403894417,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.87,
+                "p_raise": 0.42880164935925713,
+                "ev_open": 0.10850788279482271,
+                "se_ev_open": 0.016748077489390802,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.89,
+                "p_raise": 0.4356872712052838,
+                "ev_open": 0.0830904635673243,
+                "se_ev_open": 0.017017015186837205,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.9,
+                "p_raise": 0.4390921540174699,
+                "ev_open": 0.07052176087160777,
+                "se_ev_open": 0.01715000264447875,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.92,
+                "p_raise": 0.4458271262971027,
+                "ev_open": 0.04566044583790607,
+                "se_ev_open": 0.017413056291302957,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.93,
+                "p_raise": 0.4491576348565783,
+                "ev_open": 0.033366286473663465,
+                "se_ev_open": 0.017543138849326057,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.95,
+                "p_raise": 0.45574572965454,
+                "ev_open": 0.009047151450742641,
+                "se_ev_open": 0.017800455775108852,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.96,
+                "p_raise": 0.45900372316093546,
+                "ev_open": -0.002979327586921321,
+                "se_ev_open": 0.017927706049884095,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              },
+              {
+                "r": 1.0,
+                "p_raise": 0.4718000000000001,
+                "ev_open": -0.05021519680000053,
+                "se_ev_open": 0.018427501319787067,
+                "opening_is_positive_ev": false,
+                "opening_is_negative_ev": true
+              }
+            ],
+            "last_plus_ev_grid_r": 0.95,
+            "first_minus_ev_grid_r": 0.96,
+            "ev_100pct_within_1se_of_zero": false,
+            "opening_is_positive_ev_100pct": false
+          },
+          "joker": {
+            "leaf": 1.737267125,
+            "p_mc_1": 0.4523,
+            "se_p_mc_1": 0.004977195093624521,
+            "se_ev_100pct": 0.018601107598114217,
+            "ev_open_0pct": 1.737267125,
+            "ev_open_100pct": 0.046901204362500226,
+            "ev_open_100pct_calibrated": 0.04690120436249956,
+            "r_star": 1.0421640344021625,
+            "r_star_linear": 1.0277461842964817,
+            "r_star_above_100pct": true,
+            "r_star_playable_pct": 100,
+            "kappa": 0.9380083992027104,
+            "n": 10000,
+            "seed": 20260907,
+            "grid": [
+              {
+                "r": 0.0,
+                "p_raise": 0.0,
+                "ev_open": 1.737267125,
+                "se_ev_open": 0.0,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.05,
+                "p_raise": 0.03203170097141112,
+                "ev_open": 1.6175561020017144,
+                "se_ev_open": 0.0013173228306872387,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.1,
+                "p_raise": 0.06278772952883463,
+                "ev_open": 1.5026126075784947,
+                "se_ev_open": 0.0025821828715612343,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.15,
+                "p_raise": 0.09232614336942001,
+                "ev_open": 1.3922196646074299,
+                "se_ev_open": 0.0037969677800873338,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.2,
+                "p_raise": 0.12070202694906976,
+                "ev_open": 1.2861714077623776,
+                "se_ev_open": 0.004963942937409083,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.25,
+                "p_raise": 0.14796766075153786,
+                "ev_open": 1.1842724509101248,
+                "se_ev_open": 0.006085258409640986,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.3,
+                "p_raise": 0.1741726799490687,
+                "ev_open": 1.0863372941531988,
+                "se_ev_open": 0.00716295547288202,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.35,
+                "p_raise": 0.1993642231805971,
+                "ev_open": 0.9921897678059914,
+                "se_ev_open": 0.008198972731807967,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.4,
+                "p_raise": 0.2235870721196594,
+                "ev_open": 0.9016625107921931,
+                "se_ev_open": 0.009195151859485095,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.45,
+                "p_raise": 0.24688378245455533,
+                "ev_open": 0.8145964811369386,
+                "se_ev_open": 0.010153242984007533,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.5,
+                "p_raise": 0.2692948068576909,
+                "ev_open": 0.7308404963975272,
+                "se_ev_open": 0.011074909745684935,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.55,
+                "p_raise": 0.290858610478983,
+                "ev_open": 0.6502508020337163,
+                "se_ev_open": 0.0119617340467777,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.6,
+                "p_raise": 0.3116117794594879,
+                "ev_open": 0.5726906658633055,
+                "se_ev_open": 0.012815220514184773,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.65,
+                "p_raise": 0.33158912292571424,
+                "ev_open": 0.49802999688214455,
+                "se_ev_open": 0.013636800694020634,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.7,
+                "p_raise": 0.35082376889213346,
+                "ev_open": 0.42614498685083213,
+                "se_ev_open": 0.014427836995663343,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.75,
+                "p_raise": 0.3693472544690178,
+                "ev_open": 0.3569177731639307,
+                "se_ev_open": 0.01518962640160573,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.78,
+                "p_raise": 0.38013254198493635,
+                "ev_open": 0.31661027269701514,
+                "se_ev_open": 0.015633177791303274,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.79,
+                "p_raise": 0.38367423687910873,
+                "ev_open": 0.3033740128022444,
+                "se_ev_open": 0.01577883210880536,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.8,
+                "p_raise": 0.387189610744666,
+                "ev_open": 0.2902361216224131,
+                "se_ev_open": 0.015923403958287626,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.83,
+                "p_raise": 0.39758003915335044,
+                "ev_open": 0.2514043151159707,
+                "se_ev_open": 0.01635071653140379,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.84,
+                "p_raise": 0.40099235117920456,
+                "ev_open": 0.23865159356150378,
+                "se_ev_open": 0.016491049901183257,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.85,
+                "p_raise": 0.40437944268514414,
+                "ev_open": 0.2259931278269891,
+                "se_ev_open": 0.016630346062020403,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.86,
+                "p_raise": 0.407741527475211,
+                "ev_open": 0.21342811886960988,
+                "se_ev_open": 0.016768613806734122,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.87,
+                "p_raise": 0.41107881730646884,
+                "ev_open": 0.20095577529665298,
+                "se_ev_open": 0.016905861843960125,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.89,
+                "p_raise": 0.41767984901685007,
+                "ev_open": 0.17628595649436263,
+                "se_ev_open": 0.017177333214960268,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.9,
+                "p_raise": 0.42094400437071144,
+                "ev_open": 0.16408693599948387,
+                "se_ev_open": 0.017311573553129924,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.92,
+                "p_raise": 0.4274006130228477,
+                "ev_open": 0.13995686474486435,
+                "se_ev_open": 0.01757710543961523,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.93,
+                "p_raise": 0.4305934680916286,
+                "ev_open": 0.1280243124614201,
+                "se_ev_open": 0.017708413510982852,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.95,
+                "p_raise": 0.43690926986593565,
+                "ev_open": 0.10442047412228561,
+                "se_ev_open": 0.017968154630532373,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 0.96,
+                "p_raise": 0.4400326070065517,
+                "ev_open": 0.09274772890636973,
+                "se_ev_open": 0.018096603735590487,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              },
+              {
+                "r": 1.0,
+                "p_raise": 0.4523000000000001,
+                "ev_open": 0.04690120436249956,
+                "se_ev_open": 0.01860110759811422,
+                "opening_is_positive_ev": true,
+                "opening_is_negative_ev": false
+              }
+            ],
+            "last_plus_ev_grid_r": 1.0,
+            "first_minus_ev_grid_r": null,
+            "ev_100pct_within_1se_of_zero": false,
+            "opening_is_positive_ev_100pct": true
+          }
+        },
+        "bands": {
+          "open_always": {
+            "r_lo": 0.0,
+            "r_hi": 0.8717513015225222,
+            "r_hi_playable_pct": 87,
+            "inclusive_hi": false
+          },
+          "open_ace_or_joker": {
+            "r_lo": 0.8717513015225222,
+            "r_hi": 0.9575158593560786,
+            "r_lo_playable_pct": 87,
+            "r_hi_playable_pct": 96,
+            "inclusive_hi": false
+          },
+          "open_joker_only": {
+            "r_lo": 0.9575158593560786,
+            "r_hi": 1.0,
+            "r_lo_playable_pct": 96,
+            "r_hi_playable_pct": 100,
+            "inclusive_hi": true,
+            "through_100pct": true
+          },
+          "pass": {
+            "r_lo": null,
+            "r_hi": null,
+            "r_lo_playable_pct": null,
+            "through_100pct": false,
+            "never_on_unit_interval": true
+          }
+        },
+        "playable_rules": [
+          "If players are slowplaying 87% of the time, don't open KK unless you have an ace.",
+          "If players are slowplaying 96%, don't open KK at all unless you have a joker.",
+          "At 100%, KK+joker stays +EV (EV +0.047); still open with the joker."
+        ],
+        "policy_at_0pct": "open_always",
+        "policy_at_100pct": "open_joker_only",
+        "nested_r_star": true
+      }
+    },
+    "lookup_exact": [
+      {
+        "r_lo": 0.0,
+        "r_hi": 0.787161321269366,
+        "inclusive_hi": false,
+        "r_lo_playable_pct": 0,
+        "r_hi_playable_pct": 79,
+        "JJ": "open_always",
+        "QQ": "open_always",
+        "KK": "open_always",
+        "pair_J_policy": "open_always",
+        "pair_Q_policy": "open_always",
+        "pair_K_policy": "open_always"
+      },
+      {
+        "r_lo": 0.787161321269366,
+        "r_hi": 0.8397322163539229,
+        "inclusive_hi": false,
+        "r_lo_playable_pct": 79,
+        "r_hi_playable_pct": 84,
+        "JJ": "open_ace_or_joker",
+        "QQ": "open_always",
+        "KK": "open_always",
+        "pair_J_policy": "open_ace_or_joker",
+        "pair_Q_policy": "open_always",
+        "pair_K_policy": "open_always"
+      },
+      {
+        "r_lo": 0.8397322163539229,
+        "r_hi": 0.8643253115749872,
+        "inclusive_hi": false,
+        "r_lo_playable_pct": 84,
+        "r_hi_playable_pct": 86,
+        "JJ": "open_ace_or_joker",
+        "QQ": "open_ace_or_joker",
+        "KK": "open_always",
+        "pair_J_policy": "open_ace_or_joker",
+        "pair_Q_policy": "open_ace_or_joker",
+        "pair_K_policy": "open_always"
+      },
+      {
+        "r_lo": 0.8643253115749872,
+        "r_hi": 0.8717513015225222,
+        "inclusive_hi": false,
+        "r_lo_playable_pct": 86,
+        "r_hi_playable_pct": 87,
+        "JJ": "open_joker_only",
+        "QQ": "open_ace_or_joker",
+        "KK": "open_always",
+        "pair_J_policy": "open_joker_only",
+        "pair_Q_policy": "open_ace_or_joker",
+        "pair_K_policy": "open_always"
+      },
+      {
+        "r_lo": 0.8717513015225222,
+        "r_hi": 0.9018258292624068,
+        "inclusive_hi": false,
+        "r_lo_playable_pct": 87,
+        "r_hi_playable_pct": 90,
+        "JJ": "open_joker_only",
+        "QQ": "open_ace_or_joker",
+        "KK": "open_ace_or_joker",
+        "pair_J_policy": "open_joker_only",
+        "pair_Q_policy": "open_ace_or_joker",
+        "pair_K_policy": "open_ace_or_joker"
+      },
+      {
+        "r_lo": 0.9018258292624068,
+        "r_hi": 0.9310925812834512,
+        "inclusive_hi": false,
+        "r_lo_playable_pct": 90,
+        "r_hi_playable_pct": 93,
+        "JJ": "open_joker_only",
+        "QQ": "open_joker_only",
+        "KK": "open_ace_or_joker",
+        "pair_J_policy": "open_joker_only",
+        "pair_Q_policy": "open_joker_only",
+        "pair_K_policy": "open_ace_or_joker"
+      },
+      {
+        "r_lo": 0.9310925812834512,
+        "r_hi": 0.9575158593560786,
+        "inclusive_hi": false,
+        "r_lo_playable_pct": 93,
+        "r_hi_playable_pct": 96,
+        "JJ": "pass",
+        "QQ": "open_joker_only",
+        "KK": "open_ace_or_joker",
+        "pair_J_policy": "pass",
+        "pair_Q_policy": "open_joker_only",
+        "pair_K_policy": "open_ace_or_joker"
+      },
+      {
+        "r_lo": 0.9575158593560786,
+        "r_hi": 1.0,
+        "inclusive_hi": true,
+        "r_lo_playable_pct": 96,
+        "r_hi_playable_pct": 100,
+        "JJ": "pass",
+        "QQ": "open_joker_only",
+        "KK": "open_joker_only",
+        "pair_J_policy": "pass",
+        "pair_Q_policy": "open_joker_only",
+        "pair_K_policy": "open_joker_only"
+      }
+    ],
+    "lookup_playable": [
+      {
+        "r_lo_pct": 0,
+        "r_hi_pct": 79,
+        "inclusive_hi": false,
+        "label": "0\u201379%",
+        "JJ": "open_always",
+        "QQ": "open_always",
+        "KK": "open_always"
+      },
+      {
+        "r_lo_pct": 79,
+        "r_hi_pct": 84,
+        "inclusive_hi": false,
+        "label": "79\u201384%",
+        "JJ": "open_ace_or_joker",
+        "QQ": "open_always",
+        "KK": "open_always"
+      },
+      {
+        "r_lo_pct": 84,
+        "r_hi_pct": 86,
+        "inclusive_hi": false,
+        "label": "84\u201386%",
+        "JJ": "open_ace_or_joker",
+        "QQ": "open_ace_or_joker",
+        "KK": "open_always"
+      },
+      {
+        "r_lo_pct": 86,
+        "r_hi_pct": 87,
+        "inclusive_hi": false,
+        "label": "86\u201387%",
+        "JJ": "open_joker_only",
+        "QQ": "open_ace_or_joker",
+        "KK": "open_always"
+      },
+      {
+        "r_lo_pct": 87,
+        "r_hi_pct": 90,
+        "inclusive_hi": false,
+        "label": "87\u201390%",
+        "JJ": "open_joker_only",
+        "QQ": "open_ace_or_joker",
+        "KK": "open_ace_or_joker"
+      },
+      {
+        "r_lo_pct": 90,
+        "r_hi_pct": 93,
+        "inclusive_hi": false,
+        "label": "90\u201393%",
+        "JJ": "open_joker_only",
+        "QQ": "open_joker_only",
+        "KK": "open_ace_or_joker"
+      },
+      {
+        "r_lo_pct": 93,
+        "r_hi_pct": 96,
+        "inclusive_hi": false,
+        "label": "93\u201396%",
+        "JJ": "pass",
+        "QQ": "open_joker_only",
+        "KK": "open_ace_or_joker"
+      },
+      {
+        "r_lo_pct": 96,
+        "r_hi_pct": 100,
+        "inclusive_hi": true,
+        "label": "96\u2013100%",
+        "JJ": "pass",
+        "QQ": "open_joker_only",
+        "KK": "open_joker_only"
+      }
+    ],
+    "answers": {
+      "jj_open_always_below": 0.787161321269366,
+      "jj_ace_or_joker_below": 0.8643253115749872,
+      "jj_joker_only_below": 0.9310925812834512,
+      "qq_open_always_below": 0.8397322163539229,
+      "qq_ace_or_joker_below": 0.9018258292624068,
+      "qq_joker_only_below": 1.0034367723868627,
+      "kk_open_always_below": 0.8717513015225222,
+      "kk_ace_or_joker_below": 0.9575158593560786,
+      "kk_joker_only_below": 1.0421640344021625,
+      "jj_policy_at_100pct": "pass",
+      "qq_policy_at_100pct": "open_joker_only",
+      "kk_policy_at_100pct": "open_joker_only",
+      "playable_jj_pcts": [
+        79,
+        86,
+        93
+      ],
+      "playable_qq_pcts": [
+        84,
+        90,
+        100
+      ],
+      "playable_kk_pcts": [
+        87,
+        96,
+        100
+      ]
+    }
   }
 }
