@@ -841,3 +841,7 @@ def main() -> None:
     p.add_argument("--r", type=int, required=True, choices=list(OWNED_R_PCTS))
     args, rest = p.parse_known_args()
     main_for_r(args.r, argv=rest)
+
+
+if __name__ == "__main__":
+    main()
