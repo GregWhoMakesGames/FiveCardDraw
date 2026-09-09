@@ -103,18 +103,20 @@ Do **not** expand that plan until late-position non-sandbagging work is done (St
 
 Living order: [AGENTS.md](../../AGENTS.md).
 
-**Signed (do not restart):** CO open chart; BN vs all-legal CO; BN vs tight CO.
+**Signed (do not restart):** CO open chart; BN vs all-legal / tight CO; BN-vs-CO lookup at chart \(r\) (AA folds from 79%; two pair calls from 87%).
 
-**Up next (parallel, after this lands on `main`):** BN fold/call/raise lookup at sandbag thresholds \(\{79, 84, 86, 87, 90, 93, 96\}\)% — [NEXT_STAGE_BN_VS_CO_GRID.md](../NEXT_STAGE_BN_VS_CO_GRID.md).
+**Soon (plan only — [NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md](../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md)):**
 
-Then, still CO vs BN:
+1. Range vs \(r\): how much of each BN switch is CO range vs 1–6 trap rate?
+2. BN bluff-raises (shorts; air with blockers). Fold-JJ–KK is a no-bluff bound.
+3. Super System count — **negative for sandbagging, positive for stealing**; not a seat label. Unknowns: BN trips flavors; BN JJAKQ; HJ bury vs weak KK.
+4. Two-pair rank and blockers (stop lumping non-aces-up two pair).
 
-1. Multi-raise before the draw (CO opens, BN raises).
-2. Draw and post-draw, BN vs CO.
+Then, still CO vs BN: multi-raise; draw / post-draw.
 
-**After CO vs BN:** HJ opens and ideal sandbag rates with reverse-blockers (Super System “count”).
+**After CO vs BN:** HJ opens and sandbag rates. Count is the same tool and is **hand-dependent** (bury vs weak KK).
 
-**Toward the end:** 3:1 drawing hands after CO open + BN call; 3:1/4:1 inventory split on whether the joker is already out (CO or BN). Inventory only — no multiway tree yet.
+**Toward the end:** 3:1 drawing hands after CO open + BN call; 3:1/4:1 inventory split on whether the joker is already out. Inventory only — no multiway tree yet.
 
 **After HJ is started:** Ch.2 §2.9; Ch.5 §5.2; pair concealment / Ring 1.
 

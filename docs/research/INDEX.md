@@ -23,8 +23,9 @@ This folder is the **human-readable research paper**, split into chapters so par
 - [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md)
 - [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md)
 - [../NEXT_STAGE_BN_VS_CO_GRID.md](../NEXT_STAGE_BN_VS_CO_GRID.md)
+- [../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md](../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md)
 
-**How we name work.** [INDEX](#research-frames) holds the **frame**. Each frame has its own alias table so “Ring 2” does not float free of *which laboratory*. CO open chart and polar BN-vs-CO labs are **signed**. Next work (after this lands on `main`) is the [threshold grid](#immediate-research-queue). Living handoff: [AGENTS.md](../../AGENTS.md).
+**How we name work.** [INDEX](#research-frames) holds the **frame**. Each frame has its own alias table so “Ring 2” does not float free of *which laboratory*. CO open chart, polar BN-vs-CO labs, and the **threshold lookup** are **signed**. Next work is the [soon CO-open considerations](#immediate-research-queue). Living handoff: [AGENTS.md](../../AGENTS.md).
 
 ---
 
@@ -147,19 +148,23 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 ### Immediate research queue
 
-Living order is in [AGENTS.md](../../AGENTS.md). Do **not** start new analysis in the rollup PR. After it lands on `main`, the next product is the BN-vs-CO **threshold grid** (parallel OK). Finish CO+BN before HJ. Multiway 3:1/4:1 work is toward the end.
+Living order is in [AGENTS.md](../../AGENTS.md). The threshold lookup is **signed**. Soon work is four CO-open considerations (plan only — do not evaluate in a queue PR). Finish CO vs BN before HJ. Multiway 3:1/4:1 work is toward the end.
 
 | Order | Work | Chapter | Blocks |
 | ---: | --- | --- | --- |
 | — | **Done.** CO open chart: bare JJ below ~79%; ace until 86/90/96% (JJ/QQ/KK); joker until 93% (JJ) / through 100% (QQ coin-flip, KK +EV). CO does not sandbag. | [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md) | Do not restart |
 | — | **Done.** BN vs all-legal CO: fold JJ–KK; raise AA+; 2:1 call. No air. | [button_vs_cutoff_all_legal.md](button_vs_cutoff_all_legal.md) | Polar \(r=0\%\) |
 | — | **Done.** BN vs tight CO (AA+ / QQ·KK+joker): fold JJ–AA; call two pair; raise aces-up / trips | [button_vs_cutoff_tight.md](button_vs_cutoff_tight.md) | Polar \(r\approx 100\%\) |
-| 1 | **Up next (parallel):** BN fold/call/raise lookup at \(r \in \{79,84,86,87,90,93,96\}\)% — CO range from the chart. Later seats look this up instead of resimulating last two. | [../NEXT_STAGE_BN_VS_CO_GRID.md](../NEXT_STAGE_BN_VS_CO_GRID.md) | Polar endpoints signed; fill the interior (AA inflection) |
-| 2 | Multi-raise before the draw (CO opens, BN raises) | [Ch.5](ch05_later_seats.md) | After #1 |
-| 3 | Draw and post-draw, BN vs CO | [Ch.5](ch05_later_seats.md) / Ch.3–4 grids | After #2; then CO+BN is mostly worked out |
-| 4 | HJ: which hands open; ideal sandbag rates with **reverse-blockers** (Super System “count”) | [Ch.5](ch05_later_seats.md) | After CO vs BN |
-| 5 | 3:1 drawing hands after CO open **and** BN call (better price than 2:1). Inventory only; no multiway tree yet | [Ch.2](ch02_drawing_callers.md) | Toward the end |
-| 6 | 3:1 and 4:1 inventory + joker-dealt vs not (CO or BN holds it). Rate of a 1–6 drawing call on the CO-open + BN-call node | [Ch.2](ch02_drawing_callers.md) | With #5; toward the end |
+| — | **Done.** BN vs CO lookup at chart \(r\): AA folds from 79%; two pair calls from 87%. Two flips, not seven. | [../NEXT_STAGE_BN_VS_CO_GRID.md](../NEXT_STAGE_BN_VS_CO_GRID.md) | Do not restart |
+| 1 | **Soon:** range vs \(r\) — how much of each BN switch is CO range vs 1–6 trap rate? (CO may not play the chart.) | [../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md](../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md) | Plan only in the queue PR |
+| 2 | **Soon:** BN bluff-raises (shorts; air with blockers). Fold-JJ–KK is a no-bluff bound. | same ticket | After or with #1; no mix-solve in the queue PR |
+| 3 | **Soon:** Super System count — **negative for sandbagging, positive for stealing**; sign is the *line*, not the seat. Unknowns: BN trips `55543` vs `555KB`; BN JJAKQ (count + draw/disguise); HJ bury vs weak KK | [../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md](../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md) §3 | Do not assign one sign per position |
+| 4 | **Soon:** two-pair rank and blockers (stop lumping non-aces-up two pair) | same ticket | CO range is mostly two pair+ |
+| 5 | Multi-raise before the draw (CO opens, BN raises) | [Ch.5](ch05_later_seats.md) | After the soon items |
+| 6 | Draw and post-draw, BN vs CO | [Ch.5](ch05_later_seats.md) / Ch.3–4 grids | After #5 |
+| 7 | HJ: which hands open / sandbag. Count is hand-dependent (bury vs weak KK), same convention as §3 | [Ch.5](ch05_later_seats.md) | After CO vs BN |
+| 8 | 3:1 drawing hands after CO open **and** BN call. Inventory only; no multiway tree yet | [Ch.2](ch02_drawing_callers.md) | Toward the end |
+| 9 | 3:1 and 4:1 inventory + joker-dealt vs not (CO or BN holds it) | [Ch.2](ch02_drawing_callers.md) | With #8; toward the end |
 | — | Exploit leaks (through-line): too little slowplay → HJ may open any legal; too much → late seats fold lowest pairs. Baseline + what moves it + how to respond | all frames | Every lab |
 | A | **Done.** BN vs 100% 1–7: JJ −$0.32. 1–6-only: JJ −$0.016; uniform \(r^*\approx 98\%\) | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) | Do not restart |
 | B | **Done.** CO 0% sandbag: open all legal (JJ +$1.44) | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) | Do not restart |
@@ -194,6 +199,8 @@ Living order is in [AGENTS.md](../../AGENTS.md). Do **not** start new analysis i
 
 | Date | Change |
 | --- | --- |
+| 2026-09-09 | Count convention: **negative for sandbagging, positive for stealing**; sign is the line, not the seat. Unknowns: BN trips flavors, BN JJAKQ, HJ bury vs weak KK. |
+| 2026-09-09 | Threshold lookup **signed** (AA folds from 79%; two pair calls from 87%). Soon: range vs \(r\), BN bluff-raises, CO reverse-blockers, two-pair rank. |
 | 2026-09-08 | Queue: next is BN-vs-CO lookup at chart thresholds {79,84,86,87,90,93,96}. HJ reverse-blockers after CO vs BN. 3:1/4:1 draw inventories toward the end. |
 | 2026-09-08 | **CO open chart:** if the table slowplays 79%, don't open JJ unless you have an ace; at 86% JJ needs the joker; at 93% pass JJ. QQ: 84% ace / 90% joker (100% coin-flip). KK: 87% ace / 96% joker (100% +EV). CO never sandbags. |
 | 2026-09-08 | BN vs **all-legal** CO open: **fold JJ–KK**; value-raise AA / two pair / trips+; 2:1 call. No air. ([button_vs_cutoff_all_legal.md](button_vs_cutoff_all_legal.md)) |

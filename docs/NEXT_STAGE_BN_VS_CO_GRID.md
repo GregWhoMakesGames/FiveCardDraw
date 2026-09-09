@@ -1,33 +1,28 @@
 # Next stage: BN vs CO lookup at open-chart thresholds
 
-**Status: plan only. Do not compute in this ticket.** Land the review
-rollup on `main` first. Parent: [research/INDEX.md](research/INDEX.md).
-Living queue: [AGENTS.md](../AGENTS.md).
+**Status: signed — do not restart.** Lookup is in [AGENTS.md](../AGENTS.md).
+Code frames landed as stacked PRs off `main` (`button_vs_cutoff_r79` … `r96`).
+Next work: [NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md](NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md)
+(plan only). Parent: [research/INDEX.md](research/INDEX.md).
 
-Polar endpoints are **signed** (do not restart):
+Polar endpoints:
 
 | \(r\) | CO range | BN pin | Frame |
 | --- | --- | --- | --- |
 | 0% (all legal) | every jacks+ | fold JJ–KK; raise AA / two pair / trips+; 2:1 call | [button_vs_cutoff_all_legal.md](research/button_vs_cutoff_all_legal.md) |
 | ~100% (tight) | AA+ plus QQ/KK+joker | fold JJ–**AA**; call two pair (thin); raise aces-up / trips | [button_vs_cutoff_tight.md](research/button_vs_cutoff_tight.md) |
 
-The **inflection** (AA raises vs a wide cutoff and folds vs a tight one) is
-the product. Fill the interior with a lookup, not a full late-position
-re-solve each time someone slowplays.
+Interior (chart-range CO): **AA folds from \(r=79\%\) up.** **Two pair** still
+raises through 86%, **calls** from 87%. Two flips, not seven.
 
-## Product
+| \(r\) | JJ–KK | AA | Two pair | Aces-up / trips |
+| --- | --- | --- | --- | --- |
+| 0% | fold | **raise** | raise | raise |
+| 79–86% | fold | **fold** | raise | raise |
+| 87–96% / tight | fold | fold | **call** | raise |
 
-For each chart threshold \(r \in \{79, 84, 86, 87, 90, 93, 96\}\)%:
-
-1. Read CO’s opening range off
-   [cutoff_open_sandbag_v1.md](research/cutoff_open_sandbag_v1.md) (CO never
-   sandbags two pair+ / aces; JJ/QQ/KK flavors follow the band).
-2. Compute BN **fold / call / raise** by class vs that range, same locked
-   leaves as the polar labs (no multi-raise, no live draw/post-draw Nash).
-3. Write one row of a lookup: \(r\) → CO range → BN action table.
-
-A human will not pin \(r\) to 1%. The table is so later seats can **look up**
-behavior when an earlier player slowplays, instead of resimulating CO+BN.
+A human will not pin \(r\) to 1%. Later seats **look this up** when someone
+slowplays instead of resimulating last two.
 
 ## CO range at each threshold (from the signed chart)
 
@@ -46,14 +41,6 @@ CO always opens AA+ / two pair+. JJ/QQ/KK:
 
 96% matches the tight polar (QQ/KK need the joker; JJ never opens).
 
-## Parallelism
-
-After this lands on `main`, agents **may** split by \(r\) (one threshold per
-PR) or own the whole grid in one PR. Do not edit the polar frame files’
-product answers. New frame or a grid sibling is fine; add **one INDEX row**.
-
-Out of scope here: HJ mixes, reverse-blockers, multi-raise, 3:1/4:1
-inventories, UTG re-solve.
-
-Reuse: `validation/button_vs_cutoff.py`,
-`validation/button_vs_cutoff_tight.py`, `cutoff_open_chart.py`.
+Do not restart this ticket. Out of scope: HJ, the four CO-open considerations
+(range vs \(r\), BN bluffs, reverse-blockers, two-pair rank), multi-raise,
+3:1/4:1 inventories, UTG re-solve.
