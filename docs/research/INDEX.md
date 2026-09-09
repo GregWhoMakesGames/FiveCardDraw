@@ -21,8 +21,10 @@ This folder is the **human-readable research paper**, split into chapters so par
 - [../NEXT_STAGE_NONBLUFF_EV.md](../NEXT_STAGE_NONBLUFF_EV.md)
 - [../NEXT_STAGE_POSTDRAW_CAP.md](../NEXT_STAGE_POSTDRAW_CAP.md)
 - [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md)
+- [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md)
+- [../NEXT_STAGE_BN_VS_CO_GRID.md](../NEXT_STAGE_BN_VS_CO_GRID.md)
 
-**How we name work.** [INDEX](#research-frames) holds the **frame**. Each frame has its own alias table so “Ring 2” does not float free of *which laboratory*. Current frame: [button_open_no_sandbagging.md](button_open_no_sandbagging.md).
+**How we name work.** [INDEX](#research-frames) holds the **frame**. Each frame has its own alias table so “Ring 2” does not float free of *which laboratory*. CO open chart and polar BN-vs-CO labs are **signed**. Next work (after this lands on `main`) is the [threshold grid](#immediate-research-queue). Living handoff: [AGENTS.md](../../AGENTS.md).
 
 ---
 
@@ -46,7 +48,12 @@ Say `evaluate button_open_no_sandbagging Ring 2` when the frame might be wrong. 
 
 | Frame (slug) | File | Laboratory |
 | --- | --- | --- |
-| **button_open_no_sandbagging** | [button_open_no_sandbagging.md](button_open_no_sandbagging.md) | BN opened; no sandbagging. Current post-draw / button-EV work. |
+| **button_open_no_sandbagging** | [button_open_no_sandbagging.md](button_open_no_sandbagging.md) | BN opened; no sandbagging. Vs-draw Nash **tabled**. |
+| **button_open_sandbag_v1** | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) | BN open vs 100% two-pair+ (HJ/CO aces) sandbag; 1–6-only follow-up: CO never sandbags. |
+| **cutoff_open_no_sandbagging** | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) | Seats 1–6 unable; CO open/pass with BN behind. **v1 signed (0% sandbag):** open all legal (JJ +$1.44); no sandbag. |
+| **cutoff_open_sandbag_v1** | [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md) | CO vs 1–6 sandbag rate. **Open chart:** JJ/QQ/KK × {avg, ace, joker}. Bare JJ +EV below ~79%; at 100% only KK+joker is clearly +EV. CO does not sandbag. |
+| **button_vs_cutoff_all_legal** | [button_vs_cutoff_all_legal.md](button_vs_cutoff_all_legal.md) | Seats 1–6 unable; CO opens 100% legal (no sandbag). BN fold/call/raise vs that open. **No air.** Fold JJ–KK; value-raise AA / two pair / trips+; 2:1 call. |
+| **button_vs_cutoff_tight** | [button_vs_cutoff_tight.md](button_vs_cutoff_tight.md) | BN fold/call/raise vs a **tight** CO open (AA+ plus QQ/KK+joker). Range 2; not all-legal. Fold JJ–AA; call two pair (thin); raise aces-up / trips. |
 
 Mint a new frame file when the laboratory changes. Add a row here. Do not reuse Ring / Stage / Line aliases from one frame in another without a new table.
 
@@ -78,9 +85,14 @@ Use **seats 1–8** in all research prose. Code may still use 0-based indices in
 | 1 | [ch01_roadmap.md](ch01_roadmap.md) | Order of operations + deal-share framing | Roadmap / coordination |
 | 2 | [ch02_drawing_callers.md](ch02_drawing_callers.md) | Non-opening draws; **next: call/raise/mix** (§2.9) | Drawing-call validation |
 | 3 | [ch03_dealer_opening.md](ch03_dealer_opening.md) | BN opening + post-draw equity (incl. cap) | Dealer / showdown / M2 |
-| — | [button_open_no_sandbagging.md](button_open_no_sandbagging.md) | Frame aliases (Ring / Line / Stage C) for current BN lab | This frame |
+| — | [button_open_no_sandbagging.md](button_open_no_sandbagging.md) | Frame aliases (Ring / Line / Stage C); Nash tabled | Frozen vs-draw |
+| — | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) | 100% sandbag raise vs BN JJ; 1–6-only \(r^*\approx 98\%\) | **Signed** |
+| — | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) | CO open/pass with BN behind (0% sandbag in 1–6) | **Signed (v1)** |
+| — | [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md) | CO open chart (slowplay × blockers) + 0%/100% pins; JJ binds ~79% | **Signed** |
+| — | [button_vs_cutoff_all_legal.md](button_vs_cutoff_all_legal.md) | BN vs all-legal CO open: fold JJ–KK, raise AA+ | Polar range 1 |
+| — | [button_vs_cutoff_tight.md](button_vs_cutoff_tight.md) | BN vs tight CO open (AA+ / QQ·KK+joker): fold JJ–AA | Polar range 2 |
 | 4 | [ch04_draw_mixes.md](ch04_draw_mixes.md) | Opener draw mixes + check protection (C done) | Draw mixes / concealment next |
-| 5 | [ch05_later_seats.md](ch05_later_seats.md) | CO open climb; **CO bluff after BN open** (§5.2); HJ | Later seats |
+| 5 | [ch05_later_seats.md](ch05_later_seats.md) | CO open climb; **CO bluff after BN open** (§5.2); HJ | Agent B / later |
 | A | [appendix_a_rules.md](appendix_a_rules.md) | Game rules | Shared (rare edits) |
 | B | [appendix_b_code.md](appendix_b_code.md) | Code map / CLIs | Shared (rare edits) |
 | C | [appendix_c_crosswalk.md](appendix_c_crosswalk.md) | Doc crosswalk | Shared (rare edits) |
@@ -108,7 +120,7 @@ Seats 1–6 unable partitions into three disjoint cases:
 | --- | --- | ---: | --- | --- |
 | **No legal opens** | \((1-p)^8\) — all eight seats lack openers | **13.1%** | **Solved** (no open betting; typically redeal / dead hand under house rules) | Ch.1 |
 | **Only BN can open** | \((1-p)^7 \cdot p\) — seats 1–7 unable, BN open-legal | **3.8%** | Split further below | Ch.3 |
-| **CO can open** (BN may or may not) | \((1-p)^6 \cdot p\) — seats 1–6 unable, CO open-legal | **4.9%** | Planned with CO solve | Ch.5 |
+| **CO can open** (BN may or may not) | \((1-p)^6 \cdot p\) — seats 1–6 unable, CO open-legal | **4.9%** | **Signed (v1):** open all legal (JJ **+$1.44** vs pass); no CO sandbag | Ch.5 |
 
 These three sum to the ~22% folded-to-last-two mass.
 
@@ -128,26 +140,40 @@ Unconditional \(P(\ge 1\) of 7 seats is a 2:1 caller\() \approx 4.4\%\). Split o
 1. **No legal opens (~13.1%)** — solved.
 2. **Steal with no drawing caller (~3.6%)** — solved for “always open made jacks+.”
 3. **Steal into a 2:1 drawer (~0.21%)** — the active BN laboratory (Ch.2–4). Absolute deal share is small; **strategic importance is large** (this is what makes thin opens lose).
-4. **CO live after early six fold (~4.9%)** — next seat after BN template.
+4. **CO live after early six fold (~4.9%)** — **signed (v1, 0% sandbag in 1–6):** open every legal class; do not sandbag two pair+ / CO aces ([cutoff_open_no_sandbagging](cutoff_open_no_sandbagging.md)). **Open chart** vs 1–6 slowplay: bare JJ +EV below ~79%; at 100% only KK+joker is clearly +EV ([cutoff_open_sandbag_v1](cutoff_open_sandbag_v1.md)).
 5. **Early six can open (~78%)** — remaining mountain.
 
 Update the **Status** column in this ledger when a chapter’s owner claims a slice solved — prefer editing **only this table** in `INDEX.md`, not copying percentages into chapter bodies.
 
 ### Immediate research queue
 
+Living order is in [AGENTS.md](../../AGENTS.md). Do **not** start new analysis in the rollup PR. After it lands on `main`, the next product is the BN-vs-CO **threshold grid** (parallel OK). Finish CO+BN before HJ. Multiway 3:1/4:1 work is toward the end.
+
 | Order | Work | Chapter | Blocks |
 | ---: | --- | --- | --- |
-| 1 | Strong draws: call vs raise vs mix (combo-weighted EV). BN no-sandbag lab is already **call-only**; this is for CO representation and the 19/22-out tail | [Ch.2 §2.9](ch02_drawing_callers.md) | CO represent-bluffs |
-| 2 | CO bluff after BN open (return-to-actor: CO passed with no legal opener; others fold) — call/raise with underpair / high card? | [Ch.5 §5.2](ch05_later_seats.md) | Needs #1 for value-range shape |
-| 3 | Pair post-draw EV `d=3` vs `d=2`, then concealment (Ch.4 leftover) | [Ch.4](ch04_draw_mixes.md) / [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md) | Stage C done; do not redo check mixes |
-| 3b | Frame [button_open_no_sandbagging](button_open_no_sandbagging.md): **Ring 1** (flush-indifference β) on **Line 1** (BN trips-draw). Line 2 stand-pat flush call is pinned, mix open | [Ch.3 §3.5](ch03_dealer_opening.md) / [../NEXT_STAGE_POSTDRAW_BLUFF.md](../NEXT_STAGE_POSTDRAW_BLUFF.md) / [../POSTDRAW_STRATEGY_TREE.md](../POSTDRAW_STRATEGY_TREE.md) | Library + pre-C leftover-fold pin landed (§3.6). **Stage C Ring 1 still open.** Ring 1 before Ring 2. Qualify as `evaluate button_open_no_sandbagging Ring 1` if the frame is ambiguous |
-| 4 | CO open/pass; HJ sandbagging | Ch.5 | After #2 template exists |
+| — | **Done.** CO open chart: bare JJ below ~79%; ace until 86/90/96% (JJ/QQ/KK); joker until 93% (JJ) / through 100% (QQ coin-flip, KK +EV). CO does not sandbag. | [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md) | Do not restart |
+| — | **Done.** BN vs all-legal CO: fold JJ–KK; raise AA+; 2:1 call. No air. | [button_vs_cutoff_all_legal.md](button_vs_cutoff_all_legal.md) | Polar \(r=0\%\) |
+| — | **Done.** BN vs tight CO (AA+ / QQ·KK+joker): fold JJ–AA; call two pair; raise aces-up / trips | [button_vs_cutoff_tight.md](button_vs_cutoff_tight.md) | Polar \(r\approx 100\%\) |
+| 1 | **Up next (parallel):** BN fold/call/raise lookup at \(r \in \{79,84,86,87,90,93,96\}\)% — CO range from the chart. Later seats look this up instead of resimulating last two. | [../NEXT_STAGE_BN_VS_CO_GRID.md](../NEXT_STAGE_BN_VS_CO_GRID.md) | Polar endpoints signed; fill the interior (AA inflection) |
+| 2 | Multi-raise before the draw (CO opens, BN raises) | [Ch.5](ch05_later_seats.md) | After #1 |
+| 3 | Draw and post-draw, BN vs CO | [Ch.5](ch05_later_seats.md) / Ch.3–4 grids | After #2; then CO+BN is mostly worked out |
+| 4 | HJ: which hands open; ideal sandbag rates with **reverse-blockers** (Super System “count”) | [Ch.5](ch05_later_seats.md) | After CO vs BN |
+| 5 | 3:1 drawing hands after CO open **and** BN call (better price than 2:1). Inventory only; no multiway tree yet | [Ch.2](ch02_drawing_callers.md) | Toward the end |
+| 6 | 3:1 and 4:1 inventory + joker-dealt vs not (CO or BN holds it). Rate of a 1–6 drawing call on the CO-open + BN-call node | [Ch.2](ch02_drawing_callers.md) | With #5; toward the end |
+| — | Exploit leaks (through-line): too little slowplay → HJ may open any legal; too much → late seats fold lowest pairs. Baseline + what moves it + how to respond | all frames | Every lab |
+| A | **Done.** BN vs 100% 1–7: JJ −$0.32. 1–6-only: JJ −$0.016; uniform \(r^*\approx 98\%\) | [button_open_sandbag_v1.md](button_open_sandbag_v1.md) | Do not restart |
+| B | **Done.** CO 0% sandbag: open all legal (JJ +$1.44) | [cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md) | Do not restart |
+| B2 | **Done.** CO vs 1–6 100% sandbag flavor pins (input to the open chart) | [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md) | Do not restart |
 
-### Later (low priority)
+### Later (after HJ is started)
 
 | Work | Chapter | Notes |
 | --- | --- | --- |
-| Trips `d=1` kicker: highest vs non-face / lowest | [Ch.4](ch04_draw_mixes.md) | v1 keeps highest-rank (bug=ace). Hypothesis: a face kicker is more often already in the 2:1 caller, so fewer boat outs remain. After Stage C. Detail: [../NEXT_STAGE_OPENER_DRAW_MIXES.md](../NEXT_STAGE_OPENER_DRAW_MIXES.md) |
+| Strong draws: call vs raise vs mix (combo-weighted EV) | [Ch.2 §2.9](ch02_drawing_callers.md) | CO representation + 19/22-out tail. BN no-sandbag lab is already **call-only** |
+| CO bluff after BN open (return-to-actor: CO passed with no legal opener) | [Ch.5 §5.2](ch05_later_seats.md) | Needs §2.9 for value-range shape |
+| Pair post-draw EV `d=3` vs `d=2`, then concealment | [Ch.4](ch04_draw_mixes.md) / [../NEXT_STAGE_PAIR_CONCEALMENT.md](../NEXT_STAGE_PAIR_CONCEALMENT.md) | Stage C done; do not redo check mixes |
+| BN-vs-2:1 post-draw Nash (Ring 1 / Ring 2) | [button_open_no_sandbagging](button_open_no_sandbagging.md) | Steal-weighted open EV is already ± a dime |
+| Trips `d=1` kicker: highest vs non-face / lowest | [Ch.4](ch04_draw_mixes.md) | v1 keeps highest-rank (bug=ace). Detail: [../NEXT_STAGE_OPENER_DRAW_MIXES.md](../NEXT_STAGE_OPENER_DRAW_MIXES.md) |
 
 ---
 
@@ -168,6 +194,19 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 
 | Date | Change |
 | --- | --- |
+| 2026-09-08 | Queue: next is BN-vs-CO lookup at chart thresholds {79,84,86,87,90,93,96}. HJ reverse-blockers after CO vs BN. 3:1/4:1 draw inventories toward the end. |
+| 2026-09-08 | **CO open chart:** if the table slowplays 79%, don't open JJ unless you have an ace; at 86% JJ needs the joker; at 93% pass JJ. QQ: 84% ace / 90% joker (100% coin-flip). KK: 87% ace / 96% joker (100% +EV). CO never sandbags. |
+| 2026-09-08 | BN vs **all-legal** CO open: **fold JJ–KK**; value-raise AA / two pair / trips+; 2:1 call. No air. ([button_vs_cutoff_all_legal.md](button_vs_cutoff_all_legal.md)) |
+| 2026-09-08 | BN vs **tight** CO open (range 2: AA+ plus QQ/KK+joker): **fold JJ–AA**; call two pair (thin); **raise aces-up / trips**. ([button_vs_cutoff_tight.md](button_vs_cutoff_tight.md)) |
+| 2026-09-08 | Next queue: CO slowplay×blockers chart → BN vs CO (call/raise, multi-raise, draw/post-draw) → HJ. Ch.2 §2.9 / concealment after HJ starts. Exploit leaks are a through-line. |
+| 2026-09-08 | CO JJ/QQ/KK joker and ace kickers at 100% sandbag: **KK+joker +EV** (+$0.047); **QQ+joker +$0.004 inside 1 SE**; **JJ+joker still −EV** (−$0.075). Ace kickers all −EV. CO KK>QQ>JJ is the ~21% BN-behind street; BN 1–6-only “JJ best” was leaf noise + QQ’s weaker EV_bn (\(z<1.3\)). HJ mixes tabled. |
+| 2026-09-08 | CO KK+joker (bug as ace kicker) is **+EV at 100%** 1–6 sandbag (\(p_{\mathrm{raise}}=0.452\), reweighted EV +$0.05). Ace kicker without the bug stays −EV. Binding slowplay rate for JJ/QQ/KK remains **~79%** (JJ). HJ mixes tabled. |
+| 2026-09-07 | CO vs 1–6 sandbag rate: JJ/QQ/KK **−EV at 100%** (JJ −$0.26, \(p_{\mathrm{raise}}=0.494\)); 0% leaf reused (+$1.44). Bayes \(r^*\approx 0.79\) (JJ binding). Never-slowplay is the 0% lab only. ([cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md)) |
+| 2026-09-07 | 1–6-only sandbag (CO never sandbags): JJ still −EV (−$0.016, \(p_{\mathrm{raise}}=0.496\)); QQ/KK also −EV; lowest +EV BN open is AA (+$0.18 even folding the raise). Q3 flag: revisit HJ aces-sandbag if BN stops opening JJ–KK. |
+| 2026-09-07 | `button_open_sandbag_v1`: opening JJ is −EV (−$0.32) vs 100% two-pair+ / HJ-CO aces sandbag + always raise; \(p_{\mathrm{raise}}=0.573\) (n=40k, seed 20260907). No-raise leaf reused §3.4 pair_J d=3 + 6.9% 2:1 call |
+| 2026-09-07 | CO open/pass (0% sandbag in 1–6): open all legal, JJ **+$1.44** vs pass; do not sandbag AA / two pair ([cutoff_open_no_sandbagging.md](cutoff_open_no_sandbagging.md)) |
+| 2026-09-07 | Sandbag-set v1 aces: **HJ+CO**, not LJ+CO (plan-only correction; method unchanged) |
+| 2026-09-07 | Parallel next: BN 100% sandbag JJ probe + CO open/pass. BN-vs-2:1 Nash tabled. Ticket [../NEXT_STAGE_SANDBAG_AND_CO.md](../NEXT_STAGE_SANDBAG_AND_CO.md) |
 | 2026-09-07 | Average BN open ≈ +$1.94: steal +$2 on ~95%, §3.4 called street +$0.80 vs pass on ~5% (leak ~6¢ vs always-steal) |
 | 2026-09-07 | BN no-sandbag lab: 2:1 hands call, do not raise (16/48 fails 4/10 if BN continues). Open/pass leftover is not §2.9 |
 | 2026-09-07 | BN joker split: P(any of 1–7 is 2:1) = 0.300% / 4.82% (has bug / not). No legal BN pass in this frame |

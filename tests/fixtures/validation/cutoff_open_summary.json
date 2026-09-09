@@ -1,0 +1,338 @@
+{
+  "meta": {
+    "seed": 20260907,
+    "n_prob": 20000,
+    "n_hu": 4000,
+    "n_2to1": 2000,
+    "frame": "cutoff_open_no_sandbagging",
+    "matchup": "Seats 1\u20136 unable (0% sandbag). CO legal. BN opens every legal if CO passes; calls every legal if CO opens.",
+    "accounting": {
+      "pass": 0.0,
+      "steal": 2.0,
+      "fold_to_raise": -2.0,
+      "called_net": "EV_street - $2 (pot $6 into draw)"
+    },
+    "draw_order": {
+      "co_opens_bn_calls": "CO first, then BN (BN last)",
+      "co_opens_seat16_2to1": "2:1 caller first (same as M2 / \u00a73.4)",
+      "postdraw_betting": "HU CO vs BN: left-of-dealer first live is CO; opener-first matches",
+      "card_sets": "Fixed draw counts \u21d2 disjoint card-sets are order-invariant; BN-caller cell is still resimulated"
+    },
+    "locked_draws": {
+      "name": "tp1_tr2_q1",
+      "pair_d": 3,
+      "two_pair_d": 1,
+      "trips_d": 2,
+      "quads_d": 1
+    },
+    "honest_policy": "lead=never|stab=AA|raise=never",
+    "sandbag_set_v1": {
+      "two_pair_plus": "all seats 1\u20137",
+      "pair_A": "HJ (6) and CO (7) only",
+      "this_frame": "0% sandbag in seats 1\u20136; CO sandbag is Q2"
+    },
+    "doc": "docs/research/cutoff_open_no_sandbagging.md",
+    "regenerate": "analyze-cutoff-open --n-prob 20000 --n-hu 4000 --n-2to1 2000 --write-fixture"
+  },
+  "planning": {
+    "co_has_bug": {
+      "p_open_uncond": 0.22402493653484615,
+      "p_2to1_uncond": 0.006410459684599529,
+      "p_one_seat_2to1_approx": 0.0004294025302428664,
+      "p_bn_2to1_approx": 0.0004294025302428664,
+      "p_any_of_1_6_2to1_approx": 0.0025736509664732177,
+      "p_bn_open_legal_approx": 0.22402493653484615
+    },
+    "co_no_bug": {
+      "p_open_uncond": 0.22402493653484615,
+      "p_2to1_uncond": 0.006410459684599529,
+      "p_one_seat_2to1_approx": 0.0070334864715116815,
+      "p_bn_2to1_approx": 0.0070334864715116815,
+      "p_any_of_1_6_2to1_approx": 0.04146579216588142,
+      "p_bn_open_legal_approx": 0.22402493653484615
+    }
+  },
+  "by_class": [
+    {
+      "co_class": "pair_J",
+      "sandbag_set_v1_on_co": false,
+      "probs": {
+        "n": 20000.0,
+        "p_bn_open_legal": 0.21015,
+        "p_bn_2to1": 0.0051,
+        "p_any_of_1_6_2to1": 0.03025,
+        "p_steal": 0.75455,
+        "p_vs_2to1": 0.0353,
+        "p_vs_bn_legal": 0.21015,
+        "p_bn_2to1_leaf": 0.0051,
+        "p_seat16_2to1_bn_neither": 0.0302,
+        "p_co_has_bug": 0.05725,
+        "co_class": "pair_J",
+        "seed": 21233960,
+        "tries": 20000
+      },
+      "vs_2to1_caller_first": {
+        "n": 2000.0,
+        "ev_co_street": 3.022,
+        "ev_co_checkdown": 3.696,
+        "p_co_wins_final": 0.616,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.384
+      },
+      "vs_2to1_co_first": {
+        "n": 2000.0,
+        "ev_co_street": 2.974,
+        "ev_co_checkdown": 3.594,
+        "p_co_wins_final": 0.599,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.401
+      },
+      "vs_bn_legal": {
+        "n": 4000.0,
+        "ev_co_street": 1.477,
+        "ev_co_checkdown": 1.218,
+        "p_co_wins_final": 0.203,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.797
+      },
+      "section_34_locked_ev": 3.0755,
+      "ev_open": 1.43502,
+      "ev_pass_fold": 0.0,
+      "ev_pass_call": -0.10991,
+      "ev_pass_raise_checkdown": -0.414,
+      "open_minus_pass_fold": 1.43502,
+      "open_minus_best_pass": 1.43502,
+      "should_open": true,
+      "should_sandbag": false
+    },
+    {
+      "co_class": "pair_Q",
+      "sandbag_set_v1_on_co": false,
+      "probs": {
+        "n": 20000.0,
+        "p_bn_open_legal": 0.20515,
+        "p_bn_2to1": 0.00635,
+        "p_any_of_1_6_2to1": 0.0334,
+        "p_steal": 0.7551,
+        "p_vs_2to1": 0.03975,
+        "p_vs_bn_legal": 0.20515,
+        "p_bn_2to1_leaf": 0.00635,
+        "p_seat16_2to1_bn_neither": 0.0334,
+        "p_co_has_bug": 0.0565,
+        "co_class": "pair_Q",
+        "seed": 20692716,
+        "tries": 20000
+      },
+      "vs_2to1_caller_first": {
+        "n": 2000.0,
+        "ev_co_street": 3.076,
+        "ev_co_checkdown": 3.738,
+        "p_co_wins_final": 0.623,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.377
+      },
+      "vs_2to1_co_first": {
+        "n": 2000.0,
+        "ev_co_street": 3.168,
+        "ev_co_checkdown": 3.756,
+        "p_co_wins_final": 0.626,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.374
+      },
+      "vs_bn_legal": {
+        "n": 4000.0,
+        "ev_co_street": 1.9875,
+        "ev_co_checkdown": 1.6845,
+        "p_co_wins_final": 0.28075,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.71925
+      },
+      "section_34_locked_ev": 2.9615,
+      "ev_open": 1.55099,
+      "ev_pass_fold": 0.0,
+      "ev_pass_call": -0.00256,
+      "ev_pass_raise_checkdown": -0.24464,
+      "open_minus_pass_fold": 1.55099,
+      "open_minus_best_pass": 1.55099,
+      "should_open": true,
+      "should_sandbag": false
+    },
+    {
+      "co_class": "pair_K",
+      "sandbag_set_v1_on_co": false,
+      "probs": {
+        "n": 20000.0,
+        "p_bn_open_legal": 0.21185,
+        "p_bn_2to1": 0.00665,
+        "p_any_of_1_6_2to1": 0.03655,
+        "p_steal": 0.745,
+        "p_vs_2to1": 0.04315,
+        "p_vs_bn_legal": 0.21185,
+        "p_bn_2to1_leaf": 0.00665,
+        "p_seat16_2to1_bn_neither": 0.0365,
+        "p_co_has_bug": 0.05805,
+        "co_class": "pair_K",
+        "seed": 20299494,
+        "tries": 20000
+      },
+      "vs_2to1_caller_first": {
+        "n": 2000.0,
+        "ev_co_street": 3.039,
+        "ev_co_checkdown": 3.699,
+        "p_co_wins_final": 0.6165,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.3835
+      },
+      "vs_2to1_co_first": {
+        "n": 2000.0,
+        "ev_co_street": 2.956,
+        "ev_co_checkdown": 3.708,
+        "p_co_wins_final": 0.618,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.382
+      },
+      "vs_bn_legal": {
+        "n": 4000.0,
+        "ev_co_street": 2.6765,
+        "ev_co_checkdown": 2.2335,
+        "p_co_wins_final": 0.37225,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.62775
+      },
+      "section_34_locked_ev": 3.0935,
+      "ev_open": 1.6776,
+      "ev_pass_fold": 0.0,
+      "ev_pass_call": 0.14332,
+      "ev_pass_raise_checkdown": -0.05879,
+      "open_minus_pass_fold": 1.6776,
+      "open_minus_best_pass": 1.6776,
+      "should_open": true,
+      "should_sandbag": false
+    },
+    {
+      "co_class": "pair_A",
+      "sandbag_set_v1_on_co": true,
+      "probs": {
+        "n": 20000.0,
+        "p_bn_open_legal": 0.19435,
+        "p_bn_2to1": 0.0052,
+        "p_any_of_1_6_2to1": 0.0259,
+        "p_steal": 0.7746,
+        "p_vs_2to1": 0.03105,
+        "p_vs_bn_legal": 0.19435,
+        "p_bn_2to1_leaf": 0.0052,
+        "p_seat16_2to1_bn_neither": 0.02585,
+        "p_co_has_bug": 0.3863,
+        "co_class": "pair_A",
+        "seed": 20644127,
+        "tries": 20000
+      },
+      "vs_2to1_caller_first": {
+        "n": 2000.0,
+        "ev_co_street": 2.526,
+        "ev_co_checkdown": 4.08,
+        "p_co_wins_final": 0.68,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.32
+      },
+      "vs_2to1_co_first": {
+        "n": 2000.0,
+        "ev_co_street": 2.573,
+        "ev_co_checkdown": 4.113,
+        "p_co_wins_final": 0.6855,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.3145
+      },
+      "vs_bn_legal": {
+        "n": 4000.0,
+        "ev_co_street": 2.5255,
+        "ev_co_checkdown": 3.2445,
+        "p_co_wins_final": 0.54075,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.45925
+      },
+      "section_34_locked_ev": 2.607,
+      "ev_open": 1.66791,
+      "ev_pass_fold": 0.0,
+      "ev_pass_call": 0.10213,
+      "ev_pass_raise_checkdown": 0.27355,
+      "open_minus_pass_fold": 1.66791,
+      "open_minus_best_pass": 1.39436,
+      "should_open": true,
+      "should_sandbag": false
+    },
+    {
+      "co_class": "two_pair",
+      "sandbag_set_v1_on_co": true,
+      "probs": {
+        "n": 20000.0,
+        "p_bn_open_legal": 0.2391,
+        "p_bn_2to1": 0.0067,
+        "p_any_of_1_6_2to1": 0.0306,
+        "p_steal": 0.7236,
+        "p_vs_2to1": 0.0373,
+        "p_vs_bn_legal": 0.2391,
+        "p_bn_2to1_leaf": 0.0067,
+        "p_seat16_2to1_bn_neither": 0.0306,
+        "p_co_has_bug": 0.02105,
+        "co_class": "two_pair",
+        "seed": 20419131,
+        "tries": 20000
+      },
+      "vs_2to1_caller_first": {
+        "n": 2000.0,
+        "ev_co_street": 2.494,
+        "ev_co_checkdown": 4.236,
+        "p_co_wins_final": 0.706,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.294
+      },
+      "vs_2to1_co_first": {
+        "n": 2000.0,
+        "ev_co_street": 2.039,
+        "ev_co_checkdown": 4.047,
+        "p_co_wins_final": 0.6745,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.3255
+      },
+      "vs_bn_legal": {
+        "n": 4000.0,
+        "ev_co_street": 3.3565,
+        "ev_co_checkdown": 3.3135,
+        "p_co_wins_final": 0.55225,
+        "p_tie_final": 0.0,
+        "p_bn_wins_final": 0.44775
+      },
+      "section_34_locked_ev": 2.1005,
+      "ev_open": 1.78692,
+      "ev_pass_fold": 0.0,
+      "ev_pass_call": 0.32434,
+      "ev_pass_raise_checkdown": 0.36403,
+      "open_minus_pass_fold": 1.78692,
+      "open_minus_best_pass": 1.42289,
+      "should_open": true,
+      "should_sandbag": false
+    }
+  ],
+  "answers": {
+    "q1_open_every_legal": true,
+    "q1_jj_ev_open": 1.43502,
+    "q1_jj_ev_pass": 0.0,
+    "q1_jj_open_minus_pass": 1.43502,
+    "q1_minus_ev_classes": [],
+    "q1_open_classes": [
+      "pair_J",
+      "pair_Q",
+      "pair_K",
+      "pair_A",
+      "two_pair"
+    ],
+    "q2_co_should_sandbag": false,
+    "q2_sandbag_classes": [],
+    "q2_pair_A_ev_open": 1.66791,
+    "q2_pair_A_best_pass": 0.27355,
+    "q2_two_pair_ev_open": 1.78692,
+    "q2_two_pair_best_pass": 0.36403,
+    "note": "JJ pass = 0 (v1 fold to BN open). Sandbag pass uses the best of fold / call / raise-checkdown vs BN legal; steal is given up."
+  }
+}

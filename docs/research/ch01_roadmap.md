@@ -101,10 +101,24 @@ Do **not** expand that plan until late-position non-sandbagging work is done (St
 
 ## 1.7 Immediate research queue (ordered)
 
-1. **Ch.2 §2.9** — Strong draws: always call, always raise, or mix (BN-open laboratory first).
-2. **Ch.5 §5.2** — After BN opens (CO had passed with no legal opener; others fold): call/raise with less than a strong draw as a bluff? (depends on §2.9).
-3. Pair concealment (Ch.4 leftover) after the `d=3` vs `d=2` EV confirm; Ch.3 bluff 3-bet Ring 1 **after Stage C** (trips-only air, split by public \(d\)).
-4. CO open/pass chart; then HJ sandbagging.
+Living order: [AGENTS.md](../../AGENTS.md).
+
+**Signed (do not restart):** CO open chart; BN vs all-legal CO; BN vs tight CO.
+
+**Up next (parallel, after this lands on `main`):** BN fold/call/raise lookup at sandbag thresholds \(\{79, 84, 86, 87, 90, 93, 96\}\)% — [NEXT_STAGE_BN_VS_CO_GRID.md](../NEXT_STAGE_BN_VS_CO_GRID.md).
+
+Then, still CO vs BN:
+
+1. Multi-raise before the draw (CO opens, BN raises).
+2. Draw and post-draw, BN vs CO.
+
+**After CO vs BN:** HJ opens and ideal sandbag rates with reverse-blockers (Super System “count”).
+
+**Toward the end:** 3:1 drawing hands after CO open + BN call; 3:1/4:1 inventory split on whether the joker is already out (CO or BN). Inventory only — no multiway tree yet.
+
+**After HJ is started:** Ch.2 §2.9; Ch.5 §5.2; pair concealment / Ring 1.
+
+Exploit leaks are a **through-line**.
 
 ## 1.8 Later (not scheduled in this draft)
 

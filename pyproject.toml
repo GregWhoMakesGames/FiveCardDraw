@@ -32,6 +32,10 @@ analyze-opener-draw-beliefs = "fivecarddraw.validation.opener_draw_beliefs:main"
 analyze-postdraw-nonbluff-ev = "fivecarddraw.validation.postdraw_nonbluff_ev:main"
 analyze-postdraw-cap = "fivecarddraw.validation.postdraw_cap:main"
 analyze-postdraw-bluff = "fivecarddraw.validation.postdraw_bluff:main"
+analyze-cutoff-open = "fivecarddraw.validation.cutoff_open:main"
+analyze-cutoff-open-sandbag = "fivecarddraw.validation.cutoff_open_sandbag:main"
+analyze-button-vs-cutoff = "fivecarddraw.validation.button_vs_cutoff:main"
+analyze-button-vs-cutoff-tight = "fivecarddraw.validation.button_vs_cutoff_tight:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
