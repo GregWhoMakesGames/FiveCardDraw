@@ -14,7 +14,7 @@ This file owns **r = 96%** only. Other agents own 79 / 84 / 86 / 87 / 90.
 This is **not** a restart of the tight polar lab: same constructed CO
 range, new seed, new fixture.
 
-Code: `src/fivecarddraw/validation/button_vs_cutoff_chart.py` (wrapper
+Code: `src/fivecarddraw/validation/button_vs_cutoff_r93_96.py` (wrapper
 `button_vs_cutoff_r96.py`).
 CLI: `analyze-button-vs-cutoff-r96`.
 Fixture: `tests/fixtures/validation/button_vs_cutoff_r96.json`.

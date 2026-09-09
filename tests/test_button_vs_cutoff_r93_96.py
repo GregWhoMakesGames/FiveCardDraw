@@ -6,7 +6,7 @@ import pytest
 
 from fivecarddraw.cards import BUG_ID, parse_hand
 from fivecarddraw.hand_rank import HandCategory, evaluate_hand
-from fivecarddraw.validation.button_vs_cutoff_chart import (
+from fivecarddraw.validation.button_vs_cutoff_r93_96 import (
     CHART_PAIR_POLICIES,
     DEFAULT_SEED,
     OWNED_R_PCTS,

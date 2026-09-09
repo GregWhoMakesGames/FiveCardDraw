@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from fivecarddraw.validation.button_vs_cutoff_chart import FRAME_BY_R
+from fivecarddraw.validation.button_vs_cutoff_r93_96 import FRAME_BY_R
 from fivecarddraw.validation.button_vs_cutoff_tight import FRAME as TIGHT_FRAME
 from fivecarddraw.validation.cutoff_open_chart import (
     POLICY_JOKER_ONLY,

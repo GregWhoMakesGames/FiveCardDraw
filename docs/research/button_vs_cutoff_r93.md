@@ -13,7 +13,7 @@ CO chart: [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md).
 This file owns **r = 93%** only. Other agents own 79 / 84 / 86 / 87 / 90.
 Do not restart the 0% / ~100% polar labs.
 
-Code: `src/fivecarddraw/validation/button_vs_cutoff_chart.py` (wrapper
+Code: `src/fivecarddraw/validation/button_vs_cutoff_r93_96.py` (wrapper
 `button_vs_cutoff_r93.py`).
 CLI: `analyze-button-vs-cutoff-r93`.
 Fixture: `tests/fixtures/validation/button_vs_cutoff_r93.json`.
