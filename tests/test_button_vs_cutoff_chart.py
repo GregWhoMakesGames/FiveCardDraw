@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import random
 from pathlib import Path
 
@@ -180,7 +181,105 @@ def test_pins_n_and_seed():
     assert DEFAULT_SEED not in {20260907, 20260908}
 
 
-def test_fixture_paths_named_for_owned_frames():
-    root = Path(__file__).resolve().parent / "fixtures" / "validation"
-    assert (root / "button_vs_cutoff_r87.json").name.endswith("r87.json")
-    assert (root / "button_vs_cutoff_r90.json").name.endswith("r90.json")
+FIXTURE_DIR = (
+    Path(__file__).resolve().parent / "fixtures" / "validation"
+)
+
+
+def _load_fixture(r_pct: int) -> dict:
+    path = FIXTURE_DIR / f"button_vs_cutoff_r{r_pct}.json"
+    assert path.exists(), (
+        f"run analyze-button-vs-cutoff-chart --rates {r_pct} --write-fixture"
+    )
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _assert_shared_product(data: dict, *, r_pct: int) -> dict:
+    meta = data["meta"]
+    assert meta["frame"] == f"button_vs_cutoff_r{r_pct}"
+    assert meta["r_pct"] == r_pct
+    assert meta["seed"] == DEFAULT_SEED
+    assert meta["n_hu"] == DEFAULT_N_HU
+    assert meta["accounting"]["fold"] == 0.0
+    assert meta["locked_draws"]["pair_d"] == 3
+    assert meta["locked_draws"]["two_pair_d"] == 1
+    assert meta["locked_draws"]["trips_d"] == 2
+    assert "not all-legal" in meta["matchup"]
+    assert "do not restart" in " ".join(meta["out_of_scope"]).lower()
+    answers = data["answers"]
+    assert answers["jj_action"] == "fold"
+    assert answers["qq_action"] == "fold"
+    assert answers["kk_action"] == "fold"
+    assert answers["aa_action"] == "fold"
+    assert answers["aa_folds"] is True
+    assert answers["aa_value_raise"] is False
+    assert answers["aa_thin_vs_fold"] is False
+    assert answers["aa_ev_call"] < -1.0
+    assert answers["aa_p_win"] < 0.5
+    assert answers["two_pair_action"] == "call"
+    assert answers["aces_up_action"] == "raise"
+    assert answers["trips_action"] == "raise"
+    assert answers["trips_A_action"] == "raise"
+    assert answers["flavor_action_flips"] == []
+    assert "pair_A" in answers["low_pairs_fold"]
+    assert "two_pair_aces_up" in answers["value_raise_classes"]
+    by = {r["key"]: r for r in data["by_row"]}
+    for key in ("pair_J", "pair_Q", "pair_K", "pair_A"):
+        row = by[key]
+        assert row["n"] == 4000.0
+        assert row["recommend"]["action"] == "fold"
+        assert row["ev_call"] < 0.0
+        assert row["p_bn_wins_final"] < 0.5
+        assert row["se_call"] > 0.0
+    aa = by["pair_A"]
+    assert aa["recommend"]["value_raise"] is False
+    assert aa["p_bn_wins_final"] < 0.40
+    two_pair = by["two_pair"]
+    assert two_pair["ev_call"] > 0.0
+    assert two_pair["p_bn_wins_final"] < 0.5
+    assert two_pair["recommend"]["action"] == "call"
+    trips = by["trips"]
+    assert trips["p_bn_wins_final"] > 0.5
+    assert trips["recommend"]["action"] == "raise"
+    for key in ("pair_J_joker", "pair_J_ace", "pair_Q_joker", "pair_K_joker"):
+        assert by[key]["recommend"]["action"] == "fold"
+        assert by[key]["ev_call"] < 0.0
+    return by
+
+
+def test_fixture_r87_product_answers():
+    data = _load_fixture(87)
+    assert data["meta"]["co_range"]["pair_J"] == POLICY_JOKER_ONLY
+    assert data["meta"]["co_range"]["pair_Q"] == POLICY_ACE_OR_JOKER
+    assert data["meta"]["co_range"]["pair_K"] == POLICY_ACE_OR_JOKER
+    by = _assert_shared_product(data, r_pct=87)
+    # QQ+ace is still in this CO range; it is the mass that 90% drops.
+    assert by["pair_J"]["co_mix"]["pair_Q_ace"] > 0.04
+    assert by["pair_J"]["co_mix"]["pair_J_ace"] == 0.0
+    aa = by["pair_A"]
+    assert aa["ev_call"] == pytest.approx(-1.25, abs=0.02)
+    assert aa["p_bn_wins_final"] == pytest.approx(0.36, abs=0.02)
+
+
+def test_fixture_r90_product_answers():
+    data = _load_fixture(90)
+    assert data["meta"]["co_range"]["pair_J"] == POLICY_JOKER_ONLY
+    assert data["meta"]["co_range"]["pair_Q"] == POLICY_JOKER_ONLY
+    assert data["meta"]["co_range"]["pair_K"] == POLICY_ACE_OR_JOKER
+    by = _assert_shared_product(data, r_pct=90)
+    # QQ+ace has left; KK+ace remains.
+    assert by["pair_J"]["co_mix"]["pair_Q_ace"] == 0.0
+    assert by["pair_J"]["co_mix"]["pair_K_ace"] > 0.04
+    aa = by["pair_A"]
+    assert aa["ev_call"] == pytest.approx(-1.504, abs=0.02)
+    assert aa["p_bn_wins_final"] == pytest.approx(0.333, abs=0.02)
+
+
+def test_aa_gets_worse_from_87_to_90():
+    """Dropping QQ+ace tightens CO; AA's call EV should not improve."""
+    a87 = _load_fixture(87)["answers"]
+    a90 = _load_fixture(90)["answers"]
+    assert a87["aa_action"] == "fold"
+    assert a90["aa_action"] == "fold"
+    assert a90["aa_ev_call"] < a87["aa_ev_call"]
+    assert a90["aa_p_win"] < a87["aa_p_win"]
