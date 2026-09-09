@@ -36,6 +36,7 @@ analyze-cutoff-open = "fivecarddraw.validation.cutoff_open:main"
 analyze-cutoff-open-sandbag = "fivecarddraw.validation.cutoff_open_sandbag:main"
 analyze-button-vs-cutoff = "fivecarddraw.validation.button_vs_cutoff:main"
 analyze-button-vs-cutoff-tight = "fivecarddraw.validation.button_vs_cutoff_tight:main"
+analyze-button-vs-cutoff-r79 = "fivecarddraw.validation.button_vs_cutoff_r79:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
