@@ -158,7 +158,7 @@ Living order is in [AGENTS.md](../../AGENTS.md). The threshold lookup is **signe
 | — | **Done.** BN vs CO lookup at chart \(r\): AA folds from 79%; two pair calls from 87%. Two flips, not seven. | [../NEXT_STAGE_BN_VS_CO_GRID.md](../NEXT_STAGE_BN_VS_CO_GRID.md) | Do not restart |
 | 1 | **Soon:** range vs \(r\) — how much of each BN switch is CO range vs 1–6 trap rate? (CO may not play the chart.) | [../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md](../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md) | Plan only in the queue PR |
 | 2 | **Soon:** BN bluff-raises (shorts; air with blockers). Fold-JJ–KK is a no-bluff bound. | same ticket | After or with #1; no mix-solve in the queue PR |
-| 3 | **Soon:** CO reverse-blockers (KK with Q and J). Not HJ Super System count. | same ticket | BN still folds JJ–KK on the no-bluff grid |
+| 3 | **Soon:** CO reverse-blockers — Super System count, **negative** (steal, block BN). Sandbag count is positive (want an open to raise). | same ticket | BN still folds JJ–KK on the no-bluff grid |
 | 4 | **Soon:** two-pair rank and blockers (stop lumping non-aces-up two pair) | same ticket | CO range is mostly two pair+ |
 | 5 | Multi-raise before the draw (CO opens, BN raises) | [Ch.5](ch05_later_seats.md) | After the soon items |
 | 6 | Draw and post-draw, BN vs CO | [Ch.5](ch05_later_seats.md) / Ch.3–4 grids | After #5 |

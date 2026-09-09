@@ -77,8 +77,11 @@ Extra cutoff considerations before we freeze the open chart:
    **trap rate** in 1–6?
 2. **BN bluff-raises.** Shorts; air with blockers (joker + king, etc.). The
    published fold-JJ–KK line is a no-bluff bound. Do not mix-solve yet.
-3. **CO reverse-blockers.** KK with Q and J cuts BN’s JJ/QQ; when BN
-   continues they are more often ahead. Distinct from HJ Super System count.
+3. **CO reverse-blockers.** Super System count with the **sign flipped**:
+   a sandbag wants someone to open (positive; AAAKQ → open, not bury). CO
+   would rather steal than play OOP, so they hope to block BN’s continue
+   range (negative; KK with Q and J). HJ still gets the positive count
+   after CO vs BN.
 4. **Two-pair rank and blockers.** Stop treating all non-aces-up two pair as
    one class. CO’s range is mostly two pair+.
 

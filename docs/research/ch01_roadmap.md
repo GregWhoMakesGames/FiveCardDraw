@@ -109,7 +109,7 @@ Living order: [AGENTS.md](../../AGENTS.md).
 
 1. Range vs \(r\): how much of each BN switch is CO range vs 1–6 trap rate?
 2. BN bluff-raises (shorts; air with blockers). Fold-JJ–KK is a no-bluff bound.
-3. CO reverse-blockers (KK with Q and J). Not the HJ Super System count.
+3. CO reverse-blockers — Super System count with the **sign flipped** (sandbag wants an open; CO wants a steal).
 4. Two-pair rank and blockers (stop lumping non-aces-up two pair).
 
 Then, still CO vs BN: multi-raise; draw / post-draw.

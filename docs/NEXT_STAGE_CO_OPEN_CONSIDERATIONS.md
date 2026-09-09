@@ -66,19 +66,30 @@ this ticket is scheduled; do not smuggle it into multi-raise.
 
 ---
 
-## 3. CO reverse-blockers (KK with Q and J)
+## 3. CO reverse-blockers (Super System count, negative)
 
-The open chart used **joker / ace** blockers that cut *slowplay traps* in
-1–6. CO can also hold **rank blockers on BN’s openers**: KK with a queen and
-a jack makes BN **JJ and QQ** less likely (those seats cannot open as often).
+This **is** Super System’s “count,” with the **sign flipped**.
 
-When BN *does* call or raise, they are then **more likely ahead** of that KK
-(the remaining continue range is stronger). Today BN **folds JJ–KK to any
-CO open** on the no-bluff grid, so this may be small — or it may matter once
-item 2 (bluff-raises) or two-pair splitting (item 4) is live.
+A **sandbag** wants someone else to *open* so they can raise. Holding
+**AAAKQ** (aces-up with KQ) makes a later legal open very unlikely: it
+blocks strong two pair and legal one-pairs. Count is **positive** → better
+to **open** than to bury, because the trap has nothing to raise.
 
-This is **not** the HJ Super System “count” (that stays after CO vs BN). Same
-idea, different seat: CO blocking BN’s legal openers.
+A **CO opener** would rather **steal the antes** than play a bigger pot
+out of position with a marginal holding. They want to **block BN’s
+continuing range**. Count is **negative**. Example: KK with a queen and a
+jack makes BN **JJ and QQ** less likely (fewer legal opens behind). When BN
+*does* call or raise, the remaining continue range is stronger — more often
+ahead of that KK.
+
+The open chart already used **joker / ace** as trap-blockers in 1–6 (cutting
+slowplay raises). Rank blockers on BN’s openers are the other half of the
+same count. Today BN **folds JJ–KK to any CO open** on the no-bluff grid, so
+the effect may be small until item 2 (bluff-raises) or item 4 (two-pair
+splits) is live.
+
+HJ still applies the **positive** count when we get there (after CO vs BN).
+Do not wait for HJ to study the **negative** count at CO.
 
 ---
 
