@@ -158,11 +158,11 @@ Living order is in [AGENTS.md](../../AGENTS.md). The threshold lookup is **signe
 | — | **Done.** BN vs CO lookup at chart \(r\): AA folds from 79%; two pair calls from 87%. Two flips, not seven. | [../NEXT_STAGE_BN_VS_CO_GRID.md](../NEXT_STAGE_BN_VS_CO_GRID.md) | Do not restart |
 | 1 | **Soon:** range vs \(r\) — how much of each BN switch is CO range vs 1–6 trap rate? (CO may not play the chart.) | [../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md](../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md) | Plan only in the queue PR |
 | 2 | **Soon:** BN bluff-raises (shorts; air with blockers). Fold-JJ–KK is a no-bluff bound. | same ticket | After or with #1; no mix-solve in the queue PR |
-| 3 | **Soon:** CO reverse-blockers — Super System count, **negative** (steal, block BN). Sandbag count is positive (want an open to raise). | same ticket | BN still folds JJ–KK on the no-bluff grid |
+| 3 | **Soon:** Super System count — **negative for sandbagging, positive for stealing**; sign is the *line*, not the seat. Unknowns: BN trips `55543` vs `555KB`; BN JJAKQ (count + draw/disguise); HJ bury vs weak KK | [../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md](../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md) §3 | Do not assign one sign per position |
 | 4 | **Soon:** two-pair rank and blockers (stop lumping non-aces-up two pair) | same ticket | CO range is mostly two pair+ |
 | 5 | Multi-raise before the draw (CO opens, BN raises) | [Ch.5](ch05_later_seats.md) | After the soon items |
 | 6 | Draw and post-draw, BN vs CO | [Ch.5](ch05_later_seats.md) / Ch.3–4 grids | After #5 |
-| 7 | HJ: which hands open; ideal sandbag rates with reverse-blockers (Super System “count”) | [Ch.5](ch05_later_seats.md) | After CO vs BN |
+| 7 | HJ: which hands open / sandbag. Count is hand-dependent (bury vs weak KK), same convention as §3 | [Ch.5](ch05_later_seats.md) | After CO vs BN |
 | 8 | 3:1 drawing hands after CO open **and** BN call. Inventory only; no multiway tree yet | [Ch.2](ch02_drawing_callers.md) | Toward the end |
 | 9 | 3:1 and 4:1 inventory + joker-dealt vs not (CO or BN holds it) | [Ch.2](ch02_drawing_callers.md) | With #8; toward the end |
 | — | Exploit leaks (through-line): too little slowplay → HJ may open any legal; too much → late seats fold lowest pairs. Baseline + what moves it + how to respond | all frames | Every lab |
@@ -199,6 +199,7 @@ Living order is in [AGENTS.md](../../AGENTS.md). The threshold lookup is **signe
 
 | Date | Change |
 | --- | --- |
+| 2026-09-09 | Count convention: **negative for sandbagging, positive for stealing**; sign is the line, not the seat. Unknowns: BN trips flavors, BN JJAKQ, HJ bury vs weak KK. |
 | 2026-09-09 | Threshold lookup **signed** (AA folds from 79%; two pair calls from 87%). Soon: range vs \(r\), BN bluff-raises, CO reverse-blockers, two-pair rank. |
 | 2026-09-08 | Queue: next is BN-vs-CO lookup at chart thresholds {79,84,86,87,90,93,96}. HJ reverse-blockers after CO vs BN. 3:1/4:1 draw inventories toward the end. |
 | 2026-09-08 | **CO open chart:** if the table slowplays 79%, don't open JJ unless you have an ace; at 86% JJ needs the joker; at 93% pass JJ. QQ: 84% ace / 90% joker (100% coin-flip). KK: 87% ace / 96% joker (100% +EV). CO never sandbags. |

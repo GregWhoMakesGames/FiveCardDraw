@@ -66,30 +66,65 @@ this ticket is scheduled; do not smuggle it into multi-raise.
 
 ---
 
-## 3. CO reverse-blockers (Super System count, negative)
+## 3. Count (Super System) — sign is the line, not the seat
 
-This **is** Super System’s “count,” with the **sign flipped**.
+Super System’s count was originally a **sandbagging** tool. Convention here:
 
-A **sandbag** wants someone else to *open* so they can raise. Holding
-**AAAKQ** (aces-up with KQ) makes a later legal open very unlikely: it
-blocks strong two pair and legal one-pairs. Count is **positive** → better
-to **open** than to bury, because the trap has nothing to raise.
+- Count is **negative for sandbagging.** A trap wants someone else to *open*
+  so they can raise. High count (blocking later legal opens and strong two
+  pair) is **bad** for burying.
+- Count is **positive for stealing.** An opener who would rather take the
+  antes than play a bigger pot with a marginal hand wants to **block the
+  continue range**.
 
-A **CO opener** would rather **steal the antes** than play a bigger pot
-out of position with a marginal holding. They want to **block BN’s
-continuing range**. Count is **negative**. Example: KK with a queen and a
-jack makes BN **JJ and QQ** less likely (fewer legal opens behind). When BN
-*does* call or raise, the remaining continue range is stronger — more often
-ahead of that KK.
+**Do not assign the sign by seat alone.** The same seat can want high or low
+count depending on **hand strength and the line** (bury vs steal vs value-open
+hoping to get action).
 
-The open chart already used **joker / ace** as trap-blockers in 1–6 (cutting
-slowplay raises). Rank blockers on BN’s openers are the other half of the
-same count. Today BN **folds JJ–KK to any CO open** on the no-bluff grid, so
-the effect may be small until item 2 (bluff-raises) or item 4 (two-pair
-splits) is live.
+Examples (do not compute in this ticket):
 
-HJ still applies the **positive** count when we get there (after CO vs BN).
-Do not wait for HJ to study the **negative** count at CO.
+- **BN with trips** who *opens* is often hoping someone in 1–6 **sandbagged
+  two pair**. `55543` vs `555KB` block different cards. One flavor can make
+  a raise they still beat (and can reraise) more likely; the other can
+  starve that action. That is not “button = steal, so count is always
+  positive.”
+- **BN with JJ** would be glad of **JJAKQ**: it blocks a lot of sandbag
+  hands. The holding is also **stronger as a play** — if raised, discard the
+  extra jack and draw to the straight; drawing one **looks like two pair**,
+  which can push a weak two-pair sandbagger off, and a miss can still
+  bluff post-draw. Count, disguised draw, and bluff all sit on the same
+  hand.
+- **HJ** might bury to raise a CO/BN open, or open a weak **KK** hoping CO
+  and BN do **not** continue with a low two pair. Count is not good or bad
+  for HJ until you know which line that holding is on.
+
+The open chart already used **joker / ace** as blockers on 1–6 *traps*
+(cutting slowplay raises). Rank blockers on the player *behind* (KK with
+Q and J vs BN’s JJ/QQ) are the other half of the same count. Today BN
+**folds JJ–KK to any CO open** on the no-bluff grid, so the CO-steal side
+may look small until item 2 (bluff-raises) or item 4 (two-pair splits)
+is live.
+
+### Unknowns to investigate (do not start here)
+
+Add these as separate follow-ups when item 3 is scheduled. One unknown per
+PR is fine.
+
+1. **Sign by class × line, not by seat.** For each of BN / CO / HJ, pin when
+   high count helps a *sandbag*, a *steal*, and a *value open that wants a
+   raise* (trips hoping to reraise two pair). Confirm the Super System
+   convention: negative for sandbagging, positive for stealing.
+2. **BN trips flavors.** Compare `55543` vs `555KB` (and close kin): which
+   blockers raise \(P(\)a 1–6 sandbag raises a two pair BN still beats\()\)?
+3. **BN JJAKQ as a package.** Blocking sandbags + discarding the jack to a
+   straight if raised + one-card draw looking like two pair + miss-bluff.
+   How much of the EV is count vs the draw/disguise?
+4. **HJ count is hand-dependent.** Same seat: sandbag-to-raise-CO/BN vs
+   weak KK hoping late seats do not continue. Do not publish a single HJ
+   count sign.
+
+HJ strategy (after CO vs BN) still uses this count; it does not get a
+different definition.
 
 ---
 

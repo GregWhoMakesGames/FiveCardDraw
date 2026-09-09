@@ -109,12 +109,12 @@ Living order: [AGENTS.md](../../AGENTS.md).
 
 1. Range vs \(r\): how much of each BN switch is CO range vs 1–6 trap rate?
 2. BN bluff-raises (shorts; air with blockers). Fold-JJ–KK is a no-bluff bound.
-3. CO reverse-blockers — Super System count with the **sign flipped** (sandbag wants an open; CO wants a steal).
+3. Super System count — **negative for sandbagging, positive for stealing**; not a seat label. Unknowns: BN trips flavors; BN JJAKQ; HJ bury vs weak KK.
 4. Two-pair rank and blockers (stop lumping non-aces-up two pair).
 
 Then, still CO vs BN: multi-raise; draw / post-draw.
 
-**After CO vs BN:** HJ opens and ideal sandbag rates with reverse-blockers (Super System “count”).
+**After CO vs BN:** HJ opens and sandbag rates. Count is the same tool and is **hand-dependent** (bury vs weak KK).
 
 **Toward the end:** 3:1 drawing hands after CO open + BN call; 3:1/4:1 inventory split on whether the joker is already out. Inventory only — no multiway tree yet.
 

@@ -77,11 +77,12 @@ Extra cutoff considerations before we freeze the open chart:
    **trap rate** in 1–6?
 2. **BN bluff-raises.** Shorts; air with blockers (joker + king, etc.). The
    published fold-JJ–KK line is a no-bluff bound. Do not mix-solve yet.
-3. **CO reverse-blockers.** Super System count with the **sign flipped**:
-   a sandbag wants someone to open (positive; AAAKQ → open, not bury). CO
-   would rather steal than play OOP, so they hope to block BN’s continue
-   range (negative; KK with Q and J). HJ still gets the positive count
-   after CO vs BN.
+3. **Count (Super System).** Negative for **sandbagging**, positive for
+   **stealing** — the original sandbag tool, not a seat label. BN trips
+   opening may want a 1–6 two-pair trap; BN JJ may want JJAKQ (blocks
+   sandbags + draw/disguise). HJ depends on whether the holding is a bury
+   or a weak KK. Investigate the unknowns in the ticket; do not assign
+   one sign per position.
 4. **Two-pair rank and blockers.** Stop treating all non-aces-up two pair as
    one class. CO’s range is mostly two pair+.
 
@@ -92,8 +93,9 @@ Extra cutoff considerations before we freeze the open chart:
 
 **After CO vs BN is finished:**
 
-3. **HJ strategy**, including ideal sandbag rates with reverse-blockers
-   (Super System “count”). Do not start HJ before CO vs BN.
+3. **HJ strategy**, including sandbag rates. Count there uses the same
+   convention (negative for burying, positive for stealing) and is
+   **hand-dependent**. Do not start HJ before CO vs BN.
 
 **Toward the end (multiway start; do not expand until much later):**
 
