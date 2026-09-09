@@ -482,7 +482,7 @@ def derive_answers(rows: list[dict[str, Any]], spec: ChartRateSpec) -> dict[str,
     ]
     value_raise = [
         k
-        for k in ("two_pair_aces_up", "trips", "trips_A")
+        for k in ("two_pair", "two_pair_aces_up", "trips", "trips_A")
         if k in by and by[k]["recommend"]["action"] == "raise"
     ]
     flavor_flips = []
@@ -507,9 +507,12 @@ def derive_answers(rows: list[dict[str, Any]], spec: ChartRateSpec) -> dict[str,
                     }
                 )
     aa_thin = False
+    aa_raise_plus = False
     if aa is not None:
         rec = aa["recommend"]
         aa_thin = bool(rec.get("thin_vs_fold") or rec.get("thin_vs_runner_up"))
+        aa_raise_plus = bool(rec.get("raise_plus_ev_vs_fold"))
+    tp_p_win = None if tp is None else tp["p_bn_wins_final"]
     return {
         "rate_pct": spec.rate_pct,
         "co_jj": spec.jj,
@@ -525,7 +528,9 @@ def derive_answers(rows: list[dict[str, Any]], spec: ChartRateSpec) -> dict[str,
         "aa_ev_raise_checkdown": None if aa is None else aa["ev_raise_checkdown"],
         "aa_p_win": None if aa is None else aa["p_bn_wins_final"],
         "aa_thin": aa_thin,
+        "aa_raise_plus_ev_vs_fold": aa_raise_plus,
         "two_pair_action": None if tp is None else act("two_pair"),
+        "two_pair_p_win": tp_p_win,
         "aces_up_action": None if au is None else act("two_pair_aces_up"),
         "trips_action": None if tr is None else act("trips"),
         "trips_A_action": None if tra is None else act("trips_A"),

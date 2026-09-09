@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import random
 from pathlib import Path
 
@@ -179,3 +180,109 @@ def test_hu_generator_locked_draws():
     assert len(deals86) == 8
     assert all(d.caller_class == "pair_A" for d in deals86)
     assert all(d.caller_d == LOCKED_BN_DRAW.pair_d for d in deals86)
+
+
+def _load(path: Path) -> dict:
+    assert path.exists(), (
+        "run python -m fivecarddraw.validation.button_vs_cutoff_r84_r86 "
+        "--rate {84|86} --n-hu 4000 --write-fixture"
+    )
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _assert_common_fixture(data: dict, *, rate_pct: int, seed: int, frame: str) -> dict:
+    meta = data["meta"]
+    assert meta["frame"] == frame
+    assert meta["rate_pct"] == rate_pct
+    assert meta["seed"] == seed
+    assert meta["n_hu"] == 4000
+    assert meta["accounting"]["fold"] == 0.0
+    assert meta["locked_draws"]["pair_d"] == 3
+    assert meta["locked_draws"]["two_pair_d"] == 1
+    assert meta["co_range"]["kk"] == POLICY_OPEN_ALWAYS
+    answers = data["answers"]
+    assert answers["jj_action"] == "fold"
+    assert answers["qq_action"] == "fold"
+    assert answers["kk_action"] == "fold"
+    # Inflection vs all-legal polar (AA raise): both interior rows fold AA.
+    assert answers["aa_action"] == "fold"
+    assert answers["aa_ev_call"] < 0.0
+    assert answers["aa_p_win"] < 0.5
+    assert answers["aa_raise_plus_ev_vs_fold"] is True
+    assert answers["aa_ev_raise_checkdown"] > 0.0
+    assert answers["two_pair_action"] == "raise"
+    assert answers["aces_up_action"] == "raise"
+    assert answers["trips_action"] == "raise"
+    assert answers["trips_A_action"] == "raise"
+    assert answers["flavor_action_flips"] == []
+    by = {r["key"]: r for r in data["by_row"]}
+    for key in ("pair_J", "pair_Q", "pair_K", "pair_A"):
+        row = by[key]
+        assert row["recommend"]["action"] == "fold"
+        assert row["ev_call"] < 0.0
+        assert row["n"] == 4000.0
+        assert row["se_call"] > 0.0
+        assert row["p_bn_wins_final"] < 0.5
+    aa = by["pair_A"]
+    assert aa["recommend"]["value_raise"] is False
+    assert aa["recommend"]["raise_plus_ev_vs_fold"] is True
+    two_pair = by["two_pair"]
+    assert two_pair["ev_call"] > 0.0
+    assert two_pair["recommend"]["action"] == "raise"
+    assert two_pair["recommend"]["value_raise"] is True
+    trips = by["trips"]
+    assert trips["p_bn_wins_final"] > 0.5
+    assert trips["recommend"]["action"] == "raise"
+    for key in ("pair_J_joker", "pair_J_ace", "pair_Q_joker", "pair_K_joker"):
+        assert by[key]["recommend"]["action"] == "fold"
+        assert by[key]["ev_call"] < 0.0
+    return by
+
+
+def test_fixture_r84_product():
+    data = _load(FIXTURE_R84)
+    by = _assert_common_fixture(
+        data, rate_pct=84, seed=DEFAULT_SEED_R84, frame="button_vs_cutoff_r84"
+    )
+    meta = data["meta"]
+    assert meta["co_range"]["jj"] == POLICY_ACE_OR_JOKER
+    assert meta["co_range"]["qq"] == POLICY_ACE_OR_JOKER
+    # Bare JJ/QQ are out; JJ+ace is in; all KK (including bare) is in.
+    jj = by["pair_J"]
+    assert jj["co_mix"]["pair_J_bare"] == 0.0
+    assert jj["co_mix"]["pair_Q_bare"] == 0.0
+    assert jj["co_mix"]["pair_J_ace"] > 0.0
+    assert jj["co_mix"]["pair_K_bare"] > 0.05
+    aa = by["pair_A"]
+    assert aa["ev_call"] == -0.44525
+    assert aa["ev_raise_checkdown"] == 0.54625
+    assert aa["p_bn_wins_final"] == 0.4545
+    assert aa["se_call"] > 0.0
+    assert aa["se_raise_checkdown"] > 0.0
+
+
+def test_fixture_r86_product():
+    data = _load(FIXTURE_R86)
+    by = _assert_common_fixture(
+        data, rate_pct=86, seed=DEFAULT_SEED_R86, frame="button_vs_cutoff_r86"
+    )
+    meta = data["meta"]
+    assert meta["co_range"]["jj"] == POLICY_JOKER_ONLY
+    assert meta["co_range"]["qq"] == POLICY_ACE_OR_JOKER
+    # JJ ace/bare are out of CO's range at 86%; joker JJ and all KK remain.
+    for row in by.values():
+        assert row["co_mix"]["pair_J_ace"] == 0.0
+        assert row["co_mix"]["pair_J_bare"] == 0.0
+        assert row["co_mix"]["pair_Q_bare"] == 0.0
+    jj = by["pair_J"]
+    assert jj["co_mix"]["pair_J_joker"] > 0.0
+    assert jj["co_mix"]["pair_K_bare"] > 0.05
+    aa = by["pair_A"]
+    assert aa["ev_call"] == -0.70725
+    assert aa["ev_raise_checkdown"] == 0.28125
+    assert aa["p_bn_wins_final"] == 0.428
+    # AA is a worse dog than at 84% (JJ+ace dropped).
+    r84 = _load(FIXTURE_R84)
+    aa84 = next(r for r in r84["by_row"] if r["key"] == "pair_A")
+    assert aa["p_bn_wins_final"] < aa84["p_bn_wins_final"]
+    assert aa["ev_call"] < aa84["ev_call"]
