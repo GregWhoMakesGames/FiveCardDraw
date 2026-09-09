@@ -216,23 +216,34 @@ def test_fixture_product_chart():
         assert row["se_call"] > 0.0
         assert row["se_raise_checkdown"] > 0.0
 
-    assert answers["chart"] == {spec: by[spec]["action"] for spec in answers["chart"]}
-    # Low pairs: still not a value raise vs a jacks+ CO range.
+    assert answers["chart"] == {
+        "pair_J": "fold",
+        "pair_Q": "fold",
+        "pair_K": "fold",
+        "pair_A": "fold",
+        "two_pair": "raise",
+        "two_pair_aces_up": "raise",
+        "trips_plus": "raise",
+        "two_to_one": "call",
+    }
+    # One-pair: still not a value raise. AA already folds (inflection vs all-legal).
     assert by["pair_J"]["action"] == "fold"
     assert by["pair_J"]["ev_call"] < 0.0
     assert by["pair_Q"]["action"] == "fold"
     assert by["pair_K"]["action"] == "fold"
-    # Trips+ / aces-up stay value raises on this wide-ish row.
+    assert by["pair_K"]["needs_later_tree"] is True
+    assert answers["pair_A_action"] == "fold"
+    assert answers["aa_still_raises"] is False
+    assert by["pair_A"]["action"] == "fold"
+    assert by["pair_A"]["ev_call"] < 0.0
+    assert by["pair_A"]["p_bn_wins_final"] < 0.5
+    assert by["pair_A"]["recommend_tight_rule"]["action"] == "fold"
+    # Two pair has *not* flipped to the tight polar’s thin call.
+    assert by["two_pair"]["action"] == "raise"
+    assert by["two_pair"]["p_bn_wins_final"] > 0.5
+    # Trips+ / aces-up stay value raises.
     assert by["trips_plus"]["action"] == "raise"
     assert by["trips_plus"]["p_bn_wins_final"] > 0.70
     assert by["two_pair_aces_up"]["action"] == "raise"
     assert by["two_to_one"]["action"] == "call"
-    assert by["two_to_one"]["ev_call"] > 0.0
-    # AA inflection vs tight polar (tight folds AA). Pin the product.
-    assert answers["pair_A_action"] == by["pair_A"]["action"]
-    assert answers["aa_still_raises"] is True
-    assert by["pair_A"]["action"] == "raise"
-    assert by["pair_A"]["p_bn_wins_final"] > 0.5
-    assert by["two_pair"]["action"] == "raise"
-    # Sanity: this range is weaker than tight (AA still a favorite).
-    assert by["pair_A"]["ev_call"] > 0.0
+    assert by["two_to_one"]["ev_call"] > 0.5
