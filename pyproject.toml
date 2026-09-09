@@ -38,6 +38,8 @@ analyze-button-vs-cutoff = "fivecarddraw.validation.button_vs_cutoff:main"
 analyze-button-vs-cutoff-tight = "fivecarddraw.validation.button_vs_cutoff_tight:main"
 analyze-button-vs-cutoff-r79 = "fivecarddraw.validation.button_vs_cutoff_r79:main"
 analyze-button-vs-cutoff-chart = "fivecarddraw.validation.button_vs_cutoff_chart:main"
+analyze-button-vs-cutoff-r93 = "fivecarddraw.validation.button_vs_cutoff_r93:main"
+analyze-button-vs-cutoff-r96 = "fivecarddraw.validation.button_vs_cutoff_r96:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
