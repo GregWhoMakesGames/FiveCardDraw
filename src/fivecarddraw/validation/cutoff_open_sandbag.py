@@ -305,6 +305,7 @@ class CoDealMcResult:
     se_p_raise: float
     co_class: str
     world: str = WORLD
+    sandbag_rate: float = 1.0
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -324,7 +325,30 @@ class CoDealMcResult:
             se_p_raise=float(d["se_p_raise"]),
             co_class=str(d["co_class"]),
             world=str(d.get("world", WORLD)),
+            sandbag_rate=float(d.get("sandbag_rate", 1.0)),
         )
+
+
+def seat_passed_then_raises(
+    cls: str | None,
+    seat: int,
+    world: str,
+    rng: random.Random,
+    sandbag_rate: float,
+) -> tuple[bool, bool]:
+    """Whether this seat spoils the folded-to-CO deal, and whether it raises.
+
+    Sandbag-set holders pass-then-raise with probability ``sandbag_rate``;
+    otherwise they open (deal rejected). ``sandbag_rate >= 1`` takes the r=1
+    path with **no extra RNG** so locked 40k / 10k pins stay bit-identical.
+    """
+    if is_sandbag_set(cls, seat, world):
+        if sandbag_rate < 1.0 and rng.random() >= sandbag_rate:
+            return True, False
+        return False, True
+    if is_voluntary_opener(cls, seat, world):
+        return True, False
+    return False, False
 
 
 def deal_mc_p_raise_given_passed_co(
@@ -333,11 +357,13 @@ def deal_mc_p_raise_given_passed_co(
     seed: int = DEFAULT_MC_SEED,
     co_class: str = "pair_J",
     world: str = WORLD,
+    sandbag_rate: float = 1.0,
 ) -> CoDealMcResult:
-    """P(≥1 of 1–6 sandbag-set | 1–6 no voluntary, CO holds ``co_class``).
+    """P(≥1 of 1–6 sandbag-set | 1–6 passed, CO holds ``co_class``).
 
     BN is dealt and **not** filtered (unlike folded-to-BN worlds). CO is the
-    hero, so CO is not a sandbag raiser in this world.
+    hero, so CO is not a sandbag raiser in this world. Interior ``sandbag_rate``
+    < 1 lets sandbag-set holders open (reject) with probability 1−r.
     """
     rng = random.Random(seed)
     deck = list(range(53))
@@ -359,10 +385,13 @@ def deal_mc_p_raise_given_passed_co(
         for seat in SEATS_1_6:
             start = 5 * (seat - 1)
             cls = _ids_to_cls(deck[start : start + 5])
-            if is_voluntary_opener(cls, seat, world):
+            reject, raises = seat_passed_then_raises(
+                cls, seat, world, rng, sandbag_rate
+            )
+            if reject:
                 rejected = True
                 break
-            if is_sandbag_set(cls, seat, world):
+            if raises:
                 n_sandbag += 1
         if rejected:
             continue
@@ -387,6 +416,7 @@ def deal_mc_p_raise_given_passed_co(
         se_p_raise=se,
         co_class=co_class,
         world=world,
+        sandbag_rate=sandbag_rate,
     )
 
 
@@ -546,13 +576,15 @@ def deal_mc_p_raise_co_flavor(
     require_bug: bool = False,
     require_physical_ace: bool = False,
     world: str = WORLD,
+    sandbag_rate: float = 1.0,
 ) -> CoDealMcResult:
     """Same folded-to-CO raise MC as ``deal_mc_p_raise_given_passed_co``, with
     singleton blockers forced into CO's five cards.
 
     Does **not** replace the class-average 40k pins. The bug is an ace (or a
     straight/flush fill), not a duplicate king: ``pair_K`` plus the joker is
-    two kings + bug as ace kicker.
+    two kings + bug as ace kicker. Interior ``sandbag_rate`` < 1 is the same
+    card-removal MC with sandbag-set holders opening at 1−r.
     """
     rng = random.Random(seed)
     n_tried = 0
@@ -579,10 +611,13 @@ def deal_mc_p_raise_co_flavor(
         for seat in SEATS_1_6:
             start = 5 * (seat - 1)
             cls = _ids_to_cls(rest[start : start + 5])
-            if is_voluntary_opener(cls, seat, world):
+            reject, raises = seat_passed_then_raises(
+                cls, seat, world, rng, sandbag_rate
+            )
+            if reject:
                 rejected = True
                 break
-            if is_sandbag_set(cls, seat, world):
+            if raises:
                 n_sandbag += 1
         if rejected:
             continue
@@ -607,6 +642,7 @@ def deal_mc_p_raise_co_flavor(
         se_p_raise=se,
         co_class=co_class,
         world=world,
+        sandbag_rate=sandbag_rate,
     )
 
 
@@ -1280,6 +1316,14 @@ def main() -> None:
             "MCs; do not redo 40k class pins"
         ),
     )
+    p.add_argument(
+        "--write-chart",
+        action="store_true",
+        help=(
+            "Interpolate the CO open chart (slowplay r × blockers) from locked "
+            "0%/100% pins; do not redo endpoint MC"
+        ),
+    )
     p.add_argument("--blocker-n", type=int, default=DEFAULT_BLOCKER_MC_N)
     p.add_argument("--blocker-n-leaf", type=int, default=DEFAULT_BLOCKER_LEAF_N)
     p.add_argument(
@@ -1289,6 +1333,11 @@ def main() -> None:
         help="Comma-separated CO classes (default: pair_J,pair_Q,pair_K)",
     )
     args = p.parse_args()
+    if args.write_chart:
+        from fivecarddraw.validation.cutoff_open_chart import main_write_chart
+
+        main_write_chart(args.output)
+        return
     if args.write_blockers:
         path = merge_blockers_into_fixture(
             args.output,
