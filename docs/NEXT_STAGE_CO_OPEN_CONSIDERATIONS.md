@@ -1,12 +1,14 @@
 # Next stage: CO open considerations (range vs \(r\), BN bluffs, reverse-blockers, two-pair rank)
 
-**Status: plan only. Do not compute in this ticket.** Parent:
-[research/INDEX.md](research/INDEX.md). Living queue: [AGENTS.md](../AGENTS.md).
+**Status: item 1 signed** ([research/button_vs_cutoff_range_vs_r.md](research/button_vs_cutoff_range_vs_r.md));
+items 2–4 still soon. Parent: [research/INDEX.md](research/INDEX.md). Living
+queue: [AGENTS.md](../AGENTS.md).
 
-The BN-vs-CO **threshold grid** is signed (lookup below). These four questions
-are **soon**, still in the CO vs BN era, **before** HJ mixes. They are extra
-considerations the cutoff should have before we treat the open chart as
-finished. Do not start multi-raise or draw/post-draw as a way to skip them.
+The BN-vs-CO **threshold grid** is signed (lookup below). Item 1 of these
+four questions is **signed**. Items 2–4 are still **soon**, still in the CO
+vs BN era, **before** HJ mixes. They are extra considerations the cutoff
+should have before we treat the open chart as finished. Do not start
+multi-raise or draw/post-draw as a way to skip them.
 
 Signed lookup (BN vs a CO who plays the chart range at table slowplay \(r\)):
 
@@ -23,22 +25,20 @@ Two flips: **AA** leaves the raise as soon as bare JJ is out of CO (\(r=79\%\)).
 
 ## 1. Range vs slowplay rate (decomposition)
 
-The single table maps \(r\) → *ideal* CO range → BN action. Real CO may not
-play that range: **wider** than \(r\) allows, or **tighter** despite a low
-sandbag rate (especially **under 79%**, where the chart still says open every
-legal).
+**Status: signed.** Frame:
+[research/button_vs_cutoff_range_vs_r.md](research/button_vs_cutoff_range_vs_r.md).
 
-BN’s response should depend on **both**:
+Both published switches are **CO range**, not 1–6 trap rate. Chart-range at
+trap \(=0\) already folds AA (r79) and calls two pair (r87). All-legal CO at
+table \(r=79\%\) still value-raises AA; r86 CO at \(r=87\%\) still
+value-raises two pair. Too-tight CO under 79% (tight polar at trap 0) folds
+AA / calls two pair — also range. **No lookup row.**
 
-- the **range** CO is actually opening, and
-- \(P(\)seats 1–6 still have a slowplay trap\()\).
-
-**Question.** How much of each switch (AA raise→fold; two pair raise→call) is
-**CO range** vs **trap rate**? Hold one factor fixed and vary the other
-(chart-range at the wrong \(r\); non-chart range at a known \(r\)).
-
-Out of scope here: computing that grid. Method when started: reuse locked
-BN-vs-CO leaves; do not rebuild post-draw Nash.
+Primary mix: fold-bound −$2 on the **call** line only; raise stays HU (no
+multi-raise). The even-folding bound can turn the thin r87 two-pair *call*
+negative; that is not two pair’s line (`sandbag_v1`). tight_proxy keeps
+**call**. Fold-to-3-bet on the raise line would flip trap-only AA / two pair
+and is the later multi-raise ticket.
 
 ---
 
