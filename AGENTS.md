@@ -1,5 +1,39 @@
 # Agent notes
 
+## Ask when instructions conflict or a misunderstanding would be expensive
+
+Do not resolve a conflict between rules by guessing. Do not “just proceed”
+when the next step is costly: launching, stopping, or relaunching several
+agents; putting more than one agent on the same writable branch; discarding
+work that would have to be redone.
+
+If a later instruction may rest on a misunderstanding of what already
+happened, **stop**. State the actual situation in plain language. Ask whether
+the previous instruction still stands. Wait for confirmation. Do not take
+the costly action in the meantime.
+
+**Example.** Four cloud research agents were launched with `main` as the
+*starting point*. Each was supposed to create its own feature branch and
+merge via PR. They were not all committing onto `main`. The user heard that
+as “they are all working on main” and said to stop them and relaunch on
+separate branches. The coordinator noticed the likely mix-up (base branch vs
+working branch) but kept going toward a stop-and-relaunch. That would have
+thrown away four already-started agents and paid to start four more.
+
+Correct behavior: pause and say something like, “Those four used `main` only
+as the base. They were not supposed to commit on `main`. They are idle / on
+their own branches / have not pushed yet. Relaunching them is expensive and
+may be unnecessary. Do you still want them stopped and relaunched, or should
+they keep going?” Then wait.
+
+Never treat “the user said stop and relaunch” as license to skip that check
+once you know their reason may be wrong.
+
+**Branches.** Prefer a dedicated feature branch for every agent, always.
+Working on `main` is only acceptable if that agent is the only one writing,
+and even then a branch is better. Never put two agents on the same writable
+branch.
+
 ## Cursor Cloud specific instructions
 
 ### What this repo is
@@ -115,7 +149,8 @@ table always slowplaying → late seats fold lowest pairs.
 **Handoff checklist for new agents**
 
 1. `git fetch origin main && git checkout main && git pull origin main`
-2. Create `cursor/<short-name>-f76a` (or the suffix required by the run)
+2. Create `cursor/<short-name>-f76a` (or the suffix required by the run).
+   Do not stay on `main`. Do not share a writable branch with another agent.
 3. `pip install -e ".[dev]" && pytest -q`
 4. After this docs PR lands, take **one** item from
    [docs/NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md](docs/NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md).
