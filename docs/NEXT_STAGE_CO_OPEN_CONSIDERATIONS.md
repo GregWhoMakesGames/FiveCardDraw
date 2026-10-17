@@ -1,12 +1,14 @@
 # Next stage: CO open considerations (range vs \(r\), BN bluffs, reverse-blockers, two-pair rank)
 
-**Status: plan only. Do not compute in this ticket.** Parent:
-[research/INDEX.md](research/INDEX.md). Living queue: [AGENTS.md](../AGENTS.md).
+**Status: item 1 signed** ([research/button_vs_cutoff_range_vs_r.md](research/button_vs_cutoff_range_vs_r.md));
+items 2–4 still soon. Parent: [research/INDEX.md](research/INDEX.md). Living
+queue: [AGENTS.md](../AGENTS.md).
 
-The BN-vs-CO **threshold grid** is signed (lookup below). These four questions
-are **soon**, still in the CO vs BN era, **before** HJ mixes. They are extra
-considerations the cutoff should have before we treat the open chart as
-finished. Do not start multi-raise or draw/post-draw as a way to skip them.
+The BN-vs-CO **threshold grid** is signed (lookup below). Item 1 of these
+four questions is **signed**. Items 2–4 are still **soon**, still in the CO
+vs BN era, **before** HJ mixes. They are extra considerations the cutoff
+should have before we treat the open chart as finished. Do not start
+multi-raise or draw/post-draw as a way to skip them.
 
 Signed lookup (BN vs a CO who plays the chart range at table slowplay \(r\)):
 
@@ -23,22 +25,18 @@ Two flips: **AA** leaves the raise as soon as bare JJ is out of CO (\(r=79\%\)).
 
 ## 1. Range vs slowplay rate (decomposition)
 
-The single table maps \(r\) → *ideal* CO range → BN action. Real CO may not
-play that range: **wider** than \(r\) allows, or **tighter** despite a low
-sandbag rate (especially **under 79%**, where the chart still says open every
-legal).
+**Status: signed.** Frame:
+[research/button_vs_cutoff_range_vs_r.md](research/button_vs_cutoff_range_vs_r.md).
 
-BN’s response should depend on **both**:
+When the button’s line vs a cutoff open changes, it is because **cutoff
+opened a tighter set of hands**, not because seats 1–6 are more likely to
+trap. Fold aces once cutoff stops opening bare jacks; call two pair once
+cutoff’s kings need a blocker. If cutoff stays wide, the button still
+raises both of those even at a trapping table. The signed lookup is
+unchanged.
 
-- the **range** CO is actually opening, and
-- \(P(\)seats 1–6 still have a slowplay trap\()\).
-
-**Question.** How much of each switch (AA raise→fold; two pair raise→call) is
-**CO range** vs **trap rate**? Hold one factor fixed and vary the other
-(chart-range at the wrong \(r\); non-chart range at a known \(r\)).
-
-Out of scope here: computing that grid. Method when started: reuse locked
-BN-vs-CO leaves; do not rebuild post-draw Nash.
+A later three-bet tree (cutoff open, button raise, trap re-raises) could
+still let trapping matter; that is not this mix.
 
 ---
 
