@@ -1,14 +1,17 @@
 # Next stage: CO open considerations (range vs \(r\), BN bluffs, reverse-blockers, two-pair rank)
 
 **Status: item 1 signed** ([research/button_vs_cutoff_range_vs_r.md](research/button_vs_cutoff_range_vs_r.md));
-items 2–4 still soon. Parent: [research/INDEX.md](research/INDEX.md). Living
+item 2 is a **question frame**
+([research/button_vs_cutoff_bluff_raises.md](research/button_vs_cutoff_bluff_raises.md));
+items 3–4 still soon. Parent: [research/INDEX.md](research/INDEX.md). Living
 queue: [AGENTS.md](../AGENTS.md).
 
 The BN-vs-CO **threshold grid** is signed (lookup below). Item 1 of these
-four questions is **signed**. Items 2–4 are still **soon**, still in the CO
-vs BN era, **before** HJ mixes. They are extra considerations the cutoff
-should have before we treat the open chart as finished. Do not start
-multi-raise or draw/post-draw as a way to skip them.
+four questions is **signed**. Item 2 is a question frame (no mix-solve).
+Items 3–4 are still **soon**, still in the CO vs BN era, **before** HJ
+mixes. They are extra considerations the cutoff should have before we treat
+the open chart as finished. Do not start multi-raise or draw/post-draw as a
+way to skip them.
 
 Signed lookup (BN vs a CO who plays the chart range at table slowplay \(r\)):
 
@@ -42,6 +45,10 @@ still let trapping matter; that is not this mix.
 
 ## 2. BN bluff-raises (qualitative only until scheduled)
 
+**Status: question frame.**
+[research/button_vs_cutoff_bluff_raises.md](research/button_vs_cutoff_bluff_raises.md).
+Do not mix-solve. Lookup unchanged.
+
 We have almost no pre-draw bluff work. BN-vs-CO so far is fold / call /
 value-raise with **no** raise as a bluff. Polar all-legal even has **no air**
 in CO, so a BN raise was value/protection vs jacks+.
@@ -59,8 +66,8 @@ Candidates (do not mix-solve yet):
 
 A bluff-raise that sometimes works would mean the published “fold JJ–KK
 always” line is a **no-bluff bound**. It would also change what CO must
-continue with, and therefore which CO opens are +EV. Park a full tree until
-this ticket is scheduled; do not smuggle it into multi-raise.
+continue with, and therefore which CO opens are +EV. Park a full tree;
+do not smuggle it into multi-raise.
 
 ---
 
