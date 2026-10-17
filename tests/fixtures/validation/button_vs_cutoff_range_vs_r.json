@@ -5891,7 +5891,7 @@
     "p_trap_79": 0.41886,
     "p_trap_86": 0.44513,
     "p_trap_87": 0.44877,
-    "headline": "Both signed switches are CO range, not 1\u20136 trap rate. Chart-range at trap=0 already flips AA (r79) and two pair (r87). All-legal CO at r=79% still value-raises AA; r=86% CO at r=87% still value-raises two pair. No lookup row.",
-    "note": "Primary mix: fold-bound \u2212$2 on the call line only; raise stays HU (no multi-raise). tight_proxy is an optimistic vs-trap call leaf. fold_threebet on the raise line is sensitivity, not product."
+    "headline": "Button aces and two pair follow how tight cutoff opens, not how often seats 1\u20136 trap. Dropping bare jacks is enough to fold aces; kings needing a blocker is enough to call two pair. A wide cutoff still gets raised even when the table traps. Lookup unchanged.",
+    "note": "Call can mix a 1\u20136 trap raise; the button raise stays heads-up vs cutoff (no three-bet tree). Auto-folding a trap is a pessimistic bound for aces/two pair, not the published line."
   }
 }

@@ -28,17 +28,15 @@ Two flips: **AA** leaves the raise as soon as bare JJ is out of CO (\(r=79\%\)).
 **Status: signed.** Frame:
 [research/button_vs_cutoff_range_vs_r.md](research/button_vs_cutoff_range_vs_r.md).
 
-Both published switches are **CO range**, not 1–6 trap rate. Chart-range at
-trap \(=0\) already folds AA (r79) and calls two pair (r87). All-legal CO at
-table \(r=79\%\) still value-raises AA; r86 CO at \(r=87\%\) still
-value-raises two pair. Too-tight CO under 79% (tight polar at trap 0) folds
-AA / calls two pair — also range. **No lookup row.**
+When the button’s line vs a cutoff open changes, it is because **cutoff
+opened a tighter set of hands**, not because seats 1–6 are more likely to
+trap. Fold aces once cutoff stops opening bare jacks; call two pair once
+cutoff’s kings need a blocker. If cutoff stays wide, the button still
+raises both of those even at a trapping table. The signed lookup is
+unchanged.
 
-Primary mix: fold-bound −$2 on the **call** line only; raise stays HU (no
-multi-raise). The even-folding bound can turn the thin r87 two-pair *call*
-negative; that is not two pair’s line (`sandbag_v1`). tight_proxy keeps
-**call**. Fold-to-3-bet on the raise line would flip trap-only AA / two pair
-and is the later multi-raise ticket.
+A later three-bet tree (cutoff open, button raise, trap re-raises) could
+still let trapping matter; that is not this mix.
 
 ---
 

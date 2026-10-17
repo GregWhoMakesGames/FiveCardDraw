@@ -1,4 +1,4 @@
-"""BN-vs-CO range vs trap-rate decomposition (item 1; locked leaves)."""
+"""Button vs cutoff: tightness of the open vs early-seat trapping."""
 
 from __future__ import annotations
 

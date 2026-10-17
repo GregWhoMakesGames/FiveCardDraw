@@ -55,7 +55,7 @@ Say `evaluate button_open_no_sandbagging Ring 2` when the frame might be wrong. 
 | **cutoff_open_sandbag_v1** | [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md) | CO vs 1–6 sandbag rate. **Open chart:** JJ/QQ/KK × {avg, ace, joker}. Bare JJ +EV below ~79%; at 100% only KK+joker is clearly +EV. CO does not sandbag. |
 | **button_vs_cutoff_all_legal** | [button_vs_cutoff_all_legal.md](button_vs_cutoff_all_legal.md) | Seats 1–6 unable; CO opens 100% legal (no sandbag). BN fold/call/raise vs that open. **No air.** Fold JJ–KK; value-raise AA / two pair / trips+; 2:1 call. |
 | **button_vs_cutoff_tight** | [button_vs_cutoff_tight.md](button_vs_cutoff_tight.md) | BN fold/call/raise vs a **tight** CO open (AA+ plus QQ/KK+joker). Range 2; not all-legal. Fold JJ–AA; call two pair (thin); raise aces-up / trips. |
-| **button_vs_cutoff_range_vs_r** | [button_vs_cutoff_range_vs_r.md](button_vs_cutoff_range_vs_r.md) | Item 1: AA raise→fold and two pair raise→call are **CO range**, not 1–6 trap rate. No lookup row. |
+| **button_vs_cutoff_range_vs_r** | [button_vs_cutoff_range_vs_r.md](button_vs_cutoff_range_vs_r.md) | BN vs CO: the button’s aces/two-pair lines follow **how tight cutoff opens**, not how often seats 1–6 trap. Lookup unchanged. |
 
 Mint a new frame file when the laboratory changes. Add a row here. Do not reuse Ring / Stage / Line aliases from one frame in another without a new table.
 
@@ -93,7 +93,7 @@ Use **seats 1–8** in all research prose. Code may still use 0-based indices in
 | — | [cutoff_open_sandbag_v1.md](cutoff_open_sandbag_v1.md) | CO open chart (slowplay × blockers) + 0%/100% pins; JJ binds ~79% | **Signed** |
 | — | [button_vs_cutoff_all_legal.md](button_vs_cutoff_all_legal.md) | BN vs all-legal CO open: fold JJ–KK, raise AA+ | Polar range 1 |
 | — | [button_vs_cutoff_tight.md](button_vs_cutoff_tight.md) | BN vs tight CO open (AA+ / QQ·KK+joker): fold JJ–AA | Polar range 2 |
-| — | [button_vs_cutoff_range_vs_r.md](button_vs_cutoff_range_vs_r.md) | Range vs \(r\): both BN switches are CO range, not trap rate | Item 1 signed |
+| — | [button_vs_cutoff_range_vs_r.md](button_vs_cutoff_range_vs_r.md) | BN aces/two pair track cutoff tightness, not 1–6 trap frequency | Item 1 signed |
 | 4 | [ch04_draw_mixes.md](ch04_draw_mixes.md) | Opener draw mixes + check protection (C done) | Draw mixes / concealment next |
 | 5 | [ch05_later_seats.md](ch05_later_seats.md) | CO open climb; **CO bluff after BN open** (§5.2); HJ | Agent B / later |
 | A | [appendix_a_rules.md](appendix_a_rules.md) | Game rules | Shared (rare edits) |
@@ -151,8 +151,9 @@ Update the **Status** column in this ledger when a chapter’s owner claims a sl
 ### Immediate research queue
 
 Living order is in [AGENTS.md](../../AGENTS.md). The threshold lookup is **signed**.
-Item 1 (range vs \(r\)) is signed. Soon: BN bluff-raises, count, two-pair rank.
-Finish CO vs BN before HJ. Multiway 3:1/4:1 work is toward the end.
+Item 1 is signed: cutoff tightness, not 1–6 trap frequency, is what changes
+BN aces / two pair. Soon: BN bluff-raises, count, two-pair rank. Finish CO vs
+BN before HJ. Multiway 3:1/4:1 work is toward the end.
 
 | Order | Work | Chapter | Blocks |
 | ---: | --- | --- | --- |
@@ -160,7 +161,7 @@ Finish CO vs BN before HJ. Multiway 3:1/4:1 work is toward the end.
 | — | **Done.** BN vs all-legal CO: fold JJ–KK; raise AA+; 2:1 call. No air. | [button_vs_cutoff_all_legal.md](button_vs_cutoff_all_legal.md) | Polar \(r=0\%\) |
 | — | **Done.** BN vs tight CO (AA+ / QQ·KK+joker): fold JJ–AA; call two pair; raise aces-up / trips | [button_vs_cutoff_tight.md](button_vs_cutoff_tight.md) | Polar \(r\approx 100\%\) |
 | — | **Done.** BN vs CO lookup at chart \(r\): AA folds from 79%; two pair calls from 87%. Two flips, not seven. | [../NEXT_STAGE_BN_VS_CO_GRID.md](../NEXT_STAGE_BN_VS_CO_GRID.md) | Do not restart |
-| 1 | **Done.** Range vs \(r\): AA raise→fold and two pair raise→call are **CO range**, not 1–6 trap rate. Too-loose CO at high \(r\) still gets raised. No lookup row. | [button_vs_cutoff_range_vs_r.md](button_vs_cutoff_range_vs_r.md) | Do not restart |
+| 1 | **Done.** BN aces fold when cutoff stops opening bare jacks; two pair calls when cutoff’s kings need a blocker. Early-seat trapping does not cause those changes. Lookup unchanged. | [button_vs_cutoff_range_vs_r.md](button_vs_cutoff_range_vs_r.md) | Do not restart |
 | 2 | **Soon:** BN bluff-raises (shorts; air with blockers). Fold-JJ–KK is a no-bluff bound. | same ticket | After or with #1; no mix-solve in the queue PR |
 | 3 | **Soon:** Super System count — **negative for sandbagging, positive for stealing**; sign is the *line*, not the seat. Unknowns: BN trips `55543` vs `555KB`; BN JJAKQ (count + draw/disguise); HJ bury vs weak KK | [../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md](../NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md) §3 | Do not assign one sign per position |
 | 4 | **Soon:** two-pair rank and blockers (stop lumping non-aces-up two pair) | same ticket | CO range is mostly two pair+ |
@@ -203,7 +204,7 @@ Finish CO vs BN before HJ. Multiway 3:1/4:1 work is toward the end.
 
 | Date | Change |
 | --- | --- |
-| 2026-09-09 | Range vs \(r\): both BN switches are **CO range**, not trap rate. No lookup row. |
+| 2026-09-09 | BN vs CO: aces/two-pair lines follow how tight cutoff opens, not 1–6 trap frequency. Lookup unchanged. |
 | 2026-09-09 | Count convention: **negative for sandbagging, positive for stealing**; sign is the line, not the seat. Unknowns: BN trips flavors, BN JJAKQ, HJ bury vs weak KK. |
 | 2026-09-09 | Threshold lookup **signed** (AA folds from 79%; two pair calls from 87%). Soon: range vs \(r\), BN bluff-raises, CO reverse-blockers, two-pair rank. |
 | 2026-09-08 | Queue: next is BN-vs-CO lookup at chart thresholds {79,84,86,87,90,93,96}. HJ reverse-blockers after CO vs BN. 3:1/4:1 draw inventories toward the end. |

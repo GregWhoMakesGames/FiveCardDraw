@@ -1,18 +1,14 @@
-"""BN-vs-CO: decompose the two signed switches into CO range vs 1–6 trap rate.
+"""Button vs cutoff: tightness of the open vs early-seat trapping.
 
 Frame: ``button_vs_cutoff_range_vs_r``
 (docs/research/button_vs_cutoff_range_vs_r.md). Ticket item 1:
 docs/NEXT_STAGE_CO_OPEN_CONSIDERATIONS.md.
 
-The signed lookup maps table slowplay *r* → *ideal* CO chart range → BN
-action. Those BN-vs-CO labs are **HU vs the constructed range** (trap weight
-0 at BN's fold/call/raise node). Real CO may open a different range than the
-chart at that *r*, and seats 1–6 may still raise after CO opens.
-
-This module holds one factor fixed and varies the other. It **reuses locked
-fixtures** (polar + interior BN-vs-CO leaves, CO open-chart kappa, sandbag
-world ``co_vs_seats_1_6``). It does **not** rebuild post-draw Nash, restart
-the open chart, restart the polar labs, or mix-solve a raise tree.
+The signed BN-vs-CO table changes as the table slowplays more. Two things
+move together: cutoff opens fewer weak pairs, and seats 1–6 are more likely
+to raise as a trap. This module holds one fixed and varies the other, using
+locked fixtures (no new post-draw Nash, no chart/polar restart, no raise
+tree).
 
 Primary action rule (no multi-raise):
 
@@ -408,15 +404,15 @@ def derive_answers(
         "p_trap_86": round(p_by_r[86]["p_trap"], 5),
         "p_trap_87": round(p_by_r[87]["p_trap"], 5),
         "headline": (
-            "Both signed switches are CO range, not 1–6 trap rate. "
-            "Chart-range at trap=0 already flips AA (r79) and two pair (r87). "
-            "All-legal CO at r=79% still value-raises AA; r=86% CO at r=87% "
-            "still value-raises two pair. No lookup row."
+            "Button aces and two pair follow how tight cutoff opens, not how "
+            "often seats 1–6 trap. Dropping bare jacks is enough to fold aces; "
+            "kings needing a blocker is enough to call two pair. A wide cutoff "
+            "still gets raised even when the table traps. Lookup unchanged."
         ),
         "note": (
-            "Primary mix: fold-bound −$2 on the call line only; raise stays HU "
-            "(no multi-raise). tight_proxy is an optimistic vs-trap call leaf. "
-            "fold_threebet on the raise line is sensitivity, not product."
+            "Call can mix a 1–6 trap raise; the button raise stays heads-up vs "
+            "cutoff (no three-bet tree). Auto-folding a trap is a pessimistic "
+            "bound for aces/two pair, not the published line."
         ),
     }
 
@@ -545,27 +541,26 @@ def write_markdown_summary(payload: dict[str, Any], path: Path) -> Path:
         "",
         a["headline"],
         "",
-        f"p_trap(79%)={p79:.4f}; p_trap(87%)={p87:.4f} (JJ-kappa curve).",
+        f"Chance a 1–6 trap raises after cutoff opens: "
+        f"79% table → {p79:.3f}; 87% table → {p87:.3f}.",
         "",
-        "## AA raise→fold",
+        "## Aces (published raise → fold)",
         "",
-        f"- Signed: {a['aa_signed_from']} → {a['aa_signed_to']}",
-        f"- Range-only (r79 CO, trap 0): **{a['aa_range_only_r79_at_trap0']}**",
-        f"- Trap-only (all-legal CO, trap 79%): **{a['aa_trap_only_all_legal_at_r79']}**",
-        f"- Range is the switch: {a['aa_switch_is_range']}; "
-        f"trap flips it: {a['aa_switch_is_trap']}",
+        f"- Published: {a['aa_signed_from']} → {a['aa_signed_to']}",
+        f"- Tighter cutoff, nobody trapping: **{a['aa_range_only_r79_at_trap0']}**",
+        f"- Wide cutoff, table trapping 79%: **{a['aa_trap_only_all_legal_at_r79']}**",
+        f"- Tightness changes the line: {a['aa_switch_is_range']}; "
+        f"trapping changes it: {a['aa_switch_is_trap']}",
         "",
-        "## Two pair raise→call",
+        "## Two pair (published raise → call)",
         "",
-        f"- Signed: {a['two_pair_signed_from']} → {a['two_pair_signed_to']}",
-        f"- Range-only (r87 CO, trap 0): **{a['two_pair_range_only_r87_at_trap0']}**",
-        f"- Trap-only (r86 CO, trap 87%): **{a['two_pair_trap_only_r86_at_r87']}**",
-        f"- Matching fold-bound call mix: **{a['two_pair_coupled_r87_range_at_r87_fold_bound']}**",
-        f"- Matching tight-proxy call mix: **{a['two_pair_coupled_r87_range_at_r87_tight_proxy']}**",
-        f"- Range is the switch: {a['two_pair_switch_is_range']}; "
-        f"trap flips it: {a['two_pair_switch_is_trap']}",
+        f"- Published: {a['two_pair_signed_from']} → {a['two_pair_signed_to']}",
+        f"- Tighter cutoff, nobody trapping: **{a['two_pair_range_only_r87_at_trap0']}**",
+        f"- Wider cutoff, table trapping 87%: **{a['two_pair_trap_only_r86_at_r87']}**",
+        f"- Tightness changes the line: {a['two_pair_switch_is_range']}; "
+        f"trapping changes it: {a['two_pair_switch_is_trap']}",
         "",
-        f"Lookup row added: {a['lookup_row_added']}",
+        f"Lookup table unchanged: {not a['lookup_row_added']}",
         "",
     ]
     path.write_text("\n".join(lines), encoding="utf-8")
@@ -577,8 +572,8 @@ def main() -> None:
 
     p = argparse.ArgumentParser(
         description=(
-            "Decompose BN-vs-CO AA / two-pair switches into CO range vs "
-            "1–6 trap rate (locked leaves only)"
+            "Button vs cutoff: does aces/two-pair action follow how tight "
+            "cutoff opens, or how often seats 1–6 trap? (locked leaves only)"
         )
     )
     p.add_argument("-o", "--output-dir", type=Path, default=None)
@@ -600,16 +595,14 @@ def main() -> None:
     print()
     print(a["headline"])
     print(
-        f"  AA range-only {a['aa_range_only_r79_at_trap0']}  "
-        f"trap-only {a['aa_trap_only_all_legal_at_r79']}  "
-        f"range? {a['aa_switch_is_range']} trap? {a['aa_switch_is_trap']}"
+        f"  aces: tighter cutoff → {a['aa_range_only_r79_at_trap0']}; "
+        f"wide cutoff + traps → {a['aa_trap_only_all_legal_at_r79']}"
     )
     print(
-        f"  two_pair range-only {a['two_pair_range_only_r87_at_trap0']}  "
-        f"trap-only {a['two_pair_trap_only_r86_at_r87']}  "
-        f"range? {a['two_pair_switch_is_range']} trap? {a['two_pair_switch_is_trap']}"
+        f"  two pair: tighter cutoff → {a['two_pair_range_only_r87_at_trap0']}; "
+        f"wider cutoff + traps → {a['two_pair_trap_only_r86_at_r87']}"
     )
-    print(f"  lookup_row_added={a['lookup_row_added']}")
+    print(f"  lookup unchanged: {not a['lookup_row_added']}")
 
 
 if __name__ == "__main__":
